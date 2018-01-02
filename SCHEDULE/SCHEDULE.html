@@ -45,6 +45,7 @@
         var MOLD_Master_Tool_List = [];
 
         $(function () {
+            MESM_ProductionOrdersListFromSAP_DataFix();
             MOLD_Master_Tool_List_GET();
         });
 
@@ -240,9 +241,9 @@
                     }
 
                     // cc((new Date().getTime() - t0) + ' ms (mmmArray) ');
-                    //ProductionOrdersListFromSAP_GET
-                    // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_GET
-                    var url = localHost ? "ProductionOrdersListFromSAP_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_GET&Content-Type=text/xml";
+                    //MESM_ProductionOrdersListFromSAP_GET
+                    // OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET
+                    var url = localHost ? "MESM_ProductionOrdersListFromSAP.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET&Content-Type=text/xml";
                     cc(url);
                     getData(url, function (dataRows) {
 //                cc(tableOrdersURL + '/' + dataRows.length);
@@ -256,7 +257,7 @@
                             var gp = data.WorkCntrGroup;
 
                             var availableRow = false;
-                            var wcID;
+                            // var wcID;
                             // for (var m = 0; m < workCenter.length; m++) {
                             //     if (workCenter[m]['wcg'] == gp) {
                             //         if (mmmArray[md] != null && mmmArray[md].indexOf(workCenter[m]['MOLD_Machine_Matrix']) > 0) {
@@ -267,17 +268,17 @@
                             //     }
                             // }
 
-                            var _status = 1;                    // Unscheduled
-
-                            if (data.Status == 'S') {           //Scheduled
-                                _status = 2
-                            } else if (data.Status == 'H') {    //Hold
-                                _status = 3
-                            } else if (data.Status == 'C') {    //Cancelled
-                                _status = 4
-                            } else if (data.Status == 'N') {    //No Material
-                                _status = 5
-                            }
+                            // var _status = 1;                    // Unscheduled
+                            //
+                            // if (data.Status == 'S') {           //Scheduled
+                            //     _status = 2
+                            // } else if (data.Status == 'H') {    //Hold
+                            //     _status = 3
+                            // } else if (data.Status == 'C') {    //Cancelled
+                            //     _status = 4
+                            // } else if (data.Status == 'N') {    //No Material
+                            //     _status = 5
+                            // }
 
                             MESM_ProductionOrdersListFromSAP.push({
                                 "RecordID": data.ID,
@@ -291,7 +292,7 @@
                                 "WCG": data.WorkCntrGroup,
                                 "Mold": data.MoldNumber,
                                 "Status": data.Status,
-                                "wcID": wcID,
+                                // "wcID": wcID,
                                 "Press": data.Press,
                             });
                         });
@@ -336,7 +337,7 @@
 
         }
 
-        function dataToMOLD_Master_Tool_List() {
+        function MOLD_Master_Tool_List_DataFix() {
             var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
             cc(url);
             getData(url, function (dataRows) {
@@ -364,9 +365,52 @@
                         Quoted_Cycle_Time +
                         "&Content-Type=text/xml";
                     // cc(urlProc);
-                    updRecord(urlProc);
-
+                    DB_UPD(urlProc);
                 }
+            })
+        }
+
+        // ProductionOrdersListFromSAP_GET
+
+        function MESM_ProductionOrdersListFromSAP_DataFix() {
+            var url = localHost ? 'MESM_ProductionOrdersListFromSAP_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET&Content-Type=text/xml';
+            cc(url);
+            getData(url, function (dataRows) {
+                for (var n = 0; n < dataRows.length; n++) {
+
+                    var _OrderID = dataRows[n].ORDER_NUMBER;
+                    var _StartDate = dataRows[n].SCHED_date;
+                    var _StartTime = dataRows[n].SCHED_START_time;
+                    var _EndDate = dataRows[n].FINISH_date;
+                    var _EndTime = dataRows[n].SCHED_FIN_time;
+                    var _Status = dataRows[n].Status;
+                    var _Press = dataRows[n].Press;
+                    var _TARGET = dataRows[n].TARGET_QUANTITY;
+
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        _Status +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+                    cc(urlProc);
+                    // DB_UPD(urlProc);
+                    // DB_UPD(urlProc);
+                }
+
+
             })
         }
 
@@ -433,7 +477,7 @@
                     {
                         field: "TARGET",
                         title: "Target",
-                        width: 80,
+                        width: 65,
                         // visible: 0,
 //                            responsive: {visible: "lg"}
                     },
@@ -484,15 +528,7 @@
 
                             if (e.Status == 'U' || e.Status == 'H') {    //Unscheduled
 
-                                // var Status = 'U';
-                                // var urlProc = "/XMII/Illuminator?QueryTemplate=OwensboroOneHD/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_updateStatus" + "&Param.1=" +
-                                //     e.OrderID + "&Param.2=" +
-                                //     Status +
-                                //     "&Content-Type=text/xml";
 
-                                // updStatus(urlProc);
-                                // cc('e');
-                                // cc(e);
                                 var wcg = '';
                                 var wcgNAME = '';
                                 for (n = 0; n < MESM_FloorMaps.length; n++) {
@@ -623,7 +659,7 @@
                     }]
             });
 
-            orderTable.hideColumn('TARGET');
+            // orderTable.hideColumn('TARGET');
 
 
             var i = orderTable.getDataSourceQuery();
@@ -1016,7 +1052,7 @@
 
         }
 
-        function updRecord(urlProc) {
+        function DB_UPD(urlProc) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
@@ -1042,6 +1078,8 @@
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Status = tColums[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _OrderID = tColums[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _TARGET = tColums[4].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+
             var _StartDate = moment(tColums[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('MM/DD/YYYY');
             var _StartTime = tColums[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _EndDate = moment(tColums[7].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('MM/DD/YYYY');
@@ -1050,7 +1088,7 @@
             var _Status_dataSet = '',
                 _Press_dataSet = '';
 
-            // cc(_Action + ' / ' + _Status + ' / ' + _OrderID + ' / ' + _StartDate + ' / ' + _StartTime + ' / ' + _EndDate + ' / ' + _EndTime + ' / ' + _Press);
+            cc(_Action + ' / ' + _Status + ' / ' + _OrderID + ' / ' + _StartDate + ' / ' + _StartTime + ' / ' + _EndDate + ' / ' + _EndTime + ' / ' + _Press + ' / ' + _TARGET);
 
 
             if (_Status == 'Unscheduled' || _Status == 'Hold') {
@@ -1094,7 +1132,7 @@
                 }
 
                 // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
-                var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD" +
+                var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                     "&Param.1=" +
                     _OrderID +
                     "&Param.2=" +
@@ -1109,9 +1147,11 @@
                     _Status_dataSet +
                     "&Param.7=" +
                     _Press +
+                    "&Param.8=" +
+                    _TARGET +
                     "&Content-Type=text/xml";
                 // cc(urlProc);
-                updRecord(urlProc);
+                DB_UPD(urlProc);
 
             }
 
