@@ -1961,6 +1961,7 @@ Requirements:
             return this.wrapTr(dateHtmls, 'renderHeadIntroHtml') + this.wrapTr(resourceHtmls, 'renderHeadIntroHtml');
         },
         renderHeadResourceCellHtml: function (resource, date, colspan) {
+
             return '<th class="fc-resource-cell"' + ' data-resource-id="' + resource.id + '"' + (date ? ' data-date="' + date.format('YYYY-MM-DD') + '"' : '') + (colspan > 1 ? ' colspan="' + colspan + '"' : '') + '>' + htmlEscape(this.view.getResourceText(resource)) + '</th>';
         },
         renderHeadResourceDateCellHtml: function (date, resource, colspan) {
@@ -1996,6 +1997,9 @@ Requirements:
             return htmls.join('');
         },
         renderResourceBgCellHtml: function (date, resource) {
+            // cc('renderResourceBgCellHtml..');
+            // cc(date);
+            // cc(resource);
             return this.renderBgCellHtml(date, 'data-resource-id="' + resource.id + '"');
         },
         wrapTr: function (cellHtmls, introMethodName) {
@@ -2826,7 +2830,11 @@ TODO: somehow more DRY with DateComponent::eventRangeToEventFootprints monkeypat
         };
 
         TimelineEventRenderer.prototype.fgSegHtml = function (seg, disableResizing) {
-
+            cc('TimelineEventRenderer');
+            cc(seg);
+            cc(seg.footprint.eventDef.title);
+            cc(this);
+            cc('TimelineEventRenderer');
             var classes, eventDef, isDraggable, isResizableFromEnd, isResizableFromStart, timeText;
             eventDef = seg.footprint.eventDef;
             isDraggable = this.view.isEventDefDraggable(eventDef);
@@ -4833,8 +4841,6 @@ A row grouping that renders as a tall multi-cell vertical span in the "spreadshe
         EventRow.prototype.bgSegContainerEl = null;
 
         EventRow.prototype.renderEventSkeleton = function (tr) {
-
-
             var theme;
             theme = this.view.calendar.theme;
             tr.html('<td class="' + theme.getClass('widgetContent') + '"> <div> <div class="fc-event-container" /> </div> </td>');
@@ -4901,13 +4907,9 @@ A row that renders information about a particular resource, as well as it events
 
         ResourceRow.prototype.renderEventSkeleton = function (tr) {
             ResourceRow.__super__.renderEventSkeleton.apply(this, arguments);
-            cc('renderEventSkeleton');
-            cc(tr);
-            tr.attr('data-resource-id', this.resource.id);
-            tr.attr('id', this.resource.id);
-
-            // return tr.attr('data-resource-id', this.resource.id);
-            return tr;
+            // cc('renderEventSkeleton');
+            // cc(tr);
+            return tr.attr('data-resource-id', this.resource.id);
         };
 
         ResourceRow.prototype.executeEventRender = function (eventsPayload1) {
@@ -4944,7 +4946,8 @@ A row that renders information about a particular resource, as well as it events
             theme = this.view.calendar.theme;
             resource = this.resource;
             ref = this.view.colSpecs;
-
+            // cc('renderSpreadsheetSkeleton');
+            // cc(resource.id);
             for (j = 0, len = ref.length; j < len; j++) {
                 colSpec = ref[j];
                 if (colSpec.group) {
@@ -4962,6 +4965,7 @@ A row that renders information about a particular resource, as well as it events
                 }
                 tr.append(td);
             }
+            // cc(tr);
             return tr.attr('data-resource-id', resource.id);
         };
 

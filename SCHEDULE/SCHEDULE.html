@@ -33,6 +33,7 @@
     <link href="assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="assets/app/default/base/style.bundle.css" rel="stylesheet" type="text/css"/>
     <link href='assets/vendors/custom/fullcalendar/scheduler.css' rel='stylesheet'/>
+    <link href="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="assets/app/default/media/img/logo/favicon.png"/>
 
     <script>
@@ -48,6 +49,8 @@
         $(function () {
             // MESM_ProductionOrdersListFromSAP_DataFix();
             MOLD_Master_Tool_List_GET();
+
+
         });
 
         function mainPro() {
@@ -741,18 +744,34 @@
                 dragScroll: true,
                 eventOverlap: true, // todo +more
 
+                // eventRender: function (event, element) {
+                //     cc('eventRender');
+                //     element.bind('mousedown', function (e) {
+                //         if (e.which == 3) {
+                //             alert('Right mouse button pressed');
+                //         }
+                //     });
+                // },
+                // eventRender: function(event, element) {
+                //     cc('eventRender');
+                //     // element.qtip({
+                //     //     content: event.description
+                //     // });
+                // },
+
                 eventClick: function (event, element) {
+                    cc(element);
 //                    cc('eventCLICKED');
 //                    cc(event);
-                    event.title = "CLICKED ON";
+//                     event.title = "CLICKED ON";
 //                    cc(event.start._d);
 
-                    event.start._d = new Date(event.start.format());
-                    $('#calendar').fullCalendar('updateEvent', event);
+                    // event.start._d = new Date(event.start.format());
+                    // $('#calendar').fullCalendar('updateEvent', event);
 
 //                    $('#calendar').fullCalendar('refetchEvents');
 
-                    $('#calendar').fullCalendar('refresh');
+                    // $('#calendar').fullCalendar('refresh');
 
 //                    $('#calendar').fullCalendar('refetchEventSources');
                 },
@@ -808,6 +827,45 @@
 //                    cc(event);
                 },
 // * * * * *
+                eventRender: function (event, element, view) {
+                    // cc('eventRender / element');
+                    // cc(event);
+                    // cc(element);
+                    // cc(view);
+                    // cc('-------');
+                    // cc('eventRender');
+                    // cc(event.id);
+
+                    // var elm=document.getElementById(event.id);
+                    // cc('elm');
+                    // cc(elm);
+
+                    // element.bind('mousedown', function (e) {
+                    //     if (e.which == 3) {
+                    //         alert('Right mouse button pressed');
+                    //     }
+                    // });
+                    // $.contextMenu({
+                    //     selector: '.fc-timeline-event',
+                    //     callback: function (key, options) {
+                    //         // callbk(key, options);
+                    //         // var m = "clicked..: " + key;
+                    //         // window.console && console.log(m) || alert(m);
+                    //     },
+                    //     items: {
+                    //         "edit": {name: "Edit", icon: "edit"},
+                    //         "cut": {name: "Cut", icon: "cut"},
+                    //         "copy": {name: "Copy", icon: "copy"},
+                    //         "paste": {name: "Paste", icon: "paste"},
+                    //         "delete": {name: "Delete", icon: "delete"},
+                    //         "sep1": "---------",
+                    //         "quit": {name: "Quit", icon: "quit"}
+                    //     }
+                    // });
+                },
+                dayClick: function () {
+//                    $('#calendar').fullCalendar('next');
+                },
                 slotWidth: 15,
 
                 height: 700,
@@ -866,7 +924,7 @@
                 resourceGroupField: 'WorkingCenter',
                 resourceLabelText: 'WorkCentre: ',
                 resources: eventSources,
-                eventOverlap: false, // will cause the event to take up entire resource height
+                // eventOverlap: false, // will cause the event to take up entire resource height
                 resourceAreaWidth: '300px',
                 events: [
 //                    {
@@ -957,19 +1015,51 @@
 //                        description: 'This is a  event'
 //                    }
                 ],
-                eventRender: function (event, element) {
-//                    cc(event.id);
-//                    cc(element);
-//                    element.qtip({
-//                        content: event.description
-//                    });
-                },
-                dayClick: function () {
-//                    $('#calendar').fullCalendar('next');
-                },
+
 
                 schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
             });
+            // $("[href]")
+            // var elms = $("[data-resource-id]");
+            var elms = $("[data-resource-id][id]");
+            // fc-event-container
+            // cc('[data-resource-id]');
+            // cc(elms);
+            $.each( elms, function( key, e ) {
+
+                cc(e.id);
+
+                $.contextMenu({
+                    // selector: "[data-resource-id]",
+                    // selector: "[data-resource-id][id]",
+                    selector: "#"+e.id,
+                    callback: function (key, options) {
+                        cc(this);
+                        callbk(key, options);
+                        // var m = "clicked..: " + key;
+                        // window.console && console.log(m) || alert(m);
+                    },
+                    items: {
+                        "title": {name: e.id, icon: "fa-cog"},
+                        "sep1": "---------",
+                        "edit": {name: "Edit", icon: "fa-edit"},
+                        "cut": {name: "Cut", icon: "fa-scissors"},
+                        "copy": {name: "Copy", icon: "fa-files-o"},
+                        "paste": {name: "Paste", icon: "fa-clipboard"},
+                        "delete": {name: "Delete", icon: "fa-times"},
+                        // "quit": {name: "Quit", icon: "quit"}
+                    }
+                });
+            });
+
+
+
+
+
+            var callbk = function (key, options) {
+                cc(key);
+                cc(options);
+            }
             // }
         };
 
@@ -1069,7 +1159,7 @@
 
             // tbClear();
             // return;
-            cc('quickAction');
+            // cc('quickAction');
             // cc(e);
             // cc(e.innerText);
 
@@ -1105,7 +1195,7 @@
                     _During = parseInt(_Action.split('~')[1]);
                     _EndTime = '';
 
-                    cc('_During ' + _During);
+                    // cc('_During ' + _During);
 
                     var mm = _During, hh = 0;
                     hh = Math.floor(mm / 60);
@@ -1123,8 +1213,8 @@
                     } else {
                         _EndTime = _EndTime + mm + ':00';
                     }
-                    cc(_StartTime);
-                    cc(_EndTime);
+                    // cc(_StartTime);
+                    // cc(_EndTime);
 
                     // cc('assign to ');
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
@@ -1254,8 +1344,12 @@
                 // var scheduleID = e.id;
                 // cc(scheduleID);
                 // scheduleID = scheduleID.substring(scheduleID.indexOf('_') + 1);
+
+                // cc(document.getElementById(id));
+
+
                 $('#calendar').fullCalendar('renderEvent', {
-                    id: id + 'e',
+                    id: 'Schedule' + title,
                     resourceId: id,
                     start: today + 'T' + start,
                     end: today + 'T' + end,
@@ -1263,6 +1357,37 @@
                     description: id,
                     color: colors[Math.round(Math.random() * 8)]
                 });
+
+                var clientEvents = $('#calendar').fullCalendar('clientEvents');
+
+                // cc('clientEvents');
+                // cc(clientEvents);
+
+                // cc(document.getElementById(title));
+
+                $.contextMenu({
+                    selector: '#Schedule' + title,
+                    callback: function (key, options) {
+                        callbk(key, options);
+                        // var m = "clicked..: " + key;
+                        // window.console && console.log(m) || alert(m);
+                    },
+                    items: {
+                        "title": {name: title, icon: "fa-calendar"},
+                        "sep1": "---------",
+                        "edit": {name: "Edit", icon: "fa-edit"},
+                        "cut": {name: "Cut", icon: "fa-scissors"},
+                        "copy": {name: "Copy", icon: "fa-files-o"},
+                        "paste": {name: "Paste", icon: "fa-clipboard"},
+                        "delete": {name: "Delete", icon: "fa-times"},
+                        // "quit": {name: "Quit", icon: "quit"}
+                    }
+                });
+
+                function callbk(key, options) {
+                    console.log(key);
+                    console.log(options);
+                }
             }
 
 
@@ -1780,7 +1905,7 @@
             <div class="m-subheader ">
                 <div class="d-flex align-items-center">
                     <div class="mr-auto">
-                        <h3 class="m-subheader__title ">
+                        <h3 class="m-subheader__title " id="ccMenu">
                             Dashboard
                         </h3>
                     </div>
@@ -3126,6 +3251,7 @@
 <script src="assets/vendors/custom/fullcalendar/fullcalendar.js" type="text/javascript"></script>
 <script src='assets/vendors/custom/fullcalendar/scheduler.js'></script>
 <script src='assets/vendors/custom/fullcalendar/moment.min.js'></script>
+<script src="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.js"></script>
 <script src="getData.js" type="text/javascript"></script>
 
 
