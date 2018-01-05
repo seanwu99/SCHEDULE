@@ -55,26 +55,23 @@
         });
 
         function arrayProperty() {
-            ScheduleEvents['Schedule900000'] =
-                {
-                    resourceId: 'GROUP6_PRESS39',
-                    start: '01/15/2018 08:00:00',
-                    end: '01/15/2018 16:30:00'
-                };
+            ScheduleEvents['900000'] = {
+                resourceId: 'GROUP1_PRESS01',
+                start: '01/15/2018 08:00:00',
+                end: '01/15/2018 16:30:00'
+            };
             cc(ScheduleEvents);
-            cc(ScheduleEvents.hasOwnProperty('Schedule900000'));
+
+            cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
 
             for (var _key in ScheduleEvents) {
                 cc(_key);
                 cc(ScheduleEvents[_key]);
-                cc(ScheduleEvents[_key].resourceId);
-                cc(ScheduleEvents[_key].start);
-                cc(ScheduleEvents[_key].end);
             }
 
-            delete ScheduleEvents['Schedule900000'];
+            delete ScheduleEvents['900000'];
 
-            cc(ScheduleEvents.hasOwnProperty('Schedule900000'));
+            cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
 
         }
 
@@ -406,7 +403,6 @@
             cc(url);
             getData(url, function (dataRows) {
                 for (var n = 0; n < dataRows.length; n++) {
-
                     var _OrderID = dataRows[n].ORDER_NUMBER;
                     var _StartDate = dataRows[n].SCHED_date;
                     var _StartTime = dataRows[n].SCHED_START_time;
@@ -870,7 +866,7 @@
                             // MESM_ProductionOrdersListFromSAP
                             // cc('event.id.substring(8) ' + event.id.substring(8));
                             for (var i = 0; i < orderTable.dataSet.length; i++) {
-                                if (orderTable.dataSet[i].OrderID == event.id.substring(8)) {
+                                if (orderTable.dataSet[i].OrderID == event.id) {
                                     // cc(orderTable.dataSet[i].OrderID);
                                     // cc(orderTable.dataSet[i].StartDate);
                                     // cc(orderTable.dataSet[i].StartTime);
@@ -1249,6 +1245,7 @@
         }
 
         function DB_UPD(urlProc) {
+            cc(urlProc);
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
@@ -1262,15 +1259,8 @@
 
         function quickAction(e) {
 
-            // tbClear();
-            // return;
-            // cc('quickAction');
-            // cc(e);
-            // cc(e.innerText);
 
             var tColums = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
-            // cc('colums');
-            // cc(tColums);
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Status = tColums[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _OrderID = tColums[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
@@ -1288,14 +1278,9 @@
             // cc(_Action + ' / ' + _Status + ' / ' + _OrderID + ' / ' + _StartDate + ' / ' + _StartTime + ' / ' + _EndDate + ' / ' + _EndTime + ' / ' + _Press + ' / ' + _TARGET);
 
 
-            if (_Status == 'Unscheduled' || _Status == 'Hold') {
-                // cc('_Status_app');
-                // cc(_Status);
+            if (_Status == 'Unscheduled') {
 
-                // cc(e.id);
                 if (_Action.indexOf('assign') >= 0) {
-
-
                     _StartTime = '00:00:00';
                     _During = parseInt(_Action.split('~')[1]);
                     _EndTime = '';
@@ -1318,10 +1303,9 @@
                     } else {
                         _EndTime = _EndTime + mm + ':00';
                     }
-                    // cc(_StartTime);
-                    // cc(_EndTime);
 
-                    // cc('assign to ');
+                    addScheduleEvent(e.id, _OrderID, '00:00:00', _EndTime);
+
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
                         if (orderTable.dataSet[i].OrderID == _OrderID) {
                             _Status = 'Hold';
@@ -1330,7 +1314,6 @@
                             break;
                         }
                     }
-
 
                     // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
@@ -1351,11 +1334,138 @@
                         "&Param.8=" +
                         _TARGET +
                         "&Content-Type=text/xml";
-                    cc(urlProc);
+                    // cc(urlProc);
                     DB_UPD(urlProc);
 
 
-                    addEvent(e.id, _OrderID, '00:00:00', _EndTime);
+                } else if (_Action.indexOf('Cancelled') >= 0) {
+
+
+                    for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                            _Status = 'Cancelled';
+                            // _Press = '';
+                            orderTable.dataSet[i].Press = '';
+                            orderTable.dataSet[i].Status = 'C';
+                            removeScheduleEvent(_OrderID);
+                            break;
+                        }
+                    }
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        'C' +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+                    // cc(urlProc);
+                    DB_UPD(urlProc);
+                } else if (_Action.indexOf('Scheduled') >= 0) {
+                    for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                            _Status = 'Cancelled';
+                            // _Press = '';
+                            // orderTable.dataSet[i].Press = '';
+                            orderTable.dataSet[i].Status = 'S';
+                            // removeScheduleEvent(_OrderID);
+                            break;
+                        }
+                    }
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        'S' +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+
+                    DB_UPD(urlProc);
+                }
+
+                orderTable.reload();
+
+            } else if (_Status == 'Hold') {
+
+                if (_Action.indexOf('assign') >= 0) {
+                    _StartTime = '00:00:00';
+                    _During = parseInt(_Action.split('~')[1]);
+                    _EndTime = '';
+
+                    // cc('_During ' + _During);
+
+                    var mm = _During, hh = 0;
+                    hh = Math.floor(mm / 60);
+                    mm = mm - 60 * hh;
+                    if (hh > 24) {
+                        hh = 24
+                    }
+                    if (hh < 10) {
+                        _EndTime = '0' + hh + ':';
+                    } else {
+                        _EndTime = hh + ':';
+                    }
+                    if (mm < 10) {
+                        _EndTime = _EndTime + '0' + mm + ':00';
+                    } else {
+                        _EndTime = _EndTime + mm + ':00';
+                    }
+                    removeScheduleEvent(e.id);
+
+                    // addScheduleEvent(e.id, _OrderID, '00:00:00', _EndTime);
+
+                    for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                            _Status = 'Hold';
+                            orderTable.dataSet[i].Press = _Press;
+                            orderTable.dataSet[i].Status = 'H';
+                            break;
+                        }
+                    }
+
+                    // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        'H' +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+                    // cc(urlProc);
+                    DB_UPD(urlProc);
+
 
                 } else if (_Action.indexOf('Undo') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
@@ -1364,6 +1474,7 @@
                             // _Press = '';
                             orderTable.dataSet[i].Press = '';
                             orderTable.dataSet[i].Status = 'U';
+                            removeScheduleEvent(_OrderID);
                             break;
                         }
                     }
@@ -1385,123 +1496,223 @@
                         "&Param.8=" +
                         _TARGET +
                         "&Content-Type=text/xml";
-                    cc(urlProc);
+                    // cc(urlProc);
+                    DB_UPD(urlProc);
+                } else if (_Action.indexOf('Cancelled') >= 0) {
+
+
+                    for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                            _Status = 'Cancelled';
+                            // _Press = '';
+                            orderTable.dataSet[i].Press = '';
+                            orderTable.dataSet[i].Status = 'C';
+                            removeScheduleEvent(_OrderID);
+                            break;
+                        }
+                    }
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        'C' +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+                    // cc(urlProc);
+                    DB_UPD(urlProc);
+                } else if (_Action.indexOf('Scheduled') >= 0) {
+                    for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                            _Status = 'Cancelled';
+                            // _Press = '';
+                            // orderTable.dataSet[i].Press = '';
+                            orderTable.dataSet[i].Status = 'S';
+                            // removeScheduleEvent(_OrderID);
+                            break;
+                        }
+                    }
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        'S' +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+
                     DB_UPD(urlProc);
                 }
 
-                orderTable.reload();
-                // return;
-
-                // cc(_Press);
-                // var Status = 'U';
-
-
-                // if (_Status == 'Unscheduled') {
-                //     _Status_dataSet = 'U';
-                // } else if (_Status == 'Hold') {
-                //     _Status_dataSet = 'H';
-                // }
-
-
-            }
-
-            function addEvent(id, title, start, end) {
-                var tbOrderID = _OrderID;
-                var today = new Date().toISOString().substr(0, 10);
-                var colors = [
-                    '#2f7ed8',
-                    '#0d233a',
-                    '#8bbc21',
-                    '#910000',
-                    '#1aadce',
-                    '#492970',
-                    '#f28f43',
-                    '#77a1e5',
-                    '#c42525',
-                    '#a6c96a'
-                ];
-
-                // var s = Math.round(Math.random() * 20);
-                // var timeStart = 'T00:00:00';
-                // if (s < 10) {
-                //     timeStart = 'T0' + s + ':00:00';
-                // } else {
-                //     timeStart = 'T' + s + ':00:00';
-                // }
-                // var d = s + Math.round(4 + Math.random() * 10);
-                // var mm = _During, hh = 0;
-                // hh = Math.floor(mm / 60);
-                // mm = mm - 60 * hh;
-                // var timeEnd;
-                // if (hh > 24) {
-                //     hh = 24
-                // }
-                // if (hh < 10) {
-                //     timeEnd = 'T0' + hh + ':';
-                // } else {
-                //     timeEnd = 'T' + hh + ':';
-                // }
-                // if (mm < 10) {
-                //     timeEnd = timeEnd + '0' + mm + ':00';
-                // } else {
-                //     timeEnd = timeEnd + mm + ':00';
-                // }
-                // var scheduleID = e.id;
-                // cc(scheduleID);
-                // scheduleID = scheduleID.substring(scheduleID.indexOf('_') + 1);
-
-                // cc(document.getElementById(id));
-
-
-                $('#calendar').fullCalendar('renderEvent', {
-                    id: 'Schedule' + title,
-                    resourceId: id,
-                    start: today + 'T' + start,
-                    end: today + 'T' + end,
-                    title: title,
-                    description: id,
-                    color: colors[Math.round(Math.random() * 8)]
-                });
-
-                var clientEvents = $('#calendar').fullCalendar('clientEvents');
-
-                // cc('clientEvents');
-                // cc(clientEvents);
-
-                // cc(document.getElementById(title));
-
-                $.contextMenu({
-                    selector: '#Schedule' + title,
-                    callback: function (key, options) {
-                        // callbk(key, options);
-                        cc(key);
-                        cc(options);
-                        cc(options.selector);
-                        if (key == 'delete') {
-                            $('#calendar').fullCalendar('removeEvents', options.selector.substring(1));
+            } else if (_Status == 'No Material') {
+                if (_Action.indexOf('Cancelled') >= 0) {
+                    for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                            _Status = 'Cancelled';
+                            // _Press = '';
+                            // orderTable.dataSet[i].Press = '';
+                            orderTable.dataSet[i].Status = 'C';
+                            // removeScheduleEvent(_OrderID);
+                            break;
                         }
-                        // var m = "clicked..: " + key;
-                        // window.console && console.log(m) || alert(m);
-                    },
-                    items: {
-                        "title": {name: title, icon: "fa-calendar"},
-                        "sep1": "---------",
-                        "edit": {name: "Edit", icon: "fa-edit"},
-                        "cut": {name: "Cut", icon: "fa-scissors"},
-                        "copy": {name: "Copy", icon: "fa-files-o"},
-                        "paste": {name: "Paste", icon: "fa-clipboard"},
-                        "delete": {name: "Delete", icon: "fa-times"},
-                        // "quit": {name: "Quit", icon: "quit"}
                     }
-                });
-
-                // function callbk(key, options) {
-                //     console.log(key);
-                //     console.log(options);
-                // }
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                        "&Param.1=" +
+                        _OrderID +
+                        "&Param.2=" +
+                        _StartDate +
+                        "&Param.3=" +
+                        _StartTime +
+                        "&Param.4=" +
+                        _EndDate +
+                        "&Param.5=" +
+                        _EndTime +
+                        "&Param.6=" +
+                        'C' +
+                        "&Param.7=" +
+                        _Press +
+                        "&Param.8=" +
+                        _TARGET +
+                        "&Content-Type=text/xml";
+                    // cc(urlProc);
+                    DB_UPD(urlProc);
+                }
             }
 
+            orderTable.reload();
+        }
 
+        function addScheduleEvent(id, title, start, end) {
+            // var tbOrderID = _OrderID;
+            var today = new Date().toISOString().substr(0, 10);
+            var colors = [
+                '#2f7ed8',
+                '#0d233a',
+                '#8bbc21',
+                '#910000',
+                '#1aadce',
+                '#492970',
+                '#f28f43',
+                '#77a1e5',
+                '#c42525',
+                '#a6c96a'
+            ];
+
+            // var s = Math.round(Math.random() * 20);
+            // var timeStart = 'T00:00:00';
+            // if (s < 10) {
+            //     timeStart = 'T0' + s + ':00:00';
+            // } else {
+            //     timeStart = 'T' + s + ':00:00';
+            // }
+            // var d = s + Math.round(4 + Math.random() * 10);
+            // var mm = _During, hh = 0;
+            // hh = Math.floor(mm / 60);
+            // mm = mm - 60 * hh;
+            // var timeEnd;
+            // if (hh > 24) {
+            //     hh = 24
+            // }
+            // if (hh < 10) {
+            //     timeEnd = 'T0' + hh + ':';
+            // } else {
+            //     timeEnd = 'T' + hh + ':';
+            // }
+            // if (mm < 10) {
+            //     timeEnd = timeEnd + '0' + mm + ':00';
+            // } else {
+            //     timeEnd = timeEnd + mm + ':00';
+            // }
+            // var scheduleID = e.id;
+            // cc(scheduleID);
+            // scheduleID = scheduleID.substring(scheduleID.indexOf('_') + 1);
+
+            // cc(document.getElementById(id));
+
+
+            $('#calendar').fullCalendar('renderEvent', {
+                id: title,
+                resourceId: id,
+                start: today + 'T' + start,
+                end: today + 'T' + end,
+                title: title,
+                description: id,
+                color: colors[Math.round(Math.random() * 8)]
+            });
+
+            var clientEvents = $('#calendar').fullCalendar('clientEvents');
+
+            // cc('clientEvents');
+            // cc(clientEvents);
+
+            // cc(document.getElementById(title));
+
+            $.contextMenu({
+                selector: '#' + title,
+                callback: function (key, options) {
+                    // callbk(key, options);
+                    cc(key);
+                    cc(options);
+                    // cc(options.selector);
+
+                    if (key == 'delete') {
+
+                        removeScheduleEvent(options.selector.substring(1));
+
+                        for (var i = 0; i < orderTable.dataSet.length; i++) {
+                            if (orderTable.dataSet[i].OrderID == options.selector.substring(1)) {
+                                _Status = 'Unscheduled';
+                                // _Press = '';
+                                orderTable.dataSet[i].Press = '';
+                                orderTable.dataSet[i].Status = 'U';
+                                break;
+                            }
+                        }
+                        orderTable.reload();
+                    }
+                    // var m = "clicked..: " + key;
+                    // window.console && console.log(m) || alert(m);
+                },
+                items: {
+                    "title": {name: title, icon: "fa-calendar"},
+                    "sep1": "---------",
+                    "edit": {name: "Edit", icon: "fa-edit"},
+                    "cut": {name: "Cut", icon: "fa-scissors"},
+                    "copy": {name: "Copy", icon: "fa-files-o"},
+                    "paste": {name: "Paste", icon: "fa-clipboard"},
+                    "delete": {name: "Delete", icon: "fa-times"},
+                    // "quit": {name: "Quit", icon: "quit"}
+                }
+            });
+
+            // function callbk(key, options) {
+            //     console.log(key);
+            //     console.log(options);
+            // }
+        }
+
+        function removeScheduleEvent(id) {
+            $('#calendar').fullCalendar('removeEvents', id);
         }
 
         function cc(o) {
