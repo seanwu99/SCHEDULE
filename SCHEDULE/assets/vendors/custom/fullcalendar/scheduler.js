@@ -2835,9 +2835,7 @@ TODO: somehow more DRY with DateComponent::eventRangeToEventFootprints monkeypat
             classes = this.getSegClasses(seg, isDraggable, isResizableFromStart || isResizableFromEnd);
             classes.unshift('fc-timeline-event', 'fc-h-event');
             timeText = this.getTimeText(seg.footprint);
-            return '<a id="Schedule' +
-                seg.footprint.eventDef.title +
-                '" ' +
+            return '<a id="' + seg.footprint.eventDef.title + '" ' +
                 'class="' + classes.join(' ') + '" style="' + cssToStr(this.getSkinCss(seg.footprint.eventDef)) + '"' + (eventDef.url ? ' href="' + htmlEscape(eventDef.url) + '"' : '') + '>' + '<div class="fc-content">' + (timeText ? '<span class="fc-time">' + htmlEscape(timeText) + '</span>' : '') + '<span class="fc-title">' + (eventDef.title ? htmlEscape(eventDef.title) : '&nbsp;') + '</span>' + '</div>' + '<div class="fc-bg" />' + (isResizableFromStart ? '<div class="fc-resizer fc-start-resizer"></div>' : '') + (isResizableFromEnd ? '<div class="fc-resizer fc-end-resizer"></div>' : '') + '</a>';
         };
 
@@ -4901,8 +4899,8 @@ A row that renders information about a particular resource, as well as it events
 
         ResourceRow.prototype.renderEventSkeleton = function (tr) {
             ResourceRow.__super__.renderEventSkeleton.apply(this, arguments);
-            cc('renderEventSkeleton');
-            cc(tr);
+            // cc('renderEventSkeleton');
+            // cc(tr);
             tr.attr('data-resource-id', this.resource.id);
             tr.attr('id', this.resource.id);
 

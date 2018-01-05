@@ -45,13 +45,38 @@
         var mmmArray = [];
         var orderTable;
         var MOLD_Master_Tool_List = [];
-
+        var ScheduleEvents = [];
+        // ScheduleEvents.hasOwnProperty('900000');
         $(function () {
-            // MESM_ProductionOrdersListFromSAP_DataFix();
+            arrayProperty();
             MOLD_Master_Tool_List_GET();
 
 
         });
+
+        function arrayProperty() {
+            ScheduleEvents['Schedule900000'] =
+                {
+                    resourceId: 'GROUP6_PRESS39',
+                    start: '01/15/2018 08:00:00',
+                    end: '01/15/2018 16:30:00'
+                };
+            cc(ScheduleEvents);
+            cc(ScheduleEvents.hasOwnProperty('Schedule900000'));
+
+            for (var _key in ScheduleEvents) {
+                cc(_key);
+                cc(ScheduleEvents[_key]);
+                cc(ScheduleEvents[_key].resourceId);
+                cc(ScheduleEvents[_key].start);
+                cc(ScheduleEvents[_key].end);
+            }
+
+            delete ScheduleEvents['Schedule900000'];
+
+            cc(ScheduleEvents.hasOwnProperty('Schedule900000'));
+
+        }
 
         function mainPro() {
             var chatContainer = $(".m-messenger__messages");
@@ -285,7 +310,7 @@
                             // }
 
                             MESM_ProductionOrdersListFromSAP.push({
-                                "RecordID": data.ID,
+                                // "RecordID": data.ID,
                                 "OrderID": data.ORDER_NUMBER,
                                 "MATERIAL": data.MATERIAL,
                                 "TARGET": data.TARGET_QUANTITY,
@@ -689,14 +714,14 @@
 //            cc('creatSheduleForm');
 //            cc(eventSources);
 
-            var today = new Date().toISOString().substr(0, 10);
+                var today = new Date().toISOString().substr(0, 10);
 
-            $('#calendar').fullCalendar({
+                $('#calendar').fullCalendar({
 
-                now: today,
-                editable: true,
+                    now: today,
+                    editable: true,
 //			aspectRatio: 1.8,
-                scrollTime: '00:00',
+                    scrollTime: '00:00',
 //                themeSystem: 'jquery-ui',
 //                themeSystem: 'bootstrap3',
 //                hiddenDays: [ 1, 3, 5 ],
@@ -708,25 +733,25 @@
 //                businessHours: false,
 //                nowIndicator:true,
 //                allDaySlot:true,
-                slotDuration: '00:15:00',
-                slotLabelInterval: '01:00:00',
-                snapDuration: '00:15:00',
-                minTime: '00:00:00',
-                maxTime: '24:00:00',
-                scrollTime: '00:00:00',
-                noEventsMessage: 'No events to display',
-                agendaEventMinHeight: 50,  //vertical
-                listDayFormat: true,
-                listDayAltFormat: true,
-                slotEventOverlap: true,
-                fixedWeekCount: true,
-                nowIndicator: true,
-                timeFormat: 'h:mm:ss',
-                titleFormat: 'MMMM D, YYYY',
-                monthNames: ['January', 'February', 'March3', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    slotDuration: '00:15:00',
+                    slotLabelInterval: '01:00:00',
+                    snapDuration: '00:15:00',
+                    minTime: '00:00:00',
+                    maxTime: '24:00:00',
+                    scrollTime: '00:00:00',
+                    noEventsMessage: 'No events to display',
+                    agendaEventMinHeight: 50,  //vertical
+                    listDayFormat: true,
+                    listDayAltFormat: true,
+                    slotEventOverlap: true,
+                    fixedWeekCount: true,
+                    nowIndicator: true,
+                    timeFormat: 'h:mm:ss',
+                    titleFormat: 'MMMM D, YYYY',
+                    monthNames: ['January', 'February', 'March3', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 
 //                displayEventTime: true,
 //                displayEventEnd: true,
@@ -736,49 +761,35 @@
 //                        eventLimit: 6 // adjust to 6 only for agendaWeek/agendaDay
 //                    }
 //                },
-                eventLimitText: 'click for more',
-                eventStartEditable: true,
-                eventDurationEditable: true,
-                dragRevertDuration: 500,
-                dragOpacity: .75,
-                dragScroll: true,
-                eventOverlap: true, // todo +more
+                    eventLimitText: 'click for more',
+                    eventStartEditable: true,
+                    eventDurationEditable: true,
+                    dragRevertDuration: 500,
+                    dragOpacity: .75,
+                    dragScroll: true,
+                    eventOverlap: true, // todo +more
 
-                // eventRender: function (event, element) {
-                //     cc('eventRender');
-                //     element.bind('mousedown', function (e) {
-                //         if (e.which == 3) {
-                //             alert('Right mouse button pressed');
-                //         }
-                //     });
-                // },
-                // eventRender: function(event, element) {
-                //     cc('eventRender');
-                //     // element.qtip({
-                //     //     content: event.description
-                //     // });
-                // },
 
-                eventClick: function (event, element) {
-                    cc(element);
+                    eventClick: function (event, element) {
+                        // cc(event);
 //                    cc('eventCLICKED');
 //                    cc(event);
 //                     event.title = "CLICKED ON";
 //                    cc(event.start._d);
 
-                    // event.start._d = new Date(event.start.format());
-                    // $('#calendar').fullCalendar('updateEvent', event);
+                        // event.start._d = new Date(event.start.format());
+                        // $('#calendar').fullCalendar('updateEvent', event);
 
 //                    $('#calendar').fullCalendar('refetchEvents');
 
-                    // $('#calendar').fullCalendar('refresh');
+                        // $('#calendar').fullCalendar('refresh');
 
 //                    $('#calendar').fullCalendar('refetchEventSources');
-                },
+                    },
 
 
 // * * * *
-                eventAllow: function (dropLocation, draggedEvent) {
+                    eventAllow: function (dropLocation, draggedEvent) {
 //                    cc(draggedEvent.id);
 //                    if (draggedEvent.id === '11') {
 //                        cc(dropLocation);
@@ -786,22 +797,22 @@
 //                    } else {
 //                        return true;
 //                    }
-                },
+                    },
 
 // * * * *
-                eventDragStart: function (event, jsEvent, ui, view) {
+                    eventDragStart: function (event, jsEvent, ui, view) {
 //                    cc('eventDragStart' + event);
 
-                },
+                    },
 
 // * * * *
-                eventDragStop: function (event, jsEvent, ui, view) {
+                    eventDragStop: function (event, jsEvent, ui, view) {
 //                    cc('eventDragStop' + event);
 
-                },
+                    },
 
 // * * * *
-                eventDrop: function (event, delta, revertFunc) {
+                    eventDrop: function (event, delta, revertFunc) {
 //                    cc(event);
 //                    alert(event.title + " was dropped on " + event.start.format());
 //
@@ -809,72 +820,149 @@
 //                        revertFunc();
 //                    }
 
-                },
+                    },
 
 
 // * * *
-                eventResizeStart: function (event, jsEvent, ui, view) {
+                    eventResizeStart: function (event, jsEvent, ui, view) {
 //                    cc(event);
-                },
+                    },
 
 // * * *
-                eventResizeStop: function (event, jsEvent, ui, view) {
+                    eventResizeStop: function (event, jsEvent, ui, view) {
 //                    cc(event);
-                },
+                    },
 
 // * * *
-                eventResize: function (event, jsEvent, ui, view) {
+                    eventResize: function (event, jsEvent, ui, view) {
 //                    cc(event);
-                },
+                    },
 // * * * * *
-                eventRender: function (event, element, view) {
-                    // cc('eventRender / element');
-                    // cc(event);
-                    // cc(element);
-                    // cc(view);
-                    // cc('-------');
-                    // cc('eventRender');
-                    // cc(event.id);
 
-                    // var elm=document.getElementById(event.id);
-                    // cc('elm');
-                    // cc(elm);
+                    // eventRender: function (event, element) {
+                    //     cc('eventRender');
+                    //     element.bind('mousedown', function (e) {
+                    //         if (e.which == 3) {
+                    //             alert('Right mouse button pressed');
+                    //         }
+                    //     });
+                    // },
 
-                    // element.bind('mousedown', function (e) {
-                    //     if (e.which == 3) {
-                    //         alert('Right mouse button pressed');
-                    //     }
-                    // });
-                    // $.contextMenu({
-                    //     selector: '.fc-timeline-event',
-                    //     callback: function (key, options) {
-                    //         // callbk(key, options);
-                    //         // var m = "clicked..: " + key;
-                    //         // window.console && console.log(m) || alert(m);
-                    //     },
-                    //     items: {
-                    //         "edit": {name: "Edit", icon: "edit"},
-                    //         "cut": {name: "Cut", icon: "cut"},
-                    //         "copy": {name: "Copy", icon: "copy"},
-                    //         "paste": {name: "Paste", icon: "paste"},
-                    //         "delete": {name: "Delete", icon: "delete"},
-                    //         "sep1": "---------",
-                    //         "quit": {name: "Quit", icon: "quit"}
-                    //     }
-                    // });
-                },
-                dayClick: function () {
+                    eventRender: function (event, element, view) {
+                        cc(event);
+                        if (!ScheduleEvents.hasOwnProperty(event.id)) {
+                            ScheduleEvents[event.id] = {
+                                resourceId: event.resourceId,
+                                start: moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss'),
+                                end: moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss')
+                            };
+                            cc(ScheduleEvents);
+                        } else if (ScheduleEvents[event.id].resourceId != event.resourceId ||
+                            ScheduleEvents[event.id].start != moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss') ||
+                            ScheduleEvents[event.id].end != moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss')) {
+
+                            ScheduleEvents[event.id].resourceId = event.resourceId;
+                            ScheduleEvents[event.id].start = moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss');
+                            ScheduleEvents[event.id].end = moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss');
+                            cc(ScheduleEvents);
+
+
+                            // MESM_ProductionOrdersListFromSAP
+                            // cc('event.id.substring(8) ' + event.id.substring(8));
+                            for (var i = 0; i < orderTable.dataSet.length; i++) {
+                                if (orderTable.dataSet[i].OrderID == event.id.substring(8)) {
+                                    // cc(orderTable.dataSet[i].OrderID);
+                                    // cc(orderTable.dataSet[i].StartDate);
+                                    // cc(orderTable.dataSet[i].StartTime);
+                                    // cc(orderTable.dataSet[i].EndDate);
+                                    // cc(orderTable.dataSet[i].EndTime);
+                                    // cc(orderTable.dataSet[i].WCG);
+                                    // cc(orderTable.dataSet[i].Status);
+                                    // cc(orderTable.dataSet[i].Press);
+                                    // cc('====');
+                                    // cc(ScheduleEvents[event.id].resourceId);
+                                    // cc(ScheduleEvents[event.id].start);
+                                    // cc(ScheduleEvents[event.id].end);
+                                    // cc('//////');
+                                    orderTable.dataSet[i].StartDate = moment.utc(event.start._d).format('MMM DD, YYYY');
+                                    orderTable.dataSet[i].EndDate = moment.utc(event.end._d).format('MMM DD, YYYY');
+                                    orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
+                                    orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
+                                    orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
+                                    orderTable.dataSet[i].Press = ScheduleEvents[event.id].resourceId.split('_')[1];
+                                    // cc(orderTable.dataSet[i].StartDate);
+                                    // cc(orderTable.dataSet[i].EndDate);
+                                    // cc(orderTable.dataSet[i].StartTime);
+                                    // cc(orderTable.dataSet[i].EndTime);
+                                    // cc(orderTable.dataSet[i].WCG);
+                                    // cc(orderTable.dataSet[i].Press);
+                                    break;
+                                }
+                            }
+                            orderTable.reload();
+                            // cc(event);
+                        }
+                        // cc('eventRender');
+                        // cc(event.id);
+                        // cc(event.resourceId);
+                        // // cc(event.title);
+                        // // cc(event.start._d);
+                        // cc(moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss'));
+                        // cc(moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss'));
+
+                        // var elm=document.getElementById(event.id);
+                        // cc('elm');
+                        // cc(elm);
+
+                        // element.bind('mousedown', function (e) {
+                        //     if (e.which == 3) {
+                        //         alert('Right mouse button pressed');
+                        //     }
+                        // });
+                        // $.contextMenu({
+                        //     selector: '.fc-timeline-event',
+                        //     callback: function (key, options) {
+                        //         // callbk(key, options);
+                        //         // var m = "clicked..: " + key;
+                        //         // window.console && console.log(m) || alert(m);
+                        //     },
+                        //     items: {
+                        //         "edit": {name: "Edit", icon: "edit"},
+                        //         "cut": {name: "Cut", icon: "cut"},
+                        //         "copy": {name: "Copy", icon: "copy"},
+                        //         "paste": {name: "Paste", icon: "paste"},
+                        //         "delete": {name: "Delete", icon: "delete"},
+                        //         "sep1": "---------",
+                        //         "quit": {name: "Quit", icon: "quit"}
+                        //     }
+                        // });
+                    },
+                    dayClick: function () {
 //                    $('#calendar').fullCalendar('next');
-                },
-                slotWidth: 15,
+                    },
 
-                height: 700,
-                selectable: true,
-                selectHelper: true,
-                customButtons: {
-                    myCustomButton: {
-                        text: 'CustomButton',
-                        click: function () {
+                    eventMouseout: function (event, jsEvent, view) {
+                        // cc("eventMouseout");
+                        // cc(event);
+                        // cc(jsEvent);
+                        // cc(view);
+                    },
+
+                    slotWidth: 15,
+
+                    height:
+                        700,
+                    selectable:
+                        true,
+                    selectHelper:
+                        true,
+                    customButtons:
+                        {
+                            myCustomButton: {
+                                text: 'CustomButton',
+                                click:
+
+                                    function () {
 //                            cc('custom button');
 // * * *
 //                            $('#calendar').fullCalendar('removeEvents', 111);
@@ -884,7 +972,7 @@
 // //                            cc(ce[0].id);
 // //                            cc(ce[0].start);
 //                         ce.t
-                            $('#calendar').fullCalendar('updateEvent', event);
+                                        $('#calendar').fullCalendar('updateEvent', event);
 //                            cc(ce.end);
 // * * *                     $('#calendar').fullCalendar('refetchEvents');
 
@@ -893,40 +981,57 @@
 // * * *                     $('#calendar').fullCalendar('addEventSource');
 
 // * * *                     $('#calendar').fullCalendar('removeEventSource');
-                        },
-                        icon: 'left-double-arrow'
-                    }
-                },
-                header: {
-                    left: 'today prev,next myCustomButton',
-                    center: 'title',
-                    right: 'timelineDay,timelineThreeDays,agendaWeek,month'
-                },
+                                    }
 
-                defaultView: 'timelineDay',
+                                ,
+                                icon: 'left-double-arrow'
+                            }
+                        }
+                    ,
+                    header: {
+                        left: 'today prev,next myCustomButton',
+                        center:
+                            'title',
+                        right:
+                            'timelineDay,timelineThreeDays,agendaWeek,month'
+                    }
+                    ,
+
+                    defaultView: 'timelineDay',
 //                visibleRange doesn't work for 'timelineDay'
 //                visibleRange : {
 //                    start: '2017-11-03T00:00:00',
 //                    end: '2017-11-03T07:00:00'
 //                },
 
-                validRange: {   //works for timelineDay
-                    start: today + 'T00:00:00',
-                    end: today + 'T24:00:00'
-                },
+                    validRange:
+                        {   //works for timelineDay
+                            start: today + 'T00:00:00',
+                            end:
+                            today + 'T24:00:00'
+                        }
+                    ,
 
-                views: {
-                    timelineThreeDays: {
-                        type: 'timeline',
-                        duration: {days: 3}
+                    views: {
+                        timelineThreeDays: {
+                            type: 'timeline',
+                            duration:
+                                {
+                                    days: 3
+                                }
+                        }
                     }
-                },
-                resourceGroupField: 'WorkingCenter',
-                resourceLabelText: 'WorkCentre: ',
-                resources: eventSources,
-                // eventOverlap: false, // will cause the event to take up entire resource height
-                resourceAreaWidth: '300px',
-                events: [
+                    ,
+                    resourceGroupField: 'WorkingCenter',
+                    resourceLabelText:
+                        'WorkCentre: ',
+                    resources:
+                    eventSources,
+                    // eventOverlap: false, // will cause the event to take up entire resource height
+                    resourceAreaWidth:
+                        '300px',
+                    events:
+                        [
 //                    {
 //                        id: 'GROUP1_PRESS07',
 //                        resourceId: 'GROUP1_PRESS07_39',
@@ -1014,54 +1119,54 @@
 //                        title: 'M016',
 //                        description: 'This is a  event'
 //                    }
-                ],
+                    ],
 
 
-                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
-            });
-            // $("[href]")
-            // var elms = $("[data-resource-id]");
-            var elms = $("[data-resource-id][id]");
-            // fc-event-container
-            // cc('[data-resource-id]');
-            // cc(elms);
-            $.each( elms, function( key, e ) {
+                    schedulerLicenseKey:
+                        'CC-Attribution-NonCommercial-NoDerivatives'
+                })
+                ;
+                // $("[href]")
+                // var elms = $("[data-resource-id]");
+                var elms = $("[data-resource-id][id]");
+                // fc-event-container
+                // cc('[data-resource-id]');
+                // cc(elms);
+                $.each(elms, function (key, e) {
 
-                cc(e.id);
+                    // cc(e.id);
 
-                $.contextMenu({
-                    // selector: "[data-resource-id]",
-                    // selector: "[data-resource-id][id]",
-                    selector: "#"+e.id,
-                    callback: function (key, options) {
-                        cc(this);
-                        callbk(key, options);
-                        // var m = "clicked..: " + key;
-                        // window.console && console.log(m) || alert(m);
-                    },
-                    items: {
-                        "title": {name: e.id, icon: "fa-cog"},
-                        "sep1": "---------",
-                        "edit": {name: "Edit", icon: "fa-edit"},
-                        "cut": {name: "Cut", icon: "fa-scissors"},
-                        "copy": {name: "Copy", icon: "fa-files-o"},
-                        "paste": {name: "Paste", icon: "fa-clipboard"},
-                        "delete": {name: "Delete", icon: "fa-times"},
-                        // "quit": {name: "Quit", icon: "quit"}
-                    }
+                    $.contextMenu({
+                        // selector: "[data-resource-id]",
+                        // selector: "[data-resource-id][id]",
+                        selector: "#" + e.id,
+                        callback: function (key, options) {
+                            // cc(this);
+                            callbk(key, options);
+                            // var m = "clicked..: " + key;
+                            // window.console && console.log(m) || alert(m);
+                        },
+                        items: {
+                            "title": {name: e.id, icon: "fa-cog"},
+                            "sep1": "---------",
+                            "edit": {name: "Edit", icon: "fa-edit"},
+                            "cut": {name: "Cut", icon: "fa-scissors"},
+                            "copy": {name: "Copy", icon: "fa-files-o"},
+                            "paste": {name: "Paste", icon: "fa-clipboard"},
+                            "delete": {name: "Delete", icon: "fa-times"},
+                            // "quit": {name: "Quit", icon: "quit"}
+                        }
+                    });
                 });
-            });
 
 
-
-
-
-            var callbk = function (key, options) {
-                cc(key);
-                cc(options);
+                var callbk = function (key, options) {
+                    cc(key);
+                    cc(options);
+                }
+                // }
             }
-            // }
-        };
+        ;
 
         var daterangepickerInit = function () {
             if ($('#m_dashboard_daterangepicker').length == 0) {
@@ -1368,7 +1473,13 @@
                 $.contextMenu({
                     selector: '#Schedule' + title,
                     callback: function (key, options) {
-                        callbk(key, options);
+                        // callbk(key, options);
+                        cc(key);
+                        cc(options);
+                        cc(options.selector);
+                        if (key == 'delete') {
+                            $('#calendar').fullCalendar('removeEvents', options.selector.substring(1));
+                        }
                         // var m = "clicked..: " + key;
                         // window.console && console.log(m) || alert(m);
                     },
@@ -1384,10 +1495,10 @@
                     }
                 });
 
-                function callbk(key, options) {
-                    console.log(key);
-                    console.log(options);
-                }
+                // function callbk(key, options) {
+                //     console.log(key);
+                //     console.log(options);
+                // }
             }
 
 
