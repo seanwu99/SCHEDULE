@@ -277,9 +277,12 @@
 
                     }
 
-                    // cc((new Date().getTime() - t0) + ' ms (mmmArray) ');
-                    //MESM_ProductionOrdersListFromSAP_GET
-                    // OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET
+
+                    // SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+                    // FROM Customers
+                    // INNER JOIN Orders
+                    // ON Orders.CustomerID=Customers.CustomerID AND Orders.OrderID > 10300;
+
                     var url = localHost ? "MESM_ProductionOrdersListFromSAP.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET&Content-Type=text/xml";
                     cc(url);
                     getData(url, function (dataRows) {
