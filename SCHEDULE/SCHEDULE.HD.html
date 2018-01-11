@@ -38,7 +38,7 @@
 
     <script>
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
-        var MESM_ProductionOrdersListFromSAP = [];
+        var MESM_ProductionOrders = [];
         var MESM_FloorMaps = [];
         var WorkCentres = [];
         var mmmSTR = '';
@@ -204,7 +204,7 @@
             var t0 = new Date().getTime();
 
             //FloorMaps_GET
-            var url = localHost ? "MESM_FloorMaps_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
+            var url = localHost ? "MESM_FloorMaps.HD.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
             cc(url);
             getData(url, function (DATA) {
 //                cc(DATA);
@@ -258,7 +258,7 @@
                         }
                     }
                 }
-                var url = localHost ? "MOLD_Machine_Matrix_GET.xml" : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
+                var url = localHost ? "MOLD_Machine_Matrix.HD.xml" : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
                 cc(url);
                 getData(url, function (DATA) {
 
@@ -283,18 +283,18 @@
                     // INNER JOIN Orders
                     // ON Orders.CustomerID=Customers.CustomerID AND Orders.OrderID > 10300;
 
-                    var url = localHost ? "MESM_ProductionOrdersListFromSAP.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET&Content-Type=text/xml";
+                    var url = localHost ? "MESM_ProdOrd.HD.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml";
                     cc(url);
                     getData(url, function (dataRows) {
 //                cc(tableOrdersURL + '/' + dataRows.length);
 //                         cc('dataRows');
 //                         cc(dataRows);
-                        MESM_ProductionOrdersListFromSAP = [];
+                        MESM_ProductionOrders = [];
                         $.each(dataRows, function (i, data) {
                             // cc('dataRows');
                             // cc(data);
-                            var md = data.MoldNumber;
-                            var gp = data.WorkCntrGroup;
+                            var md = data.Mold;
+                            var gp = data.WorkCenter;
 
                             var availableRow = false;
                             // var wcID;
@@ -320,23 +320,23 @@
                             //     _status = 5
                             // }
 
-                            MESM_ProductionOrdersListFromSAP.push({
+                            MESM_ProductionOrders.push({
                                 // "RecordID": data.ID,
-                                "OrderID": data.ORDER_NUMBER,
-                                "MATERIAL": data.MATERIAL,
-                                "TARGET": data.TARGET_QUANTITY,
-                                "StartDate": moment(data.SCHED_date).format('MMM DD, YYYY'),
-                                "EndDate": moment(data.FINISH_date).format('MMM DD, YYYY'),
-                                "StartTime": moment(new Date("2000-1-1 " + (data.SCHED_START_time != '---' ? data.SCHED_START_time : '00:00:00'))).format('HH:mm:ss'),
-                                "EndTime": moment(new Date("2000-1-1 " + (data.SCHED_FIN_time != '---' ? data.SCHED_FIN_time : '00:00:00'))).format('HH:mm:ss'),
-                                "WCG": data.WorkCntrGroup,
-                                "Mold": data.MoldNumber,
+                                "OrderNumber": data.OrderNumber,
+                                "MATERIAL": data.Material,
+                                "TARGET": data.Target,
+                                "StartDate": moment(data.StartDate).format('MMM DD, YYYY'),
+                                "EndDate": moment(data.EndDate).format('MMM DD, YYYY'),
+                                "StartTime": moment(new Date("2000-1-1 " + (data.StartTime != '---' ? data.StartTime : '00:00:00'))).format('HH:mm:ss'),
+                                "EndTime": moment(new Date("2000-1-1 " + (data.EndTime != '---' ? data.EndTime : '00:00:00'))).format('HH:mm:ss'),
+                                "WCG": data.Group,
+                                "Mold": data.Mold,
                                 "Status": data.Status,
                                 // "wcID": wcID,
                                 "Press": data.Press,
                             });
                         });
-                        orderTableCreat(MESM_ProductionOrdersListFromSAP);
+                        orderTableCreat(MESM_ProductionOrders);
                         // cc((new Date().getTime() - t0) + ' ms (tableOrders) ');
                         // cc(WorkCentres);
                         sheduleForm(WorkCentres);
@@ -357,7 +357,7 @@
 
         function MOLD_Master_Tool_List_GET() {
 
-            var url = localHost ? 'MOLD_Master_Tool_List.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
+            var url = localHost ? 'MOLD_Master_Tool_List.HD.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
             cc(url);
 
             getData(url, function (dataRows) {
@@ -375,82 +375,6 @@
             });
 
 
-        }
-
-        function MOLD_Master_Tool_List_DataFix() {
-            var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
-            cc(url);
-            getData(url, function (dataRows) {
-                // cc(dataRows.length);
-                for (var n = 0; n < dataRows.length; n++) {
-                    var Mold_Number = dataRows[n].Mold_Number;
-                    var Total_Cavities = parseInt('0' + dataRows[n].Total_Cavities);
-                    var Quoted_Cycle_Time = parseInt('0' + dataRows[n].Quoted_Cycle_Time);
-                    if (Total_Cavities == 0) {
-                        Total_Cavities = Math.round(4 + 3 * Math.random());
-                    }
-                    if (Quoted_Cycle_Time == 0) {
-                        Quoted_Cycle_Time = Math.round(10 + 9 * Math.random());
-                    }
-
-                    // cc(Mold_Number);
-                    // cc(Total_Cavities);
-                    // cc(Quoted_Cycle_Time);
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_UPD" +
-                        "&Param.1=" +
-                        Mold_Number +
-                        "&Param.2=" +
-                        Total_Cavities +
-                        "&Param.3=" +
-                        Quoted_Cycle_Time +
-                        "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
-                }
-            })
-        }
-
-        // ProductionOrdersListFromSAP_GET
-
-        function MESM_ProductionOrdersListFromSAP_DataFix() {
-            var url = localHost ? 'MESM_ProductionOrdersListFromSAP_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET&Content-Type=text/xml';
-            cc(url);
-            getData(url, function (dataRows) {
-                for (var n = 0; n < dataRows.length; n++) {
-                    var _OrderID = dataRows[n].ORDER_NUMBER;
-                    var _StartDate = dataRows[n].SCHED_date;
-                    var _StartTime = dataRows[n].SCHED_START_time;
-                    var _EndDate = dataRows[n].FINISH_date;
-                    var _EndTime = dataRows[n].SCHED_FIN_time;
-                    var _Status = dataRows[n].Status;
-                    var _Press = dataRows[n].Press;
-                    var _TARGET = dataRows[n].TARGET_QUANTITY + '0';
-
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
-                        "&Param.1=" +
-                        _OrderID +
-                        "&Param.2=" +
-                        _StartDate +
-                        "&Param.3=" +
-                        _StartTime +
-                        "&Param.4=" +
-                        _EndDate +
-                        "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
-                        _Status +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
-                        "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
-                    // DB_UPD(urlProc);
-                }
-
-
-            })
         }
 
         var orderTableCreat = function (rows) {
@@ -498,8 +422,8 @@
 
                     },
                     {
-                        field: "OrderID",
-                        title: "OrderID",
+                        field: "OrderNumber",
+                        title: "OrderNo.",
                         sortable: "asc",
                         filterable: !1,
                         width: 85,
@@ -529,7 +453,7 @@
                     {
                         field: "StartTime",
                         title: "StartTime",
-                        width: 90,
+                        width: 80,
                         // responsive: {visible: "sm"}
                     },
                     {
@@ -544,13 +468,13 @@
                     },
                     {
                         field: "WCG",
-                        title: "WorkCentre",
-                        width: 110,
+                        title: "Group",
+                        width: 80,
                     },
                     {
                         field: "Mold",
                         title: "Mold",
-                        width: 70,
+                        width: 80,
                     },
                     {
                         field: "Press",
@@ -567,14 +491,16 @@
 
                             if (e.Status == 'U' || e.Status == 'H') {    //Unscheduled
 
-
+                                cc('e.Status == \'U\' || e.Status == \'H\'');
+                                cc(e.WCG);
                                 var wcg = '';
                                 var wcgNAME = '';
                                 for (n = 0; n < MESM_FloorMaps.length; n++) {
                                     if (e.WCG == MESM_FloorMaps[n]['unitName']) {
                                         wcg = MESM_FloorMaps[n]['recordID'];
-                                        wcgNAME = MESM_FloorMaps[n]['unitName']
-                                        n = MESM_FloorMaps.length;
+                                        wcgNAME = MESM_FloorMaps[n]['unitName'];
+                                        break;
+                                        // n = MESM_FloorMaps.length;
                                     }
                                 }
 
@@ -582,6 +508,9 @@
                                 var prsSTR = '';
                                 for (n = 0; n < MESM_FloorMaps.length; n++) {
                                     if (MESM_FloorMaps[n]['idUnitParent'] == wcg) {
+                                        cc('MESM_FloorMaps[n][\'idUnitParent\'] == wcg');
+                                        cc(wcg + ' / ' + wcgNAME + ' / ' + e.Mold + ' / ' + MESM_FloorMaps[n]['MOLD_Machine_Matrix'] + ' / ');
+                                        cc(mmmArray[e.Mold]);
 
                                         if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[n]['MOLD_Machine_Matrix']) > 0 && MESM_FloorMaps[n]['unitName'] != e.Press) {
 //                                            cc(e.Mold);
@@ -606,6 +535,7 @@
                                                 '</a>';
                                         }
 
+                                        break;
                                     }
                                 }
 //                                if (prsSTR.length > 0) {
@@ -880,7 +810,7 @@
                             // MESM_ProductionOrdersListFromSAP
                             // cc('event.id.substring(8) ' + event.id.substring(8));
                             for (var i = 0; i < orderTable.dataSet.length; i++) {
-                                if (orderTable.dataSet[i].OrderID == event.id) {
+                                if (orderTable.dataSet[i].OrderNumber == event.id) {
                                     // cc(orderTable.dataSet[i].OrderID);
                                     // cc(orderTable.dataSet[i].StartDate);
                                     // cc(orderTable.dataSet[i].StartTime);
@@ -1277,7 +1207,7 @@
             var tColums = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Status = tColums[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _OrderID = tColums[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _OrderNumber = tColums[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _TARGET = tColums[4].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 
             var _StartDate = moment(tColums[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('MM/DD/YYYY');
@@ -1318,10 +1248,10 @@
                         _EndTime = _EndTime + mm + ':00';
                     }
 
-                    addScheduleEvent(e.id, _OrderID, '00:00:00', _EndTime);
+                    addScheduleEvent(e.id, _OrderNumber, '00:00:00', _EndTime);
 
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Hold';
                             orderTable.dataSet[i].Press = _Press;
                             orderTable.dataSet[i].Status = 'H';
@@ -1332,7 +1262,7 @@
                     // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1356,18 +1286,18 @@
 
 
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Cancelled';
                             // _Press = '';
                             orderTable.dataSet[i].Press = '';
                             orderTable.dataSet[i].Status = 'C';
-                            removeScheduleEvent(_OrderID);
+                            removeScheduleEvent(_OrderNumber);
                             break;
                         }
                     }
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1387,7 +1317,7 @@
                     DB_UPD(urlProc);
                 } else if (_Action.indexOf('Scheduled') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Cancelled';
                             // _Press = '';
                             // orderTable.dataSet[i].Press = '';
@@ -1398,7 +1328,7 @@
                     }
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1452,12 +1382,12 @@
                     // cc(e.id);
                     // cc(_OrderID);
 
-                    removeScheduleEvent(_OrderID);
+                    removeScheduleEvent(_OrderNumber);
 
-                    addScheduleEvent(e.id, _OrderID, '00:00:00', _EndTime);
+                    addScheduleEvent(e.id, _OrderNumber, '00:00:00', _EndTime);
 
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Hold';
                             orderTable.dataSet[i].Press = _Press;
                             orderTable.dataSet[i].Status = 'H';
@@ -1468,7 +1398,7 @@
                     // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1490,18 +1420,18 @@
 
                 } else if (_Action.indexOf('Undo') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Unscheduled';
                             // _Press = '';
                             orderTable.dataSet[i].Press = '';
                             orderTable.dataSet[i].Status = 'U';
-                            removeScheduleEvent(_OrderID);
+                            removeScheduleEvent(_OrderNumber);
                             break;
                         }
                     }
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1523,18 +1453,18 @@
 
 
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Cancelled';
                             // _Press = '';
                             orderTable.dataSet[i].Press = '';
                             orderTable.dataSet[i].Status = 'C';
-                            removeScheduleEvent(_OrderID);
+                            removeScheduleEvent(_OrderNumber);
                             break;
                         }
                     }
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1554,7 +1484,7 @@
                     DB_UPD(urlProc);
                 } else if (_Action.indexOf('Scheduled') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Cancelled';
                             // _Press = '';
                             // orderTable.dataSet[i].Press = '';
@@ -1565,7 +1495,7 @@
                     }
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1588,7 +1518,7 @@
             } else if (_Status == 'No Material') {
                 if (_Action.indexOf('Cancelled') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderID == _OrderID) {
+                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Cancelled';
                             // _Press = '';
                             // orderTable.dataSet[i].Press = '';
@@ -1599,7 +1529,7 @@
                     }
                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
                         "&Param.1=" +
-                        _OrderID +
+                        _OrderNumber +
                         "&Param.2=" +
                         _StartDate +
                         "&Param.3=" +
@@ -1701,7 +1631,7 @@
                         removeScheduleEvent(options.selector.substring(1));
 
                         for (var i = 0; i < orderTable.dataSet.length; i++) {
-                            if (orderTable.dataSet[i].OrderID == options.selector.substring(1)) {
+                            if (orderTable.dataSet[i].OrderNumber == options.selector.substring(1)) {
                                 _Status = 'Unscheduled';
                                 // _Press = '';
                                 orderTable.dataSet[i].Press = '';
@@ -2382,28 +2312,13 @@
                                                         <div class="m-form__control">
                                                             <select class="form-control m-bootstrap-select m-bootstrap-select--solid"
                                                                     id="m_form_type">
-                                                                <option value="">
-                                                                    All
-                                                                </option>
-
-                                                                <option value="GROUP1">
-                                                                    GROUP 1
-                                                                </option>
-                                                                <option value="GROUP2">
-                                                                    GROUP 2
-                                                                </option>
-                                                                <option value="GROUP3">
-                                                                    GROUP 3
-                                                                </option>
-                                                                <option value="GROUP4">
-                                                                    GROUP 4
-                                                                </option>
-                                                                <option value="GROUP5">
-                                                                    GROUP 5
-                                                                </option>
-                                                                <option value="GROUP6">
-                                                                    GROUP 6
-                                                                </option>
+                                                                <option value=""> All</option>
+                                                                <option value="MOLD1"> MOLD1</option>
+                                                                <option value="MOLD2"> MOLD2</option>
+                                                                <option value="MOLD3"> MOLD3</option>
+                                                                <option value="MOLD4"> MOLD4</option>
+                                                                <option value="MOLD5"> MOLD5</option>
+                                                                <option value="MOLD6"> MOLD6</option>
                                                             </select>
                                                         </div>
                                                     </div>

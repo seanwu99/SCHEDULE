@@ -204,7 +204,8 @@
             var t0 = new Date().getTime();
 
             //FloorMaps_GET
-            var url = localHost ? "MESM_FloorMaps_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
+            //SCHEDULE/RTS/MESM_FloorMaps.xml
+            var url = localHost ? "MESM_FloorMaps.RTS.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
             cc(url);
             getData(url, function (DATA) {
 //                cc(DATA);
@@ -258,7 +259,7 @@
                         }
                     }
                 }
-                var url = localHost ? "MOLD_Machine_Matrix_GET.xml" : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
+                var url = localHost ? "MOLD_Machine_Matrix.RTS.xml" : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
                 cc(url);
                 getData(url, function (DATA) {
 
@@ -283,7 +284,7 @@
                     // INNER JOIN Orders
                     // ON Orders.CustomerID=Customers.CustomerID AND Orders.OrderID > 10300;
 
-                    var url = localHost ? "MESM_ProdOrd_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml";
+                    var url = localHost ? "MESM_ProductionOrdersListFromSAP.RTS.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_GET&Content-Type=text/xml";
                     cc(url);
                     getData(url, function (dataRows) {
 //                cc(tableOrdersURL + '/' + dataRows.length);
@@ -293,8 +294,8 @@
                         $.each(dataRows, function (i, data) {
                             // cc('dataRows');
                             // cc(data);
-                            var md = data.Mold;
-                            var gp = data.WorkCenter;
+                            var md = data.MoldNumber;
+                            var gp = data.WorkCntrGroup;
 
                             var availableRow = false;
                             // var wcID;
@@ -322,15 +323,15 @@
 
                             MESM_ProductionOrdersListFromSAP.push({
                                 // "RecordID": data.ID,
-                                "OrderID": data.OrderNumber,
-                                "MATERIAL": data.Material,
-                                "TARGET": data.Target,
-                                "StartDate": moment(data.StartDate).format('MMM DD, YYYY'),
-                                "EndDate": moment(data.EndDate).format('MMM DD, YYYY'),
-                                "StartTime": moment(new Date("2000-1-1 " + (data.StartTime != '---' ? data.StartTime : '00:00:00'))).format('HH:mm:ss'),
-                                "EndTime": moment(new Date("2000-1-1 " + (data.EndTime != '---' ? data.EndTime : '00:00:00'))).format('HH:mm:ss'),
-                                "WCG": data.WorkCenter,
-                                "Mold": data.Mold,
+                                "OrderID": data.ORDER_NUMBER,
+                                "MATERIAL": data.MATERIAL,
+                                "TARGET": data.TARGET_QUANTITY,
+                                "StartDate": moment(data.SCHED_date).format('MMM DD, YYYY'),
+                                "EndDate": moment(data.FINISH_date).format('MMM DD, YYYY'),
+                                "StartTime": moment(new Date("2000-1-1 " + (data.SCHED_START_time != '---' ? data.SCHED_START_time : '00:00:00'))).format('HH:mm:ss'),
+                                "EndTime": moment(new Date("2000-1-1 " + (data.SCHED_FIN_time != '---' ? data.SCHED_FIN_time : '00:00:00'))).format('HH:mm:ss'),
+                                "WCG": data.WorkCntrGroup,
+                                "Mold": data.MoldNumber,
                                 "Status": data.Status,
                                 // "wcID": wcID,
                                 "Press": data.Press,
@@ -357,7 +358,7 @@
 
         function MOLD_Master_Tool_List_GET() {
 
-            var url = localHost ? 'MOLD_Master_Tool_List.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
+            var url = localHost ? 'MOLD_Master_Tool_List.RTS.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
             cc(url);
 
             getData(url, function (dataRows) {
