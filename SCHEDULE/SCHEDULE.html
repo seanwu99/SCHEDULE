@@ -40,7 +40,11 @@
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
         var MESM_ProductionOrders = [];
         var MESM_FloorMaps = [];
+        var MESM_FloorMaps_LineGROUP = [];
+        var MESM_ProdOrd = [];
+        var MESM_Orders = [];
         var WorkCentres = [];
+        // var WorkCentres2 = [];
         var mmmSTR = '';
         var mmmArray = [];
         var orderTable;
@@ -64,57 +68,41 @@
             cc(new Date(0).toISOString());
 
             orderTablePreparing();
+            return;
 
-
-            var url = localHost ? 'MOLD_Master_Tool_List.HD.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
-            cc(url);
-            var MOLD_Master_Tool_List_GOT = false;
-            getData(url, function (_data) {
-                var Mold_Number = '';
-                for (var n = 0; n < _data.length; n++) {
-                    if (_data[n].Mold_Number != null) {
-                        Mold_Number = _data[n].Mold_Number;
-                        var mm = Number(_data[n].Total_Cavities) * 60 / Number(_data[n].Quoted_Cycle_Time);
-                        // cc(Mold_Number + ' = ' + mm);
-                        MOLD_Master_Tool_List[Mold_Number] = mm;
-                    }
-
-                }
-                MOLD_Master_Tool_List_GOT = true;
-                if (MOLD_Master_Tool_List_GOT && MESM_Orders_GOT) {
-                    mainPro();
-                }
-            });
-
-            var url = localHost ? 'MESM_Orders.HD.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
-            cc(url);
-            var MESM_Orders_GOT = false;
-            getData(url, function (dataRows) {
-                var Mold_Number = '';
-                for (var n = 0; n < dataRows.length; n++) {
-                    if (dataRows[n].Mold_Number != null) {
-                        Mold_Number = dataRows[n].Mold_Number;
-                        var mm = Number(dataRows[n].Total_Cavities) * 60 / Number(dataRows[n].Quoted_Cycle_Time);
-                        // cc(Mold_Number + ' = ' + mm);
-                        MESM_Orders[Mold_Number] = mm;
-                    }
-
-                }
-                MESM_Orders_GOT = true;
-                if (MOLD_Master_Tool_List && MESM_Orders_GOT) {
-                    mainPro();
-                }
-            });
+            // var url = localHost ? 'MESM_Orders.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+            // cc(url);
+            // var MESM_Orders_GOT = false;
+            // getData(url, function (dataRows) {
+            //     var Mold_Number = '';
+            //     for (var n = 0; n < dataRows.length; n++) {
+            //         if (dataRows[n].Mold_Number != null) {
+            //             Mold_Number = dataRows[n].Mold_Number;
+            //             var mm = Number(dataRows[n].Total_Cavities) * 60 / Number(dataRows[n].Quoted_Cycle_Time);
+            //             // cc(Mold_Number + ' = ' + mm);
+            //             MESM_Orders[Mold_Number] = mm;
+            //         }
+            //
+            //     }
+            //     MESM_Orders_GOT = true;
+            //     if (MOLD_Master_Tool_List && MESM_Orders_GOT) {
+            //         // mainPro();
+            //     }
+            // });
         }
 
         // });
         function orderTablePreparing() {
-            var url = localHost ? "MESM_FloorMaps_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
-            cc(url);
+            var url_MESM_FloorMaps_GET = localHost ? "MESM_FloorMaps_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
+
             MESM_FloorMaps = [];
-            var GROUP = [];
-            getData(url, function (data) {
+            MESM_FloorMaps_LineGROUP = [];
+
+            //MESM_FloorMaps
+            getData(url_MESM_FloorMaps_GET, function (data) {
+                cc(url_MESM_FloorMaps_GET);
                 $.each(data, function (index, value) {
+
                     MESM_FloorMaps[value.recordID] = {
                         'recordID': value.recordID,
                         'unitName': value.unitName,
@@ -128,35 +116,241 @@
                         'unitMap': value.unitMap
                     }
 
-                    if (value.unitType == '5' && value.groupType == 'mold' && !GROUP.hasOwnProperty(value.recordID)) {
+                    if (value.unitType == '5' && value.groupType == 'mold' && !MESM_FloorMaps_LineGROUP.hasOwnProperty(value.recordID)) {
                         // ScheduleEvents.hasOwnProperty('900000');
-                        GROUP[value.recordID] = [];
+                        MESM_FloorMaps_LineGROUP[value.recordID] = [];
                         // GROUP.push();
                     }
                 });
-                cc(MESM_FloorMaps);
-                cc(GROUP);
+
                 for (var m in MESM_FloorMaps) {
-                    // cc(key);
-                    // cc(MESM_FloorMaps[key]);
-                    for (var g in GROUP) {
+                    for (var g in MESM_FloorMaps_LineGROUP) {
                         if (MESM_FloorMaps[m].idUnitParent == g) {
-                            GROUP[g].push(m);
+                            MESM_FloorMaps_LineGROUP[g].push(m);
                         }
-                        // if (MESM_FloorMaps[m]) {
-                        // }
                     }
                 }
-                cc(GROUP);
-                for (var g in GROUP) {
-                    cc(GROUP[g].length);
-                }
-            });
-            var url = localHost ? 'MESM_ProdOrd_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml';
-            cc(url);
-            getData(url, function (data) {
+                cc('MESM_FloorMaps_LineGROUP');
+                cc(MESM_FloorMaps_LineGROUP);
 
-            })
+                //MESM_ProdOrd_GET
+                var url_MESM_ProdOrd_GET = localHost ? 'MESM_ProdOrd_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml';
+                MESM_ProdOrd = [];
+                getData(url_MESM_ProdOrd_GET, function (data) {
+                    $.each(data, function (index, value) {
+                        MESM_ProdOrd[value.OrderNumber] = {
+                            'OrderNumber': value.OrderNumber,
+                            'Material': value.Material,
+                            'Target': value.Target,
+                            'SchedStartDateTime': value.SchedStartDateTime,
+                            'SchedFinishDateTime': value.SchedFinishDateTime,
+                            'Group': value.Group,
+                            'Mold': value.Mold,
+                            'Status': value.Status,
+                        }
+                    });
+                    // cc('url_MESM_ProdOrd_GET');
+                    cc(MESM_ProdOrd);
+
+                    var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+
+                    getData(url_MESM_Orders_GET1, function (data) {
+                        // cc('url_MESM_Orders_GET1');
+                        MESM_Orders = [];
+                        $.each(data, function (index, value) {
+                            MESM_Orders[value.orderLastID] = {
+                                'orderFirstID': value.orderFirstID,
+                                'orderLastID': value.orderLastID,
+                                'materialID': value.materialID,
+                                'plantID': value.plantID,
+                                'scheduledStart': value.scheduledStart,
+                                'scheduledFinish': value.scheduledFinish,
+                                'lineID': value.lineID,
+                                'workcenterID': value.workcenterID,
+                                'moldID': value.moldID,
+                                'scheduledQty': value.scheduledQty,
+                                'ScheduleStatus': value.ScheduleStatus,
+                            };
+                        });
+                        // cc('url_MESM_Orders_GET1');
+                        // cc(MESM_Orders);
+                        orderTableUpdata();
+                        // refresh MESM_Orders
+
+
+                    })
+
+                });
+
+                // function mapID() {
+                // }
+
+                function orderTableUpdata() {
+                    // cc('orderTableUpdata');
+                    // cc(MESM_ProdOrd);
+                    var endCheck = 0;
+                    for (var ProdOrd in MESM_ProdOrd) {
+
+                        // cc(MESM_ProdOrd[ProdOrd].OrderNumber);
+                        if (MESM_Orders.hasOwnProperty(MESM_ProdOrd[ProdOrd].OrderNumber)) {
+                            // cc('true');
+                        } else {
+                            // cc('addOrder2Table');
+                            endCheck++;
+                            var lineID = 0;
+                            for (var f in MESM_FloorMaps) {
+                                if (MESM_FloorMaps[f].unitName == MESM_ProdOrd[ProdOrd].Group) {
+                                    lineID = f;
+                                    break;
+                                }
+                            }
+                            cc(lineID + ' / ' + MESM_ProdOrd[ProdOrd].Group);
+                            addOrder2Table(
+                                {
+                                    'Counter': '00000002',  //
+                                    'OrderNumber': MESM_ProdOrd[ProdOrd].OrderNumber,
+                                    'Material': MESM_ProdOrd[ProdOrd].Material,
+                                    'plantID': '1107',
+                                    'scheduledStart': MESM_ProdOrd[ProdOrd].SchedStartDateTime,
+                                    'scheduledFinish': MESM_ProdOrd[ProdOrd].SchedStartDateTime,
+                                    'lineID': lineID,//MESM_ProdOrd[ProdOrd].Group,
+                                    'workcenterID': null,
+                                    'moldID': MESM_ProdOrd[ProdOrd].Mold,
+                                    'scheduledQty': MESM_ProdOrd[ProdOrd].Target,
+                                    'Status': MESM_ProdOrd[ProdOrd].Status,
+                                }
+                            );
+                        }
+                    }
+
+                    if (endCheck == 0) {
+                        var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+
+                        getData(url_MESM_Orders_GET1, function (data) {
+                            // cc('url_MESM_Orders_GET1');
+                            MESM_Orders = [];
+                            $.each(data, function (index, value) {
+                                MESM_Orders[value.orderLastID] = {
+                                    'orderFirstID': value.orderFirstID,
+                                    'orderLastID': value.orderLastID,
+                                    'materialID': value.materialID,
+                                    'plantID': value.plantID,
+                                    'scheduledStart': value.scheduledStart,
+                                    'scheduledFinish': value.scheduledFinish,
+                                    'lineID': value.lineID,
+                                    'workcenterID': value.workcenterID,
+                                    'moldID': value.moldID,
+                                    'scheduledQty': value.scheduledQty,
+                                    'ScheduleStatus': value.ScheduleStatus,
+                                };
+                            });
+                            cc('url_MESM_Orders_GET2');
+                            cc(MESM_Orders);
+                            MOLD_Master_Tool_List_GET();
+                        })
+                    }
+
+
+                    function addOrder2Table(oData) {
+                        var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ScheduleOrder_Add" +
+                            "&Param.1=" +
+                            oData.Counter +
+                            "&Param.2=" +
+                            oData.OrderNumber +
+                            "&Param.3=" +
+                            oData.Material +
+                            "&Param.4=" +
+                            oData.plantID +
+                            "&Param.5=" +
+                            oData.scheduledStart +
+                            "&Param.6=" +
+                            oData.scheduledFinish +
+                            "&Param.7=" +
+                            oData.lineID +
+                            "&Param.8=" +
+                            oData.workcenterID +
+                            "&Param.9=" +
+                            oData.moldID +
+                            "&Param.10=" +
+                            oData.scheduledQty +
+                            "&Param.11=" +
+                            oData.Status +
+                            "&Content-Type=text/xml";
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                // document.getElementById("demo").innerHTML = this.responseText;
+                                cc(' add Order ' + oData.OrderNumber + ' to MESM_Orders');
+                                cc(--endCheck)
+                                if (endCheck == 0) {
+                                    var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+
+                                    getData(url_MESM_Orders_GET1, function (data) {
+                                        // cc('url_MESM_Orders_GET1');
+                                        MESM_Orders = [];
+                                        $.each(data, function (index, value) {
+                                            MESM_Orders[value.orderLastID] = {
+                                                'orderFirstID': value.orderFirstID,
+                                                'orderLastID': value.orderLastID,
+                                                'materialID': value.materialID,
+                                                'plantID': value.plantID,
+                                                'scheduledStart': value.scheduledStart,
+                                                'scheduledFinish': value.scheduledFinish,
+                                                'lineID': value.lineID,
+                                                'workcenterID': value.workcenterID,
+                                                'moldID': value.moldID,
+                                                'scheduledQty': value.scheduledQty,
+                                                'ScheduleStatus': value.ScheduleStatus,
+                                            };
+                                        });
+                                        cc('url_MESM_Orders_GET2');
+                                        cc(MESM_Orders);
+                                        MOLD_Master_Tool_List_GET();
+                                    })
+                                }
+                            }
+                        };
+                        xhttp.open("GET", urlProc, true);
+                        xhttp.send();
+
+                    }
+
+                }
+
+
+                // for (var g in GROUP) {
+                //     cc('g ' + g + ' ' + GROUP[g].length);
+                //     for (var n = 0; n < GROUP[g].length; n++) {
+                //         cc(MESM_FloorMaps[GROUP[g][n]].unitName);
+                //     }
+                // }
+                // cc('GROUP NAME');
+                // cc(GROUP.length);
+                // cc(GROUP['7']);
+                // var url = localHost ? 'MOLD_Master_Tool_List.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
+                // cc(url);
+                // getData(url, function (data) {
+                //     var Mold_Number = '';
+                //     for (var n = 0; n < data.length; n++) {
+                //         if (data[n].Mold_Number != null) {
+                //             Mold_Number = data[n].Mold_Number;
+                //             var mm = Number(data[n].Total_Cavities) * 60 / Number(data[n].Quoted_Cycle_Time);
+                //             // cc(Mold_Number + ' = ' + mm);
+                //             MOLD_Master_Tool_List[Mold_Number] = mm;
+                //         }
+                //
+                //     }
+                //     cc('MOLD_Master_Tool_List');
+                //     cc(MOLD_Master_Tool_List);
+                //     // MOLD_Master_Tool_List_GOT = true;
+                //     // if (MOLD_Master_Tool_List_GOT && MESM_Orders_GOT) {
+                //     //     mainPro();
+                //     // }
+                // });
+
+            });
+
+
         }
 
         function arrayProperty() {
@@ -181,6 +375,7 @@
         }
 
         function mainPro() {
+
             var chatContainer = $(".m-messenger__messages");
 
             $('.m-messenger__form-attachment').click(function (e) {
@@ -295,11 +490,49 @@
 
 
             daterangepickerInit();
+
             var t0 = new Date().getTime();
 
+            // MESM_FloorMaps_LineGROUP;
             //FloorMaps_GET
+
+            for (var g in MESM_FloorMaps_LineGROUP) {
+
+                cc(g);
+                // cc(MESM_FloorMaps_LineGROUP[g]);
+                cc(MESM_FloorMaps_LineGROUP[g].length);
+                cc(MESM_FloorMaps[g].unitName);
+                cc(MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][0]].unitName);
+                // cc(MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][1]]);
+                // cc(MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][2]]);
+                for (var n = 0; n < MESM_FloorMaps_LineGROUP[g].length; n++) {
+                    // cc(MESM_FloorMaps[g].unitName + ' ' + MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][n]].unitName);
+                    WorkCentres.push(
+                        {
+                            id: MESM_FloorMaps[g].unitName + '_' + MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][n]].unitName,
+                            WorkingCenter: MESM_FloorMaps[g].unitDescr,
+                            title: MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][n]].unitDescr,
+                            wcg: MESM_FloorMaps[g].unitName,
+                            MOLD_Machine_Matrix: MESM_FloorMaps[MESM_FloorMaps_LineGROUP[g][n]]['MOLD_Machine_Matrix'],
+                            children: [
+//                                {id: 'a1', title: 'M649A', occupancy: 10, eventColor: 'blue'},
+                            ]
+                        }
+                    );
+                }
+
+                // if (MESM_FloorMaps[m].idUnitParent == g) {
+                //     MESM_FloorMaps_LineGROUP[g].push(m);
+                // }
+            }
+            cc('WorkCentres');
+            cc(WorkCentres);
+            // return;
+
             var url = localHost ? "MESM_FloorMaps.HD.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
             cc(url);
+
+
             getData(url, function (DATA) {
 //                cc(DATA);
 //                cc('floorMaps' + DATA.length);
@@ -307,6 +540,7 @@
                 var GROUP = [];
 
                 mmmSTR = '[Mold_Number]';
+
                 for (var n = 0; n < DATA.length; n++) {
 
                     if (DATA[n]['MOLD_Machine_Matrix'] != null && DATA[n]['MOLD_Machine_Matrix'] != '---' && mmmSTR.indexOf(DATA[n]['MOLD_Machine_Matrix']) < 0) {
@@ -323,40 +557,45 @@
                         'groupType': DATA[n]['groupType'],
                         'MOLD_Machine_Matrix': DATA[n]['MOLD_Machine_Matrix'],
                     });
-                    if (MESM_FloorMaps[n]['unitType'] == '5' && MESM_FloorMaps[n]['groupType'] == 'mold') {
-                        GROUP.push({
-                            'recordID': MESM_FloorMaps[n]['recordID'],
-                            'unitName': MESM_FloorMaps[n]['unitName'],
-                            'unitDescr': MESM_FloorMaps[n]['unitDescr']
-                        });
-                    }
+
+                    // if (MESM_FloorMaps[n]['unitType'] == '5' && MESM_FloorMaps[n]['groupType'] == 'mold') {
+                    //     GROUP.push({
+                    //         'recordID': MESM_FloorMaps[n]['recordID'],
+                    //         'unitName': MESM_FloorMaps[n]['unitName'],
+                    //         'unitDescr': MESM_FloorMaps[n]['unitDescr']
+                    //     });
+                    // }
                 }
 //                cc('mmmSTR ==> ' + mmmSTR);
 //                cc(wcg);
 
-                for (var n = 0; n < GROUP.length; n++) {
-                    for (var m = 0; m < MESM_FloorMaps.length; m++) {
-                        if (GROUP[n]['recordID'] == MESM_FloorMaps[m]['idUnitParent']) {
-//                            cc(wcg[n]['unitName'] + '/' + wcg[n]['unitDescr'] + '/' + floorMaps[m]['unitName'] + '/' + floorMaps[m]['unitDescr'] + '/' + floorMaps[m]['recordID']);
-                            WorkCentres.push({
-                                    id: GROUP[n]['unitName'] + '_' + MESM_FloorMaps[m]['unitName'],
-                                    WorkingCenter: GROUP[n]['unitDescr'],
-                                    title: MESM_FloorMaps[m]['unitDescr'],
-                                    wcg: GROUP[n]['unitName'],
-                                    MOLD_Machine_Matrix: MESM_FloorMaps[m]['MOLD_Machine_Matrix'],
-                                    children: [
-//                                {id: 'a1', title: 'M649A', occupancy: 10, eventColor: 'blue'},
-                                    ]
-                                }
-                            );
-                        }
-                    }
-                }
+//                 for (var n = 0; n < GROUP.length; n++) {
+//                     for (var m = 0; m < MESM_FloorMaps.length; m++) {
+//                         if (GROUP[n]['recordID'] == MESM_FloorMaps[m]['idUnitParent']) {
+// //                            cc(wcg[n]['unitName'] + '/' + wcg[n]['unitDescr'] + '/' + floorMaps[m]['unitName'] + '/' + floorMaps[m]['unitDescr'] + '/' + floorMaps[m]['recordID']);
+//                             WorkCentres.push({
+//                                     id: GROUP[n]['unitName'] + '_' + MESM_FloorMaps[m]['unitName'],
+//                                     WorkingCenter: GROUP[n]['unitDescr'],
+//                                     title: MESM_FloorMaps[m]['unitDescr'],
+//                                     wcg: GROUP[n]['unitName'],
+//                                     MOLD_Machine_Matrix: MESM_FloorMaps[m]['MOLD_Machine_Matrix'],
+//                                     children: [
+// //                                {id: 'a1', title: 'M649A', occupancy: 10, eventColor: 'blue'},
+//                                     ]
+//                                 }
+//                             );
+//                         }
+//                     }
+//                 }
+//                 cc('WorkCentres1');
+//                 cc(WorkCentres);
+                // return;
                 var url = localHost ? "MOLD_Machine_Matrix.HD.xml" : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
                 cc(url);
                 getData(url, function (DATA) {
 
-                    for (var n = 0; n < DATA.length; n++) {
+                    // for (var n = 0; n < DATA.length; n++) {
+                    for (var n = 0; n < 10; n++) {
                         var mmms = '';
                         for (var name in DATA[n]) {
                             if (DATA[n][name] == '1') {
@@ -465,6 +704,8 @@
                     }
 
                 }
+                cc('MOLD_Master_Tool_List');
+                cc(MOLD_Master_Tool_List);
                 mainPro();
             });
 
