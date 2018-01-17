@@ -616,7 +616,7 @@
                     // INNER JOIN Orders
                     // ON Orders.CustomerID=Customers.CustomerID AND Orders.OrderID > 10300;
 
-                    var url = localHost ? "MESM_ProdOrd.HD.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml";
+                    var url = localHost ? "MESM_ProdOrd.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml";
                     cc(url);
                     getData(url, function (dataRows) {
 //                cc(tableOrdersURL + '/' + dataRows.length);
