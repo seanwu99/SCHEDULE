@@ -54,8 +54,7 @@
         var userRoles;
         var userRole;
         var userName;
-        var email1 = 'mark.andre@gmail.com';
-        var imgLoginUser = "assets/app/media/img/users/user1.jpg";
+
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
@@ -69,11 +68,6 @@
             cc(new Date(0).toISOString());
 
             orderTablePreparing();
-
-            $.each($(".imgLoginUser"), function (index, value) {
-                // value.src = '';
-            });
-
             return;
 
             // var url = localHost ? 'MESM_Orders.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
@@ -422,7 +416,6 @@
                             "                            </div>\n" +
                             "                        </div>";
                     } else if (dir == 'in') {
-
                         tpl =
                             "                        <div class=\"m-messenger__message m-messenger__message--in\">\n" +
                             "                            <div class=\"m-messenger__message-pic\">\n" +
@@ -560,7 +553,7 @@
                     "Mold": MESM_Orders[od].moldID,
                     "Status": MESM_Orders[od].ScheduleStatus,
                     // "wcID": wcID,
-                    "Press": MESM_Orders[od].workcenterID == 0 ? '' : MESM_FloorMaps[MESM_Orders[od].workcenterID].unitName,
+                    "Press": MESM_Orders[od].workcenterID,
                 });
                 // MESM_FloorMaps[f]. MOLD_Machine_Matrix
             }
@@ -1222,37 +1215,6 @@
                                 end: moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss')
                             };
                             cc(ScheduleEvents);
-                            for (var i = 0; i < orderTable.dataSet.length; i++) {
-                                if (orderTable.dataSet[i].OrderNumber == event.id) {
-                                    // cc(orderTable.dataSet[i].OrderID);
-                                    // cc(orderTable.dataSet[i].StartDate);
-                                    // cc(orderTable.dataSet[i].StartTime);
-                                    // cc(orderTable.dataSet[i].EndDate);
-                                    // cc(orderTable.dataSet[i].EndTime);
-                                    // cc(orderTable.dataSet[i].WCG);
-                                    // cc(orderTable.dataSet[i].Status);
-                                    // cc(orderTable.dataSet[i].Press);
-                                    // cc('====');
-                                    // cc(ScheduleEvents[event.id].resourceId);
-                                    // cc(ScheduleEvents[event.id].start);
-                                    // cc(ScheduleEvents[event.id].end);
-                                    // cc('//////');
-                                    orderTable.dataSet[i].StartDate = moment.utc(event.start._d).format('MMM DD, YYYY HH:mm:ss');
-                                    orderTable.dataSet[i].EndDate = moment.utc(event.end._d).format('MMM DD, YYYY HH:mm:ss');
-                                    orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
-                                    orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
-                                    orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
-                                    orderTable.dataSet[i].Press = ScheduleEvents[event.id].resourceId.split('_')[1];
-                                    // cc(orderTable.dataSet[i].StartDate);
-                                    // cc(orderTable.dataSet[i].EndDate);
-                                    // cc(orderTable.dataSet[i].StartTime);
-                                    // cc(orderTable.dataSet[i].EndTime);
-                                    // cc(orderTable.dataSet[i].WCG);
-                                    // cc(orderTable.dataSet[i].Press);
-                                    break;
-                                }
-                            }
-                            orderTable.reload();
                         } else if (ScheduleEvents[event.id].resourceId != event.resourceId ||
                             ScheduleEvents[event.id].start != moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss') ||
                             ScheduleEvents[event.id].end != moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss')) {
@@ -1280,8 +1242,8 @@
                                     // cc(ScheduleEvents[event.id].start);
                                     // cc(ScheduleEvents[event.id].end);
                                     // cc('//////');
-                                    orderTable.dataSet[i].StartDate = moment.utc(event.start._d).format('MMM DD, YYYY HH:mm:ss');
-                                    orderTable.dataSet[i].EndDate = moment.utc(event.end._d).format('MMM DD, YYYY HH:mm:ss');
+                                    orderTable.dataSet[i].StartDate = moment.utc(event.start._d).format('MMM DD, YYYY');
+                                    orderTable.dataSet[i].EndDate = moment.utc(event.end._d).format('MMM DD, YYYY');
                                     orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
                                     orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
                                     orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
@@ -1688,11 +1650,6 @@
                     // cc('_During ' + _During);
 
                     var mm = _During, hh = 0;
-
-                    if (mm < 240) {
-                        mm = 240
-                    }
-
                     hh = Math.floor(mm / 60);
                     mm = mm - 60 * hh;
                     if (hh > 24) {
@@ -1824,9 +1781,6 @@
                     // cc('_During ' + _During);
 
                     var mm = _During, hh = 0;
-                    if (mm < 240) {
-                        mm = 240
-                    }
                     hh = Math.floor(mm / 60);
                     mm = mm - 60 * hh;
                     if (hh > 24) {
@@ -2291,10 +2245,7 @@
                                                                         <div class="m-list-timeline__item">
                                                                             <span class="m-list-timeline__badge -m-list-timeline__badge--state-success"></span>
                                                                             <span class="m-list-timeline__text">
-																						13 new order received
-                                                                                <span class="m-badge m-badge--danger m-badge--wide">
-																							urgent
-																						</span>
+																						12 new users registered
 																					</span>
                                                                             <span class="m-list-timeline__time">
 																						Just now
@@ -2527,8 +2478,7 @@
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-topbar__userpic">
 													<img src="assets/app/media/img/users/user4.jpg"
-                                                         class="m--img-rounded m--marginless m--img-centered imgLoginUser"
-                                                         alt=""/>
+                                                         class="m--img-rounded m--marginless m--img-centered" alt=""/>
 												</span>
                                         <span class="m-topbar__username m--hide">
 													Nick
@@ -2542,7 +2492,7 @@
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
                                                         <img src="assets/app/media/img/users/user4.jpg"
-                                                             class="m--img-rounded m--marginless imgLoginUser" alt=""/>
+                                                             class="m--img-rounded m--marginless" alt=""/>
                                                     </div>
                                                     <div class="m-card-user__details">
 																<span class="m-card-user__name m--font-weight-500">
@@ -2882,10 +2832,7 @@
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
                                                         <span class="m-list-timeline__text">
-																	13 new order received
-                                                            <span class="m-badge m-badge--danger m-badge--wide">
-																		urgent
-																	</span>
+																	12 new users registered
 																</span>
                                                         <span class="m-list-timeline__time">
 																	Just now
