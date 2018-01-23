@@ -6236,7 +6236,7 @@ fullcalendar_1.defineView('timelineWeek', {
 });
 fullcalendar_1.defineView('timelineMonth', {
     type: 'timeline',
-    duration: { months: 1 }
+    duration: { days: 15 }
 });
 fullcalendar_1.defineView('timelineYear', {
     type: 'timeline',
