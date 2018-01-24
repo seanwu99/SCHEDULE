@@ -11,14 +11,20 @@
         Schedule | Dashboard
     </title>
 
+    <!--<script id="sap-ui-bootstrap"-->
+    <!--src="/sapui5/resources/sap-ui-core.js"-->
+    <!--data-sap-ui-libs="sap.m"-->
+    <!--data-sap-ui-theme="sap_belize"-->
+    <!--data-sap-ui-xx-bindingSyntax="complex"-->
+    <!--data-sap-ui-compatVersion="edge">-->
+    <!--</script>-->
     <script id="sap-ui-bootstrap"
-            src="/sapui5/resources/sap-ui-core.js"
+            src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js"
             data-sap-ui-libs="sap.m"
             data-sap-ui-theme="sap_belize"
             data-sap-ui-xx-bindingSyntax="complex"
             data-sap-ui-compatVersion="edge">
     </script>
-
     <script src="webfont.js"></script>
     <script>
         WebFont.load({
@@ -58,15 +64,14 @@
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
-
-
+            cc(moment("2018-01-24 10:13:00.000").fromNow());
             // arrayProperty();
             cc(new Date(0).toISOString());
 
             cc(document.getElementById("user_roles").value);
             cc(document.getElementById("user_role").value);
             cc(document.getElementById("user_name").value);
-
+            ActivityLogGET();
             orderTablePreparing();
 
 
@@ -91,332 +96,357 @@
             // });
         }
 
+        function ActivityLogGET(t) {
+            var logs = '';
+            getData(
+                localHost ?
+                    'MESM_ActivityLog_GET.xml' :
+                    '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Content-Type=text/xml',
+                function (data) {
+                    $.each(data, function (index, value) {
+                        logs =
+                            '<div class="m-list-timeline__item">' +
+                            value.events +
+                            '<span class="m-list-timeline__time" style="white-space: nowrap;">' +
+                            moment(value.occurred).fromNow() + '</span></div>' +
+                            logs;
+                    })
+                    document.getElementById("ActivityLog").innerHTML = logs;
+                })
+            // moment("2018-01-24 10:13:00.000", "YYYYMMDD").fromNow();
+        }
+
         // });
         function orderTablePreparing() {
-            var url_MESM_FloorMaps_GET = localHost ? "MESM_FloorMaps_GET.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
-
             MESM_FloorMaps = [];
             MESM_FloorMaps_LineGROUP = [];
 
-            //MESM_FloorMaps
-            getData(url_MESM_FloorMaps_GET, function (data) {
-                // cc(url_MESM_FloorMaps_GET);
-                $.each(data, function (index, value) {
+            getData(
+                localHost ?
+                    "MESM_FloorMaps_GET.xml" :
+                    "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml",
+                function (data) {
+                    // cc(url_MESM_FloorMaps_GET);
+                    $.each(data, function (index, value) {
 
-                    MESM_FloorMaps[value.recordID] = {
-                        'recordID': value.recordID,
-                        'unitName': value.unitName,
-                        'unitType': value.unitType,
-                        'unitDescr': value.unitDescr,
-                        'MOLD_Machine_Matrix': value.MOLD_Machine_Matrix,
-                        'groupType': value.groupType,
-                        'idUnitParent': value.idUnitParent,
-                        'unitSqlServer': value.unitSqlServer,
-                        'unitSAPID': value.unitSAPID,
-                        'unitMap': value.unitMap
-                    }
-
-                    if (value.unitType == '5' && value.groupType == 'mold' && !MESM_FloorMaps_LineGROUP.hasOwnProperty(value.recordID)) {
-                        // ScheduleEvents.hasOwnProperty('900000');
-                        MESM_FloorMaps_LineGROUP[value.recordID] = [];
-                        // GROUP.push();
-                    }
-                });
-
-                for (var m in MESM_FloorMaps) {
-                    for (var g in MESM_FloorMaps_LineGROUP) {
-                        if (MESM_FloorMaps[m].idUnitParent == g) {
-                            MESM_FloorMaps_LineGROUP[g].push(m);
-                        }
-                    }
-                }
-                cc('MESM_FloorMaps');
-                cc(MESM_FloorMaps);
-                cc(MESM_FloorMaps_LineGROUP);
-                cc('MESM_FloorMaps_LineGROUP');
-                //MESM_OrderOperation_GET
-                var urlMESM_OrderOperation_GET = localHost ? 'MESM_OrderOperation_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml';
-                MESM_OrderOperation = [];
-                getData(urlMESM_OrderOperation_GET, function (OrderOperation) {
-                    $.each(OrderOperation, function (i, v) {
-                        var dt = false;
-                        MESM_OrderOperation[v.OrderNumber] = {
-                            'OrderNumber': v.OrderNumber,
-                            'Material': v.Material,
-                            'Quantity': v.Quantity,
-                            'EarlySchedStartDate': v.EarlySchedStartDate,
-                            'EarlySchedFinDate': v.EarlySchedFinDate,
-                            'EarlySchedStartTime': v.EarlySchedStartTime,
-                            'EarlySchedFinTime': v.EarlySchedFinTime,
-                            'WorkCenterID': v.WorkCenterID,
-                            'WorkCenter': v.WorkCenter,
-                            'OrderScheduledKey': v.OrderScheduledKey,
-                            'SchedQuantity': v.SchedQuantity,
-                            'SchedStart': v.SchedStart,
-                            'SchedFinish': v.SchedFinish,
-                            'SchedStatus': v.SchedStatus,
-                            'PrtNumber': v.PrtNumber,
-                            // 'WorkCenterGroup': v.WorkCenterGroup,
-                        };
-                        // cc(MESM_OrderOperation[v.OrderNumber].SchedStart);
-                        // cc(MESM_OrderOperation[v.OrderNumber].SchedStart.length);
-                        // cc(MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01T00:00:00');
-                        // cc('1900-01-01T00:00:00');
-
-                        if (MESM_OrderOperation[v.OrderNumber].SchedQuantity == 0) {
-                            MESM_OrderOperation[v.OrderNumber].SchedQuantity = v.Quantity;
-                            dt = true;
-                        }
-                        if (MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01T00:00:00') {
-                            MESM_OrderOperation[v.OrderNumber].SchedStart = moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss');
-                            dt = true;
-                        }
-                        if (MESM_OrderOperation[v.OrderNumber].SchedFinish == '1900-01-01T00:00:00') {
-                            MESM_OrderOperation[v.OrderNumber].SchedFinish = moment(v.EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedFinTime).format('HH:mm:ss');
-                            dt = true;
-                        }
-                        if (MESM_OrderOperation[v.OrderNumber].SchedStatus == '') {
-                            MESM_OrderOperation[v.OrderNumber].SchedStatus = v.OrderScheduledKey;
-                            dt = true;
+                        MESM_FloorMaps[value.recordID] = {
+                            'recordID': value.recordID,
+                            'unitName': value.unitName,
+                            'unitType': value.unitType,
+                            'unitDescr': value.unitDescr,
+                            'MOLD_Machine_Matrix': value.MOLD_Machine_Matrix,
+                            'groupType': value.groupType,
+                            'idUnitParent': value.idUnitParent,
+                            'unitSqlServer': value.unitSqlServer,
+                            'unitSAPID': value.unitSAPID,
+                            'unitMap': value.unitMap
                         }
 
-                        if (dt) {
-                            upd(MESM_OrderOperation[v.OrderNumber]);
-                        }
-
-                        function upd(v) {
-                            // cc(v.OrderNumber);
-                            // cc(v.SchedQuantity);
-                            // cc(v.SchedStart);
-                            // cc(v.SchedFinish);
-                            // cc(v.SchedStatus);
-                            var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
-                                "&Param.1=" +
-                                v.OrderNumber +
-                                "&Param.2=" +
-                                v.SchedQuantity +
-                                "&Param.3=" +
-                                v.SchedStart +
-                                "&Param.4=" +
-                                v.SchedFinish +
-                                "&Param.5=" +
-                                v.SchedStatus +
-                                "&Param.6=" +
-                                v.WorkCenterID +
-                                "&Content-Type=text/xml";
-                            var xhttp = new XMLHttpRequest();
-                            xhttp.onreadystatechange = function () {
-                                if (this.readyState == 4 && this.status == 200) {
-                                    // document.getElementById("demo").innerHTML = this.responseText;
-                                    cc(urlProc + ' succeed.');
-                                }
-                            };
-                            xhttp.open("GET", urlProc, true);
-                            xhttp.send();
+                        if (value.unitType == '5' && value.groupType == 'mold' && !MESM_FloorMaps_LineGROUP.hasOwnProperty(value.recordID)) {
+                            // ScheduleEvents.hasOwnProperty('900000');
+                            MESM_FloorMaps_LineGROUP[value.recordID] = [];
+                            // GROUP.push();
                         }
                     });
 
-                    cc('MESM_OrderOperation');
-                    cc(MESM_OrderOperation);
-                    MOLD_Master_Tool_List_GET();
+                    for (var m in MESM_FloorMaps) {
+                        for (var g in MESM_FloorMaps_LineGROUP) {
+                            if (MESM_FloorMaps[m].idUnitParent == g) {
+                                MESM_FloorMaps_LineGROUP[g].push(m);
+                            }
+                        }
+                    }
+                    cc('MESM_FloorMaps');
+                    cc(MESM_FloorMaps);
+                    cc(MESM_FloorMaps_LineGROUP);
+                    cc('MESM_FloorMaps_LineGROUP');
+                    //MESM_OrderOperation_GET
+                    // var urlMESM_OrderOperation_GET = localHost ? 'MESM_OrderOperation_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml';
+                    MESM_OrderOperation = [];
+                    getData(
+                        localHost ?
+                            'MESM_OrderOperation_GET.xml' :
+                            '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml',
+                        function (OrderOperation) {
+                            $.each(OrderOperation, function (i, v) {
+                                var dt = false;
+                                MESM_OrderOperation[v.OrderNumber] = {
+                                    'OrderNumber': v.OrderNumber,
+                                    'Material': v.Material,
+                                    'Quantity': v.Quantity,
+                                    'EarlySchedStartDate': v.EarlySchedStartDate,
+                                    'EarlySchedFinDate': v.EarlySchedFinDate,
+                                    'EarlySchedStartTime': v.EarlySchedStartTime,
+                                    'EarlySchedFinTime': v.EarlySchedFinTime,
+                                    'WorkCenterID': v.WorkCenterID,
+                                    'WorkCenter': v.WorkCenter,
+                                    'OrderScheduledKey': v.OrderScheduledKey,
+                                    'SchedQuantity': v.SchedQuantity,
+                                    'SchedStart': v.SchedStart,
+                                    'SchedFinish': v.SchedFinish,
+                                    'SchedStatus': v.SchedStatus,
+                                    'PrtNumber': v.PrtNumber,
+                                    // 'WorkCenterGroup': v.WorkCenterGroup,
+                                };
+                                // cc(MESM_OrderOperation[v.OrderNumber].SchedStart);
+                                // cc(MESM_OrderOperation[v.OrderNumber].SchedStart.length);
+                                // cc(MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01T00:00:00');
+                                // cc('1900-01-01T00:00:00');
 
-                    // var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+                                if (MESM_OrderOperation[v.OrderNumber].SchedQuantity == 0) {
+                                    MESM_OrderOperation[v.OrderNumber].SchedQuantity = v.Quantity;
+                                    dt = true;
+                                }
+                                if (MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01T00:00:00') {
+                                    MESM_OrderOperation[v.OrderNumber].SchedStart = moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss');
+                                    dt = true;
+                                }
+                                if (MESM_OrderOperation[v.OrderNumber].SchedFinish == '1900-01-01T00:00:00') {
+                                    MESM_OrderOperation[v.OrderNumber].SchedFinish = moment(v.EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedFinTime).format('HH:mm:ss');
+                                    dt = true;
+                                }
+                                if (MESM_OrderOperation[v.OrderNumber].SchedStatus == '') {
+                                    MESM_OrderOperation[v.OrderNumber].SchedStatus = v.OrderScheduledKey;
+                                    dt = true;
+                                }
+
+                                if (dt) {
+                                    upd(MESM_OrderOperation[v.OrderNumber]);
+                                }
+
+                                function upd(v) {
+                                    // cc(v.OrderNumber);
+                                    // cc(v.SchedQuantity);
+                                    // cc(v.SchedStart);
+                                    // cc(v.SchedFinish);
+                                    // cc(v.SchedStatus);
+                                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
+                                        "&Param.1=" +
+                                        v.OrderNumber +
+                                        "&Param.2=" +
+                                        v.SchedQuantity +
+                                        "&Param.3=" +
+                                        v.SchedStart +
+                                        "&Param.4=" +
+                                        v.SchedFinish +
+                                        "&Param.5=" +
+                                        v.SchedStatus +
+                                        "&Param.6=" +
+                                        v.WorkCenterID +
+                                        "&Content-Type=text/xml";
+                                    var xhttp = new XMLHttpRequest();
+                                    xhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            // document.getElementById("demo").innerHTML = this.responseText;
+                                            cc(urlProc + ' succeed.');
+                                        }
+                                    };
+                                    xhttp.open("GET", urlProc, true);
+                                    xhttp.send();
+                                }
+                            });
+
+                            cc('MESM_OrderOperation');
+                            cc(MESM_OrderOperation);
+                            MOLD_Master_Tool_List_GET();
+
+                            // var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+                            //
+                            // getData(url_MESM_Orders_GET1, function (data) {
+                            //     // cc('url_MESM_Orders_GET1');
+                            //     MESM_Orders = [];
+                            //     $.each(data, function (index, value) {
+                            //         MESM_Orders[value.orderLastID] = {
+                            //             'orderFirstID': value.orderFirstID,
+                            //             'orderLastID': value.orderLastID,
+                            //             'materialID': value.materialID,
+                            //             'plantID': value.plantID,
+                            //             'scheduledStart': value.scheduledStart,
+                            //             'scheduledFinish': value.scheduledFinish,
+                            //             'lineID': value.lineID,
+                            //             'workcenterID': value.workcenterID,
+                            //             'moldID': value.moldID,
+                            //             'scheduledQty': value.scheduledQty,
+                            //             'ScheduleStatus': value.ScheduleStatus,
+                            //         };
+                            //     });
+                            //     // cc('url_MESM_Orders_GET1');
+                            //     // cc(MESM_Orders);
+                            //     orderTableUpdata();
+                            //     // refresh MESM_Orders
+                            //
+                            //
+                            // })
+
+                        });
+
+                    // function mapID() {
+                    // }
+
+                    // function orderTableUpdata() {
+                    //     // cc('orderTableUpdata');
+                    //     // cc(MESM_ProdOrd);
+                    //     var endCheck = 0;
+                    //     for (var ProdOrd in MESM_OrderOperation) {
                     //
-                    // getData(url_MESM_Orders_GET1, function (data) {
-                    //     // cc('url_MESM_Orders_GET1');
-                    //     MESM_Orders = [];
-                    //     $.each(data, function (index, value) {
-                    //         MESM_Orders[value.orderLastID] = {
-                    //             'orderFirstID': value.orderFirstID,
-                    //             'orderLastID': value.orderLastID,
-                    //             'materialID': value.materialID,
-                    //             'plantID': value.plantID,
-                    //             'scheduledStart': value.scheduledStart,
-                    //             'scheduledFinish': value.scheduledFinish,
-                    //             'lineID': value.lineID,
-                    //             'workcenterID': value.workcenterID,
-                    //             'moldID': value.moldID,
-                    //             'scheduledQty': value.scheduledQty,
-                    //             'ScheduleStatus': value.ScheduleStatus,
+                    //         // cc(MESM_ProdOrd[ProdOrd].OrderNumber);
+                    //         if (MESM_Orders.hasOwnProperty(MESM_OrderOperation[ProdOrd].OrderNumber)) {
+                    //             // cc('true');
+                    //         } else {
+                    //             // cc('addOrder2Table');
+                    //             endCheck++;
+                    //             var lineID = 0;
+                    //             for (var f in MESM_FloorMaps) {
+                    //                 if (MESM_FloorMaps[f].unitName == MESM_OrderOperation[ProdOrd].Group) {
+                    //                     lineID = f;
+                    //                     break;
+                    //                 }
+                    //             }
+                    //             // cc(lineID + ' / ' + MESM_ProdOrd[ProdOrd].Group);
+                    //             addOrder2Table(
+                    //                 {
+                    //                     'Counter': '00000002',  //
+                    //                     'OrderNumber': MESM_OrderOperation[ProdOrd].OrderNumber,
+                    //                     'Material': MESM_OrderOperation[ProdOrd].Material,
+                    //                     'plantID': '1107',
+                    //                     'scheduledStart': MESM_OrderOperation[ProdOrd].SchedStartDateTime,
+                    //                     'scheduledFinish': MESM_OrderOperation[ProdOrd].SchedStartDateTime,
+                    //                     'lineID': lineID,//MESM_ProdOrd[ProdOrd].Group,
+                    //                     'workcenterID': null,
+                    //                     'moldID': MESM_OrderOperation[ProdOrd].Mold,
+                    //                     'scheduledQty': MESM_OrderOperation[ProdOrd].Target,
+                    //                     'Status': MESM_OrderOperation[ProdOrd].Status,
+                    //                 }
+                    //             );
+                    //         }
+                    //     }
+                    //
+                    //     if (endCheck == 0) {
+                    //         var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+                    //
+                    //         getData(url_MESM_Orders_GET1, function (data) {
+                    //             // cc('url_MESM_Orders_GET1');
+                    //             MESM_Orders = [];
+                    //             $.each(data, function (index, value) {
+                    //                 MESM_Orders[value.orderLastID] = {
+                    //                     'orderFirstID': value.orderFirstID,
+                    //                     'orderLastID': value.orderLastID,
+                    //                     'materialID': value.materialID,
+                    //                     'plantID': value.plantID,
+                    //                     'scheduledStart': value.scheduledStart,
+                    //                     'scheduledFinish': value.scheduledFinish,
+                    //                     'lineID': value.lineID,
+                    //                     'workcenterID': value.workcenterID,
+                    //                     'moldID': value.moldID,
+                    //                     'scheduledQty': value.scheduledQty,
+                    //                     'ScheduleStatus': value.ScheduleStatus,
+                    //                 };
+                    //             });
+                    //             // cc('url_MESM_Orders_GET2');
+                    //             cc(MESM_Orders);
+                    //             MOLD_Master_Tool_List_GET();
+                    //         })
+                    //     }
+                    //
+                    //
+                    //     function addOrder2Table(oData) {
+                    //         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ScheduleOrder_Add" +
+                    //             "&Param.1=" +
+                    //             oData.Counter +
+                    //             "&Param.2=" +
+                    //             oData.OrderNumber +
+                    //             "&Param.3=" +
+                    //             oData.Material +
+                    //             "&Param.4=" +
+                    //             oData.plantID +
+                    //             "&Param.5=" +
+                    //             oData.scheduledStart +
+                    //             "&Param.6=" +
+                    //             oData.scheduledFinish +
+                    //             "&Param.7=" +
+                    //             oData.lineID +
+                    //             "&Param.8=" +
+                    //             oData.workcenterID +
+                    //             "&Param.9=" +
+                    //             oData.moldID +
+                    //             "&Param.10=" +
+                    //             oData.scheduledQty +
+                    //             "&Param.11=" +
+                    //             oData.Status +
+                    //             "&Content-Type=text/xml";
+                    //         var xhttp = new XMLHttpRequest();
+                    //         xhttp.onreadystatechange = function () {
+                    //             if (this.readyState == 4 && this.status == 200) {
+                    //                 // document.getElementById("demo").innerHTML = this.responseText;
+                    //                 cc(' add Order ' + oData.OrderNumber + ' to MESM_Orders');
+                    //                 // cc(--endCheck)
+                    //                 if (endCheck == 0) {
+                    //                     var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
+                    //
+                    //                     getData(url_MESM_Orders_GET1, function (data) {
+                    //                         // cc('url_MESM_Orders_GET1');
+                    //                         MESM_Orders = [];
+                    //                         $.each(data, function (index, value) {
+                    //                             MESM_Orders[value.orderLastID] = {
+                    //                                 'orderFirstID': value.orderFirstID,
+                    //                                 'orderLastID': value.orderLastID,
+                    //                                 'materialID': value.materialID,
+                    //                                 'plantID': value.plantID,
+                    //                                 'scheduledStart': value.scheduledStart,
+                    //                                 'scheduledFinish': value.scheduledFinish,
+                    //                                 'lineID': value.lineID,
+                    //                                 'workcenterID': value.workcenterID,
+                    //                                 'moldID': value.moldID,
+                    //                                 'scheduledQty': value.scheduledQty,
+                    //                                 'ScheduleStatus': value.ScheduleStatus,
+                    //                             };
+                    //                         });
+                    //                         // cc('url_MESM_Orders_GET2');
+                    //                         cc(MESM_Orders);
+                    //                         MOLD_Master_Tool_List_GET();
+                    //                     })
+                    //                 }
+                    //             }
                     //         };
-                    //     });
-                    //     // cc('url_MESM_Orders_GET1');
-                    //     // cc(MESM_Orders);
-                    //     orderTableUpdata();
-                    //     // refresh MESM_Orders
+                    //         xhttp.open("GET", urlProc, true);
+                    //         xhttp.send();
                     //
+                    //     }
                     //
-                    // })
+                    // }
+
+
+                    // for (var g in GROUP) {
+                    //     cc('g ' + g + ' ' + GROUP[g].length);
+                    //     for (var n = 0; n < GROUP[g].length; n++) {
+                    //         cc(MESM_FloorMaps[GROUP[g][n]].unitName);
+                    //     }
+                    // }
+                    // cc('GROUP NAME');
+                    // cc(GROUP.length);
+                    // cc(GROUP['7']);
+                    // var url = localHost ? 'MOLD_Master_Tool_List.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
+                    // cc(url);
+                    // getData(url, function (data) {
+                    //     var Mold_Number = '';
+                    //     for (var n = 0; n < data.length; n++) {
+                    //         if (data[n].Mold_Number != null) {
+                    //             Mold_Number = data[n].Mold_Number;
+                    //             var mm = Number(data[n].Total_Cavities) * 60 / Number(data[n].Quoted_Cycle_Time);
+                    //             // cc(Mold_Number + ' = ' + mm);
+                    //             MOLD_Master_Tool_List[Mold_Number] = mm;
+                    //         }
+                    //
+                    //     }
+                    //     cc('MOLD_Master_Tool_List');
+                    //     cc(MOLD_Master_Tool_List);
+                    //     // MOLD_Master_Tool_List_GOT = true;
+                    //     // if (MOLD_Master_Tool_List_GOT && MESM_Orders_GOT) {
+                    //     //     mainPro();
+                    //     // }
+                    // });
 
                 });
-
-                // function mapID() {
-                // }
-
-                // function orderTableUpdata() {
-                //     // cc('orderTableUpdata');
-                //     // cc(MESM_ProdOrd);
-                //     var endCheck = 0;
-                //     for (var ProdOrd in MESM_OrderOperation) {
-                //
-                //         // cc(MESM_ProdOrd[ProdOrd].OrderNumber);
-                //         if (MESM_Orders.hasOwnProperty(MESM_OrderOperation[ProdOrd].OrderNumber)) {
-                //             // cc('true');
-                //         } else {
-                //             // cc('addOrder2Table');
-                //             endCheck++;
-                //             var lineID = 0;
-                //             for (var f in MESM_FloorMaps) {
-                //                 if (MESM_FloorMaps[f].unitName == MESM_OrderOperation[ProdOrd].Group) {
-                //                     lineID = f;
-                //                     break;
-                //                 }
-                //             }
-                //             // cc(lineID + ' / ' + MESM_ProdOrd[ProdOrd].Group);
-                //             addOrder2Table(
-                //                 {
-                //                     'Counter': '00000002',  //
-                //                     'OrderNumber': MESM_OrderOperation[ProdOrd].OrderNumber,
-                //                     'Material': MESM_OrderOperation[ProdOrd].Material,
-                //                     'plantID': '1107',
-                //                     'scheduledStart': MESM_OrderOperation[ProdOrd].SchedStartDateTime,
-                //                     'scheduledFinish': MESM_OrderOperation[ProdOrd].SchedStartDateTime,
-                //                     'lineID': lineID,//MESM_ProdOrd[ProdOrd].Group,
-                //                     'workcenterID': null,
-                //                     'moldID': MESM_OrderOperation[ProdOrd].Mold,
-                //                     'scheduledQty': MESM_OrderOperation[ProdOrd].Target,
-                //                     'Status': MESM_OrderOperation[ProdOrd].Status,
-                //                 }
-                //             );
-                //         }
-                //     }
-                //
-                //     if (endCheck == 0) {
-                //         var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
-                //
-                //         getData(url_MESM_Orders_GET1, function (data) {
-                //             // cc('url_MESM_Orders_GET1');
-                //             MESM_Orders = [];
-                //             $.each(data, function (index, value) {
-                //                 MESM_Orders[value.orderLastID] = {
-                //                     'orderFirstID': value.orderFirstID,
-                //                     'orderLastID': value.orderLastID,
-                //                     'materialID': value.materialID,
-                //                     'plantID': value.plantID,
-                //                     'scheduledStart': value.scheduledStart,
-                //                     'scheduledFinish': value.scheduledFinish,
-                //                     'lineID': value.lineID,
-                //                     'workcenterID': value.workcenterID,
-                //                     'moldID': value.moldID,
-                //                     'scheduledQty': value.scheduledQty,
-                //                     'ScheduleStatus': value.ScheduleStatus,
-                //                 };
-                //             });
-                //             // cc('url_MESM_Orders_GET2');
-                //             cc(MESM_Orders);
-                //             MOLD_Master_Tool_List_GET();
-                //         })
-                //     }
-                //
-                //
-                //     function addOrder2Table(oData) {
-                //         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ScheduleOrder_Add" +
-                //             "&Param.1=" +
-                //             oData.Counter +
-                //             "&Param.2=" +
-                //             oData.OrderNumber +
-                //             "&Param.3=" +
-                //             oData.Material +
-                //             "&Param.4=" +
-                //             oData.plantID +
-                //             "&Param.5=" +
-                //             oData.scheduledStart +
-                //             "&Param.6=" +
-                //             oData.scheduledFinish +
-                //             "&Param.7=" +
-                //             oData.lineID +
-                //             "&Param.8=" +
-                //             oData.workcenterID +
-                //             "&Param.9=" +
-                //             oData.moldID +
-                //             "&Param.10=" +
-                //             oData.scheduledQty +
-                //             "&Param.11=" +
-                //             oData.Status +
-                //             "&Content-Type=text/xml";
-                //         var xhttp = new XMLHttpRequest();
-                //         xhttp.onreadystatechange = function () {
-                //             if (this.readyState == 4 && this.status == 200) {
-                //                 // document.getElementById("demo").innerHTML = this.responseText;
-                //                 cc(' add Order ' + oData.OrderNumber + ' to MESM_Orders');
-                //                 // cc(--endCheck)
-                //                 if (endCheck == 0) {
-                //                     var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
-                //
-                //                     getData(url_MESM_Orders_GET1, function (data) {
-                //                         // cc('url_MESM_Orders_GET1');
-                //                         MESM_Orders = [];
-                //                         $.each(data, function (index, value) {
-                //                             MESM_Orders[value.orderLastID] = {
-                //                                 'orderFirstID': value.orderFirstID,
-                //                                 'orderLastID': value.orderLastID,
-                //                                 'materialID': value.materialID,
-                //                                 'plantID': value.plantID,
-                //                                 'scheduledStart': value.scheduledStart,
-                //                                 'scheduledFinish': value.scheduledFinish,
-                //                                 'lineID': value.lineID,
-                //                                 'workcenterID': value.workcenterID,
-                //                                 'moldID': value.moldID,
-                //                                 'scheduledQty': value.scheduledQty,
-                //                                 'ScheduleStatus': value.ScheduleStatus,
-                //                             };
-                //                         });
-                //                         // cc('url_MESM_Orders_GET2');
-                //                         cc(MESM_Orders);
-                //                         MOLD_Master_Tool_List_GET();
-                //                     })
-                //                 }
-                //             }
-                //         };
-                //         xhttp.open("GET", urlProc, true);
-                //         xhttp.send();
-                //
-                //     }
-                //
-                // }
-
-
-                // for (var g in GROUP) {
-                //     cc('g ' + g + ' ' + GROUP[g].length);
-                //     for (var n = 0; n < GROUP[g].length; n++) {
-                //         cc(MESM_FloorMaps[GROUP[g][n]].unitName);
-                //     }
-                // }
-                // cc('GROUP NAME');
-                // cc(GROUP.length);
-                // cc(GROUP['7']);
-                // var url = localHost ? 'MOLD_Master_Tool_List.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
-                // cc(url);
-                // getData(url, function (data) {
-                //     var Mold_Number = '';
-                //     for (var n = 0; n < data.length; n++) {
-                //         if (data[n].Mold_Number != null) {
-                //             Mold_Number = data[n].Mold_Number;
-                //             var mm = Number(data[n].Total_Cavities) * 60 / Number(data[n].Quoted_Cycle_Time);
-                //             // cc(Mold_Number + ' = ' + mm);
-                //             MOLD_Master_Tool_List[Mold_Number] = mm;
-                //         }
-                //
-                //     }
-                //     cc('MOLD_Master_Tool_List');
-                //     cc(MOLD_Master_Tool_List);
-                //     // MOLD_Master_Tool_List_GOT = true;
-                //     // if (MOLD_Master_Tool_List_GOT && MESM_Orders_GOT) {
-                //     //     mainPro();
-                //     // }
-                // });
-
-            });
 
 
         }
@@ -869,7 +899,7 @@
                         title: "Material",
                         sortable: "asc",
                         filterable: !1,
-                        width: 150,
+                        width: 160,
 //                            template: "{{OrderID}} - {{ShipCountry}}"
                     },
                     {
@@ -882,7 +912,7 @@
                     {
                         field: "SchedStart",
                         title: "SchedStart",
-                        width: 150,
+                        width: 130,
 //                            responsive: {visible: "lg"}
                     },
                     // {
@@ -894,7 +924,7 @@
                     {
                         field: "SchedFinish",
                         title: "SchedFinish",
-                        width: 150,
+                        width: 130,
                     },
                     // {
                     //     field: "EndTime",
@@ -914,11 +944,11 @@
                     {
                         field: "Press",
                         title: "WorkCenter",
-                        width: 80,
+                        width: 90,
                     },
                     {
                         field: "Actions",
-                        width: 80,
+                        width: 100,
                         title: "Actions",
                         sortable: !1,
                         overflow: "visible",
@@ -1193,7 +1223,7 @@
                     dragRevertDuration: 500,
                     dragOpacity: .75,
                     dragScroll: true,
-                    eventOverlap: true, // todo +more
+                    eventOverlap: true, //
 
 
                     eventClick: function (event, element) {
@@ -1841,6 +1871,17 @@
                         "&Content-Type=text/xml";
                     // cc(urlProc);
                     DB_UPD(urlProc);
+
+                    ActivityLogADD(
+                        '<div class="m-list-timeline__item">' +
+                        '  <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
+                        '  <span href="" class="m-list-timeline__text">' +
+                        '    New order received' +
+                        '    <span class="m-badge m-badge--danger m-badge--wide">urgent</span>' +
+                        '  </span>' +
+                        '  <span class="m-list-timeline__time">7 hrs</span>' +
+                        '</div>'
+                    );
                 } else if (_Action.indexOf('Scheduled') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
                         if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
@@ -2080,6 +2121,24 @@
             }
 
             orderTable.reload();
+        }
+
+
+        function ActivityLogADD(msg, cs1, badge, cs2) {
+            // '<div class="m-list-timeline__item">' +
+            // '  <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
+            // '  <span href="" class="m-list-timeline__text">' +
+            // '    New order received' +
+            // '    <span class="m-badge m-badge--danger m-badge--wide">urgent</span>' +
+            // '  </span>' +
+            // '  <span class="m-list-timeline__time">7 hrs</span>' +
+            // '</div>'
+
+
+            var elm = document.getElementById("m-list-timeline__items");
+            // cc(elm.innerHTML);
+            elm.innerHTML = div + elm.innerHTML;
+
         }
 
         function addScheduleEvent(id, title, start, end) {
@@ -2347,8 +2406,7 @@
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content">
-                                                        <div class="tab-pane active"
-                                                             id="topbar_notifications_notifications" role="tabpanel">
+                                                        <div class="tab-pane active" id="topbar_notifications_notifications" role="tabpanel">
                                                             <div class="m-scrollable" data-scrollable="true"
                                                                  data-max-height="250" data-mobile-max-height="200">
                                                                 <div class="m-list-timeline m-list-timeline--skin-light">
@@ -2384,60 +2442,6 @@
 																					</span>
                                                                             <span class="m-list-timeline__time">
 																						20 mins
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						DB overloaded 80%
-																						<span class="m-badge m-badge--info m-badge--wide">
-																							settled
-																						</span>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						1 hr
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						System error -
-																						<a href="#" class="m-link">
-																							Check
-																						</a>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						2 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item m-list-timeline__item--read">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span href="" class="m-list-timeline__text">
-																						New order received
-																						<span class="m-badge m-badge--danger m-badge--wide">
-																							urgent
-																						</span>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						7 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item m-list-timeline__item--read">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						Production server down
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						3 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						Production server up
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						5 hrs
 																					</span>
                                                                         </div>
                                                                     </div>
@@ -2912,29 +2916,29 @@
                                         </h3>
                                     </div>
                                 </div>
-                                <div class="m-portlet__head-tools">
-                                    <ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm"
-                                        role="tablist">
-                                        <li class="nav-item m-tabs__item">
-                                            <a class="nav-link m-tabs__link active" data-toggle="tab"
-                                               href="#m_widget4_tab1_content" role="tab">
-                                                Today
-                                            </a>
-                                        </li>
-                                        <li class="nav-item m-tabs__item">
-                                            <a class="nav-link m-tabs__link" data-toggle="tab"
-                                               href="#m_widget4_tab2_content" role="tab">
-                                                Week
-                                            </a>
-                                        </li>
-                                        <li class="nav-item m-tabs__item">
-                                            <a class="nav-link m-tabs__link" data-toggle="tab"
-                                               href="#m_widget4_tab3_content" role="tab">
-                                                Month
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <!--<div class="m-portlet__head-tools">-->
+                                <!--<ul class="nav nav-pills nav-pills&#45;&#45;brand m-nav-pills&#45;&#45;align-right m-nav-pills&#45;&#45;btn-pill m-nav-pills&#45;&#45;btn-sm"-->
+                                <!--role="tablist">-->
+                                <!--<li class="nav-item m-tabs__item">-->
+                                <!--<a class="nav-link m-tabs__link active" data-toggle="tab"-->
+                                <!--href="#m_widget4_tab1_content" role="tab">-->
+                                <!--Today-->
+                                <!--</a>-->
+                                <!--</li>-->
+                                <!--<li class="nav-item m-tabs__item">-->
+                                <!--<a class="nav-link m-tabs__link" data-toggle="tab"-->
+                                <!--href="#m_widget4_tab2_content" role="tab">-->
+                                <!--Week-->
+                                <!--</a>-->
+                                <!--</li>-->
+                                <!--<li class="nav-item m-tabs__item">-->
+                                <!--<a class="nav-link m-tabs__link" data-toggle="tab"-->
+                                <!--href="#m_widget4_tab3_content" role="tab">-->
+                                <!--Month-->
+                                <!--</a>-->
+                                <!--</li>-->
+                                <!--</ul>-->
+                                <!--</div>-->
                             </div>
                             <div class="m-portlet__body">
                                 <div class="tab-content">
@@ -2942,388 +2946,57 @@
                                         <div class="m-scrollable" data-scrollable="true" data-max-height="740"
                                              style="height1: 600px; overflow: auto;">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
-                                                <div class="m-list-timeline__items">
+                                                <div id="ActivityLog" class="m-list-timeline__items">
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span class="m-list-timeline__text">
-																	13 new order received
-                                                            <span class="m-badge m-badge--danger m-badge--wide">
-																		urgent
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	Just now
-																</span>
+                                                        <span class="m-list-timeline__text">13 new order received<span
+                                                                class="m-badge m-badge--danger m-badge--wide">urgent</span></span>
+                                                        <span class="m-list-timeline__time">Just now</span>
+                                                    </div>
+                                                    <div class="m-list-timeline__item">
+                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
+                                                        <span class="m-list-timeline__text">12 new users registered</span>
+                                                        <span class="m-list-timeline__time">Just now</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	System shutdown
-																	<span class="m-badge m-badge--success m-badge--wide">
-																		pending
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	14 mins
-																</span>
+                                                        <span class="m-list-timeline__text">System shutdown <span
+                                                                class="m-badge m-badge--success m-badge--wide">pending</span></span>
+                                                        <span class="m-list-timeline__time">14 mins</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">
-																	New invoice received
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	20 mins
-																</span>
+                                                        <span class="m-list-timeline__text">New invoice received</span>
+                                                        <span class="m-list-timeline__time">20 mins</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">
-																	DB overloaded 80%
-																	<span class="m-badge m-badge--info m-badge--wide">
-																		settled
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	1 hr
-																</span>
+                                                        <span class="m-list-timeline__text">DB overloaded 80% <span
+                                                                class="m-badge m-badge--info m-badge--wide">settled</span></span>
+                                                        <span class="m-list-timeline__time">1 hr</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--warning"></span>
-                                                        <span class="m-list-timeline__text">
-																	System error -
-																	<a href="#" class="m-link">
-																		Check
-																	</a>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	2 hrs
-																</span>
+                                                        <span class="m-list-timeline__text">System error - <a href="#" class="m-link">Check</a></span>
+                                                        <span class="m-list-timeline__time">2 hrs</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--brand"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server down
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	3 hrs
-																</span>
+                                                        <span class="m-list-timeline__text">Production server down</span>
+                                                        <span class="m-list-timeline__time">3 hrs</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server up
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	5 hrs
-																</span>
+                                                        <span class="m-list-timeline__text">Production server up</span>
+                                                        <span class="m-list-timeline__time">5 hrs</span>
                                                     </div>
                                                     <div class="m-list-timeline__item">
                                                         <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span href="" class="m-list-timeline__text">
-																	New order received
-																	<span class="m-badge m-badge--danger m-badge--wide">
-																		urgent
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	7 hrs
-																</span>
+                                                        <span href="" class="m-list-timeline__text">New order received <span
+                                                                class="m-badge m-badge--danger m-badge--wide">urgent</span></span>
+                                                        <span class="m-list-timeline__time">7 hrs</span>
                                                     </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span class="m-list-timeline__text">
-																	12 new users registered
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	Just now
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	System shutdown
-																	<span class="m-badge m-badge--success m-badge--wide">
-																		pending
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	14 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">
-																	New invoice received
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	20 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">
-																	DB overloaded 80%
-																	<span class="m-badge m-badge--info m-badge--wide">
-																		settled
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	1 hr
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">
-																	New invoice received
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	20 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">
-																	DB overloaded 80%
-																	<span class="m-badge m-badge--info m-badge--wide">
-																		settled
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	1 hr
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--warning"></span>
-                                                        <span class="m-list-timeline__text">
-																	System error -
-																	<a href="#" class="m-link">
-																		Check
-																	</a>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	2 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--brand"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server down
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	3 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server up
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	5 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span href="" class="m-list-timeline__text">
-																	New order received
-																	<span class="m-badge m-badge--danger m-badge--wide">
-																		urgent
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	7 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span class="m-list-timeline__text">
-																	12 new users registered
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	Just now
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	System shutdown
-																	<span class="m-badge m-badge--success m-badge--wide">
-																		pending
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	14 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">
-																	New invoice received
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	20 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">
-																	DB overloaded 80%
-																	<span class="m-badge m-badge--info m-badge--wide">
-																		settled
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	1 hr
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--warning"></span>
-                                                        <span class="m-list-timeline__text">
-																	System error -
-																	<a href="#" class="m-link">
-																		Check
-																	</a>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	2 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--brand"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server down
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	3 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server up
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	5 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span href="" class="m-list-timeline__text">
-																	New order received
-																	<span class="m-badge m-badge--danger m-badge--wide">
-																		urgent
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	7 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span class="m-list-timeline__text">
-																	12 new users registered
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	Just now
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	System shutdown
-																	<span class="m-badge m-badge--success m-badge--wide">
-																		pending
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	14 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">
-																	New invoice received
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	20 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">
-																	DB overloaded 80%
-																	<span class="m-badge m-badge--info m-badge--wide">
-																		settled
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	1 hr
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">
-																	New invoice received
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	20 mins
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">
-																	DB overloaded 80%
-																	<span class="m-badge m-badge--info m-badge--wide">
-																		settled
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	1 hr
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--warning"></span>
-                                                        <span class="m-list-timeline__text">
-																	System error -
-																	<a href="#" class="m-link">
-																		Check
-																	</a>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	2 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--brand"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server down
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	3 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">
-																	Production server up
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	5 hrs
-																</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span href="" class="m-list-timeline__text">
-																	New order received
-																	<span class="m-badge m-badge--danger m-badge--wide">
-																		urgent
-																	</span>
-																</span>
-                                                        <span class="m-list-timeline__time">
-																	7 hrs
-																</span>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -4038,6 +3711,8 @@
         </a>
     </li>
 </ul>
+
+
 <input id="user_roles" type="hidden" value="{IllumLoginRoles}" style="display:block;width:1000px;" readonly/>
 <input id="user_role" type="hidden" value="{ROLE}" style="display:block;width:1000px;" readonly/>
 <input id="user_name" type="hidden" value="{IllumLoginName}" style="display: block;width:1000px;" readonly/>

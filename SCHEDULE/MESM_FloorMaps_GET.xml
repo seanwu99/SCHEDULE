@@ -1,58 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Rowsets CachedTime="" DateCreated="2018-01-11T14:52:31" EndDate="2018-01-11T14:52:31" StartDate="2018-01-11T13:52:31"
-         Version="15.1 SP2 Patch 16 (Dec 21, 2016)">
+<Rowsets CachedTime="" DateCreated="2018-01-24T19:07:12" EndDate="2018-01-24T19:07:12" StartDate="2018-01-24T18:07:12" Version="15.1 SP2 Patch 16 (Dec 21, 2016)">
     <Rowset>
         <Columns>
-            <Column Description="recordID" MaxRange="1" MinRange="0" Name="recordID" SQLDataType="-5"
-                    SourceColumn="recordID"/>
-            <Column Description="unitType" MaxRange="1" MinRange="0" Name="unitType" SQLDataType="4"
-                    SourceColumn="unitType"/>
-            <Column Description="unitName" MaxRange="1" MinRange="0" Name="unitName" SQLDataType="-9"
-                    SourceColumn="unitName"/>
-            <Column Description="unitDescr" MaxRange="1" MinRange="0" Name="unitDescr" SQLDataType="-9"
-                    SourceColumn="unitDescr"/>
-            <Column Description="MOLD_Machine_Matrix" MaxRange="1" MinRange="0" Name="MOLD_Machine_Matrix"
-                    SQLDataType="-9" SourceColumn="MOLD_Machine_Matrix"/>
-            <Column Description="groupType" MaxRange="1" MinRange="0" Name="groupType" SQLDataType="-15"
-                    SourceColumn="groupType"/>
-            <Column Description="idUnitParent" MaxRange="1" MinRange="0" Name="idUnitParent" SQLDataType="4"
-                    SourceColumn="idUnitParent"/>
-            <Column Description="isGroup" MaxRange="1" MinRange="0" Name="isGroup" SQLDataType="4"
-                    SourceColumn="isGroup"/>
-            <Column Description="isAsset" MaxRange="1" MinRange="0" Name="isAsset" SQLDataType="4"
-                    SourceColumn="isAsset"/>
-            <Column Description="isCharacteristic" MaxRange="1" MinRange="0" Name="isCharacteristic" SQLDataType="4"
-                    SourceColumn="isCharacteristic"/>
-            <Column Description="unitActive" MaxRange="1" MinRange="0" Name="unitActive" SQLDataType="4"
-                    SourceColumn="unitActive"/>
-            <Column Description="unitSqlServer" MaxRange="1" MinRange="0" Name="unitSqlServer" SQLDataType="-9"
-                    SourceColumn="unitSqlServer"/>
-            <Column Description="unitSAPID" MaxRange="1" MinRange="0" Name="unitSAPID" SQLDataType="-9"
-                    SourceColumn="unitSAPID"/>
-            <Column Description="miiDataServer" MaxRange="1" MinRange="0" Name="miiDataServer" SQLDataType="-9"
-                    SourceColumn="miiDataServer"/>
-            <Column Description="UnitFloorMapSrc" MaxRange="1" MinRange="0" Name="UnitFloorMapSrc" SQLDataType="-9"
-                    SourceColumn="UnitFloorMapSrc"/>
-            <Column Description="unitMap" MaxRange="1" MinRange="0" Name="unitMap" SQLDataType="-9"
-                    SourceColumn="unitMap"/>
-            <Column Description="UnitCoordX" MaxRange="1" MinRange="0" Name="UnitCoordX" SQLDataType="4"
-                    SourceColumn="UnitCoordX"/>
-            <Column Description="UnitCoordY" MaxRange="1" MinRange="0" Name="UnitCoordY" SQLDataType="4"
-                    SourceColumn="UnitCoordY"/>
-            <Column Description="ModifiedBy" MaxRange="1" MinRange="0" Name="ModifiedBy" SQLDataType="-9"
-                    SourceColumn="ModifiedBy"/>
-            <Column Description="ModifiedOn" MaxRange="1" MinRange="0" Name="ModifiedOn" SQLDataType="93"
-                    SourceColumn="ModifiedOn"/>
-            <Column Description="CreatedBy" MaxRange="1" MinRange="0" Name="CreatedBy" SQLDataType="-9"
-                    SourceColumn="CreatedBy"/>
-            <Column Description="CreatedOn" MaxRange="1" MinRange="0" Name="CreatedOn" SQLDataType="93"
-                    SourceColumn="CreatedOn"/>
-            <Column Description="SAP_ERP" MaxRange="1" MinRange="0" Name="SAP_ERP" SQLDataType="4"
-                    SourceColumn="SAP_ERP"/>
-            <Column Description="unitIP" MaxRange="1" MinRange="0" Name="unitIP" SQLDataType="-9"
-                    SourceColumn="unitIP"/>
-            <Column Description="ScrapStatus" MaxRange="1" MinRange="0" Name="ScrapStatus" SQLDataType="4"
-                    SourceColumn="ScrapStatus"/>
+            <Column Description="recordID" MaxRange="1" MinRange="0" Name="recordID" SQLDataType="-5" SourceColumn="recordID"/>
+            <Column Description="unitType" MaxRange="1" MinRange="0" Name="unitType" SQLDataType="4" SourceColumn="unitType"/>
+            <Column Description="unitName" MaxRange="1" MinRange="0" Name="unitName" SQLDataType="-9" SourceColumn="unitName"/>
+            <Column Description="unitDescr" MaxRange="1" MinRange="0" Name="unitDescr" SQLDataType="-9" SourceColumn="unitDescr"/>
+            <Column Description="MOLD_Machine_Matrix" MaxRange="1" MinRange="0" Name="MOLD_Machine_Matrix" SQLDataType="-9" SourceColumn="MOLD_Machine_Matrix"/>
+            <Column Description="groupType" MaxRange="1" MinRange="0" Name="groupType" SQLDataType="-15" SourceColumn="groupType"/>
+            <Column Description="idUnitParent" MaxRange="1" MinRange="0" Name="idUnitParent" SQLDataType="4" SourceColumn="idUnitParent"/>
+            <Column Description="isGroup" MaxRange="1" MinRange="0" Name="isGroup" SQLDataType="4" SourceColumn="isGroup"/>
+            <Column Description="isAsset" MaxRange="1" MinRange="0" Name="isAsset" SQLDataType="4" SourceColumn="isAsset"/>
+            <Column Description="isCharacteristic" MaxRange="1" MinRange="0" Name="isCharacteristic" SQLDataType="4" SourceColumn="isCharacteristic"/>
+            <Column Description="unitActive" MaxRange="1" MinRange="0" Name="unitActive" SQLDataType="4" SourceColumn="unitActive"/>
+            <Column Description="unitSqlServer" MaxRange="1" MinRange="0" Name="unitSqlServer" SQLDataType="-9" SourceColumn="unitSqlServer"/>
+            <Column Description="unitSAPID" MaxRange="1" MinRange="0" Name="unitSAPID" SQLDataType="-9" SourceColumn="unitSAPID"/>
+            <Column Description="miiDataServer" MaxRange="1" MinRange="0" Name="miiDataServer" SQLDataType="-9" SourceColumn="miiDataServer"/>
+            <Column Description="UnitFloorMapSrc" MaxRange="1" MinRange="0" Name="UnitFloorMapSrc" SQLDataType="-9" SourceColumn="UnitFloorMapSrc"/>
+            <Column Description="unitMap" MaxRange="1" MinRange="0" Name="unitMap" SQLDataType="-9" SourceColumn="unitMap"/>
+            <Column Description="UnitCoordX" MaxRange="1" MinRange="0" Name="UnitCoordX" SQLDataType="4" SourceColumn="UnitCoordX"/>
+            <Column Description="UnitCoordY" MaxRange="1" MinRange="0" Name="UnitCoordY" SQLDataType="4" SourceColumn="UnitCoordY"/>
+            <Column Description="ModifiedBy" MaxRange="1" MinRange="0" Name="ModifiedBy" SQLDataType="-9" SourceColumn="ModifiedBy"/>
+            <Column Description="ModifiedOn" MaxRange="1" MinRange="0" Name="ModifiedOn" SQLDataType="93" SourceColumn="ModifiedOn"/>
+            <Column Description="CreatedBy" MaxRange="1" MinRange="0" Name="CreatedBy" SQLDataType="-9" SourceColumn="CreatedBy"/>
+            <Column Description="CreatedOn" MaxRange="1" MinRange="0" Name="CreatedOn" SQLDataType="93" SourceColumn="CreatedOn"/>
+            <Column Description="SAP_ERP" MaxRange="1" MinRange="0" Name="SAP_ERP" SQLDataType="4" SourceColumn="SAP_ERP"/>
+            <Column Description="unitIP" MaxRange="1" MinRange="0" Name="unitIP" SQLDataType="-9" SourceColumn="unitIP"/>
+            <Column Description="ScrapStatus" MaxRange="1" MinRange="0" Name="ScrapStatus" SQLDataType="4" SourceColumn="ScrapStatus"/>
         </Columns>
         <Row>
             <recordID>1</recordID>
@@ -456,8 +430,8 @@
             <CreatedBy>andy</CreatedBy>
             <CreatedOn>2017-10-04T14:15:30</CreatedOn>
             <SAP_ERP>NA</SAP_ERP>
-            <unitIP>---</unitIP>
-            <ScrapStatus>NA</ScrapStatus>
+            <unitIP>172.31.6.95</unitIP>
+            <ScrapStatus>0</ScrapStatus>
         </Row>
         <Row>
             <recordID>21</recordID>
@@ -726,7 +700,7 @@
             <CreatedBy>andy</CreatedBy>
             <CreatedOn>2017-10-04T14:28:19</CreatedOn>
             <SAP_ERP>NA</SAP_ERP>
-            <unitIP>---</unitIP>
+            <unitIP>172.31.6.39</unitIP>
             <ScrapStatus>NA</ScrapStatus>
         </Row>
         <Row>
@@ -787,7 +761,7 @@
             <recordID>33</recordID>
             <unitType>6</unitType>
             <unitName>PRESS01</unitName>
-            <unitDescr>PRESS 2 NIIGATA 55 TON</unitDescr>
+            <unitDescr>PRESS 1 NIIGATA 55 TON</unitDescr>
             <MOLD_Machine_Matrix>55_Ton_Niigata</MOLD_Machine_Matrix>
             <groupType>---</groupType>
             <idUnitParent>8</idUnitParent>
@@ -807,7 +781,7 @@
             <CreatedBy>andy</CreatedBy>
             <CreatedOn>2017-10-04T14:40:19</CreatedOn>
             <SAP_ERP>NA</SAP_ERP>
-            <unitIP>172.31.6.245</unitIP>
+            <unitIP>172.31.6.248</unitIP>
             <ScrapStatus>1</ScrapStatus>
         </Row>
         <Row>
@@ -861,7 +835,7 @@
             <CreatedBy>andy</CreatedBy>
             <CreatedOn>2017-10-04T14:41:53</CreatedOn>
             <SAP_ERP>NA</SAP_ERP>
-            <unitIP>172.31.6.39</unitIP>
+            <unitIP/>
             <ScrapStatus>NA</ScrapStatus>
         </Row>
         <Row>
@@ -2454,7 +2428,7 @@
             <CreatedBy>andy</CreatedBy>
             <CreatedOn>2017-10-04T16:10:05</CreatedOn>
             <SAP_ERP>NA</SAP_ERP>
-            <unitIP>---</unitIP>
+            <unitIP/>
             <ScrapStatus>NA</ScrapStatus>
         </Row>
         <Row>
