@@ -664,7 +664,7 @@
 
             getData(
                 localHost ?
-                    "MESM_FloorMaps.xml" :
+                    "MESM_FloorMaps_GET.xml" :
                     "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml",
                 function (DATA) {
 //                cc(DATA);
@@ -727,7 +727,7 @@
                     cc(url);
                     getData(
                         localHost ?
-                            "MOLD_Machine_Matrix.xml" :
+                            "MOLD_Machine_Matrix_GET.xml" :
                             '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' +
                             mmmSTR + '&Content-Type=text/xml',
                         function (DATA) {
@@ -836,12 +836,12 @@
                 localHost ?
                     'MOLD_Master_Tool_List_GET.xml' :
                     '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml',
-                function (dataRows) {
+                function (data) {
                     var Mold_Number = '';
-                    for (var n = 0; n < dataRows.length; n++) {
-                        if (dataRows[n].Mold_Number != null) {
-                            Mold_Number = dataRows[n].Mold_Number;
-                            var mm = Number(dataRows[n].Total_Cavities) * 60 / Number(dataRows[n].Quoted_Cycle_Time);
+                    for (var n = 0; n < data.length; n++) {
+                        if (data[n].Mold_Number != null) {
+                            Mold_Number = data[n].Mold_Number;
+                            var mm = Number(data[n].Total_Cavities) * 60 / Number(data[n].Quoted_Cycle_Time);
                             // cc(Mold_Number + ' = ' + mm);
                             MOLD_Master_Tool_List[Mold_Number] = mm;
                         }
@@ -925,7 +925,7 @@
                     {
                         field: "SchedStart",
                         title: "SchedStart",
-                        width: 130,
+                        width: 140,
 //                            responsive: {visible: "lg"}
                     },
                     // {
@@ -937,7 +937,7 @@
                     {
                         field: "SchedFinish",
                         title: "SchedFinish",
-                        width: 130,
+                        width: 140,
                     },
                     // {
                     //     field: "EndTime",
@@ -1002,9 +1002,9 @@
                                         // cc(mmmArray[e.Mold]);
 
                                         if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
-                                            cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
-                                            cc(mmmArray[e.Mold]);
-                                            cc(MESM_FloorMaps[f].unitName + ' true');
+                                            // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
+                                            // cc(mmmArray[e.Mold]);
+                                            // cc(MESM_FloorMaps[f].unitName + ' true');
 //                                            cc(e.Mold);
 //                                            cc(mmmArray[e.Mold]);
 //                                            cc(floorMaps[n]['unitName']);
@@ -1023,7 +1023,7 @@
                                                 '"' +
                                                 '><i class="la la-wrench"></i>' +
                                                 'assign to ' + MESM_FloorMaps[f].unitName +
-                                                ' ~' + Math.round(0.5 + e.TARGET / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
+                                                ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
                                                 '</a>';
                                         } else {
                                             // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
@@ -1343,8 +1343,8 @@
                                     // cc('//////');
                                     orderTable.dataSet[i].StartDate = moment.utc(event.start._d).format('MMM DD, YYYY HH:mm:ss');
                                     orderTable.dataSet[i].EndDate = moment.utc(event.end._d).format('MMM DD, YYYY HH:mm:ss');
-                                    orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
-                                    orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
+                                    // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
+                                    // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
                                     orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
                                     orderTable.dataSet[i].Press = ScheduleEvents[event.id].resourceId.split('_')[1];
                                     // cc(orderTable.dataSet[i].StartDate);
@@ -1386,8 +1386,8 @@
                                     // cc('//////');
                                     orderTable.dataSet[i].StartDate = moment.utc(event.start._d).format('MMM DD, YYYY HH:mm:ss');
                                     orderTable.dataSet[i].EndDate = moment.utc(event.end._d).format('MMM DD, YYYY HH:mm:ss');
-                                    orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
-                                    orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
+                                    // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
+                                    // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
                                     orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
                                     orderTable.dataSet[i].Press = ScheduleEvents[event.id].resourceId.split('_')[1];
                                     // cc(orderTable.dataSet[i].StartDate);
@@ -1766,20 +1766,22 @@
         }
 
         function quickAction(e) {
+            cc('quickAction');
+            cc(e);
 
-
-            var tColums = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
+            var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Status = tColums[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _OrderNumber = tColums[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _TARGET = tColums[4].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _OrderNumber = TableCOL[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _Quantity = TableCOL[4].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 
-            var _StartDate = moment(tColums[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('MM/DD/YYYY');
-            var _StartTime = tColums[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _EndDate = moment(tColums[7].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('MM/DD/YYYY');
-            var _EndTime = tColums[8].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _SchedStart = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _StartTime = moment(TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('HH:mm:ss');
+            var _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _EndTime = moment(TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('HH:mm:ss');
             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
             var _During = 0;
+            var _WorkCenterID = 0;
             var _Status_dataSet = '',
                 _Press_dataSet = '';
 
@@ -1789,9 +1791,11 @@
             if (_Status == 'Unscheduled') {
 
                 if (_Action.indexOf('assign') >= 0) {
+                    cc(_Action);
                     _StartTime = '00:00:00';
                     _During = parseInt(_Action.split('~')[1]);
                     _EndTime = '';
+
 
                     // cc('_During ' + _During);
 
@@ -1816,39 +1820,61 @@
                     } else {
                         _EndTime = _EndTime + mm + ':00';
                     }
-
-                    addScheduleEvent(e.id, _OrderNumber, '00:00:00', _EndTime);
-
+                    var _today = new Date().toISOString().substr(0, 10);
+                    cc('Unscheduled -> assign' + ' / ' + _During + ' / ' + _EndTime);
+                    addScheduleEvent(e.id, _OrderNumber, _today + ' 00:00:00', _today + ' ' + _EndTime);
+                    // cc('orderTable.dataSet');
+                    // cc(orderTable.dataSet);
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
+                        cc(i + ' / ' + orderTable.dataSet[i].OrderNumber);
                         if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+
+                            _SchedStart = _today + ' 00:00:00';
+                            _SchedFinish = _today + ' ' + _EndTime;
                             _Status = 'Hold';
+                            orderTable.dataSet[i].SchedStart = _SchedStart;
+                            orderTable.dataSet[i].SchedFinish = _SchedFinish;
                             orderTable.dataSet[i].Press = _Press;
-                            orderTable.dataSet[i].Status = 'H';
+                            orderTable.dataSet[i].Status = _Status.substring(0, 1);
+                            for (var f in MESM_FloorMaps) {
+                                if (MESM_FloorMaps[f].unitName == _Press) {
+                                    _WorkCenterID = +f;
+                                    break;
+                                }
+                            }
                             break;
                         }
                     }
 
-                    // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+
+                    // cc('_WorkCenterID ' + _WorkCenterID);
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _Quantity +
                         "&Param.3=" +
-                        _StartTime +
+                        _SchedStart +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
-                        _EndTime +
+                        _Status.substring(0, 1) +
                         "&Param.6=" +
-                        'H' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
+                        _WorkCenterID +
                         "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
+
+                    cc(urlProc);
+
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // document.getElementById("demo").innerHTML = this.responseText;
+                            cc(urlProc + ' succeed.');
+
+                        }
+                    };
+                    xhttp.open("GET", urlProc, true);
+                    xhttp.send();
 
 
                 } else if (_Action.indexOf('Cancelled') >= 0) {
@@ -1864,26 +1890,31 @@
                             break;
                         }
                     }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _Quantity +
                         "&Param.3=" +
-                        _StartTime +
+                        _SchedStart +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
                         'C' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
+                        "&Param.6=" +
+                        _WorkCenterID +
                         "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
+                    cc(urlProc);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // document.getElementById("demo").innerHTML = this.responseText;
+                            cc(urlProc + ' succeed.');
+
+                        }
+                    };
+                    xhttp.open("GET", urlProc, true);
+                    xhttp.send();
 
                     ActivityLogADD(
                         '<div class="m-list-timeline__item">' +
@@ -1910,11 +1941,11 @@
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _SchedStart +
                         "&Param.3=" +
                         _StartTime +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
                         _EndTime +
                         "&Param.6=" +
@@ -1967,38 +1998,53 @@
 
                     removeScheduleEvent(_OrderNumber);
 
-                    addScheduleEvent(e.id, _OrderNumber, '00:00:00', _EndTime);
-
+                    var _today = new Date().toISOString().substr(0, 10);
+                    cc('Unscheduled -> assign' + ' / ' + _During + ' / ' + _EndTime);
+                    addScheduleEvent(e.id, _OrderNumber, _today + ' 00:00:00', _today + ' ' + _EndTime);
+                    // cc('orderTable.dataSet');
+                    // cc(orderTable.dataSet);
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
                         if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+                            orderTable.dataSet[i].SchedStart = _today + ' 00:00:00';
+                            orderTable.dataSet[i].SchedFinish = _today + ' ' + _EndTime;
                             _Status = 'Hold';
                             orderTable.dataSet[i].Press = _Press;
                             orderTable.dataSet[i].Status = 'H';
                             break;
                         }
                     }
+                    for (var f in MESM_FloorMaps) {
+                        if (MESM_FloorMaps[f].unitName == _Press) {
+                            _WorkCenterID = +f;
+                            break;
+                        }
+                    }
 
-                    // OneHDMIIOwensboro/SCHEDULE/QUERIES/ProductionOrdersListFromSAP_UPD
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _Quantity +
                         "&Param.3=" +
-                        _StartTime +
+                        _SchedStart +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
                         'H' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
+                        "&Param.6=" +
+                        _WorkCenterID +
                         "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
+                    cc(urlProc);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // document.getElementById("demo").innerHTML = this.responseText;
+                            cc(urlProc + ' succeed.');
+
+                        }
+                    };
+                    xhttp.open("GET", urlProc, true);
+                    xhttp.send();
 
 
                 } else if (_Action.indexOf('Undo') >= 0) {
@@ -2007,31 +2053,37 @@
                             _Status = 'Unscheduled';
                             // _Press = '';
                             orderTable.dataSet[i].Press = '';
+                            _WorkCenterID = 0;
                             orderTable.dataSet[i].Status = 'U';
                             removeScheduleEvent(_OrderNumber);
                             break;
                         }
                     }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _Quantity +
                         "&Param.3=" +
-                        _StartTime +
+                        _SchedStart +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
                         'U' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
+                        "&Param.6=" +
+                        _WorkCenterID +
                         "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
+                    cc(urlProc);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // document.getElementById("demo").innerHTML = this.responseText;
+                            cc(urlProc + ' succeed.');
+
+                        }
+                    };
+                    xhttp.open("GET", urlProc, true);
+                    xhttp.send();
                 } else if (_Action.indexOf('Cancelled') >= 0) {
 
 
@@ -2049,11 +2101,11 @@
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _SchedStart +
                         "&Param.3=" +
                         _StartTime +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
                         _EndTime +
                         "&Param.6=" +
@@ -2080,11 +2132,11 @@
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _SchedStart +
                         "&Param.3=" +
                         _StartTime +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
                         _EndTime +
                         "&Param.6=" +
@@ -2114,11 +2166,11 @@
                         "&Param.1=" +
                         _OrderNumber +
                         "&Param.2=" +
-                        _StartDate +
+                        _SchedStart +
                         "&Param.3=" +
                         _StartTime +
                         "&Param.4=" +
-                        _EndDate +
+                        _SchedFinish +
                         "&Param.5=" +
                         _EndTime +
                         "&Param.6=" +
@@ -2205,8 +2257,10 @@
             $('#calendar').fullCalendar('renderEvent', {
                 id: title,
                 resourceId: id,
-                start: today + 'T' + start,
-                end: today + 'T' + end,
+                // start: today + ' ' + start,
+                start: start,
+                // end: today + ' ' + end,
+                end: end,
                 title: title,
                 description: id,
                 color: colors[Math.round(Math.random() * 8)]
