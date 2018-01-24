@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Rowsets CachedTime="" DateCreated="2018-01-11T14:51:21" EndDate="2018-01-11T14:51:21" StartDate="2018-01-11T13:51:21"
-         Version="15.1 SP2 Patch 16 (Dec 21, 2016)">
+<Rowsets CachedTime="" DateCreated="2018-01-24T19:26:25" EndDate="2018-01-24T19:26:25" StartDate="2018-01-24T18:26:25" Version="15.1 SP2 Patch 16 (Dec 21, 2016)">
     <Rowset>
         <Columns>
-            <Column Description="Mold_Number" MaxRange="1" MinRange="0" Name="Mold_Number" SQLDataType="-9"
-                    SourceColumn="Mold_Number"/>
-            <Column Description="Total_Cavities" MaxRange="1" MinRange="0" Name="Total_Cavities" SQLDataType="8"
-                    SourceColumn="Total_Cavities"/>
-            <Column Description="Quoted_Cycle_Time" MaxRange="1" MinRange="0" Name="Quoted_Cycle_Time" SQLDataType="-9"
-                    SourceColumn="Quoted_Cycle_Time"/>
+            <Column Description="Mold_Number" MaxRange="1" MinRange="0" Name="Mold_Number" SQLDataType="-9" SourceColumn="Mold_Number"/>
+            <Column Description="Total_Cavities" MaxRange="1" MinRange="0" Name="Total_Cavities" SQLDataType="8" SourceColumn="Total_Cavities"/>
+            <Column Description="Quoted_Cycle_Time" MaxRange="1" MinRange="0" Name="Quoted_Cycle_Time" SQLDataType="-9" SourceColumn="Quoted_Cycle_Time"/>
         </Columns>
         <Row>
             <Mold_Number>AAAA</Mold_Number>
@@ -317,7 +313,7 @@
         </Row>
         <Row>
             <Mold_Number>DC143</Mold_Number>
-            <Total_Cavities>12</Total_Cavities>
+            <Total_Cavities>11</Total_Cavities>
             <Quoted_Cycle_Time>15</Quoted_Cycle_Time>
         </Row>
         <Row>
