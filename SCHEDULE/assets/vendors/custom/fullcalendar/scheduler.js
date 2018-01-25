@@ -1961,9 +1961,11 @@ Requirements:
             return this.wrapTr(dateHtmls, 'renderHeadIntroHtml') + this.wrapTr(resourceHtmls, 'renderHeadIntroHtml');
         },
         renderHeadResourceCellHtml: function (resource, date, colspan) {
+            cc('resource.id' + resource.id);
             return '<th class="fc-resource-cell"' + ' data-resource-id="' + resource.id + '"' + (date ? ' data-date="' + date.format('YYYY-MM-DD') + '"' : '') + (colspan > 1 ? ' colspan="' + colspan + '"' : '') + '>' + htmlEscape(this.view.getResourceText(resource)) + '</th>';
         },
         renderHeadResourceDateCellHtml: function (date, resource, colspan) {
+            cc('resource.id' + resource.id);
             return this.renderHeadDateCellHtml(date, colspan, 'data-resource-id="' + resource.id + '"');
         },
         processHeadResourceEls: function (containerEl) {
@@ -1996,6 +1998,7 @@ Requirements:
             return htmls.join('');
         },
         renderResourceBgCellHtml: function (date, resource) {
+            cc('resource.id' + resource.id);
             return this.renderBgCellHtml(date, 'data-resource-id="' + resource.id + '"');
         },
         wrapTr: function (cellHtmls, introMethodName) {
@@ -2027,6 +2030,10 @@ Requirements:
             return this.businessHourRenderer.renderEventFootprints(eventFootprints);
         }
     };
+
+    function cc(obj) {
+        console.log(obj)
+    }
 
     Calendar_constructed = Calendar.prototype.constructed;
 
@@ -2843,9 +2850,9 @@ TODO: somehow more DRY with DateComponent::eventRangeToEventFootprints monkeypat
 
     })(EventRenderer);
 
-    cc = function (obj) {
-        console.log(obj);
-    }
+    // cc = function (obj) {
+    //     console.log(obj);
+    // }
 
     computeOffsetForSegs = function (segs) {
         var j, len, max, seg;

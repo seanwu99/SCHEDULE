@@ -64,9 +64,9 @@
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
-            cc(moment("2018-01-24 10:13:00.000").fromNow());
+            // cc(moment("2018-01-24 10:13:00.000").fromNow());
             // arrayProperty();
-            cc(new Date(0).toISOString());
+            // cc(new Date(0).toISOString());
 
             cc(document.getElementById("user_roles").value);
             cc(document.getElementById("user_role").value);
@@ -156,10 +156,10 @@
                             }
                         }
                     }
-                    cc('MESM_FloorMaps');
-                    cc(MESM_FloorMaps);
-                    cc(MESM_FloorMaps_LineGROUP);
-                    cc('MESM_FloorMaps_LineGROUP');
+                    // cc('MESM_FloorMaps');
+                    // cc(MESM_FloorMaps);
+                    // cc(MESM_FloorMaps_LineGROUP);
+                    // cc('MESM_FloorMaps_LineGROUP');
                     //MESM_OrderOperation_GET
                     // var urlMESM_OrderOperation_GET = localHost ? 'MESM_OrderOperation_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml';
                     MESM_OrderOperation = [];
@@ -181,7 +181,6 @@
                                     'WorkCenterID': v.WorkCenterID,
                                     'WorkCenter': v.WorkCenter,
                                     'OrderScheduledKey': v.OrderScheduledKey,
-                                    'SchedQuantity': v.SchedQuantity,
                                     'SchedStart': v.SchedStart,
                                     'SchedFinish': v.SchedFinish,
                                     'SchedStatus': v.SchedStatus,
@@ -193,10 +192,6 @@
                                 // cc(MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01T00:00:00');
                                 // cc('1900-01-01T00:00:00');
 
-                                if (MESM_OrderOperation[v.OrderNumber].SchedQuantity == 0) {
-                                    MESM_OrderOperation[v.OrderNumber].SchedQuantity = v.Quantity;
-                                    dt = true;
-                                }
                                 if (MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01T00:00:00') {
                                     MESM_OrderOperation[v.OrderNumber].SchedStart = moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss');
                                     dt = true;
@@ -224,7 +219,7 @@
                                         "&Param.1=" +
                                         v.OrderNumber +
                                         "&Param.2=" +
-                                        v.SchedQuantity +
+                                        v.Quantity +
                                         "&Param.3=" +
                                         v.SchedStart +
                                         "&Param.4=" +
@@ -246,8 +241,8 @@
                                 }
                             });
 
-                            cc('MESM_OrderOperation');
-                            cc(MESM_OrderOperation);
+                            // cc('MESM_OrderOperation');
+                            // cc(MESM_OrderOperation);
                             MOLD_Master_Tool_List_GET();
 
                             // var url_MESM_Orders_GET1 = localHost ? 'MESM_Orders_GET1.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
@@ -457,18 +452,18 @@
                 start: '01/15/2018 08:00:00',
                 end: '01/15/2018 16:30:00'
             };
-            cc(ScheduleEvents);
-
-            cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
+            // cc(ScheduleEvents);
+            //
+            // cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
 
             for (var _key in ScheduleEvents) {
-                cc(_key);
-                cc(ScheduleEvents[_key]);
+                // cc(_key);
+                // cc(ScheduleEvents[_key]);
             }
 
             delete ScheduleEvents['900000'];
 
-            cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
+            // cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
 
         }
 
@@ -623,8 +618,8 @@
                 //     MESM_FloorMaps_LineGROUP[g].push(m);
                 // }
             }
-            cc('WorkCentres');
-            cc(WorkCentres);
+            // cc('WorkCentres');
+            // cc(WorkCentres);
             // return;
             mmmSTR = '[Mold_Number]';
             for (var f in MESM_FloorMaps) {
@@ -640,7 +635,7 @@
                     // "RecordID": data.ID,
                     "OrderNumber": MESM_OrderOperation[O].OrderNumber,
                     "Material": MESM_OrderOperation[O].Material,
-                    "Quantity": MESM_OrderOperation[O].SchedQuantity,
+                    "Quantity": MESM_OrderOperation[O].Quantity,
                     "SchedStart": moment(MESM_OrderOperation[O].SchedStart).format('YYYY-MM-DD HH:mm:ss'),
                     "SchedFinish": moment(MESM_OrderOperation[O].SchedFinish).format('YYYY-MM-DD HH:mm:ss'),
                     // "StartTime": moment(data.StartTime).format('HH:mm:ss'),
@@ -655,8 +650,8 @@
                 });
                 // MESM_FloorMaps[f]. MOLD_Machine_Matrix
             }
-            cc('MESM_ProductionOrders');
-            cc(MESM_ProductionOrders);
+            // cc('MESM_ProductionOrders');
+            // cc(MESM_ProductionOrders);
 
             // var url = localHost ? "MESM_FloorMaps.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
             // cc(url);
@@ -829,8 +824,8 @@
 
         function MOLD_Master_Tool_List_GET() {
 
-            var url = localHost ? 'MOLD_Master_Tool_List_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
-            cc(url);
+            // var url = localHost ? 'MOLD_Master_Tool_List_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Master_Tool_List_GET&Content-Type=text/xml';
+            // cc(url);
 
             getData(
                 localHost ?
@@ -847,8 +842,8 @@
                         }
 
                     }
-                    cc('MOLD_Master_Tool_List');
-                    cc(MOLD_Master_Tool_List);
+                    // cc('MOLD_Master_Tool_List');
+                    // cc(MOLD_Master_Tool_List);
                     mainPro();
                 });
 
@@ -1083,7 +1078,7 @@
                                     '       <div class="dropdown-menu dropdown-menu-right" >' +
                                     prsSTR +
                                     '           <div class="dropdown-divider"></div>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
+                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
                                     '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Cancelled</a>' +
                                     '       </div>' +
                                     '   </div>' +
@@ -1318,7 +1313,7 @@
                     // },
 
                     eventRender: function (event, element, view) {
-                        cc(event);
+                        // cc(event);
                         if (!ScheduleEvents.hasOwnProperty(event.id)) {
                             ScheduleEvents[event.id] = {
                                 resourceId: event.resourceId,
@@ -1463,8 +1458,8 @@
                                 click:
 
                                     function () {
-                                        cc('CustomButton');
-//                            cc('custom button');
+                                        // cc('CustomButton');
+                                        // cc('custom button');
 // * * *
 //                            $('#calendar').fullCalendar('removeEvents', 111);
 
@@ -1665,8 +1660,8 @@
 
 
                 var callbk = function (key, options) {
-                    cc(key);
-                    cc(options);
+                    // cc(key);
+                    // cc(options);
                 }
                 // }
             }
@@ -1767,7 +1762,7 @@
 
         function quickAction(e) {
             cc('quickAction');
-            cc(e);
+            // cc(e);
 
             var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
@@ -1780,102 +1775,64 @@
             var _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _EndTime = moment(TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('HH:mm:ss');
             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
-            var _During = 0;
+            var _During = _Action.indexOf('~') >= 0 ? parseInt(_Action.split('~')[1]) : 0;
             var _WorkCenterID = 0;
-            var _Status_dataSet = '',
-                _Press_dataSet = '';
 
-            // cc(_Action + ' / ' + _Status + ' / ' + _OrderID + ' / ' + _StartDate + ' / ' + _StartTime + ' / ' + _EndDate + ' / ' + _EndTime + ' / ' + _Press + ' / ' + _TARGET);
+            cc(e.id);
+            cc(_During);
+
+            if ((_Status == 'Unscheduled' || _Status == 'Hold') && _Action.indexOf('assign') >= 0) {
+                cc(_Status + ' > assign');
+                if (_During < 240) {
+                    _During = 240
+                }
+                _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+                _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+                _Status = 'Hold';
+                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                removeScheduleEvent(_OrderNumber);
+                addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+                ActivityLogADD('Assigned', 'Order ' + Number(_OrderNumber) + ' => ' + _Press + ' ', e.id);
+            }
+
+            if (_Status == 'Unscheduled' && _Action.indexOf('Cancelled') >= 0) {
+                cc(_Status + ' >Cancelled');
+                _SchedStart = '';
+                _SchedFinish = '';
+                _Status = 'Cancelled';
+                _Press = '';
+                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                removeScheduleEvent(_OrderNumber);
+                ActivityLogADD('Cancelled', 'Order ' + Number(_OrderNumber) + ' ', '');
+            }
+
+            if (_Status == 'Hold' && _Action.indexOf('Undo') >= 0) {
+                cc(_Status + ' >Undo');
+                _SchedStart = '';
+                _SchedFinish = '';
+                _Status = 'Unscheduled';
+                _Press = '';
+                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                removeScheduleEvent(_OrderNumber);
+                // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+                ActivityLogADD('Unassigned', 'Order ' + Number(_OrderNumber) + ' ', '');
+            }
+
+            if (_Status == 'Hold' && _Action.indexOf('Scheduled') >= 0) {
+                cc(_Status + ' >Scheduled');
+                // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+                // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+                _Status = 'Scheduled';
+                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                // removeScheduleEvent(_OrderNumber);
+                // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+                // ActivityLogADD('Assigned', 'Order ' + Number(_OrderNumber) + ' => ' + _Press + ' ');
+            }
 
 
             if (_Status == 'Unscheduled') {
 
                 if (_Action.indexOf('assign') >= 0) {
-                    cc(_Action);
-                    _StartTime = '00:00:00';
-                    _During = parseInt(_Action.split('~')[1]);
-                    _EndTime = '';
-
-
-                    // cc('_During ' + _During);
-
-                    var mm = _During, hh = 0;
-
-                    if (mm < 240) {
-                        mm = 240
-                    }
-
-                    hh = Math.floor(mm / 60);
-                    mm = mm - 60 * hh;
-                    if (hh > 24) {
-                        hh = 24
-                    }
-                    if (hh < 10) {
-                        _EndTime = '0' + hh + ':';
-                    } else {
-                        _EndTime = hh + ':';
-                    }
-                    if (mm < 10) {
-                        _EndTime = _EndTime + '0' + mm + ':00';
-                    } else {
-                        _EndTime = _EndTime + mm + ':00';
-                    }
-                    var _today = new Date().toISOString().substr(0, 10);
-                    cc('Unscheduled -> assign' + ' / ' + _During + ' / ' + _EndTime);
-                    addScheduleEvent(e.id, _OrderNumber, _today + ' 00:00:00', _today + ' ' + _EndTime);
-                    // cc('orderTable.dataSet');
-                    // cc(orderTable.dataSet);
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        cc(i + ' / ' + orderTable.dataSet[i].OrderNumber);
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-
-                            _SchedStart = _today + ' 00:00:00';
-                            _SchedFinish = _today + ' ' + _EndTime;
-                            _Status = 'Hold';
-                            orderTable.dataSet[i].SchedStart = _SchedStart;
-                            orderTable.dataSet[i].SchedFinish = _SchedFinish;
-                            orderTable.dataSet[i].Press = _Press;
-                            orderTable.dataSet[i].Status = _Status.substring(0, 1);
-                            for (var f in MESM_FloorMaps) {
-                                if (MESM_FloorMaps[f].unitName == _Press) {
-                                    _WorkCenterID = +f;
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-
-
-                    // cc('_WorkCenterID ' + _WorkCenterID);
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _Quantity +
-                        "&Param.3=" +
-                        _SchedStart +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        _Status.substring(0, 1) +
-                        "&Param.6=" +
-                        _WorkCenterID +
-                        "&Content-Type=text/xml";
-
-                    cc(urlProc);
-
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                            // document.getElementById("demo").innerHTML = this.responseText;
-                            cc(urlProc + ' succeed.');
-
-                        }
-                    };
-                    xhttp.open("GET", urlProc, true);
-                    xhttp.send();
-
 
                 } else if (_Action.indexOf('Cancelled') >= 0) {
 
@@ -1916,16 +1873,7 @@
                     xhttp.open("GET", urlProc, true);
                     xhttp.send();
 
-                    ActivityLogADD(
-                        '<div class="m-list-timeline__item">' +
-                        '  <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
-                        '  <span href="" class="m-list-timeline__text">' +
-                        '    New order received' +
-                        '    <span class="m-badge m-badge--danger m-badge--wide">urgent</span>' +
-                        '  </span>' +
-                        '  <span class="m-list-timeline__time">7 hrs</span>' +
-                        '</div>'
-                    );
+
                 } else if (_Action.indexOf('Scheduled') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
                         if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
@@ -1962,90 +1910,21 @@
                 orderTable.reload();
 
             } else if (_Status == 'Hold') {
-                // cc('_Status == \'Hold\'');
-
 
                 if (_Action.indexOf('assign') >= 0) {
-
-                    _StartTime = '00:00:00';
-                    _During = parseInt(_Action.split('~')[1]);
-                    _EndTime = '';
-
-                    // cc('_During ' + _During);
-
-                    var mm = _During, hh = 0;
-                    if (mm < 240) {
-                        mm = 240
-                    }
-                    hh = Math.floor(mm / 60);
-                    mm = mm - 60 * hh;
-                    if (hh > 24) {
-                        hh = 24
-                    }
-                    if (hh < 10) {
-                        _EndTime = '0' + hh + ':';
-                    } else {
-                        _EndTime = hh + ':';
-                    }
-                    if (mm < 10) {
-                        _EndTime = _EndTime + '0' + mm + ':00';
-                    } else {
-                        _EndTime = _EndTime + mm + ':00';
-                    }
-                    // cc('removeScheduleEvent');
-                    // cc(e.id);
-                    // cc(_OrderID);
-
-                    removeScheduleEvent(_OrderNumber);
-
-                    var _today = new Date().toISOString().substr(0, 10);
-                    cc('Unscheduled -> assign' + ' / ' + _During + ' / ' + _EndTime);
-                    addScheduleEvent(e.id, _OrderNumber, _today + ' 00:00:00', _today + ' ' + _EndTime);
-                    // cc('orderTable.dataSet');
-                    // cc(orderTable.dataSet);
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            orderTable.dataSet[i].SchedStart = _today + ' 00:00:00';
-                            orderTable.dataSet[i].SchedFinish = _today + ' ' + _EndTime;
-                            _Status = 'Hold';
-                            orderTable.dataSet[i].Press = _Press;
-                            orderTable.dataSet[i].Status = 'H';
-                            break;
-                        }
-                    }
-                    for (var f in MESM_FloorMaps) {
-                        if (MESM_FloorMaps[f].unitName == _Press) {
-                            _WorkCenterID = +f;
-                            break;
-                        }
-                    }
-
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _Quantity +
-                        "&Param.3=" +
-                        _SchedStart +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        'H' +
-                        "&Param.6=" +
-                        _WorkCenterID +
-                        "&Content-Type=text/xml";
-                    cc(urlProc);
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                            // document.getElementById("demo").innerHTML = this.responseText;
-                            cc(urlProc + ' succeed.');
-
-                        }
-                    };
-                    xhttp.open("GET", urlProc, true);
-                    xhttp.send();
-
+                    // cc('Hold >assign');
+                    // _During = parseInt(_Action.split('~')[1]);
+                    //
+                    // if (_During < 240) {
+                    //     _During = 240
+                    // }
+                    //
+                    // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+                    // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+                    // _Status = 'Hold';
+                    // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                    // removeScheduleEvent(_OrderNumber);
+                    // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
 
                 } else if (_Action.indexOf('Undo') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
@@ -2073,7 +1952,7 @@
                         "&Param.6=" +
                         _WorkCenterID +
                         "&Content-Type=text/xml";
-                    cc(urlProc);
+                    // cc(urlProc);
                     var xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
@@ -2188,21 +2067,133 @@
             orderTable.reload();
         }
 
+        function updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
 
-        function ActivityLogADD(msg, cs1, badge, cs2) {
-            // '<div class="m-list-timeline__item">' +
-            // '  <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
-            // '  <span href="" class="m-list-timeline__text">' +
-            // '    New order received' +
-            // '    <span class="m-badge m-badge--danger m-badge--wide">urgent</span>' +
-            // '  </span>' +
-            // '  <span class="m-list-timeline__time">7 hrs</span>' +
-            // '</div>'
+            if (_SchedStart == '' || _SchedFinish == '') {
+                for (var v in MESM_OrderOperation) {
+                    // cc(MESM_OrderOperation);
+                    if (MESM_OrderOperation[v].OrderNumber == _OrderNumber) {
+                        _SchedStart = moment(MESM_OrderOperation[v].EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperation[v].EarlySchedStartTime).format('HH:mm:ss');
+                        _SchedFinish = moment(MESM_OrderOperation[v].EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperation[v].EarlySchedFinTime).format('HH:mm:ss');
+                        break;
+                    }
+                }
+            }
 
 
-            var elm = document.getElementById("m-list-timeline__items");
-            // cc(elm.innerHTML);
-            elm.innerHTML = div + elm.innerHTML;
+            for (var i = 0; i < orderTable.dataSet.length; i++) {
+                // cc(i + ' / ' + orderTable.dataSet[i].OrderNumber);
+                if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+                    orderTable.dataSet[i].SchedStart = _SchedStart;
+                    orderTable.dataSet[i].SchedFinish = _SchedFinish;
+                    orderTable.dataSet[i].Press = _Press;
+                    orderTable.dataSet[i].Status = _Status.substring(0, 1);
+                    break;
+                }
+            }
+            var _WorkCenterID = 0;
+
+            if (_Press != '') {
+                for (var f in MESM_FloorMaps) {
+                    if (MESM_FloorMaps[f].unitName == _Press) {
+                        _WorkCenterID = +f;
+                        break;
+                    }
+                }
+            }
+
+            var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
+                "&Param.1=" +
+                _OrderNumber +
+                "&Param.2=" +
+                _Quantity +
+                "&Param.3=" +
+                _SchedStart +
+                "&Param.4=" +
+                _SchedFinish +
+                "&Param.5=" +
+                _Status.substring(0, 1) +
+                "&Param.6=" +
+                _WorkCenterID +
+                "&Content-Type=text/xml";
+
+            // cc(urlProc);
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // document.getElementById("demo").innerHTML = this.responseText;
+                    cc(urlProc + ' succeed.');
+
+                }
+            };
+            xhttp.open("GET", urlProc, true);
+            xhttp.send();
+        }
+
+        function ActivityLogADD(ev, _Action, tag) {
+            cc('tag ' + tag);
+            var occurred = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 19);
+            var receiver = '';
+            var events = '';
+
+            if (ev == 'Assigned') {
+                events =
+                    '<span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>' +
+                    '<span class="m-list-timeline__text"><a href="%23MOLD2_PRESS35" class="m-link">Order 1009265  => PRESS35</a></span>';
+                events.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                cc('events ' + events);
+            } else if (ev == 'Unassigned') {
+                events =
+                    '<span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>' +
+                    '<span class="m-list-timeline__text">' +
+                    _Action +
+                    '<span class="m-badge m-badge--danger m-badge--wide">Unassigned</span></span>';
+            } else if (ev == 'Cancelled') {
+                events =
+                    '<span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>' +
+                    '<span class="m-list-timeline__text">' +
+                    _Action + 'has be ' +
+                    '<span class="m-badge m-badge--metal m-badge--wide">Cancelled</span></span>';
+            }
+
+            var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
+                "&Param.1=" +
+                receiver +
+                "&Param.2=" +
+                events.replace(/[\x00-\x1F\x7F-\x9F]/g, "") +
+                "&Param.3=" +
+                occurred
+            "&Content-Type=text/xml";
+
+            cc(urlProc);
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // document.getElementById("demo").innerHTML = this.responseText;
+                    cc(urlProc + ' succeed.');
+                    ActivityLogGET();
+                }
+            };
+            xhttp.open("GET", urlProc, true);
+            xhttp.send();
+
+
+            // var div =
+            //     '<div class="m-list-timeline__item">' +
+            //     '  <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
+            //     '  <span href="" class="m-list-timeline__text">' +
+            //     '    New order received' +
+            //     '    <span class="m-badge m-badge--danger m-badge--wide">urgent</span>' +
+            //     '  </span>' +
+            //     '  <span class="m-list-timeline__time">7 hrs</span>' +
+            //     '</div>'
+            //
+            //
+            // var elm = document.getElementById("m-list-timeline__items");
+            // // cc(elm.innerHTML);
+            // elm.innerHTML = div + elm.innerHTML;
 
         }
 
@@ -2277,8 +2268,8 @@
                 selector: '#' + title,
                 callback: function (key, options) {
                     // callbk(key, options);
-                    cc(key);
-                    cc(options);
+                    // cc(key);
+                    // cc(options);
                     // cc(options.selector);
 
                     if (key == 'delete') {
@@ -3014,55 +3005,55 @@
                                              style="height1: 600px; overflow: auto;">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items">
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span class="m-list-timeline__text">13 new order received<span
-                                                                class="m-badge m-badge--danger m-badge--wide">urgent</span></span>
-                                                        <span class="m-list-timeline__time">Just now</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span class="m-list-timeline__text">12 new users registered</span>
-                                                        <span class="m-list-timeline__time">Just now</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">System shutdown <span
-                                                                class="m-badge m-badge--success m-badge--wide">pending</span></span>
-                                                        <span class="m-list-timeline__time">14 mins</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>
-                                                        <span class="m-list-timeline__text">New invoice received</span>
-                                                        <span class="m-list-timeline__time">20 mins</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>
-                                                        <span class="m-list-timeline__text">DB overloaded 80% <span
-                                                                class="m-badge m-badge--info m-badge--wide">settled</span></span>
-                                                        <span class="m-list-timeline__time">1 hr</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--warning"></span>
-                                                        <span class="m-list-timeline__text">System error - <a href="#" class="m-link">Check</a></span>
-                                                        <span class="m-list-timeline__time">2 hrs</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--brand"></span>
-                                                        <span class="m-list-timeline__text">Production server down</span>
-                                                        <span class="m-list-timeline__time">3 hrs</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--info"></span>
-                                                        <span class="m-list-timeline__text">Production server up</span>
-                                                        <span class="m-list-timeline__time">5 hrs</span>
-                                                    </div>
-                                                    <div class="m-list-timeline__item">
-                                                        <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
-                                                        <span href="" class="m-list-timeline__text">New order received <span
-                                                                class="m-badge m-badge--danger m-badge--wide">urgent</span></span>
-                                                        <span class="m-list-timeline__time">7 hrs</span>
-                                                    </div>
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;success"></span>-->
+                                                    <!--<span class="m-list-timeline__text">13 new order received<span-->
+                                                    <!--class="m-badge m-badge&#45;&#45;danger m-badge&#45;&#45;wide">urgent</span></span>-->
+                                                    <!--<span class="m-list-timeline__time">Just now</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;success"></span>-->
+                                                    <!--<span class="m-list-timeline__text">12 new users registered</span>-->
+                                                    <!--<span class="m-list-timeline__time">Just now</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;info"></span>-->
+                                                    <!--<span class="m-list-timeline__text">System shutdown <span-->
+                                                    <!--class="m-badge m-badge&#45;&#45;success m-badge&#45;&#45;wide">pending</span></span>-->
+                                                    <!--<span class="m-list-timeline__time">14 mins</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;danger"></span>-->
+                                                    <!--<span class="m-list-timeline__text">New invoice received</span>-->
+                                                    <!--<span class="m-list-timeline__time">20 mins</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;accent"></span>-->
+                                                    <!--<span class="m-list-timeline__text">DB overloaded 80% <span-->
+                                                    <!--class="m-badge m-badge&#45;&#45;info m-badge&#45;&#45;wide">settled</span></span>-->
+                                                    <!--<span class="m-list-timeline__time">1 hr</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;warning"></span>-->
+                                                    <!--<span class="m-list-timeline__text">System error - <a href="#" class="m-link">Check</a></span>-->
+                                                    <!--<span class="m-list-timeline__time">2 hrs</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;brand"></span>-->
+                                                    <!--<span class="m-list-timeline__text">Production server down</span>-->
+                                                    <!--<span class="m-list-timeline__time">3 hrs</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;info"></span>-->
+                                                    <!--<span class="m-list-timeline__text">Production server up</span>-->
+                                                    <!--<span class="m-list-timeline__time">5 hrs</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="m-list-timeline__item">-->
+                                                    <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;success"></span>-->
+                                                    <!--<span href="" class="m-list-timeline__text">New order received <span-->
+                                                    <!--class="m-badge m-badge&#45;&#45;danger m-badge&#45;&#45;wide">urgent</span></span>-->
+                                                    <!--<span class="m-list-timeline__time">7 hrs</span>-->
+                                                    <!--</div>-->
 
                                                 </div>
                                             </div>
@@ -3139,7 +3130,7 @@
                 <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
                     <ul class="m-footer__nav m-nav m-nav--inline m--pull-right">
                         <li class="m-nav__item">
-                            <a href="#" class="m-nav__link">
+                            <a href="#ActivityLog" class="m-nav__link">
                                 <span class="m-nav__link-text">About</span>
                             </a>
                         </li>

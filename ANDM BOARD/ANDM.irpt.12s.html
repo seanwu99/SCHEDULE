@@ -6,20 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <title>ANDON MODEL</title>
 
-    <script id="sap-ui-bootstrap"
-    src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
-    data-sap-ui-theme="sap_goldreflection"
-    data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3"
-    data-sap-ui-language="en">
-    </script>
-
     <!--<script id="sap-ui-bootstrap"-->
-            <!--src="/sapui5/resources/sap-ui-core.js"-->
-            <!--data-sap-ui-theme="sap_goldreflection"-->
-            <!--data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3"-->
-            <!--data-sap-ui-language="en">-->
+    <!--src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"-->
+    <!--data-sap-ui-theme="sap_goldreflection"-->
+    <!--data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3"-->
+    <!--data-sap-ui-language="en">-->
     <!--</script>-->
 
+    <script id="sap-ui-bootstrap"
+            src="/sapui5/resources/sap-ui-core.js"
+            data-sap-ui-theme="sap_goldreflection"
+            data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3"
+            data-sap-ui-language="en">
+    </script>
     <script src="Common/js/silent.js"></script>
     <!--<script src="moment.min.js"></script>-->
 
@@ -387,11 +386,11 @@
 
         //todo
         function andonBorad() {
-            for (var n = 0; n < 10; n++) {
+            for (var n = 0; n < 12; n++) {
                 var elm = document.getElementById("cx" + n);
                 if (n < shift.length - 1) {
                     elm.style.display = 'block';
-                    elm.style.width = Math.floor(100 / (shift.length - 1)) + '%';
+                    elm.style.width = Math.round(10000 / (shift.length - 1)) / 100 + '%';
                 } else {
                     elm.style.display = "none";
                 }
@@ -672,7 +671,7 @@
 
     <div style="float: none; width: 10%; line-height: 1vh;text-align: center; font-size:1vh; color: black;">.</div>
 
-    <div id="cx0" style="display: block; float: left; width: 10%;">
+    <div id="cx0" style="display: block; float: left; width: 8.33%;">
         <div id="c1_0"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             1
@@ -682,13 +681,13 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_0"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
     <div id="cx1"
-         style="display: block; float: left; width: 10%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
+         style="display: block; float: left; width: 8.33%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
         <div id="c1_1"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             2
@@ -698,12 +697,12 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_1"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
-    <div id="cx2" style="display: block; float: left; width: 10%;">
+    <div id="cx2" style="display: block; float: left; width: 8.33%;">
         <div id="c1_2"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             3
@@ -713,13 +712,13 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_2"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
     <div id="cx3"
-         style="display: block; float: left; width: 10%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
+         style="display: block; float: left; width: 8.33%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
         <div id="c1_3"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             4
@@ -729,12 +728,12 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_3"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
-    <div id="cx4" style="display: block; float: left; width: 10%;">
+    <div id="cx4" style="display: block; float: left; width: 8.33%;">
         <div id="c1_4"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             5
@@ -744,13 +743,13 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_4"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
     <div id="cx5"
-         style="display: block; float: left; width: 10%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
+         style="display: block; float: left; width: 8.33%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
         <div id="c1_5"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             6
@@ -760,12 +759,12 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_5"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
-    <div id="cx6" style="display: block; float: left; width: 10%;">
+    <div id="cx6" style="display: block; float: left; width: 8.33%;">
         <div id="c1_6"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             7
@@ -775,13 +774,13 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_6"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
     <div id="cx7"
-         style="display: block; float: left; width: 10%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
+         style="display: block; float: left; width: 8.33%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
         <div id="c1_7"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             8
@@ -791,12 +790,12 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_7"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
-    <div id="cx8" style="display: block; float: left; width: 10%;">
+    <div id="cx8" style="display: block; float: left; width: 8.33%;">
         <div id="c1_8"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             9
@@ -806,13 +805,13 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_8"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 
     <div id="cx9"
-         style="display: block; float: left; width: 10%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
+         style="display: block; float: left; width: 8.33%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
         <div id="c1_9"
              style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
             10
@@ -822,8 +821,39 @@
         <!--~00:00-->
         <!--</div>-->
         <div id="c2_9"
-             style="line-height: 18vh;text-align: center; font-size:16vh; color: green; text-decoration: none;">
-            00
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
+        </div>
+    </div>
+
+    <div id="cx10" style="display: block; float: left; width: 8.33%;">
+        <div id="c1_10"
+             style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
+            11
+        </div>
+        <!--<div id="_c1_8"-->
+        <!--style="line-height: 5vh;text-align: center; font-size:5vh; color: lightgrey; text-decoration: none;">-->
+        <!--~00:00-->
+        <!--</div>-->
+        <div id="c2_10"
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
+        </div>
+    </div>
+
+    <div id="cx11"
+         style="display: block; float: left; width: 8.33%; background: #71717c;background: -moz-linear-gradient(top, #71717c 0%, #44474c 35%, #000000 100%);background: -webkit-linear-gradient(top, #71717c 0%,#44474c 35%,#000000 100%);background: linear-gradient(to bottom, #71717c 0%,#44474c 35%,#000000 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#71717c', endColorstr='#000000',GradientType=0 );">
+        <div id="c1_11"
+             style="line-height: 13vh;text-align: center; font-size:12vh; color: lightgrey; text-decoration: underline;">
+            12
+        </div>
+        <!--<div id="_c1_9"-->
+        <!--style="line-height: 5vh;text-align: center; font-size:5vh; color: lightgrey; text-decoration: none;">-->
+        <!--~00:00-->
+        <!--</div>-->
+        <div id="c2_11"
+             style="line-height: 18vh;text-align: center; font-size:14vh; color: green; text-decoration: none;">
+            88
         </div>
     </div>
 </div>
