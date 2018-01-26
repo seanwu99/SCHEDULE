@@ -1094,7 +1094,7 @@
                                     prsSTR +
                                     '           <div class="dropdown-divider"></div>' +
                                     '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Undo</a>' +
+                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
                                     '       </div>' +
                                     '   </div>' +
                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
@@ -1792,7 +1792,7 @@
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                ActivityLogADD('Assigned', 'Order ' + Number(_OrderNumber) + ' => ' + _Press + ' ', e.id);
+                ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
             }
 
             if (_Status == 'Unscheduled' && _Action.indexOf('Cancelled') >= 0) {
@@ -1803,11 +1803,11 @@
                 _Press = '';
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
-                ActivityLogADD('Cancelled', 'Order ' + Number(_OrderNumber) + ' ', '');
+                ActivityLogADD('Cancelled', _OrderNumber + ' ', '');
             }
 
-            if (_Status == 'Hold' && _Action.indexOf('Undo') >= 0) {
-                cc(_Status + ' >Undo');
+            if (_Status == 'Hold' && _Action.indexOf('Unscheduled') >= 0) {
+                cc(_Status + ' >Unscheduled');
                 _SchedStart = '';
                 _SchedFinish = '';
                 _Status = 'Unscheduled';
@@ -1815,18 +1815,21 @@
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                ActivityLogADD('Unassigned', 'Order ' + Number(_OrderNumber) + ' ', '');
+                ActivityLogADD('Unscheduled', _OrderNumber + ' ', '');
             }
 
             if (_Status == 'Hold' && _Action.indexOf('Scheduled') >= 0) {
                 cc(_Status + ' >Scheduled');
                 // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
                 // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+                _SchedStart = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                _Press = TableCOL[9].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
                 _Status = 'Scheduled';
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 // removeScheduleEvent(_OrderNumber);
                 // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                // ActivityLogADD('Assigned', 'Order ' + Number(_OrderNumber) + ' => ' + _Press + ' ');
+                ActivityLogADD('Scheduled', _OrderNumber + ' ', '');
             }
 
 
@@ -1926,7 +1929,7 @@
                     // removeScheduleEvent(_OrderNumber);
                     // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
 
-                } else if (_Action.indexOf('Undo') >= 0) {
+                } else if (_Action.indexOf('Unscheduled') >= 0) {
                     for (var i = 0; i < orderTable.dataSet.length; i++) {
                         if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
                             _Status = 'Unscheduled';
@@ -2138,23 +2141,35 @@
             var events = '';
 
             if (ev == 'Assigned') {
-                events =
-                    '<span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>' +
-                    '<span class="m-list-timeline__text"><a href="%23MOLD2_PRESS35" class="m-link">Order 1009265  => PRESS35</a></span>';
-                events.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-                cc('events ' + events);
-            } else if (ev == 'Unassigned') {
-                events =
-                    '<span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>' +
-                    '<span class="m-list-timeline__text">' +
+
+                events = '<span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>' +
+                    '<span class="m-list-timeline__text"><a href="%23' +
+                    tag +
+                    '" class="m-link">%23' +
                     _Action +
-                    '<span class="m-badge m-badge--danger m-badge--wide">Unassigned</span></span>';
+                    '</a></span>';
+
+
+                cc('events ' + events);
+
+            } else if (ev == 'Unscheduled') {
+                events =
+                    '<span class="m-list-timeline__badge m-list-timeline__badge--primary"></span>' +
+                    '<span class="m-list-timeline__text">%23' +
+                    _Action +
+                    '<span class="m-badge m-badge--primary  m-badge--wide">Unscheduled</span></span>';
             } else if (ev == 'Cancelled') {
                 events =
-                    '<span class="m-list-timeline__badge m-list-timeline__badge--accent"></span>' +
-                    '<span class="m-list-timeline__text">' +
-                    _Action + 'has be ' +
+                    '<span class="m-list-timeline__badge m-list-timeline__badge--metal "></span>' +
+                    '<span class="m-list-timeline__text">%23' +
+                    _Action +
                     '<span class="m-badge m-badge--metal m-badge--wide">Cancelled</span></span>';
+            }else if (ev == 'Scheduled') {
+                events =
+                    '<span class="m-list-timeline__badge m-list-timeline__badge--success "></span>' +
+                    '<span class="m-list-timeline__text">%23' +
+                    _Action +
+                    '<span class="m-badge m-badge--success  m-badge--wide">Scheduled</span></span>';
             }
 
             var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
@@ -2464,7 +2479,8 @@
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content">
-                                                        <div class="tab-pane active" id="topbar_notifications_notifications" role="tabpanel">
+                                                        <div class="tab-pane active"
+                                                             id="topbar_notifications_notifications" role="tabpanel">
                                                             <div class="m-scrollable" data-scrollable="true"
                                                                  data-max-height="250" data-mobile-max-height="200">
                                                                 <div class="m-list-timeline m-list-timeline--skin-light">

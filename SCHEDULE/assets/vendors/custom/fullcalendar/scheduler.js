@@ -4906,8 +4906,8 @@ A row that renders information about a particular resource, as well as it events
 
         ResourceRow.prototype.renderEventSkeleton = function (tr) {
             ResourceRow.__super__.renderEventSkeleton.apply(this, arguments);
-            // cc('renderEventSkeleton');
-            // cc(tr);
+            cc('renderEventSkeleton');
+            cc(tr);
             tr.attr('data-resource-id', this.resource.id);
             tr.attr('id', this.resource.id);
 
