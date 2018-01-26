@@ -201,7 +201,12 @@
                                     dt = true;
                                 }
                                 if (MESM_OrderOperation[v.OrderNumber].SchedStatus == '') {
-                                    MESM_OrderOperation[v.OrderNumber].SchedStatus = v.OrderScheduledKey;
+                                    if (MESM_OrderOperation[v.OrderNumber].Material == '') {
+                                        MESM_OrderOperation[v.OrderNumber].SchedStatus = 'N';
+                                    } else {
+                                        MESM_OrderOperation[v.OrderNumber].SchedStatus = v.OrderScheduledKey;
+                                    }
+
                                     dt = true;
                                 }
 
@@ -1795,7 +1800,7 @@
                 ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
             }
 
-            if (_Status == 'Unscheduled' && _Action.indexOf('Cancelled') >= 0) {
+            if ((_Status == 'No Material' || _Status == 'Unscheduled') && _Action.indexOf('Cancelled') >= 0) {
                 cc(_Status + ' >Cancelled');
                 _SchedStart = '';
                 _SchedFinish = '';
@@ -1833,239 +1838,239 @@
             }
 
 
-            if (_Status == 'Unscheduled') {
-
-                if (_Action.indexOf('assign') >= 0) {
-
-                } else if (_Action.indexOf('Cancelled') >= 0) {
-
-
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            _Status = 'Cancelled';
-                            // _Press = '';
-                            orderTable.dataSet[i].Press = '';
-                            orderTable.dataSet[i].Status = 'C';
-                            removeScheduleEvent(_OrderNumber);
-                            break;
-                        }
-                    }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _Quantity +
-                        "&Param.3=" +
-                        _SchedStart +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        'C' +
-                        "&Param.6=" +
-                        _WorkCenterID +
-                        "&Content-Type=text/xml";
-                    cc(urlProc);
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                            // document.getElementById("demo").innerHTML = this.responseText;
-                            cc(urlProc + ' succeed.');
-
-                        }
-                    };
-                    xhttp.open("GET", urlProc, true);
-                    xhttp.send();
-
-
-                } else if (_Action.indexOf('Scheduled') >= 0) {
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            _Status = 'Cancelled';
-                            // _Press = '';
-                            // orderTable.dataSet[i].Press = '';
-                            orderTable.dataSet[i].Status = 'S';
-                            // removeScheduleEvent(_OrderID);
-                            break;
-                        }
-                    }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _SchedStart +
-                        "&Param.3=" +
-                        _StartTime +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
-                        'S' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
-                        "&Content-Type=text/xml";
-
-                    DB_UPD(urlProc);
-                }
-
-                orderTable.reload();
-
-            } else if (_Status == 'Hold') {
-
-                if (_Action.indexOf('assign') >= 0) {
-                    // cc('Hold >assign');
-                    // _During = parseInt(_Action.split('~')[1]);
-                    //
-                    // if (_During < 240) {
-                    //     _During = 240
-                    // }
-                    //
-                    // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
-                    // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-                    // _Status = 'Hold';
-                    // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                    // removeScheduleEvent(_OrderNumber);
-                    // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-
-                } else if (_Action.indexOf('Unscheduled') >= 0) {
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            _Status = 'Unscheduled';
-                            // _Press = '';
-                            orderTable.dataSet[i].Press = '';
-                            _WorkCenterID = 0;
-                            orderTable.dataSet[i].Status = 'U';
-                            removeScheduleEvent(_OrderNumber);
-                            break;
-                        }
-                    }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _Quantity +
-                        "&Param.3=" +
-                        _SchedStart +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        'U' +
-                        "&Param.6=" +
-                        _WorkCenterID +
-                        "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                            // document.getElementById("demo").innerHTML = this.responseText;
-                            cc(urlProc + ' succeed.');
-
-                        }
-                    };
-                    xhttp.open("GET", urlProc, true);
-                    xhttp.send();
-                } else if (_Action.indexOf('Cancelled') >= 0) {
-
-
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            _Status = 'Cancelled';
-                            // _Press = '';
-                            orderTable.dataSet[i].Press = '';
-                            orderTable.dataSet[i].Status = 'C';
-                            removeScheduleEvent(_OrderNumber);
-                            break;
-                        }
-                    }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _SchedStart +
-                        "&Param.3=" +
-                        _StartTime +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
-                        'C' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
-                        "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
-                } else if (_Action.indexOf('Scheduled') >= 0) {
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            _Status = 'Cancelled';
-                            // _Press = '';
-                            // orderTable.dataSet[i].Press = '';
-                            orderTable.dataSet[i].Status = 'S';
-                            // removeScheduleEvent(_OrderID);
-                            break;
-                        }
-                    }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _SchedStart +
-                        "&Param.3=" +
-                        _StartTime +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
-                        'S' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
-                        "&Content-Type=text/xml";
-
-                    DB_UPD(urlProc);
-                }
-
-            } else if (_Status == 'No Material') {
-                if (_Action.indexOf('Cancelled') >= 0) {
-                    for (var i = 0; i < orderTable.dataSet.length; i++) {
-                        if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
-                            _Status = 'Cancelled';
-                            // _Press = '';
-                            // orderTable.dataSet[i].Press = '';
-                            orderTable.dataSet[i].Status = 'C';
-                            // removeScheduleEvent(_OrderID);
-                            break;
-                        }
-                    }
-                    var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
-                        "&Param.1=" +
-                        _OrderNumber +
-                        "&Param.2=" +
-                        _SchedStart +
-                        "&Param.3=" +
-                        _StartTime +
-                        "&Param.4=" +
-                        _SchedFinish +
-                        "&Param.5=" +
-                        _EndTime +
-                        "&Param.6=" +
-                        'C' +
-                        "&Param.7=" +
-                        _Press +
-                        "&Param.8=" +
-                        _TARGET +
-                        "&Content-Type=text/xml";
-                    // cc(urlProc);
-                    DB_UPD(urlProc);
-                }
-            }
+            // if (_Status == 'Unscheduled') {
+            //
+            //     if (_Action.indexOf('assign') >= 0) {
+            //
+            //     } else if (_Action.indexOf('Cancelled') >= 0) {
+            //
+            //         //
+            //         // for (var i = 0; i < orderTable.dataSet.length; i++) {
+            //         //     if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+            //         //         _Status = 'Cancelled';
+            //         //         // _Press = '';
+            //         //         orderTable.dataSet[i].Press = '';
+            //         //         orderTable.dataSet[i].Status = 'C';
+            //         //         removeScheduleEvent(_OrderNumber);
+            //         //         break;
+            //         //     }
+            //         // }
+            //         // var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
+            //         //     "&Param.1=" +
+            //         //     _OrderNumber +
+            //         //     "&Param.2=" +
+            //         //     _Quantity +
+            //         //     "&Param.3=" +
+            //         //     _SchedStart +
+            //         //     "&Param.4=" +
+            //         //     _SchedFinish +
+            //         //     "&Param.5=" +
+            //         //     'C' +
+            //         //     "&Param.6=" +
+            //         //     _WorkCenterID +
+            //         //     "&Content-Type=text/xml";
+            //         // cc(urlProc);
+            //         // var xhttp = new XMLHttpRequest();
+            //         // xhttp.onreadystatechange = function () {
+            //         //     if (this.readyState == 4 && this.status == 200) {
+            //         //         // document.getElementById("demo").innerHTML = this.responseText;
+            //         //         cc(urlProc + ' succeed.');
+            //         //
+            //         //     }
+            //         // };
+            //         // xhttp.open("GET", urlProc, true);
+            //         // xhttp.send();
+            //
+            //
+            //     } else if (_Action.indexOf('Scheduled') >= 0) {
+            //         // for (var i = 0; i < orderTable.dataSet.length; i++) {
+            //         //     if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+            //         //         _Status = 'Cancelled';
+            //         //         // _Press = '';
+            //         //         // orderTable.dataSet[i].Press = '';
+            //         //         orderTable.dataSet[i].Status = 'S';
+            //         //         // removeScheduleEvent(_OrderID);
+            //         //         break;
+            //         //     }
+            //         // }
+            //         // var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+            //         //     "&Param.1=" +
+            //         //     _OrderNumber +
+            //         //     "&Param.2=" +
+            //         //     _SchedStart +
+            //         //     "&Param.3=" +
+            //         //     _StartTime +
+            //         //     "&Param.4=" +
+            //         //     _SchedFinish +
+            //         //     "&Param.5=" +
+            //         //     _EndTime +
+            //         //     "&Param.6=" +
+            //         //     'S' +
+            //         //     "&Param.7=" +
+            //         //     _Press +
+            //         //     "&Param.8=" +
+            //         //     _TARGET +
+            //         //     "&Content-Type=text/xml";
+            //         //
+            //         // DB_UPD(urlProc);
+            //     }
+            //
+            //     orderTable.reload();
+            //
+            // } else if (_Status == 'Hold') {
+            //
+            //     if (_Action.indexOf('assign') >= 0) {
+            //         // cc('Hold >assign');
+            //         // _During = parseInt(_Action.split('~')[1]);
+            //         //
+            //         // if (_During < 240) {
+            //         //     _During = 240
+            //         // }
+            //         //
+            //         // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+            //         // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+            //         // _Status = 'Hold';
+            //         // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+            //         // removeScheduleEvent(_OrderNumber);
+            //         // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+            //
+            //     } else if (_Action.indexOf('Unscheduled') >= 0) {
+            //         for (var i = 0; i < orderTable.dataSet.length; i++) {
+            //             if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+            //                 _Status = 'Unscheduled';
+            //                 // _Press = '';
+            //                 orderTable.dataSet[i].Press = '';
+            //                 _WorkCenterID = 0;
+            //                 orderTable.dataSet[i].Status = 'U';
+            //                 removeScheduleEvent(_OrderNumber);
+            //                 break;
+            //             }
+            //         }
+            //         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
+            //             "&Param.1=" +
+            //             _OrderNumber +
+            //             "&Param.2=" +
+            //             _Quantity +
+            //             "&Param.3=" +
+            //             _SchedStart +
+            //             "&Param.4=" +
+            //             _SchedFinish +
+            //             "&Param.5=" +
+            //             'U' +
+            //             "&Param.6=" +
+            //             _WorkCenterID +
+            //             "&Content-Type=text/xml";
+            //         // cc(urlProc);
+            //         var xhttp = new XMLHttpRequest();
+            //         xhttp.onreadystatechange = function () {
+            //             if (this.readyState == 4 && this.status == 200) {
+            //                 // document.getElementById("demo").innerHTML = this.responseText;
+            //                 cc(urlProc + ' succeed.');
+            //
+            //             }
+            //         };
+            //         xhttp.open("GET", urlProc, true);
+            //         xhttp.send();
+            //     } else if (_Action.indexOf('Cancelled') >= 0) {
+            //
+            //
+            //         for (var i = 0; i < orderTable.dataSet.length; i++) {
+            //             if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+            //                 _Status = 'Cancelled';
+            //                 // _Press = '';
+            //                 orderTable.dataSet[i].Press = '';
+            //                 orderTable.dataSet[i].Status = 'C';
+            //                 removeScheduleEvent(_OrderNumber);
+            //                 break;
+            //             }
+            //         }
+            //         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+            //             "&Param.1=" +
+            //             _OrderNumber +
+            //             "&Param.2=" +
+            //             _SchedStart +
+            //             "&Param.3=" +
+            //             _StartTime +
+            //             "&Param.4=" +
+            //             _SchedFinish +
+            //             "&Param.5=" +
+            //             _EndTime +
+            //             "&Param.6=" +
+            //             'C' +
+            //             "&Param.7=" +
+            //             _Press +
+            //             "&Param.8=" +
+            //             _TARGET +
+            //             "&Content-Type=text/xml";
+            //         // cc(urlProc);
+            //         DB_UPD(urlProc);
+            //     } else if (_Action.indexOf('Scheduled') >= 0) {
+            //         for (var i = 0; i < orderTable.dataSet.length; i++) {
+            //             if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+            //                 _Status = 'Cancelled';
+            //                 // _Press = '';
+            //                 // orderTable.dataSet[i].Press = '';
+            //                 orderTable.dataSet[i].Status = 'S';
+            //                 // removeScheduleEvent(_OrderID);
+            //                 break;
+            //             }
+            //         }
+            //         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+            //             "&Param.1=" +
+            //             _OrderNumber +
+            //             "&Param.2=" +
+            //             _SchedStart +
+            //             "&Param.3=" +
+            //             _StartTime +
+            //             "&Param.4=" +
+            //             _SchedFinish +
+            //             "&Param.5=" +
+            //             _EndTime +
+            //             "&Param.6=" +
+            //             'S' +
+            //             "&Param.7=" +
+            //             _Press +
+            //             "&Param.8=" +
+            //             _TARGET +
+            //             "&Content-Type=text/xml";
+            //
+            //         DB_UPD(urlProc);
+            //     }
+            //
+            // } else if (_Status == 'No Material') {
+            //     if (_Action.indexOf('Cancelled') >= 0) {
+            //         for (var i = 0; i < orderTable.dataSet.length; i++) {
+            //             if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+            //                 _Status = 'Cancelled';
+            //                 // _Press = '';
+            //                 // orderTable.dataSet[i].Press = '';
+            //                 orderTable.dataSet[i].Status = 'C';
+            //                 // removeScheduleEvent(_OrderID);
+            //                 break;
+            //             }
+            //         }
+            //         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProductionOrdersListFromSAP_UPD" +
+            //             "&Param.1=" +
+            //             _OrderNumber +
+            //             "&Param.2=" +
+            //             _SchedStart +
+            //             "&Param.3=" +
+            //             _StartTime +
+            //             "&Param.4=" +
+            //             _SchedFinish +
+            //             "&Param.5=" +
+            //             _EndTime +
+            //             "&Param.6=" +
+            //             'C' +
+            //             "&Param.7=" +
+            //             _Press +
+            //             "&Param.8=" +
+            //             _TARGET +
+            //             "&Content-Type=text/xml";
+            //         // cc(urlProc);
+            //         DB_UPD(urlProc);
+            //     }
+            // }
 
             orderTable.reload();
         }
@@ -2164,7 +2169,7 @@
                     '<span class="m-list-timeline__text">%23' +
                     _Action +
                     '<span class="m-badge m-badge--metal m-badge--wide">Cancelled</span></span>';
-            }else if (ev == 'Scheduled') {
+            } else if (ev == 'Scheduled') {
                 events =
                     '<span class="m-list-timeline__badge m-list-timeline__badge--success "></span>' +
                     '<span class="m-list-timeline__text">%23' +
