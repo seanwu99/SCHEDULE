@@ -448,26 +448,21 @@
 
         }
 
-        function arrayProperty() {
-            ScheduleEvents['900000'] = {
-                resourceId: 'GROUP1_PRESS01',
-                start: '01/15/2018 08:00:00',
-                end: '01/15/2018 16:30:00'
-            };
-            // cc(ScheduleEvents);
-            //
-            // cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
-
-            for (var _key in ScheduleEvents) {
-                // cc(_key);
-                // cc(ScheduleEvents[_key]);
-            }
-
-            delete ScheduleEvents['900000'];
-
-            // cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
-
-        }
+        // function arrayProperty() {
+        //     ScheduleEvents['900000'] = {
+        //         resourceId: 'GROUP1_PRESS01',
+        //         start: '01/15/2018 08:00:00',
+        //         end: '01/15/2018 16:30:00'
+        //     };
+        //     cc(ScheduleEvents);
+        //     cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
+        //     for (var _key in ScheduleEvents) {
+        //         cc(_key);
+        //         cc(ScheduleEvents[_key]);
+        //     }
+        //     delete ScheduleEvents['900000'];
+        //     cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
+        // }
 
         function mainPro() {
 
@@ -529,8 +524,6 @@
                             "                            </div>\n" +
                             "                        </div>";
                     }
-
-
                     return tpl;
                 };
                 var preparePost_ = function (dir, time, name, avatar, message) {
@@ -1326,7 +1319,7 @@
                                 end: moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss')
                             };
                             // cc(ScheduleEvents);
-                            cc(orderTable);
+                            // cc(orderTable);
                             for (var i = 0; i < orderTable.dataSet.length; i++) {
                                 if (orderTable.dataSet[i].OrderNumber == event.id) {
                                     // cc(orderTable.dataSet[i].OrderID);
@@ -1472,13 +1465,9 @@
                     },
 
                     slotWidth: 15,
-
-                    height:
-                        700,
-                    selectable:
-                        true,
-                    selectHelper:
-                        true,
+                    height: 700,
+                    selectable: true,
+                    selectHelper: true,
                     customButtons:
                         {
                             myCustomButton: {
@@ -1816,11 +1805,13 @@
                 // }
                 _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
                 _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-                _Status = 'Hold';
+                if (_Status == 'Unscheduled') {
+                    ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
+                    _Status = 'Hold';
+                }
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
             }
 
             if ((_Status == 'No Material' || _Status == 'Unscheduled') && _Action.indexOf('Cancelled') >= 0) {
@@ -2224,25 +2215,40 @@
                     '<span class="m-badge m-badge--success  m-badge--wide">Scheduled</span></span>';
             }
 
-            var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
-                "&Param.1=" +
-                receiver +
-                "&Param.2=" +
-                events +
-                "&Param.3=" +
-                occurred
-            "&Content-Type=text/xml";
-            // cc(urlProc);
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    cc(urlProc);
-                    cc(this.responseText);
-                    ActivityLogGET();
-                }
-            };
-            xhttp.open("GET", urlProc, true);
-            xhttp.send();
+            if (localHost) {
+                events = events.replace("%23", "#");
+                events = events.replace("%23", "#");
+
+                // if (document.getElementById("ActivityLog").innerHTML.indexOf(events) < 0) {
+                document.getElementById("ActivityLog").innerHTML =
+                    '<div class="m-list-timeline__item">' +
+                    events +
+                    '<span class="m-list-timeline__time" style="white-space: nowrap;">' +
+                    moment(occurred).fromNow() + '</span></div>' +
+                    document.getElementById("ActivityLog").innerHTML;
+                // }
+
+            } else {
+                var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
+                    "&Param.1=" +
+                    receiver +
+                    "&Param.2=" +
+                    events +
+                    "&Param.3=" +
+                    occurred
+                "&Content-Type=text/xml";
+                // cc(urlProc);
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        cc(urlProc);
+                        cc(this.responseText);
+                        ActivityLogGET();
+                    }
+                };
+                xhttp.open("GET", urlProc, true);
+                xhttp.send();
+            }
 
 
             // var div =
