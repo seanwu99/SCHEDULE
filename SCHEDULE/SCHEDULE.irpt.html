@@ -803,6 +803,25 @@
                             // cc((new Date().getTime() - t0) + ' ms (tableOrders) ');
                             // cc(WorkCentres);
                             sheduleForm(WorkCentres);
+                            cc('MESM_ProductionOrders');
+                            cc(MESM_ProductionOrders);
+
+                            for (var o in MESM_ProductionOrders) {
+                                if (MESM_ProductionOrders[o].Press != '' && MESM_ProductionOrders[o].Status == 'S') {
+                                    cc('========>');
+                                    cc(MESM_ProductionOrders[o]);
+                                    cc('<========');
+                                    var id = (MESM_ProductionOrders[o].Mold + '_' + MESM_ProductionOrders[o].Press).replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                                    var _OrderNumber = (MESM_ProductionOrders[o].OrderNumber).replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                                    var _SchedStart = (MESM_ProductionOrders[o].SchedStart).replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                                    var _SchedFinish = (MESM_ProductionOrders[o].SchedFinish).replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+                                    cc(id);
+                                    cc(_OrderNumber);
+                                    cc(_SchedStart);
+                                    cc(_SchedFinish);
+                                    addScheduleEvent(id, _OrderNumber, _SchedStart, _SchedFinish);
+                                }
+                            }
                             // });
 //                cc(mmmArray);
                         });
@@ -1811,6 +1830,11 @@
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+                cc('addScheduleEvent');
+                cc(e.id);
+                cc(_OrderNumber);
+                cc(_SchedStart);
+                cc(_SchedFinish);
             }
 
             if ((_Status == 'No Material' || _Status == 'Unscheduled') && _Action.indexOf('Cancelled') >= 0) {
@@ -2268,6 +2292,7 @@
         }
 
         function addScheduleEvent(id, title, start, end) {
+            
             // var tbOrderID = _OrderID;
             var today = new Date().toISOString().substr(0, 10);
             var colors = [
