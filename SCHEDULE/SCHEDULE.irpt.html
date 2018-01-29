@@ -48,19 +48,12 @@
         var MESM_FloorMaps = [];
         var MESM_FloorMaps_LineGROUP = [];
         var MESM_OrderOperation = [];
-        var MESM_OrderOperation_U = [];
-        // var MESM_Orders = [];
         var WorkCentres = [];
-        // var WorkCentres2 = [];
         var mmmSTR = '';
         var mmmArray = [];
         var orderTable;
         var MOLD_Master_Tool_List = [];
-        var MESM_Orders = [];
         var ScheduleEvents = [];
-        var userRoles;
-        var userRole;
-        var userName;
 
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
@@ -164,7 +157,6 @@
                     //MESM_OrderOperation_GET
                     // var urlMESM_OrderOperation_GET = localHost ? 'MESM_OrderOperation_GET.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml';
                     MESM_OrderOperation = [];
-                    MESM_OrderOperation_U = [];
                     getData(
                         localHost ?
                             'MESM_OrderOperation_GET.xml' :
@@ -183,30 +175,36 @@
                                     'WorkCenterID': v.WorkCenterID,
                                     'WorkCenter': v.WorkCenter,
                                     // 'OrderScheduledKey': v.OrderScheduledKey,
-                                    'SchedStart': moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss'),
-                                    'SchedFinish': moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss'),
-                                    'SchedStatus': v.OrderScheduledKey,
+                                    'SchedStart': moment(v.MIISchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.MIISchedStartTime).format('HH:mm:ss'),
+                                    'SchedFinish': moment(v.MIISchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.MIISchedFinTime).format('HH:mm:ss'),
+                                    'SchedStatus': v.SchedStat,
                                     'PrtNumber': v.PrtNumber,
                                     'OperationStatus': v.OperationStatus,
                                     // 'WorkCenterGroup': v.WorkCenterGroup,
                                 };
+                                // cc(MESM_OrderOperation[v.OrderNumber]);
                                 if (MESM_OrderOperation[v.OrderNumber].SchedStatus == '') {
+                                    // cc('1');
                                     if (MESM_OrderOperation[v.OrderNumber].Material == '') {
                                         MESM_OrderOperation[v.OrderNumber].SchedStatus = 'N';
-                                        dt = true;
                                     } else {
                                         MESM_OrderOperation[v.OrderNumber].SchedStatus = 'U';
                                     }
                                     dt = true;
                                 }
-
-                                if (MESM_OrderOperation[v.OrderNumber].Material == '' &&
-                                    MESM_OrderOperation[v.OrderNumber].SchedStatus != 'N') {
-
-                                    MESM_OrderOperation[v.OrderNumber].SchedStatus = 'N';
+                                if (MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01 00:00:00' || MESM_OrderOperation[v.OrderNumber].SchedStart == '1900-01-01 00:00:00') {
+                                    // cc('2');
+                                    MESM_OrderOperation[v.OrderNumber].SchedStart = moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss');
+                                    MESM_OrderOperation[v.OrderNumber].SchedFinish = moment(v.EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedFinTime).format('HH:mm:ss');
                                     dt = true;
                                 }
+                                if (MESM_OrderOperation[v.OrderNumber].Material == '' && MESM_OrderOperation[v.OrderNumber].SchedStatus != 'N') {
+                                    // cc('3');
+                                    MESM_OrderOperation[v.OrderNumber].SchedStatus = 'N';
+                                    // dt = true;
+                                }
                                 if (MESM_OrderOperation[v.OrderNumber].OperationStatus == '0') {
+                                    // cc('4');
                                     MESM_OrderOperation[v.OrderNumber].OperationStatus = '2';
                                     dt = true;
                                 }
@@ -216,21 +214,22 @@
                                 }
 
                                 function upd(v) {
+                                    var Status = v.SchedStatus != 'S' ? 'U' : 'S';
                                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                                         "&Param.1=" +
                                         v.OrderNumber +
                                         "&Param.2=" +
                                         v.Quantity +
                                         "&Param.3=" +
-                                        v.EarlySchedStartDate +
+                                        moment(v.SchedStart).format('YYYY-MM-DD') +
                                         "&Param.4=" +
-                                        v.EarlySchedStartTime +
+                                        moment(v.SchedStart).format('HH:mm:ss') +
                                         "&Param.5=" +
-                                        v.EarlySchedFinDate +
+                                        moment(v.SchedFinish).format('YYYY-MM-DD') +
                                         "&Param.6=" +
-                                        v.EarlySchedFinTime +
+                                        moment(v.SchedFinish).format('HH:mm:ss') +
                                         "&Param.7=" +
-                                        v.SchedStatus +
+                                        Status +
                                         "&Param.8=" +
                                         v.WorkCenterID +
                                         "&Param.9=" +
@@ -252,29 +251,29 @@
                         });
 
 
-                    getData(
-                        localHost ?
-                            'MESM_OrderOperation_UGET.xml' :
-                            '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UGET&Content-Type=text/xml',
-                        function (data) {
-                            $.each(data, function (i, v) {
-                                var dt = false;
-                                MESM_OrderOperation_U[v.OrderNumber] = {
-                                    'OrderNumber': v.OrderNumber,
-                                    'Material': v.Material,
-                                    'Quantity': v.Quantity,
-                                    'EarlySchedStartDate': v.EarlySchedStartDate,
-                                    'EarlySchedStartTime': v.EarlySchedStartTime,
-                                    'EarlySchedFinDate': v.EarlySchedFinDate,
-                                    'EarlySchedFinTime': v.EarlySchedFinTime,
-                                    'WorkCenterID': v.WorkCenterID,
-                                    'WorkCenter': v.WorkCenter,
-                                    'PrtNumber': v.PrtNumber,
-                                    'OperationStatus': v.OperationStatus,
-                                    // 'WorkCenterGroup': v.WorkCenterGroup,
-                                };
-                            });
-                        });
+                    // getData(
+                    //     localHost ?
+                    //         'MESM_OrderOperation_UGET.xml' :
+                    //         '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UGET&Content-Type=text/xml',
+                    //     function (data) {
+                    //         $.each(data, function (i, v) {
+                    //             var dt = false;
+                    //             MESM_OrderOperation_U[v.OrderNumber] = {
+                    //                 'OrderNumber': v.OrderNumber,
+                    //                 'Material': v.Material,
+                    //                 'Quantity': v.Quantity,
+                    //                 'EarlySchedStartDate': v.EarlySchedStartDate,
+                    //                 'EarlySchedStartTime': v.EarlySchedStartTime,
+                    //                 'EarlySchedFinDate': v.EarlySchedFinDate,
+                    //                 'EarlySchedFinTime': v.EarlySchedFinTime,
+                    //                 'WorkCenterID': v.WorkCenterID,
+                    //                 'WorkCenter': v.WorkCenter,
+                    //                 'PrtNumber': v.PrtNumber,
+                    //                 'OperationStatus': v.OperationStatus,
+                    //                 // 'WorkCenterGroup': v.WorkCenterGroup,
+                    //             };
+                    //         });
+                    //     });
 
 
                     // function mapID() {
@@ -626,7 +625,7 @@
             // cc('mmmSTR ' + mmmSTR);
             MESM_ProductionOrders = [];
             for (var O in MESM_OrderOperation) {
-                cc(MESM_FloorMaps[MESM_OrderOperation[O].WorkCenterID]);
+                // cc(MESM_FloorMaps[MESM_OrderOperation[O].WorkCenterID]);
                 MESM_ProductionOrders.push({
                     // "RecordID": data.ID,
                     "OrderNumber": MESM_OrderOperation[O].OrderNumber,
@@ -959,7 +958,7 @@
                         overflow: "visible",
                         template: function (e) {
 
-                            if (e.Status == 'U' || e.Status == 'H') {    //Unscheduled
+                            if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled
 
                                 // cc('e.Status == \'U\' || e.Status == \'H\'');
                                 // cc(e.WCG);
@@ -1098,7 +1097,7 @@
                                     '       <i class="la la-comment"></i>' +
                                     '   </a>'
 
-                            } else if (e.Status == 'S') {
+                            } else if (e.Status == 'H') {
                                 return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
                                     '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
                                     '           <i class="la la-ellipsis-h"></i>' +
@@ -1106,7 +1105,7 @@
                                     '       <div class="dropdown-menu dropdown-menu-right">' +
                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Scheduled</a>' +
+                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Hold</a>' +
                                     '       </div>' +
                                     '   </div>' +
                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
@@ -1798,7 +1797,7 @@
             // cc(e.id);
             // cc(_During);
 
-            if ((_Status == 'Unscheduled' || _Status == 'Hold') && _Action.indexOf('assign') >= 0) {
+            if ((_Status == 'Unscheduled' || _Status == 'Scheduled') && _Action.indexOf('assign') >= 0) {
                 // cc(_Status + ' > assign');
                 // if (_During < 240) {
                 //     _During = 240
@@ -1807,7 +1806,7 @@
                 _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
                 if (_Status == 'Unscheduled') {
                     ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
-                    _Status = 'Hold';
+                    _Status = 'Scheduled';
                 }
                 updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
@@ -1825,8 +1824,8 @@
                 ActivityLogADD('Cancelled', _OrderNumber + ' ', '');
             }
 
-            if (_Status == 'Hold' && _Action.indexOf('Unscheduled') >= 0) {
-                // cc(_Status + ' >Unscheduled');
+            if (_Status == 'Scheduled' && _Action.indexOf('Unscheduled') >= 0) {
+                cc(_Status + ' >Unscheduled');
                 _SchedStart = '';
                 _SchedFinish = '';
                 _Status = 'Unscheduled';
@@ -2095,8 +2094,8 @@
                 for (var v in MESM_OrderOperation) {
                     // cc(MESM_OrderOperation);
                     if (MESM_OrderOperation[v].OrderNumber == _OrderNumber) {
-                        _SchedStart = moment(MESM_OrderOperation_U[v].EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperation_U[v].EarlySchedStartTime).format('HH:mm:ss');
-                        _SchedFinish = moment(MESM_OrderOperation_U[v].EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperation_U[v].EarlySchedFinTime).format('HH:mm:ss');
+                        _SchedStart = moment(MESM_OrderOperation[v].EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperation[v].EarlySchedStartTime).format('HH:mm:ss');
+                        _SchedFinish = moment(MESM_OrderOperation[v].EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperation[v].EarlySchedFinTime).format('HH:mm:ss');
                         break;
                     }
                 }
@@ -2144,7 +2143,7 @@
             //     "&Param.9=" +
             //     v.OperationStatus +
             //     "&Content-Type=text/xml";
-
+            var Status = _Status.substring(0, 1) == 'S' ? 'S' : 'U';
             var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                 "&Param.1=" +
                 _OrderNumber +
@@ -2159,7 +2158,7 @@
                 "&Param.6=" +
                 moment(_SchedFinish).format('HH:mm:ss') +
                 "&Param.7=" +
-                _Status.substring(0, 1) +
+                Status +
                 "&Param.8=" +
                 _WorkCenterID +
                 "&Param.9=" +
@@ -2188,7 +2187,7 @@
 
             if (ev == 'Assigned') {
 
-                events = '<span class="m-list-timeline__badge m-list-timeline__badge--danger"></span>' +
+                events = '<span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
                     '<span class="m-list-timeline__text"><a href="%23' +
                     tag +
                     '" class="m-link">%23' +
