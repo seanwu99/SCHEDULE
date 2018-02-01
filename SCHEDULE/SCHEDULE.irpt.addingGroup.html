@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
 
 
+
     <link href="assets/vendors/custom/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href="assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="assets/app/default/base/style.bundle.css" rel="stylesheet" type="text/css"/>
@@ -867,9 +868,6 @@
             cc(rows);
 //            if (0 !== $("#m_datatable_latest_orders").length)
             orderTable = $(".m_datatable").mDatatable({
-                drawCallback: function () {
-                    cc('mDatatable drawCallback');
-                },
                 responsive: true,
                 data: {
                     type: "local",
