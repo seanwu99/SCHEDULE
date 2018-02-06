@@ -1317,7 +1317,7 @@
 
             $("#m_form_status, #m_form_type").selectpicker()
         };
-
+        var _eventDragStart;
         var sheduleForm = function (eventSources) {
 //            cc('creatSheduleForm');
 //            cc(eventSources);
@@ -1398,19 +1398,36 @@
 
 // * * * *
                     eventAllow: function (dropLocation, draggedEvent) {
-//                    cc(draggedEvent.id);
-//                    if (draggedEvent.id === '11') {
-//                        cc(dropLocation);
-//                        return dropLocation.start.isAfter('2016-01-01'); // a boolean
-//                    } else {
-//                        return true;
-//                    }
+                        var _s = dropLocation.resourceId.split('_')[0], _t = draggedEvent.resourceId.split('_')[0];
+
+                        cc(_s + ' / ' + _t);
+                        if (_eventDragStart != _t) {
+                            return false
+                        } else {
+                            return true;
+                        }
+                        // var _s = dropLocation.resourceId.split('_')[0], _t = draggedEvent.resourceId.split('_')[0];
+                        //
+                        // cc(dropLocation + ' / ' + _s);
+                        // cc(draggedEvent + ' / ' + _t);
+                        //
+                        // if (_s == _t) {
+                        //     return true;
+                        // } else return false;
+
+                        // if (draggedEvent.id === '999') {
+                        //     return String(dropLocation.resourceId).indexOf('a') >= 0; // boolean
+                        // }
+                        // else {
+                        //     return true;
+                        // }
                     },
 
 // * * * *
                     eventDragStart: function (event, jsEvent, ui, view) {
-//                    cc('eventDragStart' + event);
-
+                        cc('eventDragStart');
+                        _eventDragStart = event.resourceId.split('_')[0];
+                        cc(_eventDragStart);
                     },
 
 // * * * *
