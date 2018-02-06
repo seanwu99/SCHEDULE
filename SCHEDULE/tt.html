@@ -34,6 +34,8 @@
             }
         });
     </script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
+
 
     <link href="assets/vendors/custom/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href="assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
@@ -45,7 +47,7 @@
     <script>
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
         var MESM_OrderOperationRAW = [];
-        var MESM_OrderOperationMold = [];
+        var MESM_OrderOperationSort = [];
         // var MESM_OrderOperation = [];
         var MESM_FloorMaps = [];
         var MESM_FloorMaps_GROUP = [];
@@ -169,69 +171,162 @@
                             '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml',
                         function (data) {
                             $.each(data, function (i, v) {
-                                // cc(v);
+
+                                MESM_OrderOperationRAW.push({
+                                    ID: v.ID,
+                                    Counter: v.Counter,
+                                    OrderNumber: v.OrderNumber,
+                                    Material: v.Material,
+                                    Quantity: v.Quantity,
+                                    EarlySchedStartDate: moment(v.EarlySchedStartDate).format('YYYY-MM-DD'),
+                                    EarlySchedFinDate: moment(v.EarlySchedFinDate).format('YYYY-MM-DD'),
+                                    EarlySchedStartTime: moment(v.EarlySchedStartTime).format('HH:mm:ss'),
+                                    EarlySchedFinTime: moment(v.EarlySchedFinTime).format('HH:mm:ss'),
+                                    WorkCenterID: v.WorkCenterID,
+                                    WorkCenter: v.WorkCenter,
+                                    WorkCenterText: v.WorkCenterText,
+                                    OrderScheduledKey: v.OrderScheduledKey,
+                                    PrtNumber: v.PrtNumber,
+                                    Operation: v.Operation,
+                                    OperationStatus: v.OperationStatus,
+                                    MIISchedStartDate: moment(v.MIISchedStartDate).format('YYYY-MM-DD'),
+                                    MIISchedFinDate: moment(v.MIISchedFinDate).format('YYYY-MM-DD'),
+                                    MIISchedStartTime: moment(v.MIISchedStartTime).format('HH:mm:ss'),
+                                    MIISchedFinTime: moment(v.MIISchedFinTime).format('HH:mm:ss'),
+                                    SchedStat: v.SchedStat,
+                                    OC: v.OC,
+                                })
+                            });
+
+                            for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
+
                                 var _init = false;
 
+                                if (MESM_OrderOperationRAW[n].OC == 2) {
+                                    MESM_OrderOperationRAW[n].Operation = '2' + MESM_OrderOperationRAW[n].Operation.substring(1);
+                                }
+                                if (MESM_OrderOperationRAW[n].OC == 1) {
+                                    if (MESM_OrderOperationRAW[n].WorkCenter.toUpperCase().indexOf("RESIN") >= 0 || MESM_OrderOperationRAW[n].WorkCenterText.toUpperCase().indexOf("RESIN") >= 0) {
+                                        MESM_OrderOperationRAW[n].Operation = '1010';    //Stand Alone RESIN
+                                        var mm = MESM_OrderOperationRAW[n].WorkCenterID;
+                                        for (var m in MESM_FloorMaps) {
+                                            if (MESM_OrderOperationRAW[n].WorkCenter == MESM_FloorMaps[m].unitName) {
+                                                MESM_OrderOperationRAW[n].WorkCenterID = m; //got RESIN ID
+                                                break;
+                                            }
+                                        }
+                                        if (MESM_OrderOperationRAW[n].WorkCenterID != mm) {
+                                            _init = true;
+                                        }
+                                    }
 
-                                var ID = v.ID,
-                                    OrderNumber = v.OrderNumber,
-                                    Material = v.Material,
-                                    Quantity = v.Quantity,
-                                    EarlySchedStartDate = moment(v.EarlySchedStartDate).format('YYYY-MM-DD'),
-                                    EarlySchedFinDate = moment(v.EarlySchedFinDate).format('YYYY-MM-DD'),
-                                    EarlySchedStartTime = moment(v.EarlySchedStartTime).format('HH:mm:ss'),
-                                    EarlySchedFinTime = moment(v.EarlySchedFinTime).format('HH:mm:ss'),
-                                    WorkCenterID = v.WorkCenterID,
-                                    WorkCenter = v.WorkCenter,
-                                    OrderScheduledKey = v.OrderScheduledKey,
-                                    PrtNumber = v.PrtNumber,
-                                    Operation = v.Operation,
-                                    OperationStatus = v.OperationStatus,
-                                    MIISchedStartDate = moment(v.MIISchedStartDate).format('YYYY-MM-DD'),
-                                    MIISchedFinDate = moment(v.MIISchedFinDate).format('YYYY-MM-DD'),
-                                    MIISchedStartTime = moment(v.MIISchedStartTime).format('HH:mm:ss'),
-                                    MIISchedFinTime = moment(v.MIISchedFinTime).format('HH:mm:ss'),
-                                    SchedStat = v.SchedStat;
+                                    if (MESM_OrderOperationRAW[n].WorkCenter.toUpperCase().indexOf("MOLD") >= 0 || MESM_OrderOperationRAW[n].WorkCenterText.toUpperCase().indexOf("MOLD") >= 0) {
+                                        MESM_OrderOperationRAW[n].Operation = '1020';       //Stand Alone Moding
+                                        var mm = MESM_OrderOperationRAW[n].WorkCenterID;
+                                        for (var m in MESM_FloorMaps) {
+                                            if (MESM_OrderOperationRAW[n].WorkCenter == MESM_FloorMaps[m].unitName) {
+                                                MESM_OrderOperationRAW[n].WorkCenterID = m; //got Mold ID
+                                                break;
+                                            }
+                                        }
+                                        if (MESM_OrderOperationRAW[n].WorkCenterID != mm) {
+                                            _init = true;
+                                        }
+                                    }
+
+                                    if (MESM_OrderOperationRAW[n].WorkCenter.toUpperCase().indexOf("PACK") >= 0 || MESM_OrderOperationRAW[n].WorkCenterText.toUpperCase().indexOf("PACK") >= 0) {
+                                        MESM_OrderOperationRAW[n].Operation = '1030';    //Stand Alone PACK
+                                        var mm = MESM_OrderOperationRAW[n].WorkCenterID;
+                                        for (var m in MESM_FloorMaps) {
+                                            if (MESM_OrderOperationRAW[n].WorkCenter == MESM_FloorMaps[m].unitName) {
+                                                MESM_OrderOperationRAW[n].WorkCenterID = m; //got PACK ID
+                                                break;
+                                            }
+                                        }
+                                        if (MESM_OrderOperationRAW[n].WorkCenterID != mm) {
+                                            _init = true;
+                                        }
+                                    }
+
+                                    if (MESM_OrderOperationRAW[n].WorkCenter.toUpperCase().indexOf("ASS") >= 0 || MESM_OrderOperationRAW[n].WorkCenterText.toUpperCase().indexOf("ASS") >= 0) {
+                                        MESM_OrderOperationRAW[n].Operation = '1040';    //Stand Alone ASSY
+                                        var mm = MESM_OrderOperationRAW[n].WorkCenterID;
+                                        for (var m in MESM_FloorMaps) {
+                                            if (MESM_OrderOperationRAW[n].WorkCenter == MESM_FloorMaps[m].unitName) {
+                                                MESM_OrderOperationRAW[n].WorkCenterID = m; //got asshole :))
+                                                break;
+                                            }
+                                        }
+                                        if (MESM_OrderOperationRAW[n].WorkCenterID != mm) {
+                                            _init = true;
+                                        }
+                                    }
+                                }
 
 
-                                // cc(MESM_OrderOperation[v.OrderNumber]);
-                                if (SchedStat == '') {
-                                    SchedStat = 'U';
+                                if (MESM_OrderOperationRAW[n].SchedStat == '') {
+                                    MESM_OrderOperationRAW[n].SchedStat = 'U';
                                     _init = true;
                                 }
-                                if (MIISchedStartDate == '1900-01-01' || MIISchedFinDate == '1900-01-01') {
-                                    MIISchedStartDate = moment(v.EarlySchedStartDate).format('YYYY-MM-DD');
-                                    MIISchedFinDate = moment(v.EarlySchedFinDate).format('YYYY-MM-DD');
-                                    MIISchedStartTime = moment(v.EarlySchedStartTime).format('HH:mm:ss');
-                                    MIISchedFinTime = moment(v.EarlySchedFinTime).format('HH:mm:ss');
+                                if (MESM_OrderOperationRAW[n].MIISchedStartDate == 'Invalid date') {
+                                    MESM_OrderOperationRAW[n].MIISchedStartDate = MESM_OrderOperationRAW[n].EarlySchedStartDate;
                                     _init = true;
                                 }
-                                if (OperationStatus == '0') {
-                                    // cc('4');
-                                    OperationStatus = '2';
+                                if (MESM_OrderOperationRAW[n].MIISchedFinDate == 'Invalid date') {
+                                    MESM_OrderOperationRAW[n].MIISchedFinDate = MESM_OrderOperationRAW[n].EarlySchedFinDate;
                                     _init = true;
                                 }
+                                if (MESM_OrderOperationRAW[n].MIISchedStartTime == 'Invalid date') {
+                                    MESM_OrderOperationRAW[n].MIISchedStartTime = MESM_OrderOperationRAW[n].EarlySchedStartTime;
+                                    _init = true;
+                                }
+                                if (MESM_OrderOperationRAW[n].MIISchedFinTime == 'Invalid date') {
+                                    MESM_OrderOperationRAW[n].MIISchedFinTime = MESM_OrderOperationRAW[n].EarlySchedFinTime;
+                                    _init = true;
+                                }
+
+                                if (MESM_OrderOperationRAW[n].WorkCenterID == '0') {
+                                    if (MESM_OrderOperationRAW[n].SchedStat == 'S') {
+                                        MESM_OrderOperationRAW[n].SchedStat = 'U';
+                                        _init = true;
+                                    }
+                                } else {
+                                    if (MESM_OrderOperationRAW[n].SchedStat == 'U') {
+                                        MESM_OrderOperationRAW[n].SchedStat = 'S';
+                                        _init = true;
+                                    }
+                                }
+
+                                // if (MESM_OrderOperationRAW[n].MIISchedStartDate == 'TimeUnavailable' || MESM_OrderOperationRAW[n].MIISchedFinDate == 'TimeUnavailable') {
+                                //     // cc('TimeUnavailable');
+                                //     MESM_OrderOperationRAW[n].MIISchedStartDate = MESM_OrderOperationRAW[n].EarlySchedStartDate;
+                                //     MESM_OrderOperationRAW[n].MIISchedFinDate = MESM_OrderOperationRAW[n].EarlySchedFinDate;
+                                //     MESM_OrderOperationRAW[n].MIISchedStartTime = MESM_OrderOperationRAW[n].EarlySchedStartTime;
+                                //     MESM_OrderOperationRAW[n].MIISchedFinTime = MESM_OrderOperationRAW[n].EarlySchedFinTime;
+                                //     _init = true;
+                                // }
+
 
                                 if (_init) {
                                     var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                                         "&Param.1=" +
-                                        ID +
+                                        MESM_OrderOperationRAW[n].ID +
                                         "&Param.2=" +
-                                        Quantity +
+                                        MESM_OrderOperationRAW[n].Quantity +
                                         "&Param.3=" +
-                                        MIISchedStartDate +
+                                        MESM_OrderOperationRAW[n].MIISchedStartDate +
                                         "&Param.4=" +
-                                        MIISchedStartTime +
+                                        MESM_OrderOperationRAW[n].MIISchedStartTime +
                                         "&Param.5=" +
-                                        MIISchedFinDate +
+                                        MESM_OrderOperationRAW[n].MIISchedFinDate +
                                         "&Param.6=" +
-                                        MIISchedFinTime +
+                                        MESM_OrderOperationRAW[n].MIISchedFinTime +
                                         "&Param.7=" +
-                                        SchedStat +
+                                        MESM_OrderOperationRAW[n].SchedStat +
                                         "&Param.8=" +
-                                        WorkCenterID +
+                                        MESM_OrderOperationRAW[n].WorkCenterID +
                                         "&Param.9=" +
-                                        OperationStatus +
+                                        MESM_OrderOperationRAW[n].OperationStatus +
                                         "&Content-Type=text/xml";
                                     var xhttp = new XMLHttpRequest();
                                     xhttp.onreadystatechange = function () {
@@ -243,31 +338,12 @@
                                     xhttp.open("GET", urlProc, true);
                                     xhttp.send();
                                 }
-                                MESM_OrderOperationRAW.push({
-                                    ID: ID,
-                                    OrderNumber: OrderNumber,
-                                    Material: Material,
-                                    Quantity: Quantity,
-                                    EarlySchedStartDate: EarlySchedStartDate,
-                                    EarlySchedFinDate: EarlySchedFinDate,
-                                    EarlySchedStartTime: EarlySchedStartTime,
-                                    EarlySchedFinTime: EarlySchedFinTime,
-                                    WorkCenterID: WorkCenterID,
-                                    WorkCenter: WorkCenter,
-                                    OrderScheduledKey: OrderScheduledKey,
-                                    PrtNumber: PrtNumber,
-                                    Operation: Operation,
-                                    OperationStatus: OperationStatus,
-                                    MIISchedStartDate: MIISchedStartDate,
-                                    MIISchedFinDate: MIISchedFinDate,
-                                    MIISchedStartTime: MIISchedStartTime,
-                                    MIISchedFinTime: MIISchedFinTime,
-                                    SchedStat: SchedStat,
-
-                                });
-                            });
+                            }
+                            cc('MESM_OrderOperationRAW');
                             cc(MESM_OrderOperationRAW);
+                            // cc(MESM_OrderOperationRAW);
                             MOLD_Master_Tool_List_GET();
+
                         });
 
 
@@ -462,7 +538,9 @@
                     //     // }
                     // });
 
-                });
+                }
+            )
+            ;
 
 
         }
@@ -598,7 +676,7 @@
 
             daterangepickerInit();
 
-
+            WorkCentres = [];
             for (var ss = 0; ss < 4; ss++) {
                 var gp = ['resin', 'mold', 'pack', 'assy'];
                 for (var g in MESM_FloorMaps_GROUP) {
@@ -620,7 +698,8 @@
                     }
                 }
             }
-
+            // cc('MESM_FloorMaps_GROUP');
+            // cc(MESM_FloorMaps_GROUP);
 
             mmmSTR = '[Mold_Number]';
             for (var f in MESM_FloorMaps) {
@@ -631,30 +710,92 @@
             }
             // cc('mmmSTR ' + mmmSTR);
             // MESM_OrderOperationMold = [];
-            for (var O in MESM_OrderOperationRAW) {
+            for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
                 // cc(MESM_FloorMaps[MESM_OrderOperation[O].WorkCenterID]);
-                MESM_OrderOperationMold.push({
-                    // "RecordID": data.ID,
-                    "OrderNumber": MESM_OrderOperationRAW[O].OrderNumber,
-                    "Material": MESM_OrderOperationRAW[O].Material,
-                    "Quantity": MESM_OrderOperationRAW[O].Quantity,
-                    "SchedStart": moment(MESM_OrderOperationRAW[O].SchedStart).format('YYYY-MM-DD HH:mm:ss'),
-                    "SchedFinish": moment(MESM_OrderOperationRAW[O].SchedFinish).format('YYYY-MM-DD HH:mm:ss'),
+                // if (MESM_OrderOperationRAW[n].Operation == '0010') {
+                //     MESM_OrderOperationSort.push({
+                //         "ID": MESM_OrderOperationRAW[n].ID,
+                //         "OrderNumber": MESM_OrderOperationRAW[n].OrderNumber,
+                //         "Material": MESM_OrderOperationRAW[n].Material,
+                //         "Quantity": MESM_OrderOperationRAW[n].Quantity,
+                //         "SchedStart": moment(MESM_OrderOperationRAW[n].MIISchedStartDate + ' ' + MESM_OrderOperationRAW[n].MIISchedStartTime).format('YYYY-MM-DD HH:mm:ss'),
+                //         "SchedFinish": moment(MESM_OrderOperationRAW[n].MIISchedFinDate + ' ' + MESM_OrderOperationRAW[n].MIISchedFinTime).format('YYYY-MM-DD HH:mm:ss'),
+                //         // "StartTime": moment(data.StartTime).format('HH:mm:ss'),
+                //         // "EndTime": moment(data.EndTime).format('HH:mm:ss'),
+                //
+                //
+                //         "WCG": MESM_OrderOperationRAW[n].WorkCenter,
+                //         "Mold": MESM_OrderOperationRAW[n].PrtNumber,
+                //         "Status": MESM_OrderOperationRAW[n].SchedStat,
+                //         // "wcID": wcID,
+                //         // "Press": MESM_OrderOperation[O].WorkCenterID == 0 ? '' : MESM_FloorMaps[MESM_OrderOperation[O].WorkCenterID].unitName,
+                //         "Press": MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID].unitName,
+                //         'Sort': 'resin',
+                //     });
+                // } else if (MESM_OrderOperationRAW[n].Operation == '0020') {
+                //     MESM_OrderOperationSort.push({
+                //         "ID": MESM_OrderOperationRAW[n].ID,
+                //         "OrderNumber": MESM_OrderOperationRAW[n].OrderNumber,
+                //         "Material": MESM_OrderOperationRAW[n].Material,
+                //         "Quantity": MESM_OrderOperationRAW[n].Quantity,
+                //         "SchedStart": moment(MESM_OrderOperationRAW[n].MIISchedStartDate + ' ' + MESM_OrderOperationRAW[n].MIISchedStartTime).format('YYYY-MM-DD HH:mm:ss'),
+                //         "SchedFinish": moment(MESM_OrderOperationRAW[n].MIISchedFinDate + ' ' + MESM_OrderOperationRAW[n].MIISchedFinTime).format('YYYY-MM-DD HH:mm:ss'),
+                //         // "StartTime": moment(data.StartTime).format('HH:mm:ss'),
+                //         // "EndTime": moment(data.EndTime).format('HH:mm:ss'),
+                //
+                //
+                //         "WCG": MESM_OrderOperationRAW[n].WorkCenter,
+                //         "Mold": MESM_OrderOperationRAW[n].PrtNumber,
+                //         "Status": MESM_OrderOperationRAW[n].SchedStat,
+                //         // "wcID": wcID,
+                //         // "Press": MESM_OrderOperation[O].WorkCenterID == 0 ? '' : MESM_FloorMaps[MESM_OrderOperation[O].WorkCenterID].unitName,
+                //         "Press": MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID].unitName,
+                //         'Sort': 'mold',
+                //     });
+                // }
+                var _Sort = '';
+                if (MESM_OrderOperationRAW[n].Operation == '0010') {
+                    _Sort = 'resin';
+                } else if (MESM_OrderOperationRAW[n].Operation == '0020') {
+                    _Sort = 'mold';
+                } else if (MESM_OrderOperationRAW[n].Operation == '0030') {
+                    _Sort = 'pack';
+                } else if (MESM_OrderOperationRAW[n].Operation == '1010') {
+                    _Sort = 'resin';
+                } else if (MESM_OrderOperationRAW[n].Operation == '1020') {
+                    _Sort = 'mold';
+                } else if (MESM_OrderOperationRAW[n].Operation == '1030') {
+                    _Sort = 'pack';
+                } else if (MESM_OrderOperationRAW[n].Operation == '1040') {
+                    _Sort = 'assy';
+                } else if (MESM_OrderOperationRAW[n].Operation == '2020') {
+                    _Sort = 'mold';
+                } else if (MESM_OrderOperationRAW[n].Operation == '2030') {
+                    _Sort = 'pack';
+                }
+
+                MESM_OrderOperationSort.push({
+                    "ID": Number(MESM_OrderOperationRAW[n].ID),
+                    "Counter": MESM_OrderOperationRAW[n].Counter,
+                    "OrderNumber": MESM_OrderOperationRAW[n].OrderNumber,
+                    "Material": MESM_OrderOperationRAW[n].Material,
+                    "Quantity": MESM_OrderOperationRAW[n].Quantity,
+                    "SchedStart": moment(MESM_OrderOperationRAW[n].MIISchedStartDate + ' ' + MESM_OrderOperationRAW[n].MIISchedStartTime).format('YYYY-MM-DD HH:mm:ss'),
+                    "SchedFinish": moment(MESM_OrderOperationRAW[n].MIISchedFinDate + ' ' + MESM_OrderOperationRAW[n].MIISchedFinTime).format('YYYY-MM-DD HH:mm:ss'),
                     // "StartTime": moment(data.StartTime).format('HH:mm:ss'),
                     // "EndTime": moment(data.EndTime).format('HH:mm:ss'),
-
-
-                    "WCG": MESM_OrderOperationRAW[O].WorkCenter,
-                    "Mold": MESM_OrderOperationRAW[O].PrtNumber,
-                    "Status": MESM_OrderOperationRAW[O].SchedStatus,
+                    "WCG": MESM_OrderOperationRAW[n].WorkCenter,
+                    "Mold": MESM_OrderOperationRAW[n].PrtNumber,
+                    "Status": MESM_OrderOperationRAW[n].SchedStat,
                     // "wcID": wcID,
                     // "Press": MESM_OrderOperation[O].WorkCenterID == 0 ? '' : MESM_FloorMaps[MESM_OrderOperation[O].WorkCenterID].unitName,
-                    "Press": MESM_FloorMaps[MESM_OrderOperationRAW[O].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperationRAW[O].WorkCenterID].unitName,
+                    "Press": MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID].unitName,
+                    'Sort': _Sort,
                 });
-                // MESM_FloorMaps[f]. MOLD_Machine_Matrix
+
             }
-            // cc('MESM_ProductionOrders');
-            // cc(MESM_ProductionOrders);
+            // cc('MESM_OrderOperationMold');
+            // cc(MESM_OrderOperationMold);
 
             // var url = localHost ? "MESM_FloorMaps.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
             // cc(url);
@@ -722,7 +863,7 @@
 //                 cc(WorkCentres);
                     // return;
                     var url = localHost ? "MOLD_Machine_Matrix.xml" : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
-                    cc(url);
+                    // cc(url);
                     getData(
                         localHost ?
                             "MOLD_Machine_Matrix_GET.xml" :
@@ -806,22 +947,26 @@
                             //     "Press": data.Press,
                             // });
                             // });
-                            orderTableCreat(MESM_OrderOperationMold);
+                            orderTableCreat(MESM_OrderOperationSort);
                             // cc((new Date().getTime() - t0) + ' ms (tableOrders) ');
-                            cc('WorkCentres');
-                            cc(WorkCentres);
+                            // cc('WorkCentres');
+                            // cc(WorkCentres);
 
                             sheduleForm(WorkCentres);
                             // cc('MESM_ProductionOrders');
                             // cc(MESM_ProductionOrders);
 
-                            for (var o in MESM_OrderOperationMold) {
-                                if (MESM_OrderOperationMold[o].Press != '' && MESM_OrderOperationMold[o].Status == 'S') {
+                            for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+                                if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
+                                    var group = MESM_OrderOperationSort[n].WCG;
+                                    if (group.toUpperCase().indexOf('ASS') >= 0) {
+                                        group = 'ASSY';
+                                    }
                                     addScheduleEvent(
-                                        MESM_OrderOperationMold[o].WCG + '_' + MESM_OrderOperationMold[o].Press,
-                                        MESM_OrderOperationMold[o].OrderNumber,
-                                        MESM_OrderOperationMold[o].SchedStart,
-                                        MESM_OrderOperationMold[o].SchedFinish);
+                                        group + '_' + MESM_OrderOperationSort[n].Press,
+                                        MESM_OrderOperationSort[n].OrderNumber,
+                                        MESM_OrderOperationSort[n].SchedStart,
+                                        MESM_OrderOperationSort[n].SchedFinish);
                                 }
                             }
                         });
@@ -858,8 +1003,13 @@
         }
 
         var orderTableCreat = function (rows) {
+            cc('rows');
+            cc(rows);
 //            if (0 !== $("#m_datatable_latest_orders").length)
             orderTable = $(".m_datatable").mDatatable({
+                drawCallback: function () {
+                    cc('mDatatable drawCallback');
+                },
                 responsive: true,
                 data: {
                     type: "local",
@@ -877,12 +1027,20 @@
                 pagination: !0,
                 search: {input: $("#generalSearch")},
                 columns: [
+                    // {
+                    //     field: "ID",
+                    //     title: "",
+                    //     width: 0,
+                    //     sortable: 'asc',
+                    //     filterable: false,
+                    //     // visible: false,
+                    // },
                     {
 
-                        field: "RecordID",
+                        field: "CK",
                         title: "#",
-                        sortable: !1,
-                        width: 40,
+                        sortable: false,
+                        width: 20,
                         selector: {class: "m-checkbox--solid m-checkbox--brand"},
                         textAlign: "center"
                     },
@@ -891,30 +1049,39 @@
                             var t = {
                                 'U': {title: "Unscheduled", class: "m-badge--brand"},
                                 'S': {title: "Scheduled", class: " m-badge--success"},
-                                'H': {title: "Hold", class: " m-badge--danger"},
+                                'H': {title: "Hold", class: " m-badge--warning"},
                                 'C': {title: "Cancelled", class: " m-badge--metal"},
-                                'N': {title: "No Material", class: " m-badge--warning"},
+                                // 'N': {title: "No Material", class: " m-badge--warning"},
                                 // 6: {title: "Urgent", class: " m-badge--danger"},
                                 // 7: {title: "Delayed", class: " m-badge--info"}
                             };
                             return '<span class="m-badge ' + t[e.Status].class + ' m-badge--wide">' + t[e.Status].title + "</span>"
                         },
+                        sortable: true,
                     },
+                    {
 
+                        field: "ID",
+                        title: "ID",
+                        sortable: 'asc',
+                        visible: false,
+                        width: 0,
+
+                    },
                     {
                         field: "OrderNumber",
-                        title: "OrderNumber.",
-                        sortable: "asc",
-                        filterable: !1,
+                        title: "Order #",
+                        sortable: true,
+                        filterable: true,
                         width: 100,
 //                            template: "{{OrderID}} - {{ShipCountry}}"
                     },
 
                     {
                         field: "Material",
-                        title: "Material",
-                        sortable: "asc",
-                        filterable: !1,
+                        title: "Material #",
+                        sortable: false,
+                        filterable: false,
                         width: 160,
 //                            template: "{{OrderID}} - {{ShipCountry}}"
                     },
@@ -922,6 +1089,8 @@
                     {
                         field: "Quantity",
                         title: "Quantity",
+                        sortable: false,
+                        filterable: false,
                         width: 65,
                         // visible: 0,
 //                            responsive: {visible: "lg"}
@@ -930,6 +1099,8 @@
                     {
                         field: "SchedStart",
                         title: "SchedStart",
+                        sortable: false,
+                        filterable: false,
                         width: 140,
 //                            responsive: {visible: "lg"}
                     },
@@ -942,6 +1113,8 @@
                     {
                         field: "SchedFinish",
                         title: "SchedFinish",
+                        sortable: false,
+                        filterable: false,
                         width: 140,
                     },
                     // {
@@ -952,42 +1125,37 @@
                     {
                         field: "WCG",
                         title: "Group",
-                        width: 80,
+                        sortable: false,
+                        filterable: false,
+                        width: 70,
                     },
                     {
                         field: "Mold",
                         title: "Mold",
-                        width: 80,
+                        sortable: false,
+                        filterable: false,
+                        width: 70,
                     },
                     {
                         field: "Press",
                         title: "WorkCenter",
+                        sortable: false,
+                        filterable: false,
                         width: 90,
                     },
                     {
                         field: "Actions",
-                        width: 100,
+                        width: 80,
                         title: "Actions",
-                        sortable: !1,
-                        overflow: "visible",
+                        sortable: false,
+                        filterable: false,
                         template: function (e) {
-
-                            if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled
-
-                                // cc('e.Status == \'U\' || e.Status == \'H\'');
-                                // cc(e.WCG);
+                            cc('Actions==>');
+                            cc(e);
+                            cc('<=Actions');
+                            if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled & Scheduled
                                 var wcg = '';
                                 var wcgNAME = '';
-                                // cc(MESM_FloorMaps);
-
-                                // for (n = 0; n < MESM_FloorMaps.length; n++) {
-                                //     if (e.WCG == MESM_FloorMaps[n]['unitName']) {
-                                //         wcg = MESM_FloorMaps[n]['recordID'];
-                                //         wcgNAME = MESM_FloorMaps[n]['unitName'];
-                                //         break;
-                                //         // n = MESM_FloorMaps.length;
-                                //     }
-                                // }
                                 for (var f in MESM_FloorMaps) {
                                     if (e.WCG == MESM_FloorMaps[f].unitName) {
                                         wcg = MESM_FloorMaps[f].recordID;
@@ -996,89 +1164,39 @@
                                         // n = MESM_FloorMaps.length;
                                     }
                                 }
-                                // cc(wcg + ' / ' + wcgNAME + ' / ' + e.Mold);
                                 var prs = [];
                                 var prsSTR = '';
 
-                                for (var f in MESM_FloorMaps) {
-                                    if (MESM_FloorMaps[f].idUnitParent == wcg) {
-                                        // cc('MESM_FloorMaps[f].idUnitParent == wcg ' + MESM_FloorMaps[f].unitName);
-                                        // cc(wcg + ' / ' + wcgNAME + ' / ' + e.Mold + ' / ' + MESM_FloorMaps[f].MOLD_Machine_Matrix + ' / ');
-                                        // cc(mmmArray[e.Mold]);
+                                if (e.Sort == 'mold') {
 
-                                        if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
-                                            // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
-                                            // cc(mmmArray[e.Mold]);
-                                            // cc(MESM_FloorMaps[f].unitName + ' true');
-//                                            cc(e.Mold);
-//                                            cc(mmmArray[e.Mold]);
-//                                            cc(floorMaps[n]['unitName']);
-//                                            cc(floorMaps[n]['MOLD_Machine_Matrix']);
-                                            prs.push({
-                                                'unitName': MESM_FloorMaps[f].unitName,
-                                                'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
-                                            });
-                                            // cc(MESM_FloorMaps[n]['unitName']);
-                                            // cc(' TARGET : ' + e.TARGET);
-                                            prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
-                                                '"' +
-                                                wcgNAME +
-                                                '_' +
-                                                MESM_FloorMaps[f].unitName +
-                                                '"' +
-                                                '><i class="la la-wrench"></i>' +
-                                                'assign to ' + MESM_FloorMaps[f].unitName +
-                                                ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
-                                                '</a>';
-                                        } else {
-                                            // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
-                                            // cc(mmmArray[e.Mold]);
-                                            // cc(MESM_FloorMaps[f].unitName + ' false');
+                                    for (var f in MESM_FloorMaps) {
+                                        if (MESM_FloorMaps[f].idUnitParent == wcg) {
+                                            if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
+                                                prs.push({
+                                                    'unitName': MESM_FloorMaps[f].unitName,
+                                                    'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
+                                                });
+                                                prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
+                                                    '"' +
+                                                    wcgNAME +
+                                                    '_' +
+                                                    MESM_FloorMaps[f].unitName +
+                                                    '"' +
+                                                    '><i class="la la-wrench"></i>' +
+                                                    'assign to ' + MESM_FloorMaps[f].unitName +
+                                                    ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
+                                                    '</a>';
+                                            } else {
+                                                // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
+                                                // cc(mmmArray[e.Mold]);
+                                                // cc(MESM_FloorMaps[f].unitName + ' false');
+                                            }
                                         }
-
-                                        // break;
                                     }
+                                    cc('e.Sort == \'mold\'');
+                                    cc(prsSTR);
                                 }
 
-//                                 for (n = 0; n < MESM_FloorMaps.length; n++) {
-//                                     if (MESM_FloorMaps[n]['idUnitParent'] == wcg) {
-//                                         cc('MESM_FloorMaps[n][\'idUnitParent\'] == wcg');
-//                                         cc(wcg + ' / ' + wcgNAME + ' / ' + e.Mold + ' / ' + MESM_FloorMaps[n]['MOLD_Machine_Matrix'] + ' / ');
-//                                         cc(mmmArray[e.Mold]);
-//
-//                                         if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[n]['MOLD_Machine_Matrix']) > 0 && MESM_FloorMaps[n]['unitName'] != e.Press) {
-// //                                            cc(e.Mold);
-// //                                            cc(mmmArray[e.Mold]);
-// //                                            cc(floorMaps[n]['unitName']);
-// //                                            cc(floorMaps[n]['MOLD_Machine_Matrix']);
-//                                             prs.push({
-//                                                 'unitName': MESM_FloorMaps[n]['unitName'],
-//                                                 'MOLD_Machine_Matrix': MESM_FloorMaps[n]['MOLD_Machine_Matrix']
-//                                             });
-//                                             // cc(MESM_FloorMaps[n]['unitName']);
-//                                             // cc(' TARGET : ' + e.TARGET);
-//                                             prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
-//                                                 '"' +
-//                                                 wcgNAME +
-//                                                 '_' +
-//                                                 MESM_FloorMaps[n]['unitName'] +
-//                                                 '"' +
-//                                                 '><i class="la la-wrench"></i>' +
-//                                                 'assign to ' + MESM_FloorMaps[n]['unitName'] +
-//                                                 ' ~' + Math.round(0.5 + e.TARGET / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
-//                                                 '</a>';
-//                                         }
-//
-//                                         break;
-//                                     }
-//                                 }
-//                                if (prsSTR.length > 0) {
-//                                    cc(e.Mold);
-//                                    cc(mmmArray[e.Mold]);
-//                                    cc('=======');
-//                                    cc(prsSTR);
-//                                    cc('=======');
-//                                }
 
                                 return e.Status == 'U' ?
                                     '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
@@ -1139,30 +1257,50 @@
                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
                                     '       <i class="la la-comment"></i>' +
                                     '   </a>';
-                            } else if (e.Status == 'N') {
-                                return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                    '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                    '           <i class="la la-ellipsis-h"></i>' +
-                                    '       </a>' +
-                                    '       <div class="dropdown-menu dropdown-menu-right">' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Waiting for Material</a>' +
-                                    '           <div class="dropdown-divider"></div>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Cancelled</a>' +
-                                    '       </div>' +
-                                    '   </div>' +
-                                    '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                    '       <i class="la la-comment"></i>' +
-                                    '   </a>';
                             }
+                            // else if (e.Status == 'N') {
+                            //     return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+                            //         '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+                            //         '           <i class="la la-ellipsis-h"></i>' +
+                            //         '       </a>' +
+                            //         '       <div class="dropdown-menu dropdown-menu-right">' +
+                            //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
+                            //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
+                            //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Waiting for Material</a>' +
+                            //         '           <div class="dropdown-divider"></div>' +
+                            //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Cancelled</a>' +
+                            //         '       </div>' +
+                            //         '   </div>' +
+                            //         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+                            //         '       <i class="la la-comment"></i>' +
+                            //         '   </a>';
+                            // }
 
 
                         }
-                    }]
+                    },
+
+                    // {
+                    //
+                    //     field: "Counter",
+                    //     title: "Counter",
+                    //     sortable: 'asc',
+                    //     width: 150,
+                    //
+                    // },
+                    {
+                        field: "Sort",
+                        title: "",
+                        width: 0,
+                        visible: false,
+                        sortable: false,
+                        filterable: false,
+                    }
+                ]
             });
 
-            // orderTable.hideColumn('TARGET');
+            // orderTable.hideColumn('ID');
+            // orderTable.hideColumn('Sort');
 
 
             var i = orderTable.getDataSourceQuery();
@@ -1323,8 +1461,8 @@
                     // },
 
                     eventRender: function (event, element, view) {
-                        cc('====>eventRender');
-                        cc(event);
+                        // cc('====>eventRender');
+                        // cc(event);
                         if (!ScheduleEvents.hasOwnProperty(event.id)) {
                             ScheduleEvents[event.id] = {
                                 resourceId: event.resourceId,
@@ -1377,16 +1515,17 @@
                             ScheduleEvents[event.id].end = moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss');
                             // cc(ScheduleEvents);
 
-                            var _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
+                            var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
                             // MESM_ProductionOrdersListFromSAP
-                            // cc('event.id.substring(8) ' + event.id.substring(8));
+                            // cc('event.id.substring(8) ' + event.id.substring(8));;
                             for (var i = 0; i < orderTable.dataSet.length; i++) {
                                 if (orderTable.dataSet[i].OrderNumber == event.id) {
+                                    _ID = orderTable.dataSet[i].ID;
                                     _OrderNumber = event.id;
                                     _Quantity = orderTable.dataSet[i].Quantity;
                                     _Status = orderTable.dataSet[i].Status;
-                                    _SchedStart = moment.utc(event.start._d).format('MMM DD, YYYY HH:mm:ss');
-                                    _SchedFinish = moment.utc(event.end._d).format('MMM DD, YYYY HH:mm:ss');
+                                    _SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                                    _SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
                                     _Press = ScheduleEvents[event.id].resourceId;
                                     // cc(orderTable.dataSet[i].OrderID);
                                     // cc(orderTable.dataSet[i].StartDate);
@@ -1401,8 +1540,8 @@
                                     // cc(ScheduleEvents[event.id].start);
                                     // cc(ScheduleEvents[event.id].end);
                                     // cc('//////');
-                                    orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('MMM DD, YYYY HH:mm:ss');
-                                    orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('MMM DD, YYYY HH:mm:ss');
+                                    orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                                    orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
                                     // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
                                     // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
                                     orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
@@ -1417,8 +1556,8 @@
                                 }
                             }
                             // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                            console.log(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press.split('_')[1]);
-                            updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press.split('_')[1]);
+                            // console.log(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press.split('_')[1]);
+                            updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press.split('_')[1]);
                             orderTable.reload();
                             //wxy
                             // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
@@ -1792,9 +1931,8 @@
 
         function quickAction(e) {
             // cc('quickAction');
-            // cc(e);
-
             var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
+            var _ID = TableCOL[11].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _OrderNumber = TableCOL[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
@@ -1822,7 +1960,7 @@
                     ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
                     _Status = 'Scheduled';
                 }
-                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
                 cc('addScheduleEvent');
@@ -1838,7 +1976,7 @@
                 _SchedFinish = '';
                 _Status = 'Cancelled';
                 _Press = '';
-                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 ActivityLogADD('Cancelled', _OrderNumber + ' ', '');
             }
@@ -1849,7 +1987,7 @@
                 _SchedFinish = '';
                 _Status = 'Unscheduled';
                 _Press = '';
-                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 removeScheduleEvent(_OrderNumber);
                 // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
                 ActivityLogADD('Unscheduled', _OrderNumber + ' ', '');
@@ -1863,7 +2001,7 @@
                 _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
                 _Press = TableCOL[9].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
                 _Status = 'Scheduled';
-                updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 // removeScheduleEvent(_OrderNumber);
                 // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
                 ActivityLogADD('Scheduled', _OrderNumber + ' ', '');
@@ -2107,14 +2245,14 @@
             orderTable.reload();
         }
 
-        function updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
+        function updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
 
             if (_SchedStart == '' || _SchedFinish == '') {
                 for (var v in MESM_OrderOperationRAW) {
                     // cc(MESM_OrderOperation);
-                    if (MESM_OrderOperationRAW[v].OrderNumber == _OrderNumber) {
-                        _SchedStart = moment(MESM_OrderOperationRAW[v].EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperationRAW[v].EarlySchedStartTime).format('HH:mm:ss');
-                        _SchedFinish = moment(MESM_OrderOperationRAW[v].EarlySchedFinDate).format('YYYY-MM-DD') + ' ' + moment(MESM_OrderOperationRAW[v].EarlySchedFinTime).format('HH:mm:ss');
+                    if (MESM_OrderOperationRAW[v].ID == _ID) {
+                        _SchedStart = MESM_OrderOperationRAW[v].EarlySchedStartDate + ' ' + MESM_OrderOperationRAW[v].EarlySchedStartTime;
+                        _SchedFinish = MESM_OrderOperationRAW[v].EarlySchedFinDate + ' ' + MESM_OrderOperationRAW[v].EarlySchedFinTime;
                         break;
                     }
                 }
@@ -2123,7 +2261,7 @@
 
             for (var i = 0; i < orderTable.dataSet.length; i++) {
                 // cc(i + ' / ' + orderTable.dataSet[i].OrderNumber);
-                if (orderTable.dataSet[i].OrderNumber == _OrderNumber) {
+                if (orderTable.dataSet[i].ID == _ID) {
                     orderTable.dataSet[i].SchedStart = _SchedStart;
                     orderTable.dataSet[i].SchedFinish = _SchedFinish;
                     orderTable.dataSet[i].Press = _Press;
@@ -2165,7 +2303,7 @@
             var Status = _Status.substring(0, 1) == 'S' ? 'S' : 'U';
             var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                 "&Param.1=" +
-                _OrderNumber +
+                _ID +
                 "&Param.2=" +
                 _Quantity +
                 "&Param.3=" +
@@ -2184,7 +2322,7 @@
                 '2' +
                 "&Content-Type=text/xml";
 
-            cc(urlProc);
+            // cc(urlProc);
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -2199,6 +2337,8 @@
         }
 
         function ActivityLogADD(ev, _Action, tag) {
+            cc('ev ' + ev);
+            cc('_Action ' + _Action);
             cc('tag ' + tag);
             var occurred = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 19);
             var receiver = '';
@@ -2991,7 +3131,7 @@
                                                         <div class="m-form__label">
                                                             <label class="m-label m-label--single"
                                                                    style="white-space:nowrap">
-                                                                WorkCenter:
+                                                                WorkCenter Group:
                                                             </label>
                                                         </div>
                                                         <div class="m-form__control">
@@ -3003,6 +3143,9 @@
                                                                 <option value="MOLD3"> MOLD3</option>
                                                                 <option value="MOLD4"> MOLD4</option>
                                                                 <option value="MOLD5"> MOLD5</option>
+                                                                <option value="MOLD6"> MOLD6</option>
+                                                                <option value="MOLD6">----</option>
+                                                                <option value="MOLD6"> MOLD6</option>
                                                                 <option value="MOLD6"> MOLD6</option>
                                                             </select>
                                                         </div>
@@ -3873,7 +4016,7 @@
 <script src='assets/vendors/custom/fullcalendar/moment.min.js'></script>
 <script src="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.js"></script>
 <script src="getData.js" type="text/javascript"></script>
-
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
 
 </body>
 <!-- end::Body -->
