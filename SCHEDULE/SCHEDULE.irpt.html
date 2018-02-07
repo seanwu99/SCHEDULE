@@ -102,9 +102,9 @@
                 function (data) {
                     $.each(data, function (index, value) {
                         logs =
-                            '<div class="m-list-timeline__item">' +
+                            '<div class="m-list-timeline__item" >' +
                             value.events +
-                            '<span class="m-list-timeline__time" style="white-space: nowrap;">' +
+                            '<span class="m-list-timeline__time" >' +
                             moment(value.occurred).fromNow() + '</span></div>' +
                             logs;
                     })
@@ -138,7 +138,7 @@
                         };
 
                         if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) &&
-                            (value.groupType == 'resin' || value.groupType == 'mold' || value.groupType == 'pack' || value.groupType == 'assy')) {
+                            (value.groupType == 'RESIN' || value.groupType == 'MOLDING' || value.groupType == 'PACKING' || value.groupType == 'ASSY')) {
                             MESM_FloorMaps_GROUP[value.recordID] = [];
                         }
                     });
@@ -344,7 +344,7 @@
                                     xhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
                                             // document.getElementById("demo").innerHTML = this.responseText;
-                                            cc(urlProc + ' succeed.');
+                                            // cc(urlProc + ' //');
                                         }
                                     };
                                     xhttp.open("GET", urlProc, true);
@@ -690,7 +690,7 @@
 
             WorkCentres = [];
             for (var ss = 0; ss < 4; ss++) {
-                var gp = ['resin', 'mold', 'pack', 'assy'];
+                var gp = ['RESIN', 'MOLDING', 'PACKING', 'ASSY'];
                 for (var g in MESM_FloorMaps_GROUP) {
                     for (var n = 0; n < MESM_FloorMaps_GROUP[g].length; n++) {
                         if (MESM_FloorMaps_GROUP[g][n].groupType == gp[ss]) {
@@ -710,8 +710,8 @@
                     }
                 }
             }
-            cc('MESM_FloorMaps_GROUP');
-            cc(MESM_FloorMaps_GROUP);
+            // cc('MESM_FloorMaps_GROUP');
+            // cc(MESM_FloorMaps_GROUP);
 
             mmmSTR = '[Mold_Number]';
             for (var f in MESM_FloorMaps) {
@@ -767,23 +767,23 @@
                 // }
                 var _Sort = '';
                 if (MESM_OrderOperationRAW[n].Operation == '0010') {
-                    _Sort = 'resin';
+                    _Sort = 'RESIN';
                 } else if (MESM_OrderOperationRAW[n].Operation == '0020') {
-                    _Sort = 'mold';
+                    _Sort = 'MOLDING';
                 } else if (MESM_OrderOperationRAW[n].Operation == '0030') {
-                    _Sort = 'pack';
+                    _Sort = 'PACKING';
                 } else if (MESM_OrderOperationRAW[n].Operation == '1010') {
                     _Sort = 'resin';
                 } else if (MESM_OrderOperationRAW[n].Operation == '1020') {
-                    _Sort = 'mold';
+                    _Sort = 'MOLDING';
                 } else if (MESM_OrderOperationRAW[n].Operation == '1030') {
-                    _Sort = 'pack';
+                    _Sort = 'PACKING';
                 } else if (MESM_OrderOperationRAW[n].Operation == '1040') {
-                    _Sort = 'assy';
+                    _Sort = 'ASSY';
                 } else if (MESM_OrderOperationRAW[n].Operation == '2020') {
-                    _Sort = 'mold';
+                    _Sort = 'MOLDING';
                 } else if (MESM_OrderOperationRAW[n].Operation == '2030') {
-                    _Sort = 'pack';
+                    _Sort = 'PACKING';
                 }
 
                 MESM_OrderOperationSort.push({
@@ -963,7 +963,7 @@
                             // cc('WorkCentres');
                             // cc(WorkCentres);
 
-                            sheduleForm(WorkCentres);
+                            scheduleForm(WorkCentres);
                             // cc('MESM_ProductionOrders');
                             // cc(MESM_ProductionOrders);
 
@@ -971,7 +971,7 @@
                                 if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
                                     addScheduleEvent(
                                         MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-                                        MESM_OrderOperationSort[n].OrderNumber,
+                                        MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
                                         MESM_OrderOperationSort[n].SchedStart,
                                         MESM_OrderOperationSort[n].SchedFinish);
                                 }
@@ -1010,12 +1010,12 @@
         }
 
         var orderTableCreat = function (rows) {
-            cc('rows');
-            cc(rows);
+            // cc('rows');
+            // cc(rows);
 //            if (0 !== $("#m_datatable_latest_orders").length)
             orderTable = $(".m_datatable").mDatatable({
                 drawCallback: function () {
-                    cc('mDatatable drawCallback');
+                    // cc('mDatatable drawCallback');
                 },
                 responsive: true,
                 data: {
@@ -1167,17 +1167,17 @@
                                         // n = MESM_FloorMaps.length;
                                     }
                                 }
-                                var prs = [];
+                                // var prs = [];
                                 var prsSTR = '';
 
-                                if (e.Sort == 'mold') {
+                                if (e.Sort == 'MOLDING') {
                                     for (var f in MESM_FloorMaps) {
                                         if (MESM_FloorMaps[f].idUnitParent == wcg) {
                                             if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
-                                                prs.push({
-                                                    'unitName': MESM_FloorMaps[f].unitName,
-                                                    'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
-                                                });
+                                                // prs.push({
+                                                //     'unitName': MESM_FloorMaps[f].unitName,
+                                                //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
+                                                // });
                                                 prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
                                                     '"' +
                                                     wcgNAME +
@@ -1195,6 +1195,22 @@
                                             }
                                         }
                                     }
+                                } else if (e.Sort == 'RESIN') {
+                                    prsSTR =
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND02"><i class="la la-wrench"></i>assign to BLEND02' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND03"><i class="la la-wrench"></i>assign to BLEND03' + '</a>';
+                                } else if (e.Sort == 'PACKING') {
+                                    prsSTR =
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK01"><i class="la la-wrench"></i>assign to PACK01' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK02"><i class="la la-wrench"></i>assign to PACK02' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK03"><i class="la la-wrench"></i>assign to PACK03' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK04"><i class="la la-wrench"></i>assign to PACK04' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK05"><i class="la la-wrench"></i>assign to PACK05' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
+                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
                                 }
 
 
@@ -1288,7 +1304,7 @@
                         field: "Sort",
                         title: "",
                         visible: false,
-                        width: 0,
+                        width: 100,
                         sortable: false,
                         filterable: false,
                     }
@@ -1296,7 +1312,7 @@
             });
 
             orderTable.hideColumn('ID');
-            // orderTable.hideColumn('Sort');
+            orderTable.hideColumn('Sort');
 
 
             var i = orderTable.getDataSourceQuery();
@@ -1317,19 +1333,21 @@
 
             $("#m_form_status, #m_form_type").selectpicker()
         };
+
         var _eventDragStart;
-        var sheduleForm = function (eventSources) {
+        var _eventDragStop;
+        var scheduleForm = function (eventSources) {
 //            cc('creatSheduleForm');
 //            cc(eventSources);
 
-                var today = new Date().toISOString().substr(0, 10);
+            var today = new Date().toISOString().substr(0, 10);
 
-                $('#calendar').fullCalendar({
+            $('#calendar').fullCalendar({
 
-                    now: today,
-                    editable: true,
+                now: today,
+                editable: true,
 //			aspectRatio: 1.8,
-                    scrollTime: '00:00',
+                scrollTime: '00:00',
 //                themeSystem: 'jquery-ui',
 //                themeSystem: 'bootstrap3',
 //                hiddenDays: [ 1, 3, 5 ],
@@ -1341,25 +1359,25 @@
 //                businessHours: false,
 //                nowIndicator:true,
 //                allDaySlot:true,
-                    slotDuration: '00:15:00',
-                    slotLabelInterval: '01:00:00',
-                    snapDuration: '00:15:00',
-                    minTime: '00:00:00',
-                    maxTime: '24:00:00',
-                    scrollTime: '00:00:00',
-                    noEventsMessage: 'No events to display',
-                    agendaEventMinHeight: 50,  //vertical
-                    listDayFormat: true,
-                    listDayAltFormat: true,
-                    slotEventOverlap: true,
-                    fixedWeekCount: true,
-                    nowIndicator: true,
-                    timeFormat: 'h:mm:ss',
-                    titleFormat: 'MMMM D, YYYY',
-                    monthNames: ['January', 'February', 'March3', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                slotDuration: '00:15:00',
+                slotLabelInterval: '01:00:00',
+                snapDuration: '00:15:00',
+                minTime: '00:00:00',
+                maxTime: '24:00:00',
+                scrollTime: '00:00:00',
+                noEventsMessage: 'No events to display',
+                agendaEventMinHeight: 50,  //vertical
+                listDayFormat: true,
+                listDayAltFormat: true,
+                slotEventOverlap: true,
+                fixedWeekCount: true,
+                nowIndicator: true,
+                timeFormat: 'h:mm:ss',
+                titleFormat: 'MMMM D, YYYY',
+                monthNames: ['January', 'February', 'March3', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 
 //                displayEventTime: true,
 //                displayEventEnd: true,
@@ -1369,285 +1387,299 @@
 //                        eventLimit: 6 // adjust to 6 only for agendaWeek/agendaDay
 //                    }
 //                },
-                    eventLimitText: 'click for more',
-                    eventStartEditable: true,
-                    eventDurationEditable: true,
-                    dragRevertDuration: 500,
-                    dragOpacity: .75,
-                    dragScroll: true,
-                    eventOverlap: true, //
+                eventLimitText: 'click for more',
+                eventStartEditable: true,
+                eventDurationEditable: true,
+                dragRevertDuration: 500,
+                dragOpacity: .75,
+                dragScroll: true,
+                eventOverlap: true, //
 
 
-                    eventClick: function (event, element) {
-                        // cc(event);
+                eventClick: function (event, element) {
+                    // cc(event);
 //                    cc('eventCLICKED');
 //                    cc(event);
 //                     event.title = "CLICKED ON";
 //                    cc(event.start._d);
 
-                        // event.start._d = new Date(event.start.format());
-                        // $('#calendar').fullCalendar('updateEvent', event);
+                    // event.start._d = new Date(event.start.format());
+                    // $('#calendar').fullCalendar('updateEvent', event);
 
 //                    $('#calendar').fullCalendar('refetchEvents');
 
-                        // $('#calendar').fullCalendar('refresh');
+                    // $('#calendar').fullCalendar('refresh');
 
 //                    $('#calendar').fullCalendar('refetchEventSources');
-                    },
+                },
 
 
 // * * * *
-                    eventAllow: function (dropLocation, draggedEvent) {
-                        var _s = dropLocation.resourceId.split('_')[0], _t = draggedEvent.resourceId.split('_')[0];
+                eventAllow: function (dropLocation, draggedEvent) {
+                    // var _s = dropLocation.resourceId.split('_')[0], _t = draggedEvent.resourceId.split('_')[0];
+                    // MOLD2_PRESS02
+                    // cc(_s + ' / ' + _t);
+                    cc(dropLocation);
+                    cc(draggedEvent);
+                    if (dropLocation.resourceId.split('_')[0] != draggedEvent.description.split('_')[0] ||
+                        draggedEvent.resourceId.split('_')[0] != draggedEvent.description.split('_')[0]) {
+                        return false
+                    } else {
+                        return true;
+                    }
+                    // var _s = dropLocation.resourceId.split('_')[0], _t = draggedEvent.resourceId.split('_')[0];
+                    //
+                    // cc(dropLocation + ' / ' + _s);
+                    // cc(draggedEvent + ' / ' + _t);
+                    //
+                    // if (_s == _t) {
+                    //     return true;
+                    // } else return false;
 
-                        cc(_s + ' / ' + _t);
-                        if (_eventDragStart != _t) {
-                            return false
-                        } else {
-                            return true;
-                        }
-                        // var _s = dropLocation.resourceId.split('_')[0], _t = draggedEvent.resourceId.split('_')[0];
-                        //
-                        // cc(dropLocation + ' / ' + _s);
-                        // cc(draggedEvent + ' / ' + _t);
-                        //
-                        // if (_s == _t) {
-                        //     return true;
-                        // } else return false;
-
-                        // if (draggedEvent.id === '999') {
-                        //     return String(dropLocation.resourceId).indexOf('a') >= 0; // boolean
-                        // }
-                        // else {
-                        //     return true;
-                        // }
-                    },
-
-// * * * *
-                    eventDragStart: function (event, jsEvent, ui, view) {
-                        cc('eventDragStart');
-                        _eventDragStart = event.resourceId.split('_')[0];
-                        cc(_eventDragStart);
-                    },
+                    // if (draggedEvent.id === '999') {
+                    //     return String(dropLocation.resourceId).indexOf('a') >= 0; // boolean
+                    // }
+                    // else {
+                    //     return true;
+                    // }
+                },
 
 // * * * *
-                    eventDragStop: function (event, jsEvent, ui, view) {
-//                    cc('eventDragStop' + event);
-
-                    },
+                eventDragStart: function (event, jsEvent, ui, view) {
+                    // cc('eventDragStart');
+                    _eventDragStart = event;
+                    // cc(_eventDragStart);
+                    // cc(_eventDragStart);
+                },
 
 // * * * *
-                    eventDrop: function (event, delta, revertFunc) {
-//                    cc(event);
+                eventDragStop: function (event, jsEvent, ui, view) {
+                    // cc('eventDragStop');
+                    // _eventDragStop = event;
+                    // cc(_eventDragStop);
+
+                },
+
+// * * * *
+                eventDrop: function (event, delta, revertFunc) {
+                    // cc('eventDrop');
+                    // cc(event);
+                    orderTableRefresh(event);
 //                    alert(event.title + " was dropped on " + event.start.format());
 //
 //                    if (!confirm("Are you sure about this change?")) {
 //                        revertFunc();
 //                    }
 
-                    },
+                },
 
 
 // * * *
-                    eventResizeStart: function (event, jsEvent, ui, view) {
+                eventResizeStart: function (event, jsEvent, ui, view) {
 //                    cc(event);
-                    },
+                },
 
 // * * *
-                    eventResizeStop: function (event, jsEvent, ui, view) {
-//                    cc(event);
-                    },
+                eventResizeStop: function (event, jsEvent, ui, view) {
+                    // cc('eventResizeStop');
+                    // cc(event);
+                    // scheduleFormUPD(event);
+                },
 
 // * * *
-                    eventResize: function (event, jsEvent, ui, view) {
+                eventResize: function (event, jsEvent, ui, view) {
+                    // cc('eventResize');
+                    // cc(event);
+                    orderTableRefresh(event);
 //                    cc(event);
-                    },
+                },
 // * * * * *
 
-                    // eventRender: function (event, element) {
-                    //     cc('eventRender');
-                    //     element.bind('mousedown', function (e) {
-                    //         if (e.which == 3) {
-                    //             alert('Right mouse button pressed');
+                // eventRender: function (event, element) {
+                //     cc('eventRender');
+                //     element.bind('mousedown', function (e) {
+                //         if (e.which == 3) {
+                //             alert('Right mouse button pressed');
+                //         }
+                //     });
+                // },
+
+                eventRender: function (event, element, view) {
+                    // cc('====>eventRender');
+                    return;
+                    // // cc('event==');
+                    // cc(event.id);
+                    // cc(event.resourceId);
+                    // cc(event.resourceId.split('_')[0]);
+                    // cc(event.resourceId.split('_')[1]);
+                    // if (!ScheduleEvents.hasOwnProperty(event.id)) {
+                    //     ScheduleEvents[event.id] = {
+                    //         resourceId: event.resourceId,
+                    //         start: moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss'),
+                    //         end: moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss')
+                    //     };
+                    //     // cc(ScheduleEvents);
+                    //     // cc(orderTable);
+                    //     for (var i = 0; i < orderTable.dataSet.length; i++) {
+                    //         if (orderTable.dataSet[i].OrderNumber == event.id && orderTable.dataSet[i].WCG == event.resourceId.split('_')[0]) {
+                    //             // cc(orderTable.dataSet[i].OrderID);
+                    //             // cc(orderTable.dataSet[i].StartDate);
+                    //             // cc(orderTable.dataSet[i].StartTime);
+                    //             // cc(orderTable.dataSet[i].EndDate);
+                    //             // cc(orderTable.dataSet[i].EndTime);
+                    //             // cc(orderTable.dataSet[i].WCG);
+                    //             // cc(orderTable.dataSet[i].Status);
+                    //             // cc(orderTable.dataSet[i].Press);
+                    //             // cc('====');
+                    //             // cc(ScheduleEvents[event.id].resourceId);
+                    //             // cc(ScheduleEvents[event.id].start);
+                    //             // cc(ScheduleEvents[event.id].end);
+                    //             // cc('//////');
+                    //             orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    //             orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    //             // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
+                    //             // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
+                    //             // orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
+                    //             orderTable.dataSet[i].Press = ScheduleEvents[event.id].resourceId.split('_')[1];
+                    //             // cc(orderTable.dataSet[i].StartDate);
+                    //             // cc(orderTable.dataSet[i].EndDate);
+                    //             // cc(orderTable.dataSet[i].StartTime);
+                    //             // cc(orderTable.dataSet[i].EndTime);
+                    //             // cc(orderTable.dataSet[i].WCG);
+                    //             // cc(orderTable.dataSet[i].Press);
+                    //             break;
                     //         }
-                    //     });
-                    // },
+                    //     }
+                    //     orderTable.reload();
+                    // } else if (ScheduleEvents[event.id].resourceId != event.resourceId ||
+                    //     ScheduleEvents[event.id].start != moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss') ||
+                    //     ScheduleEvents[event.id].end != moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss')) {
+                    //
+                    //     if (ScheduleEvents[event.id].resourceId != event.resourceId) {
+                    //         ActivityLogADD('Assigned', event.id + ' => ' + event.resourceId + ' ', event.id);
+                    //     }
+                    //
+                    //     // ScheduleEvents[event.id].resourceId = event.resourceId;
+                    //     // ScheduleEvents[event.id].start = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    //     // ScheduleEvents[event.id].end = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    //     // cc(ScheduleEvents);
+                    //
+                    //     // var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
+                    //     // MESM_ProductionOrdersListFromSAP
+                    //     // cc('event.id.substring(8) ' + event.id.substring(8));;
+                    //
+                    //     // for (var i = 0; i < orderTable.dataSet.length; i++) {
+                    //     //     // cc(orderTable.dataSet[i]);
+                    //     //     if (orderTable.dataSet[i].OrderNumber == event.id && orderTable.dataSet[i].WCG == event.resourceId.split('_')[0]) {
+                    //     //         _ID = orderTable.dataSet[i].ID;
+                    //     //         _OrderNumber = event.id;
+                    //     //         _Quantity = orderTable.dataSet[i].Quantity;
+                    //     //         _Status = orderTable.dataSet[i].Status;
+                    //     //         _SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    //     //         _SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    //     //         // _Press = ScheduleEvents[event.id].resourceId;
+                    //     //         // cc(orderTable.dataSet[i].OrderID);
+                    //     //         // cc(orderTable.dataSet[i].StartDate);
+                    //     //         // cc(orderTable.dataSet[i].StartTime);
+                    //     //         // cc(orderTable.dataSet[i].EndDate);
+                    //     //         // cc(orderTable.dataSet[i].EndTime);
+                    //     //         // cc(orderTable.dataSet[i].WCG);
+                    //     //         // cc(orderTable.dataSet[i].Status);
+                    //     //         // cc(orderTable.dataSet[i].Press);
+                    //     //         // cc('====');
+                    //     //         // cc(ScheduleEvents[event.id].resourceId);
+                    //     //         // cc(ScheduleEvents[event.id].start);
+                    //     //         // cc(ScheduleEvents[event.id].end);
+                    //     //         // cc('//////');
+                    //     //         orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    //     //         orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    //     //         // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
+                    //     //         // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
+                    //     //         // orderTable.dataSet[i].WCG = event.resourceId.split('_')[0];
+                    //     //         orderTable.dataSet[i].Press = event.resourceId.split('_')[1];
+                    //     //         // cc(orderTable.dataSet[i].StartDate);
+                    //     //         // cc(orderTable.dataSet[i].EndDate);
+                    //     //         // cc(orderTable.dataSet[i].StartTime);
+                    //     //         // cc(orderTable.dataSet[i].EndTime);
+                    //     //         // cc(orderTable.dataSet[i].WCG);
+                    //     //         // cc(orderTable.dataSet[i].Press);
+                    //     //         break;
+                    //     //     }
+                    //     // }
+                    //     // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                    //     // console.log(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press.split('_')[1]);
+                    //     // MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, event.resourceId.split('_')[1]);
+                    //     // orderTable.reload();
+                    //     //wxy
+                    //     // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+                    //     // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+                    //     // _Status = 'Hold';
+                    //     // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                    //     // removeScheduleEvent(_OrderNumber);
+                    //     // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+                    //     // ActivityLogADD('Assigned', event.id + ' => ' + e.id + ' ', ScheduleEvents[event.id].resourceId);
+                    //
+                    //     // cc(event);
+                    // }
+                    // cc('eventRender');
+                    // cc(event.id);
+                    // cc(event.resourceId);
+                    // // cc(event.title);
+                    // // cc(event.start._d);
+                    // cc(moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss'));
+                    // cc(moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss'));
 
-                    eventRender: function (event, element, view) {
-                        cc('====>eventRender');
-                        cc('event==');
-                        cc(event.id);
-                        cc(event.resourceId);
-                        cc(event.resourceId.split('_')[0]);
-                        cc(event.resourceId.split('_')[1]);
-                        if (!ScheduleEvents.hasOwnProperty(event.id)) {
-                            ScheduleEvents[event.id] = {
-                                resourceId: event.resourceId,
-                                start: moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss'),
-                                end: moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss')
-                            };
-                            // cc(ScheduleEvents);
-                            // cc(orderTable);
-                            for (var i = 0; i < orderTable.dataSet.length; i++) {
-                                if (orderTable.dataSet[i].OrderNumber == event.id && orderTable.dataSet[i].WCG == event.resourceId.split('_')[0]) {
-                                    // cc(orderTable.dataSet[i].OrderID);
-                                    // cc(orderTable.dataSet[i].StartDate);
-                                    // cc(orderTable.dataSet[i].StartTime);
-                                    // cc(orderTable.dataSet[i].EndDate);
-                                    // cc(orderTable.dataSet[i].EndTime);
-                                    // cc(orderTable.dataSet[i].WCG);
-                                    // cc(orderTable.dataSet[i].Status);
-                                    // cc(orderTable.dataSet[i].Press);
-                                    // cc('====');
-                                    // cc(ScheduleEvents[event.id].resourceId);
-                                    // cc(ScheduleEvents[event.id].start);
-                                    // cc(ScheduleEvents[event.id].end);
-                                    // cc('//////');
-                                    orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
-                                    orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
-                                    // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
-                                    // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
-                                    // orderTable.dataSet[i].WCG = ScheduleEvents[event.id].resourceId.split('_')[0];
-                                    orderTable.dataSet[i].Press = ScheduleEvents[event.id].resourceId.split('_')[1];
-                                    // cc(orderTable.dataSet[i].StartDate);
-                                    // cc(orderTable.dataSet[i].EndDate);
-                                    // cc(orderTable.dataSet[i].StartTime);
-                                    // cc(orderTable.dataSet[i].EndTime);
-                                    // cc(orderTable.dataSet[i].WCG);
-                                    // cc(orderTable.dataSet[i].Press);
-                                    break;
-                                }
-                            }
-                            orderTable.reload();
-                        } else if (ScheduleEvents[event.id].resourceId != event.resourceId ||
-                            ScheduleEvents[event.id].start != moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss') ||
-                            ScheduleEvents[event.id].end != moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss')) {
+                    // var elm=document.getElementById(event.id);
+                    // cc('elm');
+                    // cc(elm);
 
-                            if (ScheduleEvents[event.id].resourceId != event.resourceId) {
-                                ActivityLogADD('Assigned', event.id + ' => ' + event.resourceId + ' ', event.id);
-                            }
-
-                            ScheduleEvents[event.id].resourceId = event.resourceId;
-                            ScheduleEvents[event.id].start = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
-                            ScheduleEvents[event.id].end = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
-                            // cc(ScheduleEvents);
-
-                            var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
-                            // MESM_ProductionOrdersListFromSAP
-                            // cc('event.id.substring(8) ' + event.id.substring(8));;
-
-                            for (var i = 0; i < orderTable.dataSet.length; i++) {
-                                cc(orderTable.dataSet[i]);
-                                if (orderTable.dataSet[i].OrderNumber == event.id && orderTable.dataSet[i].WCG == event.resourceId.split('_')[0]) {
-                                    _ID = orderTable.dataSet[i].ID;
-                                    _OrderNumber = event.id;
-                                    _Quantity = orderTable.dataSet[i].Quantity;
-                                    _Status = orderTable.dataSet[i].Status;
-                                    _SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
-                                    _SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
-                                    // _Press = ScheduleEvents[event.id].resourceId;
-                                    // cc(orderTable.dataSet[i].OrderID);
-                                    // cc(orderTable.dataSet[i].StartDate);
-                                    // cc(orderTable.dataSet[i].StartTime);
-                                    // cc(orderTable.dataSet[i].EndDate);
-                                    // cc(orderTable.dataSet[i].EndTime);
-                                    // cc(orderTable.dataSet[i].WCG);
-                                    // cc(orderTable.dataSet[i].Status);
-                                    // cc(orderTable.dataSet[i].Press);
-                                    // cc('====');
-                                    // cc(ScheduleEvents[event.id].resourceId);
-                                    // cc(ScheduleEvents[event.id].start);
-                                    // cc(ScheduleEvents[event.id].end);
-                                    // cc('//////');
-                                    orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
-                                    orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
-                                    // orderTable.dataSet[i].StartTime = moment.utc(event.start._d).format('HH:mm:ss');
-                                    // orderTable.dataSet[i].EndTime = moment.utc(event.end._d).format('HH:mm:ss');
-                                    // orderTable.dataSet[i].WCG = event.resourceId.split('_')[0];
-                                    orderTable.dataSet[i].Press = event.resourceId.split('_')[1];
-                                    // cc(orderTable.dataSet[i].StartDate);
-                                    // cc(orderTable.dataSet[i].EndDate);
-                                    // cc(orderTable.dataSet[i].StartTime);
-                                    // cc(orderTable.dataSet[i].EndTime);
-                                    // cc(orderTable.dataSet[i].WCG);
-                                    // cc(orderTable.dataSet[i].Press);
-                                    break;
-                                }
-                            }
-                            // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                            // console.log(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press.split('_')[1]);
-                            updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, event.resourceId.split('_')[1]);
-                            orderTable.reload();
-                            //wxy
-                            // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
-                            // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-                            // _Status = 'Hold';
-                            // updOrder(_OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                            // removeScheduleEvent(_OrderNumber);
-                            // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                            // ActivityLogADD('Assigned', event.id + ' => ' + e.id + ' ', ScheduleEvents[event.id].resourceId);
-
-                            // cc(event);
-                        }
-                        // cc('eventRender');
-                        // cc(event.id);
-                        // cc(event.resourceId);
-                        // // cc(event.title);
-                        // // cc(event.start._d);
-                        // cc(moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss'));
-                        // cc(moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss'));
-
-                        // var elm=document.getElementById(event.id);
-                        // cc('elm');
-                        // cc(elm);
-
-                        // element.bind('mousedown', function (e) {
-                        //     if (e.which == 3) {
-                        //         alert('Right mouse button pressed');
-                        //     }
-                        // });
-                        // $.contextMenu({
-                        //     selector: '.fc-timeline-event',
-                        //     callback: function (key, options) {
-                        //         // callbk(key, options);
-                        //         // var m = "clicked..: " + key;
-                        //         // window.console && console.log(m) || alert(m);
-                        //     },
-                        //     items: {
-                        //         "edit": {name: "Edit", icon: "edit"},
-                        //         "cut": {name: "Cut", icon: "cut"},
-                        //         "copy": {name: "Copy", icon: "copy"},
-                        //         "paste": {name: "Paste", icon: "paste"},
-                        //         "delete": {name: "Delete", icon: "delete"},
-                        //         "sep1": "---------",
-                        //         "quit": {name: "Quit", icon: "quit"}
-                        //     }
-                        // });
-                    },
-                    dayClick: function () {
+                    // element.bind('mousedown', function (e) {
+                    //     if (e.which == 3) {
+                    //         alert('Right mouse button pressed');
+                    //     }
+                    // });
+                    // $.contextMenu({
+                    //     selector: '.fc-timeline-event',
+                    //     callback: function (key, options) {
+                    //         // callbk(key, options);
+                    //         // var m = "clicked..: " + key;
+                    //         // window.console && console.log(m) || alert(m);
+                    //     },
+                    //     items: {
+                    //         "edit": {name: "Edit", icon: "edit"},
+                    //         "cut": {name: "Cut", icon: "cut"},
+                    //         "copy": {name: "Copy", icon: "copy"},
+                    //         "paste": {name: "Paste", icon: "paste"},
+                    //         "delete": {name: "Delete", icon: "delete"},
+                    //         "sep1": "---------",
+                    //         "quit": {name: "Quit", icon: "quit"}
+                    //     }
+                    // });
+                },
+                dayClick: function () {
 //                    $('#calendar').fullCalendar('next');
-                    },
+                },
 
-                    eventMouseout: function (event, jsEvent, view) {
-                        // cc("eventMouseout");
-                        // cc(event);
-                        // cc(jsEvent);
-                        // cc(view);
-                    },
+                eventMouseout: function (event, jsEvent, view) {
+                    // cc("eventMouseout");
+                    // cc(event);
+                    // cc(jsEvent);
+                    // cc(view);
+                },
 
-                    slotWidth: 15,
-                    height: 700,
-                    selectable: true,
-                    selectHelper: true,
-                    customButtons:
-                        {
-                            myCustomButton: {
-                                text: 'CustomButton',
-                                click:
+                slotWidth: 15,
+                height: 700,
+                selectable: true,
+                selectHelper: true,
+                customButtons:
+                    {
+                        myCustomButton: {
+                            text: 'CustomButton',
+                            click:
 
-                                    function () {
-                                        // cc('CustomButton');
-                                        // cc('custom button');
+                                function () {
+                                    // cc('CustomButton');
+                                    // cc('custom button');
 // * * *
 //                            $('#calendar').fullCalendar('removeEvents', 111);
 
@@ -1656,7 +1688,7 @@
 // //                            cc(ce[0].id);
 // //                            cc(ce[0].start);
 //                         ce.t
-                                        $('#calendar').fullCalendar('updateEvent', event);
+                                    $('#calendar').fullCalendar('updateEvent', event);
 //                            cc(ce.end);
 // * * *                     $('#calendar').fullCalendar('refetchEvents');
 
@@ -1665,60 +1697,60 @@
 // * * *                     $('#calendar').fullCalendar('addEventSource');
 
 // * * *                     $('#calendar').fullCalendar('removeEventSource');
-                                    }
+                                }
 
-                                ,
-                                icon: 'left-double-arrow'
-                            }
+                            ,
+                            icon: 'left-double-arrow'
                         }
-                    ,
-                    header: {
-                        left: 'today prev,next myCustomButton',
-                        center:
-                            'title',
-                        right:
-                            'timelineDay,timeline3D,timeline1W,timeline1M'
                     }
-                    ,
+                ,
+                header: {
+                    left: 'today prev,next myCustomButton',
+                    center:
+                        'title',
+                    right:
+                        'timelineDay,timeline3D,timeline1W,timeline1M'
+                }
+                ,
 
-                    defaultView: 'timelineDay',
+                defaultView: 'timelineDay',
 //                visibleRange doesn't work for 'timelineDay'
 //                visibleRange : {
 //                    start: '2017-11-03T00:00:00',
 //                    end: '2017-11-03T07:00:00'
 //                },
 
-                    validRange:
-                        {   //works for timelineDay
-                            start: today + 'T00:00:00',
-                            end: today + 'T24:00:00'
-                        },
-
-                    views: {
-                        timeline3D: {
-                            type: 'timeline',
-                            duration: {days: 3}
-                        },
-                        timeline1W: {
-                            type: 'timeline',
-                            duration: {week: 1}
-                        },
-                        // timeline1M: {
-                        //     type: 'timeline',
-                        //     duration: {month: 1}
-                        // }
+                validRange:
+                    {   //works for timelineDay
+                        // start: today + 'T00:00:00',
+                        // end: today + 'T24:00:00'
                     },
 
-                    resourceGroupField: 'WorkingCenter',
-                    resourceLabelText:
-                        'WorkCenter: ',
-                    resources:
-                    eventSources,
-                    // eventOverlap: false, // will cause the event to take up entire resource height
-                    resourceAreaWidth:
-                        '300px',
-                    events:
-                        [
+                views: {
+                    timeline3D: {
+                        type: 'timeline',
+                        duration: {days: 3}
+                    },
+                    timeline1W: {
+                        type: 'timeline',
+                        duration: {week: 1}
+                    },
+                    // timeline1M: {
+                    //     type: 'timeline',
+                    //     duration: {month: 1}
+                    // }
+                },
+
+                resourceGroupField: 'WorkingCenter',
+                resourceLabelText:
+                    'WorkCenter: ',
+                resources:
+                eventSources,
+                // eventOverlap: false, // will cause the event to take up entire resource height
+                resourceAreaWidth:
+                    '300px',
+                events:
+                    [
 //                    {
 //                        id: 'GROUP1_PRESS07',
 //                        resourceId: 'GROUP1_PRESS07_39',
@@ -1806,54 +1838,92 @@
 //                        title: 'M016',
 //                        description: 'This is a  event'
 //                    }
-                    ],
+                ],
 
 
-                    schedulerLicenseKey:
-                        'CC-Attribution-NonCommercial-NoDerivatives'
-                })
-                ;
-                // $("[href]")
-                // var elms = $("[data-resource-id]");
-                var elms = $("[data-resource-id][id]");
-                // fc-event-container
-                // cc('[data-resource-id]');
-                // cc(elms);
-                $.each(elms, function (key, e) {
+                schedulerLicenseKey:
+                    'CC-Attribution-NonCommercial-NoDerivatives'
+            })
+            ;
+            // $("[href]")
+            // var elms = $("[data-resource-id]");
+            var elms = $("[data-resource-id][id]");
+            // fc-event-container
+            // cc('[data-resource-id]');
+            // cc(elms);
+            $.each(elms, function (key, e) {
 
-                    // cc(e.id);
+                // cc(e.id);
 
-                    $.contextMenu({
-                        // selector: "[data-resource-id]",
-                        // selector: "[data-resource-id][id]",
-                        selector: "#" + e.id,
-                        callback: function (key, options) {
-                            // cc(this);
-                            callbk(key, options);
-                            // var m = "clicked..: " + key;
-                            // window.console && console.log(m) || alert(m);
-                        },
-                        items: {
-                            "title": {name: e.id, icon: "fa-cog"},
-                            "sep1": "---------",
-                            "edit": {name: "Edit", icon: "fa-edit"},
-                            "cut": {name: "Cut", icon: "fa-scissors"},
-                            "copy": {name: "Copy", icon: "fa-files-o"},
-                            "paste": {name: "Paste", icon: "fa-clipboard"},
-                            "delete": {name: "Delete", icon: "fa-times"},
-                            // "quit": {name: "Quit", icon: "quit"}
-                        }
-                    });
+                $.contextMenu({
+                    // selector: "[data-resource-id]",
+                    // selector: "[data-resource-id][id]",
+                    selector: "#" + e.id,
+                    callback: function (key, options) {
+                        // cc(this);
+                        callbk(key, options);
+                        // var m = "clicked..: " + key;
+                        // window.console && console.log(m) || alert(m);
+                    },
+                    items: {
+                        "title": {name: e.id, icon: "fa-cog"},
+                        "sep1": "---------",
+                        "edit": {name: "Edit", icon: "fa-edit"},
+                        "cut": {name: "Cut", icon: "fa-scissors"},
+                        "copy": {name: "Copy", icon: "fa-files-o"},
+                        "paste": {name: "Paste", icon: "fa-clipboard"},
+                        "delete": {name: "Delete", icon: "fa-times"},
+                        // "quit": {name: "Quit", icon: "quit"}
+                    }
                 });
+            });
 
 
-                var callbk = function (key, options) {
-                    // cc(key);
-                    // cc(options);
-                }
-                // }
+            var callbk = function (key, options) {
+                // cc(key);
+                // cc(options);
             }
-        ;
+            // }
+        }
+
+        function orderTableRefresh(event) {
+            // cc(event);
+            // var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
+            for (var i = 0; i < orderTable.dataSet.length; i++) {
+                // cc(orderTable.dataSet[i]);
+                if (orderTable.dataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.dataSet[i].WCG == event.resourceId.split('_')[0]) {
+                    // _ID = orderTable.dataSet[i].ID;
+                    // _OrderNumber = event.id;
+                    // _Quantity = orderTable.dataSet[i].Quantity;
+                    // _Status = 'Scheduled';
+                    // _SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    // _SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    // _Press = event.resourceId.split('_')[1];
+
+                    orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    orderTable.dataSet[i].Press = event.resourceId.split('_')[1];
+                    orderTable.dataSet[i].Status = 'Scheduled';
+                    orderTable.reload();
+
+                    MESM_OrderOperation_UPD(
+                        orderTable.dataSet[i].ID,
+                        orderTable.dataSet[i].Quantity,
+                        orderTable.dataSet[i].Status,
+                        orderTable.dataSet[i].SchedStart,
+                        orderTable.dataSet[i].SchedFinish,
+                        orderTable.dataSet[i].Press
+                    );
+
+                    if (_eventDragStart.resourceId != event.resourceId) {
+                        ActivityLogADD('Assigned', orderTable.dataSet[i].OrderNumber + '_' + orderTable.dataSet[i].Sort + ' => ' +
+                            event.resourceId.split('_')[1] + ' ', orderTable.dataSet[i].OrderNumber + '_' + orderTable.dataSet[i].Sort);
+                        // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                    }
+                    break;
+                }
+            }
+        }
 
         var daterangepickerInit = function () {
             if ($('#m_dashboard_daterangepicker').length == 0) {
@@ -1941,7 +2011,7 @@
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     // document.getElementById("demo").innerHTML = this.responseText;
-                    cc(urlProc + ' succeed.');
+                    // cc(urlProc + ' //');
                 }
             };
             xhttp.open("GET", urlProc, true);
@@ -1951,21 +2021,20 @@
         function quickAction(e) {
             cc('quickAction');
             var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
+            cc(TableCOL);
             var _ID = TableCOL[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _OrderNumber = TableCOL[3].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Quantity = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-
             var _SchedStart = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            // var _StartTime = moment(TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('HH:mm:ss');
             var _SchedFinish = TableCOL[7].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            // var _EndTime = moment(TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "")).format('HH:mm:ss');
             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
             var _During = _Action.indexOf('~') >= 0 ? parseInt(_Action.split('~')[1]) : 0;
             var _WorkCenterID = 0;
+            var _Sort = TableCOL[12].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 
-            cc('_ID ' + _ID);
+            // cc('_ID ' + _ID);
             // cc(_During);
 
             if ((_Status == 'Unscheduled' || _Status == 'Scheduled') && _Action.indexOf('assign') >= 0) {
@@ -1973,58 +2042,50 @@
                 // if (_During < 240) {
                 //     _During = 240
                 // }
-                _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
-                _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-                if (_Status == 'Unscheduled') {
-                    ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id + ' ', _OrderNumber);
-                    _Status = 'Scheduled';
-                }
-                // updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                removeScheduleEvent(_OrderNumber);
-                addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                // cc('addScheduleEvent');
-                // cc(e.id);
-                // cc(_OrderNumber);
-                // cc(_SchedStart);
-                // cc(_SchedFinish);
+                // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+                // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+                _Status = 'Scheduled';
+                removeScheduleEvent(_OrderNumber + '_' + _Sort);
+                ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
             }
 
-            if ((_Status == 'No Material' || _Status == 'Unscheduled') && _Action.indexOf('Cancelled') >= 0) {
-                // cc(_Status + ' >Cancelled');
-                _SchedStart = '';
-                _SchedFinish = '';
-                _Status = 'Cancelled';
-                _Press = '';
-                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                removeScheduleEvent(_OrderNumber);
-                ActivityLogADD('Cancelled', _OrderNumber + ' ', '');
+            if (_Action.indexOf('Cancelled') >= 0) {
+                // // cc(_Status + ' >Cancelled');
+                // _SchedStart = '';
+                // _SchedFinish = '';
+                // _Status = 'Cancelled';
+                // _Press = '';
+                MESM_OrderOperation_UPD(_ID, _Quantity, 'Cancelled', '', '', '');
+                removeScheduleEvent(_OrderNumber + '_' + _Sort);
+                ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
             }
 
             if (_Status == 'Scheduled' && _Action.indexOf('Unscheduled') >= 0) {
-                cc(_Status + ' >Unscheduled');
-                _SchedStart = '';
-                _SchedFinish = '';
-                _Status = 'Unscheduled';
-                _Press = '';
-                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                removeScheduleEvent(_OrderNumber);
-                // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                ActivityLogADD('Unscheduled', _OrderNumber + ' ', '');
+                // // cc(_Status + ' >Unscheduled');
+                // _SchedStart = '';
+                // _SchedFinish = '';
+                // _Status = 'Unscheduled';
+                // _Press = '';
+                MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
+                removeScheduleEvent(_OrderNumber + '_' + _Sort);
+                ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
             }
 
-            if (_Status == 'Hold' && _Action.indexOf('Scheduled') >= 0) {
-                // cc(_Status + ' >Scheduled');
-                // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
-                // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-                _SchedStart = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-                _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-                _Press = TableCOL[9].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-                _Status = 'Scheduled';
-                updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                // removeScheduleEvent(_OrderNumber);
-                // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
-                ActivityLogADD('Scheduled', _OrderNumber + ' ', '');
-            }
+            // if (_Status == 'Hold' && _Action.indexOf('Scheduled') >= 0) {
+            //     // cc(_Status + ' >Scheduled');
+            //     // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+            //     // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+            //     _SchedStart = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            //     _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            //     _Press = TableCOL[9].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            //     _Status = 'Scheduled';
+            //     MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+            //     // removeScheduleEvent(_OrderNumber);
+            //     // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
+            //     ActivityLogADD('Scheduled', _OrderNumber + ' ', '');
+            // }
 
 
             // if (_Status == 'Unscheduled') {
@@ -2264,15 +2325,15 @@
             orderTable.reload();
         }
 
-        function updOrder(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
-            cc('updOrder::updOrder');
+        function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
+            // cc('updOrder::updOrder');
 
             if (_SchedStart == '' || _SchedFinish == '') {
-                for (var v in MESM_OrderOperationRAW) {
+                for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
                     // cc(MESM_OrderOperation);
-                    if (MESM_OrderOperationRAW[v].ID == _ID) {
-                        _SchedStart = MESM_OrderOperationRAW[v].EarlySchedStartDate + ' ' + MESM_OrderOperationRAW[v].EarlySchedStartTime;
-                        _SchedFinish = MESM_OrderOperationRAW[v].EarlySchedFinDate + ' ' + MESM_OrderOperationRAW[v].EarlySchedFinTime;
+                    if (MESM_OrderOperationRAW[n].ID == _ID) {
+                        _SchedStart = MESM_OrderOperationRAW[n].EarlySchedStartDate + ' ' + MESM_OrderOperationRAW[n].EarlySchedStartTime;
+                        _SchedFinish = MESM_OrderOperationRAW[n].EarlySchedFinDate + ' ' + MESM_OrderOperationRAW[n].EarlySchedFinTime;
                         break;
                     }
                 }
@@ -2348,48 +2409,47 @@
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     // document.getElementById("demo").innerHTML = this.responseText;
-                    cc(urlProc + ' succeed........................');
-
+                    cc(urlProc + ' //');
                 }
             };
             xhttp.open("GET", urlProc, true);
             xhttp.send();
         }
 
-        function ActivityLogADD(ev, _Action, tag) {
-            cc('ev ' + ev);
-            cc('_Action ' + _Action);
-            cc('tag ' + tag);
+        function ActivityLogADD(actType, actMSG, actID) {
+            // cc('ev ' + ev);
+            // cc('_Action ' + _Action);
+            // cc('tag ' + tag);
             var occurred = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 19);
             var receiver = '';
             var events = '';
 
-            if (ev == 'Assigned') {
+            if (actType == 'Assigned') {
 
                 events = '<span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
                     '<span class="m-list-timeline__text"><a href="%23' +
-                    tag +
+                    actID +
                     '" class="m-link">%23' +
-                    _Action +
+                    actMSG +
                     '</a></span>';
 
-            } else if (ev == 'Unscheduled') {
+            } else if (actType == 'Unscheduled') {
                 events =
                     '<span class="m-list-timeline__badge m-list-timeline__badge--primary"></span>' +
                     '<span class="m-list-timeline__text">%23' +
-                    _Action +
+                    actMSG +
                     '<span class="m-badge m-badge--primary  m-badge--wide">Unscheduled</span></span>';
-            } else if (ev == 'Cancelled') {
+            } else if (actType == 'Cancelled') {
                 events =
                     '<span class="m-list-timeline__badge m-list-timeline__badge--metal "></span>' +
                     '<span class="m-list-timeline__text">%23' +
-                    _Action +
+                    actMSG +
                     '<span class="m-badge m-badge--metal m-badge--wide">Cancelled</span></span>';
-            } else if (ev == 'Scheduled') {
+            } else if (actType == 'Scheduled') {
                 events =
                     '<span class="m-list-timeline__badge m-list-timeline__badge--success "></span>' +
                     '<span class="m-list-timeline__text">%23' +
-                    _Action +
+                    actMSG +
                     '<span class="m-badge m-badge--success  m-badge--wide">Scheduled</span></span>';
             }
 
@@ -2419,8 +2479,8 @@
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        cc(urlProc);
-                        cc(this.responseText);
+                        // cc(urlProc+' //');
+                        // cc(this.responseText);
                         ActivityLogGET();
                     }
                 };
@@ -2446,7 +2506,7 @@
 
         }
 
-        function addScheduleEvent(id, title, start, end) {
+        function addScheduleEvent(resourceId, elementId, schedleStart, scheduleFinsh) {
 
             // var tbOrderID = _OrderID;
             var today = new Date().toISOString().substr(0, 10);
@@ -2496,14 +2556,14 @@
 
 
             $('#calendar').fullCalendar('renderEvent', {
-                id: title,
-                resourceId: id,
+                id: elementId,
+                resourceId: resourceId,
                 // start: today + ' ' + start,
-                start: start,
+                start: schedleStart,
                 // end: today + ' ' + end,
-                end: end,
-                title: title,
-                description: id,
+                end: scheduleFinsh,
+                title: elementId,
+                description: resourceId,
                 color: colors[Math.round(Math.random() * 8)]
             });
 
@@ -2515,7 +2575,7 @@
             // cc(document.getElementById(title));
 
             $.contextMenu({
-                selector: '#' + title,
+                selector: '#' + elementId,
                 callback: function (key, options) {
                     // callbk(key, options);
                     // cc(key);
@@ -2523,25 +2583,31 @@
                     // cc(options.selector);
 
                     if (key == 'delete') {
-
-                        removeScheduleEvent(options.selector.substring(1));
-
+                        cc(options.selector.substring(1).split('_')[0]);
+                        cc(options.selector.substring(1).split('_')[1]);
                         for (var i = 0; i < orderTable.dataSet.length; i++) {
-                            if (orderTable.dataSet[i].OrderNumber == options.selector.substring(1)) {
-                                _Status = 'Unscheduled';
-                                // _Press = '';
-                                orderTable.dataSet[i].Press = '';
-                                orderTable.dataSet[i].Status = 'U';
+                            if (orderTable.dataSet[i].OrderNumber == options.selector.substring(1).split('_')[0] &&
+                                orderTable.dataSet[i].Sort == options.selector.substring(1).split('_')[1]) {
+                                // cc(orderTable.dataSet[i].OrderNumber );
+                                // cc(orderTable.dataSet[i].Sort );
+                                //
+                                // orderTable.dataSet[i].Press = '';
+                                // orderTable.dataSet[i].Status = 'Unscheduled';
+
+                                removeScheduleEvent(options.selector.substring(1));
+                                // MESM_OrderOperation_UPD();
+                                MESM_OrderOperation_UPD(orderTable.dataSet[i].ID, orderTable.dataSet[i].Quantity, 'Unscheduled', '', '', '');
+                                orderTable.reload();
                                 break;
                             }
                         }
-                        orderTable.reload();
+
                     }
                     // var m = "clicked..: " + key;
                     // window.console && console.log(m) || alert(m);
                 },
                 items: {
-                    "title": {name: title, icon: "fa-calendar"},
+                    "title": {name: elementId, icon: "fa-calendar"},
                     "sep1": "---------",
                     "edit": {name: "Edit", icon: "fa-edit"},
                     "cut": {name: "Cut", icon: "fa-scissors"},
@@ -2556,6 +2622,10 @@
             //     console.log(key);
             //     console.log(options);
             // }
+        }
+
+        function getEventSources() {
+            $('#calendar').fullCalendar('getEventSources');
         }
 
         function removeScheduleEvent(id) {

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var dateTimeNow = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substr(0, 19);
+    var _dateTimeNow = new Date(new Date() - (new Date().getTimezoneOffset() * 60000) - 24 * 3600000).toISOString().substr(0, 19);
+
+    var urlShiftA =
+        '/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_LinePerformance' +
+        '&Param.1=' + dateTimeNow.substr(0, 10) +
+        '&Param.2=' + dateTimeNow.substr(0, 10) +
+        '&Param.3=' + selected_unitName +
+        '&Param.4=' + lastOpreation +
+        '&Param.5=' + 'A' +
+        "&ts=" + timestamp + "&Content-Type=text/xml";
+
+    var urlShiftB = dayTime ?
+        '/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_LinePerformance' +
+        '&Param.1=' + dateTimeNow.substr(0, 10) +
+        '&Param.2=' + dateTimeNow.substr(0, 10) +
+        '&Param.3=' + selected_unitName +
+        '&Param.4=' + lastOpreation +
+        '&Param.5=' + 'B' +
+        "&ts=" + timestamp + "&Content-Type=text/xml" :
+        '/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_LinePerformance' +
+        '&Param.1=' + _dateTimeNow.substr(0, 10) +
+        '&Param.2=' + _dateTimeNow.substr(0, 10) +
+        '&Param.3=' + selected_unitName +
+        '&Param.4=' + lastOpreation +
+        '&Param.5=' + 'B' +
+        "&ts=" + timestamp + "&Content-Type=text/xml";
+</script>
+</body>
+</html>
