@@ -1,0 +1,4121 @@
+<!DOCTYPE HTML>
+
+<html >
+
+<head>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=11;no-cache" />
+    <meta charset="UTF-8"/>
+    <title>Hunter Douglas</title>
+
+    <link rel="stylesheet" type="text/css" href="css/default.css"></link>
+
+    <style>
+
+        #header {
+            position:absolute;
+            top:5px;
+            left:30px;
+            width: 95%;
+            height: 10%;
+            padding-left: 5px;
+        // opacity:0.9;
+        //background-image: url('Common/img/asset2c.png');
+        }
+
+        #top_navigation {
+            position:absolute;
+            top:95px;
+            left:30px;
+            width: 95%;
+            height: 15%;
+            padding-left: 5px;
+            padding-top: 10px;
+        }
+
+        #main_content {
+            position:absolute;
+            width: 95%;
+            height: 65%;
+            top:145px;
+            left:30px;
+        }
+
+        #matrixRuntime{
+            border: 1px solid #007dc0;
+            border-radius: 5px;
+            padding: 5px 5px 5px 5px;
+        }
+
+        #app_title {
+            width: 95%;
+            text-align: center;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 32px;
+            color: #007dc0;
+        }
+
+        #page_title {
+            position:absolute;
+            top:85px;
+            width: 400px;
+            text-align: center;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 62px;
+            color: #cfcfcf;
+        }
+
+        #matrixBottomButtons {
+            margin:10px auto;
+        }
+
+        #TV-MachineName {
+            text-align: left;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 28px;
+            color: #007dc0;
+        }
+
+        #TV-MachineID {
+            text-align: left;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 62px;
+            color: #cfcfcf;
+        }
+
+        #BT-LightGreen,#BT-LightYellow,#BT-LightWhite,#BT-LightRed{
+        //border-radius: 50%;
+            border:5px;
+            /*background-color: #007cc0 !important;*/
+        }
+
+        .greenButtonOff{
+            background-color: #b9d6b3 !important;
+            border: 5px solid #000000 !important;
+        }
+
+        .greenButtonOn{
+            background-color: #3ee222 !important;
+            border: 5px solid #88f975 !important;
+        }
+
+        .yellowButtonOff{
+            background-color:#e5e19e !important;
+            border: 5px solid #000000 !important;
+        }
+
+        .yellowButtonOn{
+            background-color: #f7e307 !important;
+            border: 5px solid #f7ec74 !important;
+        }
+
+        .whiteButtonOff{
+            background-color:#eaf1fc !important;
+            border: 5px solid #000000 !important;
+        }
+
+        .whiteButtonOn{
+            background-color: #dcf4f3 !important;
+            border: 5px solid #d4fcfb !important;
+        }
+
+        .redButtonOff{
+            background-color:#ddd0d3 !important;
+            border: 5px solid #000000 !important;
+        }
+
+        .redButtonOn{
+            background-color: #ef0433 !important;
+            border: 5px solid #ed5c5c !important;
+        }
+
+        #L-OrderInfo,#L-RuntimeInfo{
+            color: #007dc0;
+            font: 20px Arial, sans-serif;
+            height: 30px;
+            font-weight: bold;
+        }
+
+        #BT-OrderList{
+            font-weight: bold;
+            font-size:14px;
+            text-transform: uppercase;
+        }
+
+        /*  ACTIVE ORDER */
+
+        #L-OrderID, #L-OrderStartDate,#L-OrderPartID,#L-OrderPartName,#L-MoldID,
+        #L-StdCavitatiion,#L-OrderQTY,#L-StdCycleTime,#L-PartWeight,#L-BoxWeight{
+            font-family: "Lucida Grande", Tahoma;
+            font-size: 10px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            padding-left: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #TF-OrderID,#TF-OrderStartDate,#TF-OrderPartID,#TF-MoldID,
+        #TF-StdCavitatiion,#TF-OrderQTY,#TF-StdCycleTime,#TF-PartWeight,#TF-BoxWeight{
+            font-size: 16px !important;
+            height: 35px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #TF-OrderPartName{
+            font-size: 15px !important;
+            height: 45px;
+        //font-weight: bold;
+            text-align: center;
+        }
+
+        /*  RUNTIME */
+
+        #L-GoodParts,#L-CycleTime,#L-FillTime,#L-BlockedCavities,#L-TotalRunningTime{
+            font-family: "Lucida Grande", Tahoma;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #BT-OrderStart{
+            font-weight: bold;
+            font-size:14px;
+            text-transform: uppercase;
+        }
+
+        #L-ScrapParts,#L-AutoTime,#L-RecovTime,#L-DownTime,#L-RemainingTime{
+            font-family: "Lucida Grande", Tahoma;
+            text-align:right;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #TF-GoodParts,#TF-ScrapParts,#TF-CycleTime,#TF-AutoTime,#TF-FillTime,#TF-RecovTime,
+        #TF-BlockedCavities,#TF-DownTime,#TF-TotalRunningTime,#TF-RemainingTime{
+            font-size: 40px !important;
+            height: 55px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /*  BUTTONS */
+
+        #BT-LogOn,#BT-ForcedScrap,#BT-LabelPrinting,#BT-Hold,#BT-PartsInspection,#BT-Emergency{
+            font-weight: bold;
+            font-size:14px;
+            text-transform: uppercase;
+        }
+
+        #BT-Cavitation,#BT-Downtime, #BT-Scrap,#BT-Components,#BT-Hystory {
+            font-weight: bold;
+            font-size:14px;
+        }
+
+        /****** OVERLAYS ******************/
+
+        #MatrixCV,#MatrixDT,#MatrixSC,#MatrixCOM,#MatrixINS,#MatrixOL,#MatrixLG,#Cell-TableOL {
+            margin:10px auto;
+        }
+
+        #L-CV,#L-MH,#L-DT ,#L-SC, #L-COM,#L-INS,#L-OL,#L-LG,#L-LB{
+            margin-top:15px;
+            padding:5px;
+            font-family: "Arial Black",Arial,Helvetica,sans-serif;
+            font-size:32px;
+            height:35px;
+        //color: #007dc0;
+        }
+
+        /*  LOGON */
+
+        #L-ClockID{
+            font-family: "Lucida Grande", Tahoma;
+            font-size: 9px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            padding-left: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #TF-ClockID{
+            font-size: 16px;
+            height: 35px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #BT-SubmitLogOn {
+            font-weight: bold;
+            font-size:14px;
+        }
+
+
+
+        /* CAVITY */
+
+        #L-MoldName,#L-MoldOriginalCavities,#L-MoldTotalCavities, #L-MoldDeficiency, #L-CavityID,
+        #L-CavityIDto,#L-BlockedReason,#L-BlockedHow, #L-RecordMoldHistory, #L-MoldBlockedCavities{
+            font-family: "Lucida Grande", Tahoma;
+            text-align:right;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #TF-MoldName,#TF-MoldOriginalCavities,#TF-MoldTotalCavities,#TF-MoldBlockedList{
+            font-size: 30px;
+            height: 55px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #TA-MoldHistoryValues{
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #dbox_CavityID, #dbox_CavityIDto {
+            font-size: 20px !important;
+            height: 55px;
+            font-weight: bold;
+            max-height:200px  !important;
+        }
+
+        #dbox_MoldDeficiency,#dbox_BlockedReason,#dbox_BlockedHow {
+            font-size: 20px;
+            height: 55px;
+            font-weight: bold;
+            text-align: center;
+            isplay:  inline-block;
+            max-height:  120px !important;
+            overflow-x:  hidden;
+        }
+
+        #CB-RecordMoldHistory{
+            width:25%  !important;
+            font-size: 20px;
+            zoom:2  !important;
+        }
+
+        /* MOLD HISTORY */
+
+        #L-PartWeightH,#L-RunnerWeightH,#L-ChillerH,#L-ChillerTempH,#L-ThermolatorH,#L-ThermolatorTempH,
+        #L-InjectionFillSpeed1H,#L-InjectionFillSpeed2H,#L-InjectionFillSpeed3H,#L-InjectionFillSpeed4H,#L-InjectionFillSpeed5H,#L-InjectionFillSpeed6H,
+        #L-MoldOpenH,#L-InjectionFillPos1H,#L-InjectionFillPos2H,#L-InjectionFillPos3H,#L-InjectionFillPos4H,#L-InjectionFillPos5H,
+        #L-OilTempH,#L-InjectHoldPP1H,#L-InjectHoldPP2H,#L-InjectHoldPP3H,#L-CoolingTimeH,#L-InjectionTimeH,
+        #L-BarrelTempNozzleH,#L-BarrelTempZone1H,#L-BarrelTempZone2H,#L-BarrelTempZone3H,#L-BarrelTempZone4H,#L-BarrelTempZone5H{
+            font-family: "Lucida Grande", Tahoma;
+            text-align:right;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+        }
+
+
+        #TF-MoldNumberH,#TF-PressH,#TF-TechnicianH,#TF-DrawingNumberH,
+        #TF-ResinH,#TF-ColorNameH,#TF-ColorNumberH,#TF-CurrentCavitationH,#TF-TotalCavitationH,#TF-CycleTimeH,
+        #TF-PartWeightH,#TF-RunnerWeightH,#TF-ChillerH,#TF-ChillerTempH,#TF-ThermolatorH,#TF-ThermolatorTempH,
+        #TF-InjectionFillSpeed1H,#TF-InjectionFillSpeed2H,#TF-InjectionFillSpeed3H,#TF-InjectionFillSpeed4H,#TF-InjectionFillSpeed5H,#TF-InjectionFillSpeed6H,
+        #TF-MoldOpenH,#TF-InjectionFillPos1H,#TF-InjectionFillPos2H,#TF-InjectionFillPos3H,#TF-InjectionFillPos4H,#TF-InjectionFillPos5H,
+        #TF-OilTempH,#TF-InjectHoldPP1H,#TF-InjectHoldPP2H,#TF-InjectHoldPP3H,#TF-CoolingTimeH,#TF-InjectionTimeH,
+        #TF-BarrelTempNozzleH,#TF-BarrelTempZone1H,#TF-BarrelTempZone2H,#TF-BarrelTempZone3H,#TF-BarrelTempZone4H,#TF-BarrelTempZone5H{
+            font-size: 16px !important;
+            height: 45px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #TF-PartNameH,#TF-DateH{
+            font-size: 14px !important;
+            height: 45px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
+        /* COMPONENTS */
+
+
+        /* DOWNTIME */
+
+
+        #L-DowntimeCode{
+            font-family: "Lucida Grande", Tahoma;
+            text-align:right;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #dbox_DowntimeCode {
+            font-size: 20px;
+            height: 55px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* LABEL */
+
+        #L-LabelOrderID,#L-LabelInspectionLot,#L-LabelQuantity,#L-LabelMachineID,#L-LabelBatchID,#L-LabelShift,
+        #L-LabelMaterialID,#L-LabelMaterialName,#L-LabelUOM,#L-LabelDocument,#L-LabelDate,#L-LabelAddres{
+            font-family: "Lucida Grande", Tahoma;
+            text-align:right;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #TF-LabelOrderID,#TF-LabelInspectionLot,#TF-LabelQuantity,#TF-LabelMachineID,#TF-LabelBatchID,#TF-LabelShift,
+        #TF-LabelMaterialID,#TF-LabelMaterialName,#TF-LabelUOM,#TF-LabelDocument,#TF-LabelDate,#TF-LabelAddress{
+            font-size: 30px;
+            height: 55px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* login */
+
+        #__cell74,#__cell75,#__cell76,#__cell78{
+            text-align:center;
+            height: 36px;
+        }
+
+        /* order list */
+
+        #__cell79{
+            text-align:center;
+            height: 36px;
+        }
+
+        /* cavities */
+
+        #__cell81, #__cell99 {
+            text-align:center;
+        }
+
+        #__cell82,#__cell84,#__cell86 ,#__cell88,#__cell90,#__cell92,#__cell94,#__cell96	{
+            padding:10px;
+            padding-right:20px;
+            text-align:right;
+        }
+
+        /* mold history */
+
+        #__cell100, #__cell101, #__cell102, #__cell103, #__cell104, #__cell105,
+        #__cell106, #__cell107, #__cell108, #__cell109, #__cell110, #__cell111,
+        #__cell112, #__cell113, #__cell114, #__cell115, #__cell116, #__cell117,
+        #__cell118, #__cell119, #__cell120, #__cell121, #__cell122, #__cell123,
+        #__cell124, #__cell125, #__cell126, #__cell127, #__cell128, #__cell129,
+        #__cell130, #__cell131, #__cell132, #__cell133, #__cell134, #__cell135,
+        #__cell136, #__cell137, #__cell138, #__cell139, #__cell140, #__cell141,
+        #__cell142, #__cell143, #__cell144, #__cell145, #__cell146, #__cell147,
+        #__cell148, #__cell149, #__cell150, #__cell151, #__cell152, #__cell153 ,
+        #__cell154, #__cell155, #__cell156, #__cell157, #__cell158, #__cell159,
+        #__cell160, #__cell161, #__cell162, #__cell163, #__cell164, #__cell165,
+        #__cell166, #__cell167, #__cell168, #__cell169, #__cell170, #__cell171{
+            text-align:center;
+        }
+
+        #Cell-TitleMH,#Cell-TitleMH2 {
+            text-align:center;
+        }
+
+        /* titles for now */
+        #__cell172, #__cell179, #__cell182, #__cell216{
+            text-align:center;
+        }
+        /* downtime */
+        #__cell174, #__cell177{
+            text-align:center;
+        }
+        /* scrap */
+
+        /* components */
+
+        /* inspection */
+
+        /* label */
+
+        /* SAPUI5 CSS */
+
+
+
+        .sapUiTf {
+            text-align: center !important;
+            font-weight: bold !important;
+            font-size: 18px  !important;
+        }
+
+        li.sapUiLbxI {
+            text-align: center !important;
+            display: table;
+        // list-style-position: inside;
+            border-bottom: 1px dotted black;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif ;
+            height:50px  !important;
+            width:100%;
+            font-size: 30px  !important;
+        //font-weight: bold ;
+        }
+
+        .sapUiLbxITxt {
+            text-align:center !important ;
+            font-size: 20px  !important;
+        }
+
+
+
+
+    </style>
+    <script
+            src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
+            id="sap-ui-bootstrap"
+            data-sap-ui-theme="sap_belize"
+            data-sap-ui-xx-bindingSyntax="complex"
+            data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.m">
+
+    </script>
+    <!--<script-->
+            <!--id="sap-ui-bootstrap"-->
+            <!--src="/sapui5/resources/sap-ui-core.js"-->
+            <!--data-sap-ui-theme="sap_goldreflection"-->
+            <!--data-sap-ui-xx-bindingSyntax="complex"-->
+            <!--data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.m"-->
+            <!--data-sap-ui-language="en" >-->
+    <!--</script>-->
+
+    <script type="text/javascript" src="Common/js/default.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="Common/css/keyboard.css">
+    <script type="text/javascript" src="Common/js/jquery.keyboard.js"></script>
+
+    <script >
+
+        //----------------GLOBAL VARIABLES--------------------------------
+
+        var oCore = sap.ui.getCore();
+        // station id
+        var selected_StationID =0;
+        var selected_StationName ='';
+        // scive order id
+        var selected_OrderID  =0;
+        var selected_OrderOperationID = "";
+        // activ order
+        var selected_ScheduledStart = "";
+        var selected_ScheduledQty = 0;
+        var selected_PartID = "";
+        var selected_PartName = "";
+        var selected_MaterialID = "";
+        var selected_ColorID = "";
+        var selected_ColorName = "";
+        var selected_Description = "";
+        var selected_MoldNumber = "";
+        var selected_OriginalCavities = 0;
+        var selected_TotalCavities = 0;
+        var selected_StdCycleTime = 0;
+        var selected_NetWeight = 0;
+        var selected_GrossWT = 0;
+        // runtime data
+        var runtime_GoodParts = 0;
+        var runtime_CycleTime = 0;
+        var runtime_AutoTime = 0;
+        var runtime_RecoveryTime = 0;
+        var runtime_BlockedCavity = 0;
+        var runtime_Downtime = 0;
+        var calculated_RunTime = 0;
+        var calculated_RemainTime = 0;
+        // user id
+        var is_UserLoged = 0;
+        var selecte_UserID = '';
+        var selecte_UserName = '';
+        // scrap flag
+        var selectred_ForceScrapStatus = 0;
+
+
+        // -----------------	LOAD	------------------------
+
+        function roleSecurity() {
+            disableButtons();
+            getUnitID();
+        }
+
+        // GET UNIT IDs
+
+        function getUnitID (){
+            var timestamp = new Date().getTime();
+            var Param1 =local_MachineIP.trim();
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/MANAGEMENT/QUERIES/get_UnitID&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+            // alert(queryStr);
+            getData(queryStr, parseJsonGetUnitID);
+        }
+        function parseJsonGetUnitID (jasondata){
+            // alert(jasondata.length);
+            if(jasondata.length>0) {
+                for (var i=0; i<jasondata.length; i++){
+                    selected_StationName = (jasondata[i]['unitName']);
+                    oCore.byId('TV-MachineID').setText(selected_StationName);
+                    selected_StationID =(jasondata[i]['recordID']);
+                    selectred_ForceScrapStatus = 	(jasondata[i]['ScrapStatus']);
+                    if ( selectred_ForceScrapStatus == 1){
+                        oCore.byId("BT-ForcedScrap").setStyle("Emph");
+                        oCore.byId("BT-ForcedScrap").setText('STOP-SCRAP');
+                    }
+                    getActiveOrderData();
+                }
+            } else {
+
+            }
+        }
+
+        // GET ACTIVE ORDER DATA
+
+        function getActiveOrderData (){
+            var timestamp = new Date().getTime();
+            var Param1 =selected_StationID
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_ActiveOrderMolding&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+            // alert(queryStr);
+            getData(queryStr, parseJsonGetActiveOrder);
+        }
+        function parseJsonGetActiveOrder (jasondata){
+            //  alert(jasondata.length);
+            if(jasondata.length>0) {
+                // alert(jasondata.length);
+                for (var i=0; i<jasondata.length; i++){
+                    selected_OrderID = (jasondata[i]['OrderNumber']);
+                    oCore.byId('TF-OrderID').setValue(selected_OrderID);
+                    selected_OrderOperationID =  (jasondata[i]['Operation']);
+                    selected_ScheduledStartDate = (jasondata[i]['EarlySchedStartDate']);
+                    selected_ScheduledStartTime = (jasondata[i]['EarlySchedStartTime']);
+                    selected_ScheduledStart = selected_ScheduledStartDate +":" + selected_ScheduledStartTime;
+                    oCore.byId('TF-OrderStartDate').setValue(selected_ScheduledStart);
+                    selected_PartID = (jasondata[i]['Material']);
+                    oCore.byId('TF-OrderPartID').setValue(selected_PartID);
+                    selected_PartName = (jasondata[i]['MaterialDescription']);
+                    oCore.byId('TF-OrderPartName').setValue(selected_PartName);
+                    selected_TotalCavities = (jasondata[i]['Total_Cavities']);
+                    selected_OriginalCavities = (jasondata[i]['Original_Cavities']);
+                    oCore.byId('TF-StdCavitatiion').setValue(selected_OriginalCavities);
+                    selected_MoldNumber = (jasondata[i]['Mold_Number']);
+                    oCore.byId('TF-MoldID').setValue(selected_MoldNumber);
+                    selected_ScheduledQty = (jasondata[i]['Quantity']);
+                    oCore.byId('TF-OrderQTY').setValue(selected_ScheduledQty);
+                    selected_StdCycleTime = (jasondata[i]['Quoted_Cycle_Time']);
+                    oCore.byId('TF-StdCycleTime').setValue(selected_StdCycleTime);
+                    selected_NetWeight = (jasondata[i]['NetWeight']);
+                    oCore.byId('TF-PartWeight').setValue(selected_NetWeight);
+                    selected_GrossWT = (jasondata[i]['GrossWT']);
+                    oCore.byId('TF-BoxWeight').setValue(selected_GrossWT);
+
+                    selected_ColorID  = (jasondata[i]['VALUE_NEUTRAL']);
+                    selected_ColorName  = (jasondata[i]['VALUE_CHAR']);
+                }
+                getRuntimeData();
+            } else {
+
+            }
+        }
+
+        // GET RUNTIME DATA
+
+        function getRuntimeData (){
+            var timestamp = new Date().getTime();
+            var Param1 =selected_StationName;
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_RuntimeData&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+            //alert(queryStr);
+            getData(queryStr, parseJsonGetRuntimeData);
+        }
+        function parseJsonGetRuntimeData (jasondata){
+            // alert(jasondata.length);
+            if(jasondata.length>0) {
+                //alert(jasondata.length);
+                for (var i=0; i<jasondata.length; i++){
+                    tagName = (jasondata[i]['tagName']);
+                    notifTagValue = (jasondata[i]['notifTagValue']);
+                    switch (tagName){
+                        case 'GOOD_PARTS' :
+                            oCore.byId('TF-GoodParts').setValue(notifTagValue);
+                            runtime_GoodParts = notifTagValue;
+                            break;
+                        case 'SCRAP_PARTS' :
+                            oCore.byId('TF-ScrapParts').setValue(notifTagValue);
+                            break;
+                        case 'CYCLE_TIME' :
+                            oCore.byId('TF-CycleTime').setValue(notifTagValue);
+                            break;
+                        case 'AUTO_TIME' :
+                            oCore.byId('TF-AutoTime').setValue(notifTagValue);
+                            break;
+                        case 'FILL_TIME' :
+                            oCore.byId('TF-FillTime').setValue(notifTagValue);
+                            break;
+                        case 'RECOV_TIME' :
+                            oCore.byId('TF-RecovTime').setValue(notifTagValue);
+                            break;
+                        case 'BLOCKED_CAVITIES' :
+                            break;
+                        case 'DOWN_TIME' :
+                            break;
+                        case 'ACCU_TIME' :
+                            oCore.byId('TF-TotalRunningTime').setValue(notifTagValue);
+                            break;
+                        case 'REMAINING_TIME' :
+                            break;
+                        case 'StatusWHITE' :
+                            if(notifTagValue==0) oBT_LightWhite.addStyleClass("whiteButtonOff");
+                            else oBT_LightWhite.addStyleClass("whiteButtonOn");
+                            break;
+                        case 'StatusGREEN' :
+                            if(notifTagValue==0) oBT_LightGreen.addStyleClass("greenButtonOff");
+                            else oBT_LightGreen.addStyleClass("greenButtonOn");
+                            break;
+                        case 'StatusRED' :
+                            if(notifTagValue==0) oBT_LightRed.addStyleClass("redButtonOff");
+                            else oBT_LightRed.addStyleClass("redButtonOn");
+                            break;
+                        case 'StatusYELLOW' :
+                            if(notifTagValue==0) oBT_LightYellow.addStyleClass("yellowButtonOff");
+                            else oBT_LightYellow.addStyleClass("yellowButtonOn");
+                            break;
+                        default:
+                    }
+                    oCore.byId('TF-BlockedCavities').setValue(selected_OriginalCavities - selected_TotalCavities);
+                    oCore.byId('TF-RemainingTime').setValue( Math.round( ((selected_ScheduledQty - runtime_GoodParts) / (selected_TotalCavities) ) *  selected_StdCycleTime  )      );
+                    // to be defined
+                    oCore.byId('TF-DownTime').setValue(0);
+                }
+                // startTimer();
+
+            } else {
+                resetRuntimeData ();
+            }
+        }
+
+
+        function resetRuntimeData (){
+            oCore.byId('TF-GoodParts').setValue(0);
+            oCore.byId('TF-ScrapParts').setValue(0);
+            oCore.byId('TF-CycleTime').setValue(0);
+            oCore.byId('TF-AutoTime').setValue(0);
+            oCore.byId('TF-FillTime').setValue(0);
+            oCore.byId('TF-RecovTime').setValue(0);
+            oCore.byId('TF-TotalRunningTime').setValue(0);
+            oBT_LightWhite.addStyleClass("whiteButtonOff");
+            oBT_LightGreen.addStyleClass("greenButtonOff");
+            oBT_LightRed.addStyleClass("redButtonOff");
+            oBT_LightYellow.addStyleClass("yellowButtonOff");
+            oCore.byId('TF-BlockedCavities').setValue(0);
+            oCore.byId('TF-RemainingTime').setValue( 0);
+            oCore.byId('TF-DownTime').setValue(0);
+        }
+
+        //----------HEADER MATRIX ------------
+
+        var oMatrixHeader = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixHeader',
+            layoutFixed : true,
+            width : '100%',
+            height : '95px',
+            columns : 2,
+            widths : ['60%','40%'] });
+
+        var oTV_MachineName = new sap.ui.commons.TextView({
+            id : 'TV-MachineName',
+            text : 'STATION',
+            textAlign:'Begin',
+            width : '90%' });
+
+        //----------LIGHTS MATRIX ------------
+
+        var oMatrixLights = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixLights',
+            layoutFixed : true,
+            width : '100%',
+            height : '95px',
+            columns : 4,
+            widths : ['25%','25%','25%','25%'] });
+
+        var oBT_LightGreen= new sap.ui.commons.Button({
+            text : "",
+            id : "BT-LightGreen",
+            width: "90px",
+            height: "90px",
+        })
+
+        var oBT_LightYellow= new sap.ui.commons.Button({
+            text : "",
+            id : "BT-LightYellow",
+            width: "90px",
+            height: "90px",
+        })
+
+        var oBT_LightWhite= new sap.ui.commons.Button({
+            text : "",
+            id : "BT-LightWhite",
+            width: "90px",
+            height: "90px",
+        })
+
+        var oBT_LightRed= new sap.ui.commons.Button({
+            text : "",
+            id : "BT-LightRed",
+            width: "90px",
+            height: "90px",
+        })
+
+        oMatrixLights.createRow(oBT_LightGreen,oBT_LightYellow,oBT_LightWhite,oBT_LightRed)
+
+        oMatrixHeader.createRow(oTV_MachineName,oMatrixLights);
+
+        oMatrixHeader.placeAt("app_title");
+
+        //-----------	PAGE TITLE	--------------------------
+
+        var oTV_MachineID = new sap.ui.commons.TextView({
+            id : 'TV-MachineID',
+            text : ' ',
+            textAlign:'Begin',
+            width : '90%' });
+
+        oTV_MachineID.placeAt("page_title");
+
+        //------------ MAIN MATRIX-----------------
+
+        var oMatrixMain = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixMain',
+            layoutFixed : true,
+            width : '100%',
+            height : '85px',
+            columns : 3,
+            padding: '55px',
+            widths : ['30%','58%' ,'12%'] });
+
+        var oCell_Divider1 = new sap.ui.commons.layout.MatrixLayoutCell({hAlign:'Begin', colSpan: 3});
+        oCell_Divider1.addContent(new sap.ui.commons.HorizontalDivider({width: '100%'}));
+
+        oMatrixMain.createRow(oCell_Divider1);
+
+        var oL_OrderInfo = new sap.ui.commons.Label({
+            id : 'L-OrderInfo',
+            //	height: "50px",
+            text : 'ORDER INFORMATION' });
+
+        var oL_RuntimeInfo = new sap.ui.commons.Label({
+            id : 'L-RuntimeInfo',
+            //	height: "50px",
+            text : 'RUNTIME DATA' });
+
+        oMatrixMain.createRow(oL_OrderInfo,oL_RuntimeInfo,'')
+
+        //-------ORDER (MAIN SUB) MATRIX-----------------
+
+        var oMatrixOrder = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixOrder',
+            layoutFixed : true,
+            width : '100%',
+            height : '85px',
+            columns : 2,
+            padding: '55px',
+            widths : ['35%','65%' ] });
+
+        oBT_OrderList= new sap.ui.commons.Button({
+            text : "ORDER LIST",
+            id : "BT-OrderList",
+            //style: sap.ui.commons.ButtonStyle.Emph,
+            width: "120px",
+            height: "70px",
+            //press : function() {},
+        })
+        oBT_OrderList.attachPress(doOpenOredList);
+
+        oMatrixOrder.createRow(oBT_OrderList);
+
+        var oL_OrderID = new sap.ui.commons.Label({
+            id : 'L-OrderID',
+            text : 'Order No ' });
+
+        var oTF_OrderID = new sap.ui.commons.TextField({
+            id : 'TF-OrderID',
+            tooltip : 'Order ID',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_OrderID,oTF_OrderID);
+
+        var oL_OrderStartDate = new sap.ui.commons.Label({
+            id : 'L-OrderStartDate',
+            text : 'Start Time ' });
+
+        var oTF_OrderStartDate = new sap.ui.commons.TextField({
+            id : 'TF-OrderStartDate',
+            tooltip : 'Order Start Time',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_OrderStartDate,oTF_OrderStartDate);
+
+        var oL_OrderPartID = new sap.ui.commons.Label({
+            id : 'L-OrderPartID',
+            text : 'Partr No' });
+
+        var oTF_OrderPartID = new sap.ui.commons.TextField({
+            id : 'TF-OrderPartID',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Part no',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_OrderPartID,oTF_OrderPartID);
+
+        var oL_OrderPartName = new sap.ui.commons.Label({
+            id : 'L-OrderPartName',
+            text : 'Part Name' });
+
+        var oTF_OrderPartName = new sap.ui.commons.TextArea({
+            id : 'TF-OrderPartName',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Part Name',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_OrderPartName,oTF_OrderPartName);
+
+        var oL_MoldID = new sap.ui.commons.Label({
+            id : 'L-MoldID',
+            text : 'Mold ID' });
+
+        var oTF_MoldID = new sap.ui.commons.TextField({
+            id : 'TF-MoldID',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Mold ID',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_MoldID,oTF_MoldID );
+
+        var oL_StdCavitatiion = new sap.ui.commons.Label({
+            id : 'L-StdCavitatiion',
+            text : 'Std. Cavitation' });
+
+        var oTF_StdCavitatiion = new sap.ui.commons.TextField({
+            id : 'TF-StdCavitatiion',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Std. Cavitation',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_StdCavitatiion,oTF_StdCavitatiion );
+
+        var oL_OrderQTY = new sap.ui.commons.Label({
+            id : 'L-OrderQTY',
+            text : 'Order QTY ' });
+
+        var oTF_OrderQTY = new sap.ui.commons.TextField({
+            id : 'TF-OrderQTY',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Order QTY',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_OrderQTY,oTF_OrderQTY);
+
+        var oL_StdCycleTime = new sap.ui.commons.Label({
+            id : 'L-StdCycleTime',
+            text : 'Std Cycle Time' });
+
+        var oTF_StdCycleTime = new sap.ui.commons.TextField({
+            id : 'TF-StdCycleTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Std Cycle Time',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_StdCycleTime,oTF_StdCycleTime);
+
+        var oL_PartWeight = new sap.ui.commons.Label({
+            id : 'L-PartWeight',
+            text : 'Part Weight [g]' });
+
+        var oTF_PartWeight = new sap.ui.commons.TextField({
+            id : 'TF-PartWeight',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'PartWeight',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_PartWeight,oTF_PartWeight );
+
+        var oL_BoxWeight = new sap.ui.commons.Label({
+            id : 'L-BoxWeight',
+            text : 'Box Weight [g]' });
+
+        var oTF_BoxWeight = new sap.ui.commons.TextField({
+            id : 'TF-BoxWeight',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Box Weight',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixOrder.createRow(oL_BoxWeight,oTF_BoxWeight );
+
+        // ************ORDER MATRIX FUNCTIONS	*******************************************
+
+        var is_order_table_created = 0;
+
+        function doOpenOredList (){
+            if(!oOverlayContainerOL.isOpen()){
+                oOverlayContainerOL.open();
+                if(is_order_table_created==0){
+                    createTableWorkorders() ;
+                }else {
+                    updateTableWorkorders();
+                }
+            }
+        }
+
+        //----- RUNTIME (MAIN SUB ) MATRIX-----------------
+
+        var oMatrixRuntime = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixRuntime',
+            layoutFixed : true,
+            width : '100%',
+            height : '85px',
+            columns : 4,
+            widths : ['25%','25%','25%','25%'  ] });
+
+        oMatrixRuntime.createRow('','','','');
+
+        var oL_GoodParts = new sap.ui.commons.Label({
+            id : 'L-GoodParts',
+            width : '90%',
+            textAlign:'Right',
+            text : 'Good Parts' });
+
+        var oTF_GoodParts = new sap.ui.commons.TextField({
+            id : 'TF-GoodParts',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Good Parts ',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        var oL_ScrapParts = new sap.ui.commons.Label({
+            id : 'L-ScrapParts',
+            text : 'Scrap Parts' });
+
+        var oTF_ScrapParts= new sap.ui.commons.TextField({
+            id : 'TF-ScrapParts',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Scrap Parts',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixRuntime.createRow(oL_GoodParts,oTF_GoodParts, oTF_ScrapParts,oL_ScrapParts);
+
+        var oL_CycleTime = new sap.ui.commons.Label({
+            id : 'L-CycleTime',
+            width : '90%',
+            textAlign:'Right',
+            text : 'Cycle Time' });
+
+        var oTF_CycleTime = new sap.ui.commons.TextField({
+            id : 'TF-CycleTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Cycle Time ',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        var oL_AutoTime = new sap.ui.commons.Label({
+            id : 'L-AutoTime',
+            text : 'Auto Time' });
+
+        var oTF_AutoTime= new sap.ui.commons.TextField({
+            id : 'TF-AutoTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Auto Time',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixRuntime.createRow(oL_CycleTime,oTF_CycleTime, oTF_AutoTime,oL_AutoTime);
+
+        var oL_FillTime = new sap.ui.commons.Label({
+            id : 'L-FillTime',
+            width : '90%',
+            textAlign:'Right',
+            text : 'Fill Time' });
+
+        var oTF_FillTime = new sap.ui.commons.TextField({
+            id : 'TF-FillTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Fill Time ',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        var oL_RecovTime = new sap.ui.commons.Label({
+            id : 'L-RecovTime',
+            text : 'Recovery Time' });
+
+        var oTF_RecovTime= new sap.ui.commons.TextField({
+            id : 'TF-RecovTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Recov Time',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixRuntime.createRow(oL_FillTime,oTF_FillTime, oTF_RecovTime,oL_RecovTime);
+
+        var oL_BlockedCavities = new sap.ui.commons.Label({
+            id : 'L-BlockedCavities',
+            width : '90%',
+            textAlign:'Right',
+            text : 'Blocked Cavity' });
+
+        var oTF_BlockedCavities = new sap.ui.commons.TextField({
+            id : 'TF-BlockedCavities',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Blocked Caviti ',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        var oL_DownTime = new sap.ui.commons.Label({
+            id : 'L-DownTime',
+            text : 'Down Time' });
+
+        var oTF_DownTime = new sap.ui.commons.TextField({
+            id : 'TF-DownTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Down Time',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixRuntime.createRow(oL_BlockedCavities,oTF_BlockedCavities,oTF_DownTime,oL_DownTime);
+
+        var oL_TotalRunningTime = new sap.ui.commons.Label({
+            id : 'L-TotalRunningTime',
+            width : '90%',
+            textAlign:'Right',
+            text : 'Running Time' });
+
+        var oTF_TotalRunningTime = new sap.ui.commons.TextField({
+            id : 'TF-TotalRunningTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Total Run Time',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        var oL_RemainingTime = new sap.ui.commons.Label({
+            id : 'L-RemainingTime',
+            text : 'Remaining Time' });
+
+        var oTF_RemainingTime = new sap.ui.commons.TextField({
+            id : 'TF-RemainingTime',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Remaining Time',
+            editable : false,
+            value : '',
+            width : '90%' });
+
+        oMatrixRuntime.createRow(oL_TotalRunningTime,oTF_TotalRunningTime,oTF_RemainingTime,oL_RemainingTime);
+
+        var oTF_Message = new sap.ui.commons.TextField({
+            id : 'TF-Message',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Message',
+            editable : false,
+            value : '',
+            width : '98%' });
+
+        var oCell_Message = new sap.ui.commons.layout.MatrixLayoutCell({hAlign:'Begin', colSpan: 4});
+        oCell_Message.addContent(oTF_Message);
+
+        // oMatrixRuntime.createRow(oCell_Message);
+
+        //------------ BOTTOM BUTTONS MATRIX (RUNTIME SUB MATRIX)-----------------
+
+        var oMatrixBottomButtons = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixBottomButtons',
+            layoutFixed : true,
+            width : '100%',
+            height : '105px',
+            columns : 6,
+            padding: '15px',
+            widths : ['2%','23%','23%','23%','23%','2%' ] });
+
+        var oCell_Divider2 = new sap.ui.commons.layout.MatrixLayoutCell({colSpan: 5, hAlign: 'Right'});
+        oCell_Divider2.addContent(new sap.ui.commons.HorizontalDivider({ width: '100%'}));
+
+        oMatrixBottomButtons.createRow('',oCell_Divider2);
+
+        var oBT_Cavitation= new sap.ui.commons.Button({
+            text : "CAVITATION",
+            id : "BT-Cavitation",
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        oBT_Cavitation.attachPress(doOpenCV);
+
+        var oBT_Downtime= new sap.ui.commons.Button({
+            text : "DOWNTIME",
+            id : "BT-Downtime",
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        oBT_Downtime.attachPress(doOpenDT);
+
+        var oBT_Scrap= new sap.ui.commons.Button({
+            text : "SCRAP",
+            id : "BT-Scrap",
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        oBT_Scrap.attachPress(doOpenSC);
+
+        var oBT_Components= new sap.ui.commons.Button({
+            text : "COMPONENTS",
+            id : "BT-Components",
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        oBT_Components.attachPress(doOpenCOM)
+
+        var oBT_Hystory= new sap.ui.commons.Button({
+            text : "HISTORY",
+            id : "BT-Hystory",
+            width: "120px",
+            height: "70px",
+            // press :function() {	},
+        })
+        oBT_Hystory.attachPress(doOpenHIST)
+
+        oMatrixBottomButtons.createRow('',oBT_Cavitation,oBT_Downtime,oBT_Components,oBT_Hystory,'');
+
+        var oCell_BottomButtons = new sap.ui.commons.layout.MatrixLayoutCell({colSpan: 4, hAlign: 'Right'});
+
+        oCell_BottomButtons.addContent(oMatrixBottomButtons);
+
+        oMatrixRuntime.createRow(oCell_BottomButtons);
+
+        // ************ MATRIX FUNCTIONS	*******************************************
+
+        function doOpenCV() {
+            if(!oOverlayContainerCV.isOpen()){
+                oOverlayContainerCV.open();
+                showCavitiesInfo();
+            }
+        }
+
+        function doOpenDT() {
+            if(!oOverlayContainerDT.isOpen()){
+                updateDowntimeCode();
+                oOverlayContainerDT.open();
+            }
+        }
+
+        function doOpenSC() {
+            if(!oOverlayContainerSC.isOpen()){
+                oOverlayContainerSC.open();
+            }
+        }
+
+        var is_order_components_created = 0;
+
+        function doOpenCOM() {
+            if(!oOverlayContainerCOM.isOpen()){
+                oOverlayContainerCOM.open();
+                if( is_order_components_created == 0){
+                    createTableComponents();
+                }else {
+                    updateTableComponents();
+                }
+            }
+        }
+        function doOpenHIST() {
+            // if(!oOverlayContainerINS.isOpen()){
+            // oOverlayContainerINS.open();
+            // }
+            doOpenMoldHistoryForm();
+        }
+
+        // **************************************************************
+
+        //--------- SIDE BUTTONS (SUB) MATRIX-----------------
+
+        var oMatrixSideButtons = new sap.ui.commons.layout.MatrixLayout({
+            id : 'matrixSideButtons',
+            //layoutFixed : true,
+            width : '100%',
+            height : '85px',
+            columns : 1,
+            padding: '15px',
+            widths : ['90%'  ] });
+
+
+        oBT_LogOn= new sap.ui.commons.Button({
+            text : "LOG ON" ,
+            id : "BT-LogOn",
+            //style: sap.ui.commons.ButtonStyle.Emph,
+            width: "120px",
+            height: "70px",
+            //press : function() {}
+        })
+        oBT_LogOn.attachPress(doOpenLogOn);
+
+        oMatrixSideButtons.createRow(oBT_LogOn)
+
+        oBT_ForcedScrap= new sap.ui.commons.Button({
+            text : "FRC-SCRAP",
+            id : "BT-ForcedScrap",
+            //style: sap.ui.commons.ButtonStyle.Emph,
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        oBT_ForcedScrap.attachPress(doForceScrapSwitch);
+
+        oMatrixSideButtons.createRow(oBT_ForcedScrap)
+
+        var oBT_LabelPrinting= new sap.ui.commons.Button({
+            text : "LABEL",
+            id : "BT-LabelPrinting",
+            width: "120px",
+            height: "70px",
+            press : function() {},
+        })
+        oBT_LabelPrinting.attachPress(doOpenLB);
+
+        oMatrixSideButtons.createRow(oBT_LabelPrinting)
+
+        var oBT_Hold= new sap.ui.commons.Button({
+            text : "HOLD",
+            id : "BT-Hold",
+            width: "120px",
+            height: "70px",
+            press :function() {},
+        })
+
+        oMatrixSideButtons.createRow(oBT_Hold)
+
+        var oBT_PartsInspection= new sap.ui.commons.Button({
+            text : "INSPECTION",
+            id : "BT-PartsInspection",
+            width: "120px",
+            height: "70px",
+            //press : function() {},
+        })
+        oBT_PartsInspection.attachPress(doPartsInspection);
+
+        oMatrixSideButtons.createRow(oBT_PartsInspection)
+
+        oBT_Emergency= new sap.ui.commons.Button({
+            text : "EMERGENCY",
+            id : "BT-Emergency",
+            style: sap.ui.commons.ButtonStyle.Reject,
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        //oBT_Emergency.attachPress(doEmergency);
+
+        oMatrixSideButtons.createRow(oBT_Emergency)
+
+        oMatrixMain.createRow(oMatrixOrder,oMatrixRuntime,oMatrixSideButtons);
+
+        // ****************************************************************************************************************
+
+        function doOpenLogOn (){
+            refreshKeypad();
+            if ( is_UserLoged == 0){
+                if(!oOverlayContainerLG.isOpen()){
+                    oOverlayContainerLG.open();
+                }
+            }
+            else {
+                disableButtons();
+                oCore.byId("BT-LogOn").setText('LOG ON');
+                selecte_UserID = '';
+                selecte_UserName = '';
+                is_UserLoged = 0;
+            }
+        }
+
+        function doForceScrapSwitch(){
+            if ( selectred_ForceScrapStatus == 0){
+                oCore.byId("BT-ForcedScrap").setStyle("Emph");
+                oCore.byId("BT-ForcedScrap").setText('STOP-SCRAP');
+                selectred_ForceScrapStatus = 1;
+                doChangeDBScrapStatus();
+            }
+            else {
+                oCore.byId("BT-ForcedScrap").setStyle("Default");
+                oCore.byId("BT-ForcedScrap").setText('FRC-SCRAP');
+                selectred_ForceScrapStatus = 0;
+                doChangeDBScrapStatus();
+            }
+
+        }
+
+        //********************************************************************
+
+        function doChangeDBScrapStatus (){
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                var timestamp = new Date().getTime();
+                var Param1 = escapeSQLString( selected_StationID);
+                var Param2 = escapeSQLString(selectred_ForceScrapStatus);
+                var paramStr = "Param.1="+encodeURIComponent(Param1)+"&Param.2="+encodeURIComponent(Param2);
+                // alert(paramStr);
+                var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/set_MachineScrapStatus&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                            doChangePLCScrapStatus();
+                        } else {
+                            alert("Error DB : " + oReqData.statusText);
+                        }
+                };
+                oReqData.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+        function doChangePLCScrapStatus (){
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                var timestamp = new Date().getTime();
+                var paramStr = "CODE=" + encodeURIComponent(5) + "&unitID=" + encodeURIComponent(selected_StationID)
+                // alert(paramStr);
+                var queryStr = "/XMII/Runner?Transaction=OneHDMIIOwensboro/PCO_HANDLER/TRANSACTIONS/AppMsgHandler&Content-Type=text/html&" + paramStr + "&ts=" + timestamp;
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                        } else {
+                            alert("Error PCo: " + oReqData.statusText);
+                        }
+                }
+                oReqData.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+        //**************************************************************************
+
+        function doOpenLB() {
+            printLabel();
+            if(!oOverlayContainerLB.isOpen()){
+                // oOverlayContainerLB.open();
+            }
+        }
+
+        function printLabel(){
+
+        }
+
+        function  doPartsInspection () {
+            // open new window
+            window.open("InspectionDashBoard.irpt");
+        }
+
+        function  doEmergency (){
+
+        }
+
+        // ***********	OVERLAYS	***************************************************************************************
+
+        // ********* 	LOG ON  OVERLAY	***************************************************************************************
+
+        var oMatrixLG = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixLG',
+            layoutFixed : true,
+            width: '390px',
+            columns : 1,
+            widths : ['400px']
+        });
+
+        var oMatrixLGT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixILGT',
+            layoutFixed : true,
+            width: '390px',
+            columns : 1,
+            widths : ['390px']
+        });
+
+        var oTitleLG = new sap.ui.commons.Label({
+            id : 'L-LG',
+            text : 'LOG ON'
+        });
+
+        oMatrixLG.createRow( oTitleLG );
+
+        var oLabelClockID = new sap.ui.commons.Label({
+            id : 'L-ClockID',
+            visible : true,
+            text : ' OPERATOR CLOCK ID',
+            width : '120px'
+        });
+
+        oMatrixLG.createRow( oLabelClockID );
+
+        var oTF_ClockID = new sap.ui.commons.TextField({
+            id : 'TF-ClockID',
+            tooltip : 'Clock ID',
+            editable : true,
+            maxLength : 11,
+            visible : true,
+            width : '180px'
+        });
+        oTF_ClockID.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-ClockID').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        oMatrixLG.createRow(  oTF_ClockID );
+
+        oMatrixLG.createRow(  '' );
+
+        var oBT_SubmitLogOn= new sap.ui.commons.Button({
+            text : "SUBMIT",
+            id : "BT-SubmitLogOn",
+            width: "120px",
+            height: "70px",
+            // press : function() {},
+        })
+        oBT_SubmitLogOn.attachPress(doSubmitLogOn);
+
+        oMatrixLG.createRow( oBT_SubmitLogOn );
+
+        var oOverlayContainerLG = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerLG.setHeight('300px');
+        oOverlayContainerLG.setWidth('400px');
+        oOverlayContainerLG.addContent(oMatrixLG);
+
+        //**********************************************************
+
+        function doSubmitLogOn (){
+            var timestamp = new Date().getTime();
+            var Param1 = escapeSQLString($('#TF-ClockID').val());
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/isOperator&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+            // alert(queryStr);
+            getData(queryStr, parseJsonLogOn);
+        }
+        function parseJsonLogOn (jasondata){
+            // alert(jasondata.length);
+            if(jasondata.length>0) {
+                // alert(jasondata.length);
+                for (var i=0; i<jasondata.length; i++){
+                    valid_user = (jasondata[i]['valid']);
+                    if ( Number(valid_user) ==1){
+                        enableButtons();
+                        oOverlayContainerLG.close();
+                        selecte_UserID = escapeSQLString($('#TF-ClockID').val());
+                        selecte_UserName =  (jasondata[i]['Name']);
+                        oCore.byId("BT-LogOn").setText('LOG OUT');
+                        is_UserLoged = 1;
+                    }
+                    else {
+
+                    }
+                }
+            } else {
+
+            }
+        }
+
+        // ********* 	ORDER LIST  OVERLAY	***************************************************************************************
+
+        var oMatrixOL = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixOL',
+            layoutFixed : true,
+            width: '990px',
+            columns : 1,
+            widths : ['900px']
+        });
+
+        var oMatrixOLT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixIOLT',
+            layoutFixed : true,
+            width: '990px',
+            columns : 2,
+            widths : ['495px','495px']
+        });
+
+        var oTitleOL = new sap.ui.commons.Label({
+            id : 'L-OL',
+            text : 'ORDER LIST'
+        });
+        oMatrixOL.createRow( oTitleOL );
+
+        var oTableOL = new sap.ui.table.Table({
+            id : "TBL_OL",
+            visibleRowCount: 7,
+            firstVisibleRow: 0,
+            rowHeight: 50,
+            width: "980px",
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            selectionMode: sap.ui.table.SelectionMode.Single
+        });
+
+        oTableOL.attachRowSelectionChange(function(oEvent) {
+            var selIndex = oTableOL.getSelectedIndex();
+            selectedIndex = selIndex;
+            if (selIndex  >= 0) {
+                // Retrieve the selected row
+                var selectedRow = oTableOL.getRows()[selIndex];
+                var selectedRowContext = oEvent.getParameter("rowContext");
+                selected_OrderID =  oModelOL.getProperty("OrderNumber", selectedRowContext);
+                // alert(selectedOrderID);
+            }
+            else {
+
+                selectedIndex =  -1;
+                selectedOrderID =0;
+            }
+        });
+
+        var oModelOL =  new sap.ui.model.xml.XMLModel();
+
+        var oCellTableOL = new sap.ui.commons.layout.MatrixLayoutCell({
+            id : 'Cell-TableOL',
+            colSpan : 2 });
+
+        oCellTableOL.addContent(oTableOL);
+
+
+        oMatrixOL.createRow( oCellTableOL );
+
+        oBT_OrderStart= new sap.ui.commons.Button({
+            text : "START ORDER",
+            id : "BT-OrderStart",
+            //style: sap.ui.commons.ButtonStyle.Emph,
+            width: "120px",
+            height: "70px",
+            //press : function() {},
+        })
+        oBT_OrderStart.attachPress(setNewActiveOrder);
+
+        var oCell_OrderBtn2 = new sap.ui.commons.layout.MatrixLayoutCell({hAlign:'Center', colSpan: 2, padding:'Both'});
+        oCell_OrderBtn2.addContent(oBT_OrderStart);
+
+        oMatrixOL.createRow(oCell_OrderBtn2);
+
+        var oOverlayContainerOL = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerOL.setHeight('580px');
+        oOverlayContainerOL.setWidth('1020px');
+        oOverlayContainerOL.addContent(oMatrixOL);
+
+
+        // *******************	  ORDER OVERLAY FUNCTIONS	*****************************************************************
+
+        function createTableWorkorders() {
+            // Bind the table rows to this model
+            var timestamp = new Date().getTime();
+            //alert(selected_StationID);
+            var Param1 = escapeSQLString(selected_StationID);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            //alert(paramStr);
+            oModelOL.loadData("/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_Orders&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml","",false);
+            //alert(oModelOL.getXML());
+            createColumnsWorkorders();
+            oTableOL.setModel(oModelOL);
+            oTableOL.bindRows("/Rowset/Row");
+            is_order_table_created= 1;
+        };
+
+        function updateTableWorkorders() {
+            oTableOL.clearSelection();
+            var timestamp = new Date().getTime();
+            var isFloorOrder = 0;
+            // alert(selectedStationID);
+            var Param1 = escapeSQLString(selected_StationID);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            oModelOL.loadData("/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_Orders&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml","",false);
+            oTableOL.getModel().refresh(true);
+        };
+
+        function createColumnsWorkorders() {
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "ORDER ID"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "OrderNumber"),
+                sortProperty: "OrderNumber",
+                filterProperty: "OrderNumber",
+                width: "120px"
+            }));
+            /*
+				oTableOL.addColumn(new sap.ui.table.Column({
+					label: new sap.ui.commons.Label({text: "MATERIAL"}),
+					template: new sap.ui.commons.TextView().bindProperty("text", "Material"),
+					sortProperty: "Material",
+					filterProperty: "Material",
+					width: "120px"
+				}));
+				oTableOL.addColumn(new sap.ui.table.Column({
+					label: new sap.ui.commons.Label({text: "DESCRIPTION"}),
+					template: new sap.ui.commons.TextView().bindProperty("text", "MaterialDescription"),
+					sortProperty: "MaterialDescription",
+					filterProperty: "MaterialDescription",
+					width: "140px"
+				}));
+*/
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "SCH START"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "EarlySchedStart"),
+                sortProperty: "EarlySchedStart",
+                filterProperty: "EarlySchedStart",
+                width: "120px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "SCH END"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "EarlySchedFin"),
+                sortProperty: "EarlySchedFin",
+                filterProperty: "EarlySchedFin",
+                width: "120px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "MII START"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "MIISchedStart"),
+                sortProperty: "MIISchedStart",
+                filterProperty: "MIISchedStart",
+                width: "120px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "MII END"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "MIISchedFin"),
+                sortProperty: "MIISchedFin",
+                filterProperty: "MIISchedFin",
+                width: "120px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "SCHED QTY"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "Quantity"),
+                sortProperty: "Quantity",
+                filterProperty: "Quantity",
+                width: "100px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "ERP STS"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "SystemStatus"),
+                sortProperty: "SystemStatus",
+                filterProperty: "SystemStatus",
+                width: "100px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "FLR STS"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "OperationStatus"),
+                sortProperty: "OperationStatus",
+                filterProperty: "OperationStatus",
+                width: "100px"
+            }));
+        }
+
+
+        // set active order to park
+        // set selected order to active
+        // display order info
+        // set COD3 to PLC
+
+        var oReqData;
+
+        function setNewActiveOrder(){
+
+            // alert(selected_OrderID);
+
+            if (selected_OrderID==0 ) return;
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                var timestamp = new Date().getTime();
+                var Param1 = escapeSQLString(selected_StationID);
+                var Param2 = escapeSQLString(selected_OrderID);
+                var paramStr = "Param.1="+encodeURIComponent(Param1)+"&Param.2="+encodeURIComponent(Param2);
+                //alert(paramStr);
+                var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/set_NewActiveOrder&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                            oOverlayContainerOL.close();
+                            getActiveOrderData();
+                            doOredStart ();
+                        } else {
+                            alert("Error DB : " + oReqData.statusText);
+                        }
+                };
+                oReqData.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+        function doOredStart (){
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                var timestamp = new Date().getTime();
+                var paramStr = "CODE=" + encodeURIComponent(3) + "&unitID=" + encodeURIComponent(selected_StationID)
+                // alert(paramStr);
+                var queryStr = "/XMII/Runner?Transaction=OneHDMIIOwensboro/PCO_HANDLER/TRANSACTIONS/AppMsgHandler&Content-Type=text/html&" + paramStr + "&ts=" + timestamp;
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                        } else {
+                            alert("Error PCo: " + oReqData.statusText);
+                        }
+                };
+                oReqData.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+
+        // ***************	CAVITATION  OVERLAY	***************************************************************************************
+
+        var oMatrixCV = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixCV',
+            layoutFixed : true,
+            width: '750px',
+            columns : 1,
+            widths : ['750px']
+        });
+
+        var oMatrixCVT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixCVT',
+            layoutFixed : true,
+            width: '750px',
+            columns : 2,
+            widths : ['250px','500px']
+        });
+
+        var oTitleCV = new sap.ui.commons.Label({
+            id : 'L-CV',
+            text : 'CAVITATIONS'
+        });
+        oMatrixCV.createRow( oTitleCV );
+
+        var oL_MoldName = new sap.ui.commons.Label({
+            id : 'L-MoldName',
+            text : 'Mold ID' });
+
+        var oTF_MoldName = new sap.ui.commons.TextField({
+            id : 'TF-MoldName',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'MoldName',
+            editable : false,
+            value : '',
+            width : '50%' });
+
+        oMatrixCVT.createRow( oL_MoldName,oTF_MoldName  );
+
+        var oL_MoldOriginalCavities = new sap.ui.commons.Label({
+            id : 'L-MoldOriginalCavities',
+            text : 'Original Cavities' });
+
+        var oTF_MoldOriginalCavities = new sap.ui.commons.TextField({
+            id : 'TF-MoldOriginalCavities',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Original Cavities',
+            editable : false,
+            value : '',
+            width : '50%' });
+
+        oMatrixCVT.createRow( oL_MoldOriginalCavities ,oTF_MoldOriginalCavities  );
+
+        var oL_MoldTotalCavities = new sap.ui.commons.Label({
+            id : 'L-MoldTotalCavities',
+            text : 'Total Cavities' });
+
+        var oTF_MoldTotalCavities = new sap.ui.commons.TextField({
+            id : 'TF-MoldTotalCavities',
+            textAlign: sap.ui.core.TextAlign.Center ,
+            tooltip : 'Mold Total Cavities',
+            editable : true,
+            value : '',
+            width : '50%'
+        });
+        oTF_MoldTotalCavities.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-MoldTotalCavities').keyboard({
+                    layout : 'num',
+                    restrictInput : true, // Prevent keys not in the displayed keyboard from being typed in
+                    preventPaste : true,  // prevent ctrl-v and right click
+                    autoAccept : true
+                });
+            }
+        });
+
+        oMatrixCVT.createRow( oL_MoldTotalCavities ,oTF_MoldTotalCavities  );
+
+
+        var oLabel_MoldBlockedCavities = new sap.ui.commons.Label({
+            id : 'L-MoldBlockedCavities',
+            visible : true,
+            text : 'Blocked Cavities' })
+
+        var oTF_MoldBlockedList = new sap.ui.commons.TextField({
+            id : 'TF-MoldBlockedList',
+            tooltip : 'Mold Blocked List',
+            editable : false,
+            value : ' ',
+            width : '80%' });
+
+        //	oMatrixCVT.createRow(oLabel_MoldBlockedCavities, oTF_MoldBlockedList  );
+
+        var oLabel_CavityID = new sap.ui.commons.Label({
+            id : 'L-CavityID',
+            visible : true,
+            text : 'FROM Cavity ID' });
+
+        var oComboBox_CavityID = new sap.ui.commons.DropdownBox({
+            id : "dbox_CavityID",
+            tooltip : 'Cavity ID',
+            width : '50%',
+        });
+
+        oCore.byId("dbox_CavityID").setMaxPopupItems(8);
+
+        // oComboBox_CavityID.addStyleClass("bigLabel");
+
+        oMatrixCVT.createRow( oLabel_CavityID,oComboBox_CavityID  );
+
+        var oLabel_CavityIDto = new sap.ui.commons.Label({
+            id : 'L-CavityIDto',
+            visible : true,
+            text : 'TO Cavity ID' });
+
+        var oComboBox_CavityIDto = new sap.ui.commons.DropdownBox({
+            id : "dbox_CavityIDto",
+            tooltip : 'Cavity ID',
+            width : '50%',
+        });
+
+
+        oCore.byId("dbox_CavityIDto").setMaxPopupItems(8);
+
+        // oComboBox_CavityIDto.addStyleClass("bigLabel");
+
+        oMatrixCVT.createRow( oLabel_CavityIDto,oComboBox_CavityIDto  );
+
+        var oL_BlockedReason = new sap.ui.commons.Label({
+            id : 'L-BlockedReason',
+            text : 'Reason' });
+
+        var oComboBox_BlockedReason = new sap.ui.commons.DropdownBox({
+            id : "dbox_BlockedReason",
+            tooltip : 'Reason',
+            editable : true,
+            width : '80%',
+            change: function(oEvent){
+                //alert(oEvent.oSource.getSelectedKey());
+            }
+        });
+
+        oCore.byId("dbox_BlockedReason").setMaxPopupItems(6);
+
+        oMatrixCVT.createRow( oL_BlockedReason,oComboBox_BlockedReason  );
+
+        var oL_BlockedHow = new sap.ui.commons.Label({
+            id : 'L-BlockedHow',
+            text : 'How' });
+
+        var oComboBox_BlockedHow = new sap.ui.commons.DropdownBox({
+            id : "dbox_BlockedHow",
+            tooltip : 'How',
+            editable : true,
+            width : '80%',
+            change: function(oEvent){
+                //alert(oEvent.oSource.getSelectedKey());
+            }
+        });
+
+        oCore.byId("dbox_BlockedHow").setMaxPopupItems(5);
+
+        //oPopOver_BlockedHow = ComboBox_BlockedHow.getPicker();
+        //oPopOver_BlockedHow.setContentHeight("100px");
+
+        oMatrixCVT.createRow( oL_BlockedHow,oComboBox_BlockedHow  );
+
+        var oL_RecordMoldHistory = new sap.ui.commons.Label({
+            id : 'L-RecordMoldHistory',
+            text : 'Record Mold History' });
+
+        var oCB_RecordMoldHistory =  new sap.m.CheckBox({
+            id : 'CB-RecordMoldHistory',
+            width : '60px',
+            text : '' });
+
+
+        oMatrixCVT.createRow( oL_RecordMoldHistory ,oCB_RecordMoldHistory );
+
+        oMatrixCV.createRow( oMatrixCVT  );
+
+        oBT_UpdateCavities= new sap.ui.commons.Button({
+            text : "UPDATE",
+            id : "BT-UpdateCavities",
+            //style: sap.ui.commons.ButtonStyle.Emph,
+            width: "120px",
+            height: "70px",
+            //press : function() {},
+        })
+        oBT_UpdateCavities.attachPress(doChangeCavities)
+
+        oMatrixCV.createRow( oBT_UpdateCavities  );
+
+        var oOverlayContainerCV = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerCV.setHeight('720px');
+        oOverlayContainerCV.setWidth('750px');
+        oOverlayContainerCV.addContent(oMatrixCV);
+
+        //**************************************************************************************
+
+        function showCavitiesInfo (){
+            oCore.byId('TF-MoldName').setValue(selected_MoldNumber);
+            oCore.byId('TF-MoldOriginalCavities').setValue(selected_OriginalCavities);
+            oCore.byId('TF-MoldTotalCavities').setValue(selected_TotalCavities);
+            updateComBoxCavityID();
+            updateComBoxBlockedReason();
+            updateComBoxBlockedHow();
+            //document.getElementById("TF-MoldTotalCavities").setAttribute("onfocus", "this.select()");
+        }
+
+        function doChangeCavities (){
+            // change databse info
+            doChangeDBCavities ();
+            // change PLC value
+            doChangePLCCavities ();
+
+        }
+
+        /*
+			update cavitie num in MOLD_Master_Tool_List table,
+			create record in MOLD_Deficiencies table,
+			create record in MOLD_BlockOff_Info table
+			*/
+
+        function doChangeDBCavities (){
+            if(oCore.byId("CB-RecordMoldHistory").getSelected){
+                oOverlayContainerCV.close();
+                doOpenMoldHistoryForm();
+            }
+            // return;
+            var temp_TotalValue= escapeSQLString($('#TF-MoldTotalCavities').val());
+            if (Number(temp_TotalValue) >= Number(selected_TotalCavities)) {
+                //alert(selected_Total_Cavities);
+                //return;
+            }
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                var timestamp = new Date().getTime();
+
+                var Param1 = escapeSQLString(selected_MoldNumber);	// mold number
+                var Param2 = escapeSQLString( temp_TotalValue);   // total cavities
+
+                var Param3 = escapeSQLString(selected_MaterialID); 		 // material or drawing
+                var Param4 = escapeSQLString(selected_Description); 		// material description
+                var Param5 = escapeSQLString(selected_OriginalCavities);	// original cavities
+                var Param6 = escapeSQLString(oComboBox_CavityID.getSelectedKey());	// cavity from
+                var Param7 = escapeSQLString(oComboBox_CavityIDto.getSelectedKey());	// to cavity
+                var Param8 = escapeSQLString(selecte_UserID);	// user
+                var Param9 = escapeSQLString(oComboBox_BlockedReason.getSelectedKey());	// reason
+                var Param10 = escapeSQLString(oComboBox_BlockedHow.getSelectedKey());	// how is blocked
+
+                var paramStr = "Param.1=" + encodeURIComponent(Param1) + "&Param.2=" + encodeURIComponent(Param2)
+                    +"&Param.3=" + encodeURIComponent(Param3) + "&Param.4=" + encodeURIComponent(Param4)
+                    +"&Param.5=" + encodeURIComponent(Param5) + "&Param.6=" + encodeURIComponent(Param6)
+                    +"&Param.7=" + encodeURIComponent(Param7) + "&Param.8=" + encodeURIComponent(Param8)
+                    +"&Param.9=" + encodeURIComponent(Param9) + "&Param.10=" + encodeURIComponent(Param10);
+
+                //alert(paramStr);
+                //return;
+                var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/set_MoldNewTotalCavities&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                            //oOverlayContainerCV.close();
+                            getActiveOrderData();
+                            if(oCore.byId("CB-RecordMoldHistory").getSelected){
+                                //doOpenMoldHistoryForm();
+                            }
+                            oOverlayContainerCV.close();
+                        } else {
+                            alert("Error DB: " + oReqData.statusText);
+                        }
+                };
+                oReqData.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+        // change PLC cavities num
+
+        function doChangePLCCavities (){
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                var timestamp = new Date().getTime();
+                var paramStr = "CODE=" + encodeURIComponent(4) + "&unitID=" + encodeURIComponent(selected_StationID)
+                // alert(paramStr);
+                var queryStr = "/XMII/Runner?Transaction=OneHDMIIOwensboro/PCO_HANDLER/TRANSACTIONS/AppMsgHandler&Content-Type=text/html&" + paramStr + "&ts=" + timestamp;
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                            doSentEmailChangeCavities();
+                        } else {
+                            alert("Error PCo: " + oReqData.statusText);
+                        }
+                };
+                oReqData.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+        function doSentEmailChangeCavities(){
+
+            var Param1 =  escapeSQLString(selected_StationName);	// unit name
+            var Param2 =  escapeSQLString(selected_OrderID);	// order id
+            var Param3 = escapeSQLString(selected_OrderOperationID); // operation id
+            var Param4 = escapeSQLString(selected_MoldNumber);	// mold number
+            var Param5 = escapeSQLString( temp_TotalValue);  		 // total cavities
+            var Param6 = escapeSQLString(selecte_UserName);			// user name
+            var MailRecipient = "admin@hunterdouglas.com";
+
+            var oSendMail;
+            if (window.XMLHttpRequest) {
+                oSendMail = new XMLHttpRequest();
+            }
+            if (oSendMail != null) {
+                var timestamp = new Date().getTime();
+
+                var paramStr = "UnitName="+encodeURIComponent(Param1)+
+                    "&OrderID="+encodeURIComponent(Param2)+
+                    "&OperationID="+encodeURIComponent(Param3)+
+                    "&MoldID="+encodeURIComponent(Param4)+
+                    "&CavityCurrentNumber="+encodeURIComponent(Param5)+
+                    "&UserName="+encodeURIComponent(Param6)+
+                    "&MailRecipient="+encodeURIComponent(MailRecipient);
+                // alert(paramStr);
+                var queryStr = "/XMII/Runner?Transaction=OneHDMIIOwensboro/STATIONS_HMI/TRANSACTIONS/SetMailFromHMI&OutputParameter=XML_RESULT&Content-Type=text/xml&"+paramStr+"&ts="+timestamp;
+                // alert(queryStr);
+
+                return;
+                oSendMail.open("GET", queryStr, true);
+                oSendMail.onreadystatechange = function() {
+                    if (oSendMail.readyState == 4)
+                        if (oSendMail.status == 200) {
+                            // Successful -- rebuild the screen
+                            var xmlDOC = oSendMail.responseXML;
+                            if(xmlDOC.getElementsByTagName("TRXRESULT")[0] && xmlDOC.getElementsByTagName("TRXRESULT")[0].childNodes[0]) {
+                                var trxMessage = xmlDOC.getElementsByTagName("TRXRESULT")[0].childNodes[0].nodeValue;
+                                alert(trxMessage);
+                            } else {
+                                alert("Please do try again later .. ");
+                            }
+                        } else {
+                            alert("Error: " + oSendMail.statusText);
+                        }
+                }
+                oSendMail.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
+        }
+
+        function updateComBoxCavityID() {
+            var timestamp = new Date().getTime();
+            var Param1 = escapeSQLString(selected_MoldNumber);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_MoldCavityStatus&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml"
+            // alert(queryStr);
+            getData(queryStr ,  parseJsonMoldCavityStatus);
+            function parseJsonMoldCavityStatus(jsondata){
+                oComboBox_CavityID.destroyItems();
+                oComboBox_CavityIDto.destroyItems();
+                var total_cav_num = jsondata[0]['Total_Cavities'];
+                for (var i=1; i<Number(total_cav_num)+1; i++){
+                    item_key = i ;
+                    item_text = 'CAVITY #'+i ;
+
+                    oItem = new sap.ui.core.ListItem({
+                        key : item_key,
+                        text : item_text,
+                    });
+                    oComboBox_CavityID.addItem(oItem);
+
+                    oItemto = new sap.ui.core.ListItem({
+                        key : item_key,
+                        text : item_text,
+                    });
+                    oComboBox_CavityIDto.addItem(oItemto);
+                }
+            }
+        }
+
+        function updateComBoxBlockedReason() {
+            var timestamp = new Date().getTime();
+            var Param1 = escapeSQLString(selected_MoldNumber);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_MoldBlockedReason&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml"
+            // alert(queryStr);
+            getData(queryStr ,  parseJsonMoldBlockedReason);
+            function parseJsonMoldBlockedReason(jsondata){
+                oComboBox_BlockedReason.destroyItems();
+                for (var i=0; i<jsondata.length; i++){
+                    item_key = jsondata[i]['recordID'];
+                    item_text = jsondata[i]['moldBlockedReason'];
+                    oItem = new sap.ui.core.ListItem({
+                        key : item_key,
+                        text : item_text });
+                    oComboBox_BlockedReason.addItem(oItem);
+                }
+            }
+        }
+
+        function updateComBoxBlockedHow() {
+            var timestamp = new Date().getTime();
+            var Param1 = escapeSQLString(selected_MoldNumber);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_MoldBlockedHow&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml"
+            // alert(queryStr);
+            getData(queryStr ,  parseJsonMoldBlockedHow);
+            function parseJsonMoldBlockedHow(jsondata){
+                oComboBox_BlockedHow.destroyItems();
+                for (var i=0; i<jsondata.length; i++){
+                    item_key = jsondata[i]['recordID'];
+                    item_text = jsondata[i]['moldBlockedHow'];
+                    oItem = new sap.ui.core.ListItem({
+                        key : item_key,
+                        text : item_text });
+                    oComboBox_BlockedHow.addItem(oItem);
+                }
+            }
+        }
+
+        // *********	MOLD HISTORY  OVERLAY	(INSPECTION) **************************************************************************************
+
+        var oMatrixMH = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixMH',
+            layoutFixed : true,
+            width: '1140px',
+            columns : 6,
+            widths : ['190px','190px','190px','190px','190px','190px',]
+        });
+
+
+        var oTitleMH = new sap.ui.commons.Label({
+            id : 'L-MH',
+            text : 'MOLD SETUP'
+        });
+
+        var oCellTitleMH = new sap.ui.commons.layout.MatrixLayoutCell({
+            id : 'Cell-TitleMH',
+            colSpan : 6 });
+
+        oCellTitleMH.addContent(oTitleMH);
+
+        oMatrixMH.createRow( oCellTitleMH );
+
+        var oTF_MoldNumberH = new sap.ui.commons.TextField({
+            id : 'TF-MoldNumberH',
+            tooltip : 'Mold Number',
+            editable :false,
+            value : ' ',
+            width : '95%'
+        });
+
+        var oTF_PressH = new sap.ui.commons.TextField({
+            id : 'TF-PressH',
+            tooltip : 'Press',
+            editable :false,
+            value : ' ',
+            width : '95%'
+        });
+
+        var oTF_DateH = new sap.ui.commons.TextField({
+            id : 'TF-DateH',
+            tooltip : 'Date',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_TechnicianH = new sap.ui.commons.TextField({
+            id : 'TF-TechnicianH',
+            tooltip : 'Technician',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+
+        var oTF_DrawingNumberH = new sap.ui.commons.TextField({
+            id : 'TF-DrawingNumberH',
+            tooltip : 'Drawing Number',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_PartNameH = new sap.ui.commons.TextArea({
+            id : 'TF-PartNameH',
+            tooltip : 'Mold Name',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+
+        oMatrixMH.createRow( oTF_MoldNumberH,oTF_PressH,oTF_DateH,oTF_TechnicianH,oTF_DrawingNumberH,oTF_PartNameH);
+
+        var oTF_ResinH = new sap.ui.commons.TextField({
+            id : 'TF-ResinH',
+            tooltip : 'Resin',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_ColorNameH = new sap.ui.commons.TextField({
+            id : 'TF-ColorNameH',
+            tooltip : 'Color Name',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_ColorNumberH = new sap.ui.commons.TextField({
+            id : 'TF-ColorNumberH',
+            tooltip : 'Color Number',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_TotalCavitationH = new sap.ui.commons.TextField({
+            id : 'TF-TotalCavitationH',
+            tooltip : 'Total Cavitation',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_CurrentCavitationH = new sap.ui.commons.TextField({
+            id : 'TF-CurrentCavitationH',
+            tooltip : 'Current Cavitation',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+        var oTF_CycleTimeH = new sap.ui.commons.TextField({
+            id : 'TF-CycleTimeH',
+            tooltip : 'Cycle Time',
+            editable :false,
+            value : ' ',
+            width : '95%' });
+
+
+        oMatrixMH.createRow( oTF_ResinH,oTF_ColorNameH,oTF_ColorNumberH,oTF_TotalCavitationH,oTF_CurrentCavitationH,oTF_CycleTimeH);
+
+        //  3  row
+        var oL_PartWeightH = new sap.ui.commons.Label({
+            id : 'L-PartWeightH',
+            text : 'Part Weight' });
+
+        var oL_RunnerWeightH = new sap.ui.commons.Label({
+            id : 'L-RunnerWeightH',
+            text : 'Runner Weight' });
+
+        var oL_ChillerH = new sap.ui.commons.Label({
+            id : 'L-ChillerH',
+            text : 'Chiller' });
+
+        var oL_ChillerTempH = new sap.ui.commons.Label({
+            id : 'L-ChillerTempH',
+            text : 'Chiller Temp' });
+
+        var oL_ThermolatorH = new sap.ui.commons.Label({
+            id : 'L-ThermolatorH',
+            text : 'Thermolator' });
+
+        var oL_ThermolatorTempH = new sap.ui.commons.Label({
+            id : 'L-ThermolatorTempH',
+            text : 'Thermolator Temp' });
+
+        oMatrixMH.createRow( oL_PartWeightH,oL_RunnerWeightH,oL_ChillerH,oL_ChillerTempH,oL_ThermolatorH,oL_ThermolatorTempH);
+
+        var oTF_PartWeightH = new sap.ui.commons.TextField({
+            id : 'TF-PartWeightH',
+            tooltip : 'Part Weight',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_PartWeightH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-PartWeightH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_RunnerWeightH = new sap.ui.commons.TextField({
+            id : 'TF-RunnerWeightH',
+            tooltip : 'Runner Weight',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_RunnerWeightH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-RunnerWeightH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_ChillerH = new sap.ui.commons.TextField({
+            id : 'TF-ChillerH',
+            tooltip : 'Chiller',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_ChillerH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-ChillerH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                });
+            }
+        });
+
+        var oTF_ChillerTempH = new sap.ui.commons.TextField({
+            id : 'TF-ChillerTempH',
+            tooltip : 'Chiller Temp',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_ChillerTempH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-ChillerTempH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_ThermolatorH = new sap.ui.commons.TextField({
+            id : 'TF-ThermolatorH',
+            tooltip : 'Thermolator',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_ThermolatorH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-ThermolatorH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_ThermolatorTempH = new sap.ui.commons.TextField({
+            id : 'TF-ThermolatorTempH',
+            tooltip : 'Thermolator Temp',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_ThermolatorTempH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-ThermolatorTempH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        oMatrixMH.createRow( oTF_PartWeightH,oTF_RunnerWeightH ,oTF_ChillerH,oTF_ChillerTempH,oTF_ThermolatorH,oTF_ThermolatorTempH);
+
+        //  4  row
+        var oL_InjectionFillSpeed1H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillSpeed1H',
+            text : 'Injection Fill Speed 1' });
+
+        var oL_InjectionFillSpeed2H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillSpeed2H',
+            text : 'Injection Fill Speed 2' });
+
+        var oL_InjectionFillSpeed3H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillSpeed3H',
+            text : 'Injection Fill Speed 3' });
+
+        var oL_InjectionFillSpeed4H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillSpeed4H',
+            text : 'Injection Fill Speed 4' });
+
+        var oL_InjectionFillSpeed5H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillSpeed5H',
+            text : 'Injection Fill Speed 5' });
+
+        var oL_InjectionFillSpeed6H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillSpeed6H',
+            text : 'Injection Fill Speed 6' });
+
+        oMatrixMH.createRow( oL_InjectionFillSpeed1H,oL_InjectionFillSpeed2H,oL_InjectionFillSpeed3H,oL_InjectionFillSpeed4H,oL_InjectionFillSpeed5H,oL_InjectionFillSpeed6H);
+
+        var oTF_InjectionFillSpeed1H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillSpeed1H',
+            tooltip : 'Injection Fill Speed 1',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillSpeed1H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillSpeed1H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillSpeed2H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillSpeed2H',
+            tooltip : 'Injection Fill Speed 2',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillSpeed2H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillSpeed2H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillSpeed3H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillSpeed3H',
+            tooltip : 'Injection Fill Speed 3',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillSpeed3H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillSpeed3H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillSpeed4H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillSpeed4H',
+            tooltip : 'Injection Fill Speed 4',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillSpeed4H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillSpeed4H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillSpeed5H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillSpeed5H',
+            tooltip : 'Injection Fill Speed 5',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillSpeed5H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillSpeed5H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillSpeed6H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillSpeed6H',
+            tooltip : 'Injection Fill Speed 6',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillSpeed6H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillSpeed6H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+
+        oMatrixMH.createRow( oTF_InjectionFillSpeed1H,oTF_InjectionFillSpeed2H,oTF_InjectionFillSpeed3H, oTF_InjectionFillSpeed4H,oTF_InjectionFillSpeed5H,oTF_InjectionFillSpeed6H);
+
+        //  5 row
+        var oL_MoldOpenH = new sap.ui.commons.Label({
+            id : 'L-MoldOpenH',
+            text : 'Mold Open' });
+
+        var oL_InjectionFillPos1H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillPos1H',
+            text : 'Injection Fill Pos 1' });
+
+        var oL_InjectionFillPos2H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillPos2H',
+            text : 'Injection Fill Pos 2' });
+
+        var oL_InjectionFillPos3H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillPos3H',
+            text : 'Injection Fill Pos 3' });
+
+        var oL_InjectionFillPos4H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillPos4H',
+            text : 'Injection Fill Pos 4' });
+
+        var oL_InjectionFillPos5H = new sap.ui.commons.Label({
+            id : 'L-InjectionFillPos5H',
+            text : 'Injection Fill Pos 5' });
+
+        oMatrixMH.createRow( oL_MoldOpenH,oL_InjectionFillPos1H,oL_InjectionFillPos2H,oL_InjectionFillPos3H,oL_InjectionFillPos4H,oL_InjectionFillPos5H);
+
+        var oTF_MoldOpenH = new sap.ui.commons.TextField({
+            id : 'TF-MoldOpenH',
+            tooltip : 'Mold Open',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_MoldOpenH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-MoldOpenH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillPos1H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillPos1H',
+            tooltip : 'Injection Fill Pos 1',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillPos1H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillPos1H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillPos2H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillPos2H',
+            tooltip : 'Injection Fill Pos 2',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillPos2H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillPos2H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillPos3H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillPos3H',
+            tooltip : 'Injection Fill Pos 3',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillPos3H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillPos3H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillPos4H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillPos4H',
+            tooltip : 'Injection Fill Pos 4',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillPos4H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillPos4H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionFillPos5H = new sap.ui.commons.TextField({
+            id : 'TF-InjectionFillPos5H',
+            tooltip : 'Injection Fill Pos 5',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionFillPos5H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionFillPos5H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+
+        oMatrixMH.createRow( oTF_MoldOpenH,oTF_InjectionFillPos1H,oTF_InjectionFillPos2H,oTF_InjectionFillPos3H,oTF_InjectionFillPos4H,oTF_InjectionFillPos5H);
+
+        //  6  row
+        var oL_OilTempH = new sap.ui.commons.Label({
+            id : 'L-OilTempH',
+            text : 'Oil Temp' });
+
+        var oL_InjectHoldPP1H = new sap.ui.commons.Label({
+            id : 'L-InjectHoldPP1H',
+            text : 'Inject Hold PP1' });
+
+        var oL_InjectHoldPP2H = new sap.ui.commons.Label({
+            id : 'L-InjectHoldPP2H',
+            text : 'Inject Hold PP2' });
+
+        var oL_InjectHoldPP3H = new sap.ui.commons.Label({
+            id : 'L-InjectHoldPP3H',
+            text : 'Inject Hold PP3' });
+
+        var oL_CoolingTimeH = new sap.ui.commons.Label({
+            id : 'L-CoolingTimeH',
+            text : 'Cooling Time' });
+
+        var oL_InjectionTimeH = new sap.ui.commons.Label({
+            id : 'L-InjectionTimeH',
+            text : 'Injection Time' });
+
+        oMatrixMH.createRow( oL_OilTempH,oL_InjectHoldPP1H,oL_InjectHoldPP2H ,oL_InjectHoldPP3H,oL_CoolingTimeH,oL_InjectionTimeH);
+
+        var oTF_OilTempH = new sap.ui.commons.TextField({
+            id : 'TF-OilTempH',
+            tooltip : 'Oil Temp',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_OilTempH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-OilTempH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectHoldPP1H = new sap.ui.commons.TextField({
+            id : 'TF-InjectHoldPP1H',
+            tooltip : 'Inject Hold PP1',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectHoldPP1H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectHoldPP1H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectHoldPP2H = new sap.ui.commons.TextField({
+            id : 'TF-InjectHoldPP2H',
+            tooltip : 'Inject Hold PP2',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectHoldPP2H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectHoldPP2H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectHoldPP3H = new sap.ui.commons.TextField({
+            id : 'TF-InjectHoldPP3H',
+            tooltip : 'Inject Hold PP3',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectHoldPP3H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectHoldPP3H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_CoolingTimeH = new sap.ui.commons.TextField({
+            id : 'TF-CoolingTimeH',
+            tooltip : 'Cooling Time',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_CoolingTimeH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-CoolingTimeH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_InjectionTimeH = new sap.ui.commons.TextField({
+            id : 'TF-InjectionTimeH',
+            tooltip : 'Injection Time',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_InjectionTimeH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-InjectionTimeH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        oMatrixMH.createRow( oTF_OilTempH, oTF_InjectHoldPP1H ,oTF_InjectHoldPP2H,oTF_InjectHoldPP3H, oTF_CoolingTimeH,oTF_InjectionTimeH);
+
+        //  7  row
+        var oL_BarrelTempNozzleH = new sap.ui.commons.Label({
+            id : 'L-BarrelTempNozzleH',
+            text : 'Barrel Temp Nozzle' });
+
+        var oL_BarrelTempZone1H = new sap.ui.commons.Label({
+            id : 'L-BarrelTempZone1H',
+            text : 'Barrel Temp Zone1' });
+
+        var oL_BarrelTempZone2H = new sap.ui.commons.Label({
+            id : 'L-BarrelTempZone2H',
+            text : 'Barrel Temp Zone2' });
+
+        var oL_BarrelTempZone3H = new sap.ui.commons.Label({
+            id : 'L-BarrelTempZone3H',
+            text : 'Barrel Temp Zone3' });
+
+        var oL_BarrelTempZone4H = new sap.ui.commons.Label({
+            id : 'L-BarrelTempZone4H',
+            text : 'Barrel Temp Zone4' });
+
+        var oL_BarrelTempZone5H = new sap.ui.commons.Label({
+            id : 'L-BarrelTempZone5H',
+            text : 'Barrel Temp Zone5' });
+
+
+        oMatrixMH.createRow( oL_BarrelTempNozzleH,oL_BarrelTempZone1H,oL_BarrelTempZone2H,oL_BarrelTempZone3H,oL_BarrelTempZone4H,oL_BarrelTempZone5H);
+
+        var oTF_BarrelTempNozzleH = new sap.ui.commons.TextField({
+            id : 'TF-BarrelTempNozzleH',
+            tooltip : 'Barrel Temp Nozzle',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_BarrelTempNozzleH.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-BarrelTempNozzleH').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_BarrelTempZone1H = new sap.ui.commons.TextField({
+            id : 'TF-BarrelTempZone1H',
+            tooltip : 'Barrel Temp Zone1',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_BarrelTempZone1H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-BarrelTempZone1H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_BarrelTempZone2H = new sap.ui.commons.TextField({
+            id : 'TF-BarrelTempZone2H',
+            tooltip : 'Barrel Temp Zone2',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_BarrelTempZone2H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-BarrelTempZone2H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_BarrelTempZone3H = new sap.ui.commons.TextField({
+            id : 'TF-BarrelTempZone3H',
+            tooltip : 'Barrel Temp Zone3',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_BarrelTempZone3H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-BarrelTempZone3H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_BarrelTempZone4H = new sap.ui.commons.TextField({
+            id : 'TF-BarrelTempZone4H',
+            tooltip : 'Barrel Temp Zone4',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_BarrelTempZone4H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-BarrelTempZone4H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        var oTF_BarrelTempZone5H = new sap.ui.commons.TextField({
+            id : 'TF-BarrelTempZone5H',
+            tooltip : 'Barrel Temp Zone5',
+            editable :true,
+            value : '',
+            width : '90%'
+        });
+        oTF_BarrelTempZone5H.addEventDelegate({
+            onAfterRendering:function() {
+                $('#TF-BarrelTempZone5H').keyboard({
+                    layout : 'num',
+                    restrictInput : true,
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        oMatrixMH.createRow( oTF_BarrelTempNozzleH,oTF_BarrelTempZone1H,oTF_BarrelTempZone2H,oTF_BarrelTempZone3H,oTF_BarrelTempZone4H,oTF_BarrelTempZone5H);
+
+
+        var oBT_SaveMoldHistory= new sap.ui.commons.Button({
+            text : "SAVE",
+            id : "BT-SaveMoldHistory",
+            //style: sap.ui.commons.ButtonStyle.Emph,
+            width: "120px",
+            height: "70px",
+            //press : function() {},
+        })
+        oBT_SaveMoldHistory.attachPress(doSaveMoldHistory)
+
+        var oCellTitleMH2 = new sap.ui.commons.layout.MatrixLayoutCell({
+            id : 'Cell-TitleMH2',
+            colSpan : 6 });
+
+        oCellTitleMH2.addContent(oBT_SaveMoldHistory);
+
+
+        oMatrixMH.createRow( oCellTitleMH2 );
+
+        var oOverlayContainerMH = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerMH.setHeight('700px');
+        oOverlayContainerMH.setWidth('1150px');
+        oOverlayContainerMH.addContent(oMatrixMH);
+
+        //**************************************************************************************
+
+        function doOpenMoldHistoryForm (){
+            if(!oOverlayContainerMH.isOpen()){
+                setHeaderHistoryRecordData();
+                oOverlayContainerMH.open();
+            }
+        }
+
+        function setHeaderHistoryRecordData(){
+            oCore.byId('TF-MoldNumberH').setValue( selected_MoldNumber);
+            oCore.byId('TF-PressH').setValue(selected_StationName);
+            var DateObj = new Date();
+            oCore.byId('TF-DateH').setValue(DateObj.toLocaleString());
+            oCore.byId('TF-TechnicianH').setValue(selecte_UserName );
+            oCore.byId('TF-DrawingNumberH').setValue(selected_PartID);
+            oCore.byId('TF-PartNameH').setValue(selected_PartName	);
+            oCore.byId('TF-ResinH').setValue("PC"	);
+            oCore.byId('TF-ColorNameH').setValue(selected_ColorName);
+            oCore.byId('TF-ColorNumberH').setValue(selected_ColorID);
+            oCore.byId('TF-CurrentCavitationH').setValue(selected_TotalCavities);
+            oCore.byId('TF-TotalCavitationH').setValue(selected_OriginalCavities);
+            oCore.byId('TF-CycleTimeH').setValue(selected_StdCycleTime);
+        }
+
+
+        function doSaveMoldHistory(){
+
+            var Param1= escapeSQLString(selected_MoldNumber);		// mold id
+            var Param2 = escapeSQLString(selected_StationID);			// press id
+            var Param3 = 	"25-01-2018";						//date
+            var Param4= escapeSQLString(selecte_UserID);				// user id
+            var Param5 = escapeSQLString(selected_PartID);			// drawing
+            var Param6 = escapeSQLString(selected_PartName);	 		// part name
+            var Param7= escapeSQLString("PC");					// resin
+            var Param8 = escapeSQLString(selected_ColorName);			// color
+            var Param9 = escapeSQLString(selected_ColorID);	 		// color number
+            var Param10= escapeSQLString(selected_TotalCavities);		// current cavities
+            var Param11 = escapeSQLString(selected_OriginalCavities);			// total cavities
+            var Param12 = escapeSQLString(selected_StdCycleTime);	 		// cycle time
+
+            var temp_PartWeight= escapeSQLString($('#TF-PartWeightH').val());
+            if (temp_PartWeight =="") temp_PartWeight = 0;
+            var Param13 = temp_PartWeight;
+            var temp_RunnerWeight= escapeSQLString($('#TF-RunnerWeightH').val());
+            if (temp_RunnerWeight =="") temp_RunnerWeight = 0;
+            var Param14 = temp_RunnerWeight;
+            var temp_Chiller= escapeSQLString($('#TF-ChillerH').val());
+            if (temp_Chiller =="") temp_Chiller = 0;
+            var Param15 = temp_Chiller;
+            var temp_ChillerTemp= escapeSQLString($('#TF-ChillerTempH').val());
+            if (temp_ChillerTemp =="") temp_ChillerTemp = 0;
+            var Param16 = temp_ChillerTemp;
+            var temp_Thermolator= escapeSQLString($('#TF-ThermolatorH').val());
+            if (temp_Thermolator =="") temp_Thermolator = 0;
+            var Param17 = temp_Thermolator;
+            var temp_ThermolatorTemp= escapeSQLString($('#TF-ThermolatorTempH').val());
+            if (temp_ThermolatorTemp =="") temp_ThermolatorTemp = 0;
+            var Param18 = temp_ThermolatorTemp;
+            var temp_InjectionFillSpeed1= escapeSQLString($('#TF-InjectionFillSpeed1H').val());
+            if (temp_InjectionFillSpeed1 =="") temp_InjectionFillSpeed1 = 0;
+            var Param19 = temp_InjectionFillSpeed1;
+            var temp_InjectionFillSpeed2= escapeSQLString($('#TF-InjectionFillSpeed2H').val());
+            if (temp_InjectionFillSpeed2 =="") temp_InjectionFillSpeed2 = 0;
+            var Param20 = temp_InjectionFillSpeed2;
+            var temp_InjectionFillSpeed3= escapeSQLString($('#TF-InjectionFillSpeed3H').val());
+            if (temp_InjectionFillSpeed3 =="") temp_InjectionFillSpeed3 = 0;
+            var Param21 = temp_InjectionFillSpeed3;
+            var temp_InjectionFillSpeed4= escapeSQLString($('#TF-InjectionFillSpeed4H').val());
+            if (temp_InjectionFillSpeed4 =="") temp_InjectionFillSpeed4 = 0;
+            var Param22 = temp_InjectionFillSpeed4;
+            var temp_InjectionFillSpeed5= escapeSQLString($('#TF-InjectionFillSpeed5H').val());
+            if (temp_InjectionFillSpeed5 =="") temp_InjectionFillSpeed5 = 0;
+            var Param23 = temp_InjectionFillSpeed5;
+            var temp_InjectionFillSpeed6= escapeSQLString($('#TF-InjectionFillSpeed6H').val());
+            if (temp_InjectionFillSpeed6 =="") temp_InjectionFillSpeed6 = 0;
+            var Param24 = temp_InjectionFillSpeed6;
+            var temp_MoldOpen= escapeSQLString($('#TF-MoldOpenH').val());
+            if (temp_MoldOpen =="") temp_MoldOpen = 0;
+            var Param25 = temp_MoldOpen;
+            var temp_InjectionFillPos1= escapeSQLString($('#TF-InjectionFillPos1H').val());
+            if (temp_InjectionFillPos1 =="") temp_InjectionFillPos1 = 0;
+            var Param26 = temp_InjectionFillPos1;
+            var temp_InjectionFillPos2= escapeSQLString($('#TF-InjectionFillPos2H').val());
+            if (temp_InjectionFillPos2 =="") temp_InjectionFillPos2 = 0;
+            var Param27 = temp_InjectionFillPos2;
+            var temp_InjectionFillPos3= escapeSQLString($('#TF-InjectionFillPos3H').val());
+            if (temp_InjectionFillPos3 =="") temp_InjectionFillPos3 = 0;
+            var Param28 = temp_InjectionFillPos3;
+            var temp_InjectionFillPos4= escapeSQLString($('#TF-InjectionFillPos4H').val());
+            if (temp_InjectionFillPos4 =="") temp_InjectionFillPos4 = 0;
+            var Param29 = temp_InjectionFillPos4;
+            var temp_InjectionFillPos5= escapeSQLString($('#TF-InjectionFillPos5H').val());
+            if (temp_InjectionFillPos5 =="") temp_InjectionFillPos5 = 0;
+            var Param30 = temp_InjectionFillPos5;
+            var temp_OilTemp= escapeSQLString($('#TF-OilTempH').val());
+            if (temp_OilTemp =="") temp_OilTemp = 0;
+            var Param31 = temp_OilTemp;
+            var temp_InjectHoldPP1= escapeSQLString($('#TF-InjectHoldPP1H').val());
+            if (temp_InjectHoldPP1 =="") temp_InjectHoldPP1 = 0;
+            var Param32 = temp_InjectHoldPP1;
+            var temp_InjectHoldPP2= escapeSQLString($('#TF-InjectHoldPP2H').val());
+            if (temp_InjectHoldPP2 =="") temp_InjectHoldPP2 = 0;
+            var Param33 = temp_InjectHoldPP2;
+            var temp_InjectHoldPP3= escapeSQLString($('#TF-InjectHoldPP3H').val());
+            if (temp_InjectHoldPP3 =="") temp_InjectHoldPP3 = 0;
+            var Param34 = temp_InjectHoldPP3;
+            var temp_CoolingTime= escapeSQLString($('#TF-CoolingTimeH').val());
+            if (temp_CoolingTime =="") temp_CoolingTime = 0;
+            var Param35 = temp_CoolingTime;
+            var temp_InjectionTime= escapeSQLString($('#TF-InjectionTimeH').val());
+            if (temp_InjectionTime =="") temp_InjectionTime = 0;
+            var Param36 =temp_InjectionTime;
+            var temp_BarrelTempNozzle= escapeSQLString($('#TF-BarrelTempNozzleH').val());
+            if (temp_BarrelTempNozzle =="") temp_BarrelTempNozzle = 0;
+            var Param37= temp_BarrelTempNozzle;
+            var temp_BarrelTempZone1= escapeSQLString($('#TF-BarrelTempZone1H').val());
+            if (temp_BarrelTempZone1 =="") temp_BarrelTempZone1 = 0;
+            var Param38 = temp_BarrelTempZone1;
+            var temp_BarrelTempZone2= escapeSQLString($('#TF-BarrelTempZone2H').val());
+            if (temp_BarrelTempZone2 =="") temp_BarrelTempZone2 = 0;
+            var Param39 =temp_BarrelTempZone2;
+            var temp_BarrelTempZone3= escapeSQLString($('#TF-BarrelTempZone3H').val());
+            if (temp_BarrelTempZone3 =="") temp_BarrelTempZone3 = 0;
+            var Param40 = temp_BarrelTempZone3;
+            var temp_BarrelTempZone4= escapeSQLString($('#TF-BarrelTempZone4H').val());
+            if (temp_BarrelTempZone4 =="") temp_BarrelTempZone4 = 0;
+            var Param41 = temp_BarrelTempZone4;
+            var temp_BarrelTempZone5= escapeSQLString($('#TF-BarrelTempZone5H').val());
+            if (temp_BarrelTempZone5 =="") temp_BarrelTempZone5 = 0;
+            var Param42 = temp_BarrelTempZone5;
+
+            var ParamValues =  Param13 +","+ Param14 +","+Param15 +","+Param16 +","+Param17 +","+Param18 +","+Param19 +","+Param20 +","+Param21
+                +","+Param22 +","+Param23 +","+Param24 +","+Param25 +","+Param26 +","+Param27 +","+Param28 +","+Param29 +","+Param30
+                +","+Param31 +","+Param32 +","+Param33 +","+Param34 +","+Param35 +","+Param36 +","+Param37 +","+Param38
+                +","+Param39 +","+Param40 +","+Param41 +","+Param42
+
+            var timestamp = new Date().getTime();
+
+            var paramStr =
+                "Param.1="+encodeURIComponent(Param1) +  "&Param.2="+encodeURIComponent(Param2)+  "&Param.3="+encodeURIComponent(Param3)
+                +  "&Param.4="+encodeURIComponent(Param4)+  "&Param.5="+encodeURIComponent(Param5)+  "&Param.6="+encodeURIComponent(Param6)
+                +    "&Param.7="+encodeURIComponent(Param7) +  "&Param.8="+encodeURIComponent(Param8)+  "&Param.9="+encodeURIComponent(Param9)
+                +  "&Param.10="+encodeURIComponent(Param10)+  "&Param.11="+encodeURIComponent(Param11)+  "&Param.12="+encodeURIComponent(Param12)
+                +  "&Param.13="+encodeURIComponent(ParamValues)
+
+            // alert(paramStr);
+
+            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/set_MoldHistoryRecord&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+
+            if (window.XMLHttpRequest) {
+                oReqData = new XMLHttpRequest();
+            }
+            if (oReqData != null) {
+                oReqData.open("GET", queryStr, true);
+                oReqData.onreadystatechange = function () {
+                    if (oReqData.readyState == 4)
+                        if (oReqData.status == 200) {
+                            // alert("Successful ...");
+                            oOverlayContainerMH.close();
+                        } else {
+                            alert("Error DB : " + oReqData.statusText);
+                        }
+                };
+                oReqData.send();
+            }else {
+
+            }
+        }
+
+
+
+        // *********	DOWNTIME  OVERLAY	***************************************************************************************
+
+        var oMatrixDT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixDT',
+            layoutFixed : true,
+            width: '890px',
+            columns : 1,
+            widths : ['900px']
+        });
+
+        var oMatrixDTT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixDTT',
+            layoutFixed : true,
+            width: '890px',
+            columns : 2,
+            widths : ['445px','445px']
+        });
+
+        var oTitleDT = new sap.ui.commons.Label({
+            id : 'L-DT',
+            text : 'DOWNTIME'
+        });
+        oMatrixDT.createRow( oTitleDT );
+
+        var oTableDT = new sap.ui.table.Table({
+            id : "TBL_DT",
+            visibleRowCount: 7,
+            firstVisibleRow: 0,
+            width: "890px",
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            selectionMode: sap.ui.table.SelectionMode.Multi
+        });
+
+        var oModelDT =  new sap.ui.model.xml.XMLModel();
+
+        oMatrixDT.createRow( oTableDT);
+
+        var oL_DowntimeCode = new sap.ui.commons.Label({
+            id : 'L-DowntimeCode',
+            text : 'Downtime Code' });
+
+        var oComboBox_DowntimeCode = new sap.ui.commons.DropdownBox({
+            id : "dbox_DowntimeCode",
+            tooltip : 'Downtime Code',
+            editable : true,
+            width : '80%',
+            change: function(oEvent){
+                //alert(oEvent.oSource.getSelectedKey());
+            }
+        });
+
+        oCore.byId("dbox_DowntimeCode").setMaxPopupItems(8);
+
+        oMatrixDTT.createRow( oL_DowntimeCode,oComboBox_DowntimeCode);
+
+        oMatrixDT.createRow( oMatrixDTT);
+
+        var oBT_DowntimeCode= new sap.ui.commons.Button({
+            text : "SUBMIT",
+            id : "BT-DowntimeCode",
+            width: "120px",
+            height: "70px",
+            press : function() {},
+        })
+        //oBT_DowntimeCode.attachPress(doSubmitDowntimeCode);
+
+        oMatrixDT.createRow(oBT_DowntimeCode);
+
+        var oOverlayContainerDT = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerDT.setHeight('550px');
+        oOverlayContainerDT.setWidth('900px');
+        oOverlayContainerDT.addContent(oMatrixDT);
+
+        //**************************************************************************************
+
+        function updateDowntimeCode() {
+            var timestamp = new Date().getTime();
+            var Param1 = escapeSQLString(selected_MoldNumber);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_DowntimeCode&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml"
+            // alert(queryStr);
+            getData(queryStr ,  parseJsonDowntimeCode);
+            function parseJsonDowntimeCode(jsondata){
+                oComboBox_DowntimeCode.destroyItems();
+                for (var i=0; i<jsondata.length; i++){
+                    item_key = jsondata[i]['recordID'];
+                    item_text = jsondata[i]['downtimeDescription'];
+                    oItem = new sap.ui.core.ListItem({
+                        key : item_key,
+                        text : item_text });
+                    oComboBox_DowntimeCode.addItem(oItem);
+                }
+            }
+        }
+
+
+        // ***************	SCRAP  OVERLAY	***************************************************************************************
+
+        var oMatrixSC = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixSC',
+            layoutFixed : true,
+            width: '890px',
+            columns : 1,
+            widths : ['900px']
+        });
+
+        var oMatrixSCT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixSCT',
+            layoutFixed : true,
+            width: '890px',
+            columns : 2,
+            widths : ['445px','445px']
+        });
+
+        var oTitleSC = new sap.ui.commons.Label({
+            id : 'L-SC',
+            text : 'SCRAP'
+        });
+        oMatrixSC.createRow( oTitleSC );
+
+        var oTableSC = new sap.ui.table.Table({
+            id : "TBL_SC",
+            visibleRowCount: 7,
+            firstVisibleRow: 0,
+            width: "530px",
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            selectionMode: sap.ui.table.SelectionMode.Multi
+        });
+
+        var oModelSC =  new sap.ui.model.xml.XMLModel();
+
+        var oOverlayContainerSC = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerSC.setHeight('550px');
+        oOverlayContainerSC.setWidth('900px');
+        oOverlayContainerSC.addContent(oMatrixSC);
+
+        // ***************	COMPONENTS  OVERLAY	****************************
+
+        var oMatrixCOM = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixCOM',
+            layoutFixed : true,
+            width: '990px',
+            columns : 1,
+            widths : ['990px']
+        });
+
+        var oMatrixCOMT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixCOMT',
+            layoutFixed : true,
+            width: '990px',
+            columns : 2,
+            widths : ['495px','495px']
+        });
+
+        var oTitleCOM = new sap.ui.commons.Label({
+            id : 'L-COM',
+            text : 'COMPONENTS'
+        });
+        oMatrixCOM.createRow( oTitleCOM );
+
+        var oTableCOM = new sap.ui.table.Table({
+            id : "TBL_COM",
+            visibleRowCount: 8,
+            firstVisibleRow: 0,
+            rowHeight: 50,
+            width: "990px",
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            selectionMode: sap.ui.table.SelectionMode.Single,
+        });
+
+        var oModelCOM =  new sap.ui.model.xml.XMLModel();
+
+        oMatrixCOM.createRow( oTableCOM );
+
+        var oOverlayContainerCOM = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerCOM.setHeight('550px');
+        oOverlayContainerCOM.setWidth('990px');
+        oOverlayContainerCOM.addContent(oMatrixCOM);
+
+        // ***************  	FUNCTIONS 	****************************
+
+        function createTableComponents() {
+            // Bind the table rows to this model
+            var timestamp = new Date().getTime();
+            //alert(selectedStationID);
+            var Param1 = escapeSQLString(selected_OrderID);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            oModelCOM.loadData("/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_OrderComponents&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml","",false);
+            //alert(oModelOL.getXML());
+            createColumnsComponents();
+            oTableCOM.setModel(oModelCOM);
+            oTableCOM.bindRows("/Rowset/Row");
+            is_order_components_created=1;
+        };
+
+        function updateTableComponents() {
+            oTableCOM.clearSelection();
+            var timestamp = new Date().getTime();
+            var isFloorOrder = 0;
+            // alert(selectedStationID);
+            var Param1 = escapeSQLString(selected_OrderID);
+            var paramStr = "Param.1="+encodeURIComponent(Param1);
+            // alert(paramStr);
+            oModelCOM.loadData("/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_OrderComponents&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml","",false);
+            oTableCOM.getModel().refresh(true);
+        };
+
+        function createColumnsComponents() {
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "MATERIAL ID"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "Material"),
+                sortProperty: "Material",
+                filterProperty: "Material",
+                width: "120px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "STORAGE"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "StorageLocation"),
+                sortProperty: "StorageLocation",
+                filterProperty: "StorageLocation",
+                width: "100px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "REQUIRED QTY"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "ReqQuan"),
+                sortProperty: "ReqQuan",
+                filterProperty: "ReqQuan",
+                width: "140px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "UOM"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "BaseUoM"),
+                sortProperty: "BaseUoM",
+                filterProperty: "BaseUoM",
+                width: "100px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "WITHDRAWN QTY"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "WithdrawnQuantity"),
+                sortProperty: "WithdrawnQuantity",
+                filterProperty: "WithdrawnQuantity",
+                width: "140px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "ENTRY QTY"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "EntryQuantity"),
+                sortProperty: "EntryQuantity",
+                filterProperty: "EntryQuantity",
+                width: "100px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "COMMITED QTY"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "CommitedQuantity"),
+                sortProperty: "CommitedQuantity",
+                filterProperty: "CommitedQuantity",
+                width: "140px"
+            }));
+            oTableCOM.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "SEQUENCE"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "Sequence"),
+                sortProperty: "Sequence",
+                filterProperty: "Sequence",
+                width: "100px"
+            }));
+        }
+
+        // *********  INSPECTION  OVERLAY	***************************************************************************************
+
+        var oMatrixINS = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixINS',
+            layoutFixed : true,
+            width: '890px',
+            columns : 1,
+            widths : ['900px']
+        });
+
+        var oMatrixINST = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixINST',
+            layoutFixed : true,
+            width: '890px',
+            columns : 2,
+            widths : ['445px','445px']
+        });
+
+        var oTitleINS = new sap.ui.commons.Label({
+            id : 'L-INS',
+            text : 'INSPECTION'
+        });
+        oMatrixINS.createRow( oTitleINS );
+
+        var oTableINS = new sap.ui.table.Table({
+            id : "TBL_INS",
+            visibleRowCount: 7,
+            firstVisibleRow: 0,
+            width: "530px",
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            selectionMode: sap.ui.table.SelectionMode.Multi
+        });
+
+        var oModelINS =  new sap.ui.model.xml.XMLModel();
+
+        var oOverlayContainerINS = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerINS.setHeight('550px');
+        oOverlayContainerINS.setWidth('900px');
+        oOverlayContainerINS.addContent(oMatrixINS);
+
+        // ********* 	LABEL  OVERLAY	***************************************************************************************
+
+        var oMatrixLB = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixLB',
+            layoutFixed : true,
+            width: '890px',
+            columns : 1,
+            widths : ['900px']
+        });
+
+        var oMatrixLBT = new sap.ui.commons.layout.MatrixLayout({
+            id : 'MatrixILBT',
+            layoutFixed : true,
+            width: '890px',
+            columns : 4,
+            widths : ['20px','270px','270px','270px']
+        });
+
+        var oTitleLB = new sap.ui.commons.Label({
+            id : 'L-LB',
+            text : 'LABEL'
+        });
+        oMatrixLB.createRow( oTitleLB );
+
+        var oTableLB = new sap.ui.table.Table({
+            id : "TBL_LB",
+            visibleRowCount: 7,
+            firstVisibleRow: 0,
+            width: "530px",
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            selectionMode: sap.ui.table.SelectionMode.Multi
+        });
+
+        var oModelLB =  new sap.ui.model.xml.XMLModel();
+
+        var oLabel_LabelOrderID = new sap.ui.commons.Label({
+            id : 'L-LabelOrderID',
+            visible : true,
+            text : 'ORDER ID' })
+
+        var oLabel_LabelInspectionLot = new sap.ui.commons.Label({
+            id : 'L-LabelInspectionLot',
+            visible : true,
+            text : 'ISPECTION LOT' })
+
+        var oLabel_LabelQuantity = new sap.ui.commons.Label({
+            id : 'L-LabelQuantity',
+            visible : true,
+            text : 'QUANTITY' })
+
+        oMatrixLBT.createRow('',oLabel_LabelOrderID, oLabel_LabelInspectionLot,oLabel_LabelQuantity);
+
+        var oTF_LabelOrderID = new sap.ui.commons.TextField({
+            id : 'TF-LabelOrderID',
+            tooltip : 'Label Order ID',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelInspectionLot = new sap.ui.commons.TextField({
+            id : 'TF-LabelInspectionLot',
+            tooltip : 'Label Inspection Lot',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelQuantity = new sap.ui.commons.TextField({
+            id : 'TF-LabelQuantity',
+            tooltip : 'Label Quantity',
+            editable : true,
+            value : '',
+            width : '80%' });
+
+        oTF_LabelQuantity.addEventDelegate({
+            onAfterRendering:function() {
+                // do something
+                $('#TF-LabelQuantity').keyboard({
+                    layout : 'num',
+                    restrictInput : true, // Prevent keys not in the displayed keyboard from being typed in
+                    preventPaste : true,
+                    autoAccept : true
+                });
+            }
+        });
+
+        oMatrixLBT.createRow('',oTF_LabelOrderID,oTF_LabelInspectionLot,oTF_LabelQuantity );
+
+        var oLabel_LabelMachineID = new sap.ui.commons.Label({
+            id : 'L-LabelMachineID',
+            visible : true,
+            text : 'MACHINE ID' })
+
+        var oLabel_LabelBatchID = new sap.ui.commons.Label({
+            id : 'L-LabelBatchID',
+            visible : true,
+            text : 'BATCH ID' })
+
+        var oLabel_LabelShift = new sap.ui.commons.Label({
+            id : 'L-LabelShift',
+            visible : true,
+            text : 'SHIFT' })
+
+        oMatrixLBT.createRow('',oLabel_LabelMachineID,oLabel_LabelBatchID,oLabel_LabelShift);
+
+        var oTF_LabelMachineID = new sap.ui.commons.TextField({
+            id : 'TF-LabelMachineID',
+            tooltip : 'Label Machine ID',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelBatchID = new sap.ui.commons.TextField({
+            id : 'TF-LabelBatchID',
+            tooltip : 'Label Batch ID',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelShift = new sap.ui.commons.TextField({
+            id : 'TF-LabelShift',
+            tooltip : 'SHIFT',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+
+        oMatrixLBT.createRow('',oTF_LabelMachineID,oTF_LabelBatchID,oTF_LabelShift );
+
+        var oLabel_LabelMaterialID = new sap.ui.commons.Label({
+            id : 'L-LabelMaterialID',
+            visible : true,
+            text : 'MATERIAL ID' })
+
+        var oLabel_LabelMaterialDescription = new sap.ui.commons.Label({
+            id : 'L-LabelMaterialDescription',
+            visible : true,
+            text : 'DESCRIPTION' })
+
+        var oLabel_LabelUOM = new sap.ui.commons.Label({
+            id : 'L-LabelUOM',
+            visible : true,
+            text : 'UOM' })
+
+
+        oMatrixLBT.createRow('',oLabel_LabelMaterialID,oLabel_LabelMaterialDescription,oLabel_LabelUOM);
+
+
+        var oTF_LabelMaterialID = new sap.ui.commons.TextField({
+            id : 'TF-LabelMaterialID',
+            tooltip : 'Label Material ID',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelMaterialDescription = new sap.ui.commons.TextField({
+            id : 'TF-LabelMaterialDescription',
+            tooltip : 'Label Material Description',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelUOM = new sap.ui.commons.TextField({
+            id : 'TF-LabelUOM',
+            tooltip : 'UOM',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+
+        oMatrixLBT.createRow('',oTF_LabelMaterialID,oTF_LabelMaterialDescription,oTF_LabelUOM );
+
+
+        var oLabel_LabelDocument = new sap.ui.commons.Label({
+            id : 'L-LabelDocument',
+            visible : true,
+            text : 'DOCUMENT ID' })
+
+        var oLabel_LabelDate = new sap.ui.commons.Label({
+            id : 'L-LabelDate',
+            visible : true,
+            text : 'DATE' })
+
+        var oLabel_LabelAddress= new sap.ui.commons.Label({
+            id : 'L-LabelAddress',
+            visible : true,
+            text : 'ADDRESS' })
+
+
+        oMatrixLBT.createRow('',oLabel_LabelDocument,oLabel_LabelDate,oLabel_LabelAddress);
+
+
+        var oTF_LabelDocument = new sap.ui.commons.TextField({
+            id : 'TF-LabelDocument',
+            tooltip : 'Label Document',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelDate = new sap.ui.commons.TextField({
+            id : 'TF-LabelDate',
+            tooltip : 'Label Date',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        var oTF_LabelAddress = new sap.ui.commons.TextArea({
+            id : 'TF-LabelAddress',
+            tooltip : 'ADDRESS',
+            editable : false,
+            value : '',
+            width : '80%' });
+
+        oMatrixLBT.createRow('',oTF_LabelDocument,oTF_LabelDate,oTF_LabelAddress );
+
+        oMatrixLB.createRow(oMatrixLBT);
+
+        var oBT_LabelPrintSubmit= new sap.ui.commons.Button({
+            text : "SUBMIT",
+            id : "BT-LabelPrintSubmit",
+            width: "120px",
+            height: "70px",
+            press : function() {},
+        })
+        //oBT_LabelPrintSubmit.attachPress(doLabelPrintSubmit);
+
+        oMatrixLB.createRow(oBT_LabelPrintSubmit);
+
+        var oOverlayContainerLB = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
+        oOverlayContainerLB.setHeight('550px');
+        oOverlayContainerLB.setWidth('900px');
+        oOverlayContainerLB.addContent(oMatrixLB);
+
+        // ******************************************************************************************************************************************************************
+
+        oMatrixMain.placeAt("main_content");
+
+        //------------------------- MAIN METHODS----------------------------------
+
+        function disableButtons (){
+            // return;
+            oBT_OrderList.setEnabled(false);
+            oBT_OrderStart.setEnabled(false);
+            oBT_ForcedScrap.setEnabled(false);
+            oBT_Emergency.setEnabled(false);
+
+            oBT_Cavitation.setEnabled(false);
+            oBT_Downtime.setEnabled(false);
+            //oBT_Scrap.setEnabled(false);
+            oBT_Components.setEnabled(false);
+            oBT_Hystory.setEnabled(false);
+
+            oBT_LabelPrinting.setEnabled(false);
+            oBT_Hold.setEnabled(false);
+            oBT_PartsInspection.setEnabled(false);
+        }
+
+        function enableButtons (){
+            oBT_OrderList.setEnabled(true);
+            oBT_OrderStart.setEnabled(true);
+            oBT_ForcedScrap.setEnabled(true);
+            oBT_Emergency.setEnabled(true);
+
+            oBT_Cavitation.setEnabled(true);
+            oBT_Downtime.setEnabled(true);
+            //oBT_Scrap.setEnabled(true);
+            oBT_Components.setEnabled(true);
+            oBT_Hystory.setEnabled(true);
+
+            oBT_LabelPrinting.setEnabled(true);
+            oBT_Hold.setEnabled(true);
+            oBT_PartsInspection.setEnabled(true);
+        }
+
+        // -------------------------------SOFT KB-------------------------------------
+
+
+
+        function refreshKeypadH (){
+            $('#TF-PartWeightH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-RunnerWeightH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-ChillerH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-ChillerTempH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-ThermolatorH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-ThermolatorTempH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillSpeed1H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillSpeed2H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillSpeed3H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillSpeed4H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillSpeed5H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillSpeed6H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-MoldOpenH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillPos1H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionFillPos2H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-InjectionFillPos3H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-InjectionFillPos4H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-InjectionFillPos5H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-OilTempH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-InjectHoldPP1H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-InjectHoldPP2H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-InjectHoldPP3H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-CoolingTimeH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-InjectionTimeH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+
+            $('#TF-BarrelTempNozzleH').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-BarrelTempZone1H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-BarrelTempZone2H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-BarrelTempZone3H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-BarrelTempZone4H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-BarrelTempZone5H').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+        }
+
+
+        function refreshKeypad(){
+            $('#TF-ClockID').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+            $('#TF-Label Quontity').keyboard({
+                layout : 'num',
+                restrictInput : true,
+                preventPaste : true,
+                autoAccept : true
+            });
+        }
+
+
+
+    </script>
+
+</head>
+
+<body onLoad="roleSecurity()">
+
+<input id="MachineIP" value='{Machine}'  hidden/>
+
+<div id="header" >
+    <div id="app_title"></div>
+    <div id="page_title"></div>
+</div>
+
+<div id="top_navigation" ></div>
+
+<div id="main_content" ></div>
+
+</body>
+
+<script>
+
+    var local_MachineIP = document.getElementById('MachineIP').value;
+
+    //-----------------------------------CLOCK --------------------------
+
+    var timer_is_on = 0;
+
+    var timerVar = setInterval(function(){ getRuntimeData(); }, 15000);
+
+    function startTimer() {
+        if (timerVar) {
+            clearInterval(timerVar);
+            timerVar = setInterval(function(){ getRuntimeData(); }, 15000);
+        }
+    }
+
+    function stopTimer() {
+        clearInterval(timerVar);
+        timer_is_on = 0;
+    }
+
+</script>
+
+</html>

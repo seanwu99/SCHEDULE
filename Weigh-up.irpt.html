@@ -6,7 +6,7 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=11;no-cache" />
     <meta charset="UTF-8"/>
-    <title>Hunter Douglas</title>
+    <title>WEIGHUP & </title>
 
     <link rel="stylesheet" type="text/css" href="css/default.css"></link>
 
@@ -56,10 +56,12 @@
         }
 
         #page_title {
+            position:absolute;
+            top:85px;
             width: 400px;
             text-align: center;
             font-family: "Arial Black", Arial, Helvetica, sans-serif;
-            font-size: 32px;
+            font-size: 62px;
             color: #cfcfcf;
         }
 
@@ -77,7 +79,7 @@
         #TV-MachineID {
             text-align: left;
             font-family: "Arial Black", Arial, Helvetica, sans-serif;
-            font-size: 42px;
+            font-size: 62px;
             color: #cfcfcf;
         }
 
@@ -140,10 +142,12 @@
             text-transform: uppercase;
         }
 
+        /*  ACTIVE ORDER */
+
         #L-OrderID, #L-OrderStartDate,#L-OrderPartID,#L-OrderPartName,#L-MoldID,
         #L-StdCavitatiion,#L-OrderQTY,#L-StdCycleTime,#L-PartWeight,#L-BoxWeight{
             font-family: "Lucida Grande", Tahoma;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: lighter;
             font-variant: normal;
             text-transform: uppercase;
@@ -151,6 +155,40 @@
             margin-top: 10px;
             padding-left: 10px;
             letter-spacing: 0.2em;
+        }
+
+        #TF-OrderID,#TF-OrderStartDate,#TF-OrderPartID,#TF-MoldID,
+        #TF-StdCavitatiion,#TF-OrderQTY,#TF-StdCycleTime,#TF-PartWeight,#TF-BoxWeight{
+            font-size: 16px !important;
+            height: 35px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #TF-OrderPartName{
+            font-size: 15px !important;
+            height: 45px;
+        //font-weight: bold;
+            text-align: center;
+        }
+
+        /*  RUNTIME */
+
+        #L-GoodParts,#L-CycleTime,#L-FillTime,#L-BlockedCavities,#L-TotalRunningTime{
+            font-family: "Lucida Grande", Tahoma;
+            font-size: 12px;
+            font-weight: lighter;
+            font-variant: normal;
+            text-transform: uppercase;
+            color: #666666;
+            margin-top: 10px;
+            letter-spacing: 0.2em;
+        }
+
+        #BT-OrderStart{
+            font-weight: bold;
+            font-size:14px;
+            text-transform: uppercase;
         }
 
         #L-ScrapParts,#L-AutoTime,#L-RecovTime,#L-DownTime,#L-RemainingTime{
@@ -167,11 +205,13 @@
 
         #TF-GoodParts,#TF-ScrapParts,#TF-CycleTime,#TF-AutoTime,#TF-FillTime,#TF-RecovTime,
         #TF-BlockedCavities,#TF-DownTime,#TF-TotalRunningTime,#TF-RemainingTime{
-            font-size: 30px;
+            font-size: 40px !important;
             height: 55px;
             font-weight: bold;
             text-align: center;
         }
+
+        /*  BUTTONS */
 
         #BT-LogOn,#BT-ForcedScrap,#BT-LabelPrinting,#BT-Hold,#BT-PartsInspection,#BT-Emergency{
             font-weight: bold;
@@ -225,43 +265,11 @@
             font-size:14px;
         }
 
-        /*  ORDERS */
 
-        #TF-OrderID,#TF-OrderStartDate,#TF-OrderPartID,#TF-MoldID,
-        #TF-StdCavitatiion,#TF-OrderQTY,#TF-StdCycleTime,#TF-PartWeight,#TF-BoxWeight{
-            font-size: 16px;
-            height: 35px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        #TF-OrderPartName{
-            font-size: 16px;
-            height: 45px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        #L-GoodParts,#L-CycleTime,#L-FillTime,#L-BlockedCavities,#L-TotalRunningTime{
-            font-family: "Lucida Grande", Tahoma;
-            font-size: 12px;
-            font-weight: lighter;
-            font-variant: normal;
-            text-transform: uppercase;
-            color: #666666;
-            margin-top: 10px;
-            letter-spacing: 0.2em;
-        }
-
-        #BT-OrderStart{
-            font-weight: bold;
-            font-size:14px;
-            text-transform: uppercase;
-        }
 
         /* CAVITY */
 
-        #L-MoldName,#L-MoldOriginalCavities,#L-MoldTotalCavities, #L-MoldDeficiency, #L-MoldDeficiency,#L-CavityID,
+        #L-MoldName,#L-MoldOriginalCavities,#L-MoldTotalCavities, #L-MoldDeficiency, #L-CavityID,
         #L-CavityIDto,#L-BlockedReason,#L-BlockedHow, #L-RecordMoldHistory, #L-MoldBlockedCavities{
             font-family: "Lucida Grande", Tahoma;
             text-align:right;
@@ -304,7 +312,7 @@
         }
 
         #CB-RecordMoldHistory{
-            width:90%  !important;
+            width:25%  !important;
             font-size: 20px;
             zoom:2  !important;
         }
@@ -326,25 +334,27 @@
             margin-top: 10px;
         }
 
-        #TF-PartNameH{
-            font-size: 13px;
-            height: 45px;
-            font-weight: bold;
-            text-align: center;
-        }
 
-        #TF-MoldNumberH,#TF-PressH,#TF-DateH,#TF-TechnicianH,#TF-DrawingNumberH,
+        #TF-MoldNumberH,#TF-PressH,#TF-TechnicianH,#TF-DrawingNumberH,
         #TF-ResinH,#TF-ColorNameH,#TF-ColorNumberH,#TF-CurrentCavitationH,#TF-TotalCavitationH,#TF-CycleTimeH,
         #TF-PartWeightH,#TF-RunnerWeightH,#TF-ChillerH,#TF-ChillerTempH,#TF-ThermolatorH,#TF-ThermolatorTempH,
         #TF-InjectionFillSpeed1H,#TF-InjectionFillSpeed2H,#TF-InjectionFillSpeed3H,#TF-InjectionFillSpeed4H,#TF-InjectionFillSpeed5H,#TF-InjectionFillSpeed6H,
         #TF-MoldOpenH,#TF-InjectionFillPos1H,#TF-InjectionFillPos2H,#TF-InjectionFillPos3H,#TF-InjectionFillPos4H,#TF-InjectionFillPos5H,
         #TF-OilTempH,#TF-InjectHoldPP1H,#TF-InjectHoldPP2H,#TF-InjectHoldPP3H,#TF-CoolingTimeH,#TF-InjectionTimeH,
         #TF-BarrelTempNozzleH,#TF-BarrelTempZone1H,#TF-BarrelTempZone2H,#TF-BarrelTempZone3H,#TF-BarrelTempZone4H,#TF-BarrelTempZone5H{
-            font-size: 14px;
+            font-size: 16px !important;
             height: 45px;
             font-weight: bold;
             text-align: center;
         }
+
+        #TF-PartNameH,#TF-DateH{
+            font-size: 14px !important;
+            height: 45px;
+            font-weight: bold;
+            text-align: center;
+        }
+
 
         /* COMPONENTS */
 
@@ -457,33 +467,53 @@
 
         /* label */
 
+        /* SAPUI5 CSS */
+
+
+
         .sapUiTf {
             text-align: center !important;
-            font-weight: bold ;
+            font-weight: bold !important;
+            font-size: 18px  !important;
         }
 
         li.sapUiLbxI {
+            text-align: center !important;
             display: table;
-            list-style-position: inside;
+        // list-style-position: inside;
             border-bottom: 1px dotted black;
             font-family: "Arial Black", Arial, Helvetica, sans-serif ;
             height:50px  !important;
             width:100%;
             font-size: 30px  !important;
-            font-weight: bold ;
-            text-align: center !important;
+        //font-weight: bold ;
         }
 
-    </style>
+        .sapUiLbxITxt {
+            text-align:center !important ;
+            font-size: 20px  !important;
+        }
 
+
+
+
+    </style>
     <script
+            src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
             id="sap-ui-bootstrap"
-            src="/sapui5/resources/sap-ui-core.js"
-            data-sap-ui-theme="sap_goldreflection"
+            data-sap-ui-theme="sap_belize"
             data-sap-ui-xx-bindingSyntax="complex"
-            data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.m"
-            data-sap-ui-language="en" >
+            data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.m">
+
     </script>
+    <!--<script-->
+    <!--id="sap-ui-bootstrap"-->
+    <!--src="/sapui5/resources/sap-ui-core.js"-->
+    <!--data-sap-ui-theme="sap_goldreflection"-->
+    <!--data-sap-ui-xx-bindingSyntax="complex"-->
+    <!--data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.m"-->
+    <!--data-sap-ui-language="en" >-->
+    <!--</script>-->
 
     <script type="text/javascript" src="Common/js/default.js"></script>
 
@@ -528,6 +558,7 @@
         // user id
         var is_UserLoged = 0;
         var selecte_UserID = '';
+        var selecte_UserName = '';
         // scrap flag
         var selectred_ForceScrapStatus = 0;
 
@@ -574,7 +605,7 @@
             var timestamp = new Date().getTime();
             var Param1 =selected_StationID
             var paramStr = "Param.1="+encodeURIComponent(Param1);
-            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_ActiveOrder&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
+            var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_ActiveOrderMolding&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
             // alert(queryStr);
             getData(queryStr, parseJsonGetActiveOrder);
         }
@@ -585,6 +616,7 @@
                 for (var i=0; i<jasondata.length; i++){
                     selected_OrderID = (jasondata[i]['OrderNumber']);
                     oCore.byId('TF-OrderID').setValue(selected_OrderID);
+                    selected_OrderOperationID =  (jasondata[i]['Operation']);
                     selected_ScheduledStartDate = (jasondata[i]['EarlySchedStartDate']);
                     selected_ScheduledStartTime = (jasondata[i]['EarlySchedStartTime']);
                     selected_ScheduledStart = selected_ScheduledStartDate +":" + selected_ScheduledStartTime;
@@ -606,6 +638,9 @@
                     oCore.byId('TF-PartWeight').setValue(selected_NetWeight);
                     selected_GrossWT = (jasondata[i]['GrossWT']);
                     oCore.byId('TF-BoxWeight').setValue(selected_GrossWT);
+
+                    selected_ColorID  = (jasondata[i]['VALUE_NEUTRAL']);
+                    selected_ColorName  = (jasondata[i]['VALUE_CHAR']);
                 }
                 getRuntimeData();
             } else {
@@ -683,9 +718,28 @@
                     oCore.byId('TF-DownTime').setValue(0);
                 }
                 // startTimer();
-            } else {
 
+            } else {
+                resetRuntimeData ();
             }
+        }
+
+
+        function resetRuntimeData (){
+            oCore.byId('TF-GoodParts').setValue(0);
+            oCore.byId('TF-ScrapParts').setValue(0);
+            oCore.byId('TF-CycleTime').setValue(0);
+            oCore.byId('TF-AutoTime').setValue(0);
+            oCore.byId('TF-FillTime').setValue(0);
+            oCore.byId('TF-RecovTime').setValue(0);
+            oCore.byId('TF-TotalRunningTime').setValue(0);
+            oBT_LightWhite.addStyleClass("whiteButtonOff");
+            oBT_LightGreen.addStyleClass("greenButtonOff");
+            oBT_LightRed.addStyleClass("redButtonOff");
+            oBT_LightYellow.addStyleClass("yellowButtonOff");
+            oCore.byId('TF-BlockedCavities').setValue(0);
+            oCore.byId('TF-RemainingTime').setValue( 0);
+            oCore.byId('TF-DownTime').setValue(0);
         }
 
         //----------HEADER MATRIX ------------
@@ -881,12 +935,12 @@
 
         var oL_StdCavitatiion = new sap.ui.commons.Label({
             id : 'L-StdCavitatiion',
-            text : 'Std. Cavitatiion' });
+            text : 'Std. Cavitation' });
 
         var oTF_StdCavitatiion = new sap.ui.commons.TextField({
             id : 'TF-StdCavitatiion',
             textAlign: sap.ui.core.TextAlign.Center ,
-            tooltip : 'Std. Cavitatiion',
+            tooltip : 'Std. Cavitation',
             editable : false,
             value : '',
             width : '90%' });
@@ -1335,6 +1389,8 @@
             else {
                 disableButtons();
                 oCore.byId("BT-LogOn").setText('LOG ON');
+                selecte_UserID = '';
+                selecte_UserName = '';
                 is_UserLoged = 0;
             }
         }
@@ -1525,7 +1581,7 @@
                         enableButtons();
                         oOverlayContainerLG.close();
                         selecte_UserID = escapeSQLString($('#TF-ClockID').val());
-                        oCore.byId("TF-ClockID").setValue('');
+                        selecte_UserName =  (jasondata[i]['Name']);
                         oCore.byId("BT-LogOn").setText('LOG OUT');
                         is_UserLoged = 1;
                     }
@@ -1658,20 +1714,22 @@
                 filterProperty: "OrderNumber",
                 width: "120px"
             }));
-            oTableOL.addColumn(new sap.ui.table.Column({
-                label: new sap.ui.commons.Label({text: "MATERIAL"}),
-                template: new sap.ui.commons.TextView().bindProperty("text", "Material"),
-                sortProperty: "Material",
-                filterProperty: "Material",
-                width: "120px"
-            }));
-            oTableOL.addColumn(new sap.ui.table.Column({
-                label: new sap.ui.commons.Label({text: "DESCRIPTION"}),
-                template: new sap.ui.commons.TextView().bindProperty("text", "MaterialDescription"),
-                sortProperty: "MaterialDescription",
-                filterProperty: "MaterialDescription",
-                width: "140px"
-            }));
+            /*
+				oTableOL.addColumn(new sap.ui.table.Column({
+					label: new sap.ui.commons.Label({text: "MATERIAL"}),
+					template: new sap.ui.commons.TextView().bindProperty("text", "Material"),
+					sortProperty: "Material",
+					filterProperty: "Material",
+					width: "120px"
+				}));
+				oTableOL.addColumn(new sap.ui.table.Column({
+					label: new sap.ui.commons.Label({text: "DESCRIPTION"}),
+					template: new sap.ui.commons.TextView().bindProperty("text", "MaterialDescription"),
+					sortProperty: "MaterialDescription",
+					filterProperty: "MaterialDescription",
+					width: "140px"
+				}));
+*/
             oTableOL.addColumn(new sap.ui.table.Column({
                 label: new sap.ui.commons.Label({text: "SCH START"}),
                 template: new sap.ui.commons.TextView().bindProperty("text", "EarlySchedStart"),
@@ -1684,6 +1742,20 @@
                 template: new sap.ui.commons.TextView().bindProperty("text", "EarlySchedFin"),
                 sortProperty: "EarlySchedFin",
                 filterProperty: "EarlySchedFin",
+                width: "120px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "MII START"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "MIISchedStart"),
+                sortProperty: "MIISchedStart",
+                filterProperty: "MIISchedStart",
+                width: "120px"
+            }));
+            oTableOL.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "MII END"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "MIISchedFin"),
+                sortProperty: "MIISchedFin",
+                filterProperty: "MIISchedFin",
                 width: "120px"
             }));
             oTableOL.addColumn(new sap.ui.table.Column({
@@ -1878,14 +1950,16 @@
             width : '50%',
         });
 
-        oComboBox_CavityID.addStyleClass("bigLabel");
+        oCore.byId("dbox_CavityID").setMaxPopupItems(8);
+
+        // oComboBox_CavityID.addStyleClass("bigLabel");
 
         oMatrixCVT.createRow( oLabel_CavityID,oComboBox_CavityID  );
 
         var oLabel_CavityIDto = new sap.ui.commons.Label({
             id : 'L-CavityIDto',
             visible : true,
-            text : ' TO Cavity ID' });
+            text : 'TO Cavity ID' });
 
         var oComboBox_CavityIDto = new sap.ui.commons.DropdownBox({
             id : "dbox_CavityIDto",
@@ -1893,7 +1967,10 @@
             width : '50%',
         });
 
-        oComboBox_CavityIDto.addStyleClass("bigLabel");
+
+        oCore.byId("dbox_CavityIDto").setMaxPopupItems(8);
+
+        // oComboBox_CavityIDto.addStyleClass("bigLabel");
 
         oMatrixCVT.createRow( oLabel_CavityIDto,oComboBox_CavityIDto  );
 
@@ -1911,6 +1988,8 @@
             }
         });
 
+        oCore.byId("dbox_BlockedReason").setMaxPopupItems(6);
+
         oMatrixCVT.createRow( oL_BlockedReason,oComboBox_BlockedReason  );
 
         var oL_BlockedHow = new sap.ui.commons.Label({
@@ -1927,6 +2006,11 @@
             }
         });
 
+        oCore.byId("dbox_BlockedHow").setMaxPopupItems(5);
+
+        //oPopOver_BlockedHow = ComboBox_BlockedHow.getPicker();
+        //oPopOver_BlockedHow.setContentHeight("100px");
+
         oMatrixCVT.createRow( oL_BlockedHow,oComboBox_BlockedHow  );
 
         var oL_RecordMoldHistory = new sap.ui.commons.Label({
@@ -1935,6 +2019,7 @@
 
         var oCB_RecordMoldHistory =  new sap.m.CheckBox({
             id : 'CB-RecordMoldHistory',
+            width : '60px',
             text : '' });
 
 
@@ -2071,8 +2156,55 @@
             }
         }
 
-        function 	doSentEmailChangeCavities(){
+        function doSentEmailChangeCavities(){
 
+            var Param1 =  escapeSQLString(selected_StationName);	// unit name
+            var Param2 =  escapeSQLString(selected_OrderID);	// order id
+            var Param3 = escapeSQLString(selected_OrderOperationID); // operation id
+            var Param4 = escapeSQLString(selected_MoldNumber);	// mold number
+            var Param5 = escapeSQLString( temp_TotalValue);  		 // total cavities
+            var Param6 = escapeSQLString(selecte_UserName);			// user name
+            var MailRecipient = "admin@hunterdouglas.com";
+
+            var oSendMail;
+            if (window.XMLHttpRequest) {
+                oSendMail = new XMLHttpRequest();
+            }
+            if (oSendMail != null) {
+                var timestamp = new Date().getTime();
+
+                var paramStr = "UnitName="+encodeURIComponent(Param1)+
+                    "&OrderID="+encodeURIComponent(Param2)+
+                    "&OperationID="+encodeURIComponent(Param3)+
+                    "&MoldID="+encodeURIComponent(Param4)+
+                    "&CavityCurrentNumber="+encodeURIComponent(Param5)+
+                    "&UserName="+encodeURIComponent(Param6)+
+                    "&MailRecipient="+encodeURIComponent(MailRecipient);
+                // alert(paramStr);
+                var queryStr = "/XMII/Runner?Transaction=OneHDMIIOwensboro/STATIONS_HMI/TRANSACTIONS/SetMailFromHMI&OutputParameter=XML_RESULT&Content-Type=text/xml&"+paramStr+"&ts="+timestamp;
+                // alert(queryStr);
+
+                return;
+                oSendMail.open("GET", queryStr, true);
+                oSendMail.onreadystatechange = function() {
+                    if (oSendMail.readyState == 4)
+                        if (oSendMail.status == 200) {
+                            // Successful -- rebuild the screen
+                            var xmlDOC = oSendMail.responseXML;
+                            if(xmlDOC.getElementsByTagName("TRXRESULT")[0] && xmlDOC.getElementsByTagName("TRXRESULT")[0].childNodes[0]) {
+                                var trxMessage = xmlDOC.getElementsByTagName("TRXRESULT")[0].childNodes[0].nodeValue;
+                                alert(trxMessage);
+                            } else {
+                                alert("Please do try again later .. ");
+                            }
+                        } else {
+                            alert("Error: " + oSendMail.statusText);
+                        }
+                }
+                oSendMail.send();
+            } else {
+                window.alert("Error creating XmlHttpRequest object.");
+            }
         }
 
         function updateComBoxCavityID() {
@@ -2153,9 +2285,9 @@
         var oMatrixMH = new sap.ui.commons.layout.MatrixLayout({
             id : 'MatrixMH',
             layoutFixed : true,
-            width: '1020px',
+            width: '1140px',
             columns : 6,
-            widths : ['170px','170px','170px','170px','170px','170px',]
+            widths : ['190px','190px','190px','190px','190px','190px',]
         });
 
 
@@ -2177,7 +2309,7 @@
             tooltip : 'Mold Number',
             editable :false,
             value : ' ',
-            width : '90%'
+            width : '95%'
         });
 
         var oTF_PressH = new sap.ui.commons.TextField({
@@ -2185,7 +2317,7 @@
             tooltip : 'Press',
             editable :false,
             value : ' ',
-            width : '90%'
+            width : '95%'
         });
 
         var oTF_DateH = new sap.ui.commons.TextField({
@@ -2193,14 +2325,14 @@
             tooltip : 'Date',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
         var oTF_TechnicianH = new sap.ui.commons.TextField({
             id : 'TF-TechnicianH',
             tooltip : 'Technician',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
 
         var oTF_DrawingNumberH = new sap.ui.commons.TextField({
@@ -2208,14 +2340,14 @@
             tooltip : 'Drawing Number',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
         var oTF_PartNameH = new sap.ui.commons.TextArea({
             id : 'TF-PartNameH',
             tooltip : 'Mold Name',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
 
         oMatrixMH.createRow( oTF_MoldNumberH,oTF_PressH,oTF_DateH,oTF_TechnicianH,oTF_DrawingNumberH,oTF_PartNameH);
@@ -2225,46 +2357,45 @@
             tooltip : 'Resin',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
         var oTF_ColorNameH = new sap.ui.commons.TextField({
             id : 'TF-ColorNameH',
             tooltip : 'Color Name',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
         var oTF_ColorNumberH = new sap.ui.commons.TextField({
             id : 'TF-ColorNumberH',
             tooltip : 'Color Number',
             editable :false,
             value : ' ',
-            width : '90%' });
-
-        var oTF_CurrentCavitationH = new sap.ui.commons.TextField({
-            id : 'TF-CurrentCavitationH',
-            tooltip : 'Current Cavitation',
-            editable :false,
-            value : ' ',
-            width : '90%' });
-
+            width : '95%' });
 
         var oTF_TotalCavitationH = new sap.ui.commons.TextField({
             id : 'TF-TotalCavitationH',
             tooltip : 'Total Cavitation',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
+
+        var oTF_CurrentCavitationH = new sap.ui.commons.TextField({
+            id : 'TF-CurrentCavitationH',
+            tooltip : 'Current Cavitation',
+            editable :false,
+            value : ' ',
+            width : '95%' });
 
         var oTF_CycleTimeH = new sap.ui.commons.TextField({
             id : 'TF-CycleTimeH',
             tooltip : 'Cycle Time',
             editable :false,
             value : ' ',
-            width : '90%' });
+            width : '95%' });
 
 
-        oMatrixMH.createRow( oTF_ResinH,oTF_ColorNameH,oTF_ColorNumberH,oTF_CurrentCavitationH,oTF_TotalCavitationH,oTF_CycleTimeH);
+        oMatrixMH.createRow( oTF_ResinH,oTF_ColorNameH,oTF_ColorNumberH,oTF_TotalCavitationH,oTF_CurrentCavitationH,oTF_CycleTimeH);
 
         //  3  row
         var oL_PartWeightH = new sap.ui.commons.Label({
@@ -2975,7 +3106,7 @@
 
         var oOverlayContainerMH = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
         oOverlayContainerMH.setHeight('700px');
-        oOverlayContainerMH.setWidth('1050px');
+        oOverlayContainerMH.setWidth('1150px');
         oOverlayContainerMH.addContent(oMatrixMH);
 
         //**************************************************************************************
@@ -2990,11 +3121,12 @@
         function setHeaderHistoryRecordData(){
             oCore.byId('TF-MoldNumberH').setValue( selected_MoldNumber);
             oCore.byId('TF-PressH').setValue(selected_StationName);
-            oCore.byId('TF-DateH').setValue("25-01-2018");
-            oCore.byId('TF-TechnicianH').setValue(selecte_UserID);
+            var DateObj = new Date();
+            oCore.byId('TF-DateH').setValue(DateObj.toLocaleString());
+            oCore.byId('TF-TechnicianH').setValue(selecte_UserName );
             oCore.byId('TF-DrawingNumberH').setValue(selected_PartID);
             oCore.byId('TF-PartNameH').setValue(selected_PartName	);
-            oCore.byId('TF-ResinH').setValue(selected_MaterialID	);
+            oCore.byId('TF-ResinH').setValue("PC"	);
             oCore.byId('TF-ColorNameH').setValue(selected_ColorName);
             oCore.byId('TF-ColorNumberH').setValue(selected_ColorID);
             oCore.byId('TF-CurrentCavitationH').setValue(selected_TotalCavities);
@@ -3011,7 +3143,7 @@
             var Param4= escapeSQLString(selecte_UserID);				// user id
             var Param5 = escapeSQLString(selected_PartID);			// drawing
             var Param6 = escapeSQLString(selected_PartName);	 		// part name
-            var Param7= escapeSQLString(selected_MaterialID);			// resin
+            var Param7= escapeSQLString("PC");					// resin
             var Param8 = escapeSQLString(selected_ColorName);			// color
             var Param9 = escapeSQLString(selected_ColorID);	 		// color number
             var Param10= escapeSQLString(selected_TotalCavities);		// current cavities
@@ -3199,6 +3331,8 @@
                 //alert(oEvent.oSource.getSelectedKey());
             }
         });
+
+        oCore.byId("dbox_DowntimeCode").setMaxPopupItems(8);
 
         oMatrixDTT.createRow( oL_DowntimeCode,oComboBox_DowntimeCode);
 
@@ -3694,7 +3828,7 @@
         //------------------------- MAIN METHODS----------------------------------
 
         function disableButtons (){
-            return;
+            // return;
             oBT_OrderList.setEnabled(false);
             oBT_OrderStart.setEnabled(false);
             oBT_ForcedScrap.setEnabled(false);
