@@ -367,7 +367,7 @@
 
                         });
 
-
+                    //
                     // getData(
                     //     localHost ?
                     //         'MESM_OrderOperation_UGET.xml' :
@@ -391,11 +391,11 @@
                     //             };
                     //         });
                     //     });
-
-
+                    //
+                    //
                     // function mapID() {
                     // }
-
+                    //
                     // function orderTableUpdata() {
                     //     // cc('orderTableUpdata');
                     //     // cc(MESM_ProdOrd);
@@ -527,8 +527,8 @@
                     //     }
                     //
                     // }
-
-
+                    //
+                    //
                     // for (var g in GROUP) {
                     //     cc('g ' + g + ' ' + GROUP[g].length);
                     //     for (var n = 0; n < GROUP[g].length; n++) {
@@ -558,11 +558,9 @@
                     //     //     mainPro();
                     //     // }
                     // });
-
+                    //
                 }
             )
-            ;
-
 
         }
 
@@ -813,7 +811,7 @@
             }
             // cc('MESM_OrderOperationMold');
             // cc(MESM_OrderOperationMold);
-
+            //
             // var url = localHost ? "MESM_FloorMaps.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml";
             // cc(url);
 
@@ -823,20 +821,20 @@
                     "MESM_FloorMaps_GET.xml" :
                     "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml",
                 function (DATA) {
-//                cc(DATA);
-//                cc('floorMaps' + DATA.length);
-//                 MESM_FloorMaps = [];
-//                 var GROUP = [];
-//
+                    // cc(DATA);
+                    // cc('floorMaps' + DATA.length);
+                    // MESM_FloorMaps = [];
+                    // var GROUP = [];
+                    //
                     // mmmSTR = '[Mold_Number]';
-//
+                    //
                     // for (var n = 0; n < DATA.length; n++) {
-//
+                    //
                     // if (DATA[n]['MOLD_Machine_Matrix'] != null && DATA[n]['MOLD_Machine_Matrix'] != '---' && mmmSTR.indexOf(DATA[n]['MOLD_Machine_Matrix']) < 0) {
                     //     mmmSTR += ',[' + DATA[n]['MOLD_Machine_Matrix'] + ']';
                     // }
-//
-//
+                    //
+                    //
                     // MESM_FloorMaps.push({
                     //     'recordID': DATA[n]['recordID'],
                     //     'unitType': DATA[n]['unitType'],
@@ -846,7 +844,7 @@
                     //     'groupType': DATA[n]['groupType'],
                     //     'MOLD_Machine_Matrix': DATA[n]['MOLD_Machine_Matrix'],
                     // });
-
+                    //
                     // if (MESM_FloorMaps[n]['unitType'] == '5' && MESM_FloorMaps[n]['groupType'] == 'mold') {
                     //     GROUP.push({
                     //         'recordID': MESM_FloorMaps[n]['recordID'],
@@ -855,9 +853,9 @@
                     //     });
                     // }
                     // }
-//                cc('mmmSTR ==> ' + mmmSTR);
-//                cc(wcg);
-
+                    // cc('mmmSTR ==> ' + mmmSTR);
+                    // cc(wcg);
+//
 //                 for (var n = 0; n < GROUP.length; n++) {
 //                     for (var m = 0; m < MESM_FloorMaps.length; m++) {
 //                         if (GROUP[n]['recordID'] == MESM_FloorMaps[m]['idUnitParent']) {
@@ -1765,134 +1763,126 @@
                 // eventOverlap: false, // will cause the event to take up entire resource height
                 resourceAreaWidth:
                     '300px',
-                events:
-                    [
-//                         {
-//                             id: 'GROUP1_PRESS07',
-//                             resourceId: 'GROUP1_PRESS07_39',
-//                             start: today + 'T08:00:00',
-//                             end: today + 'T16:00:00',
-//                             title: 'M639A',
-//                             description: 'This is a  event',
-//                             color: 'red'
-//                         },
-//                         {
-//                             id: '2',
-//                             resourceId: 'e1',
-//                             start: today + 'T07:00:00',
-//                             end: today + 'T15:00:00',
-//                             title: 'M639',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '2',
-//                             resourceId: 'e1',
-// //                        start: today + 'T15:30:00',
-// //                        end: today + 'T23:00:00',
-//                             start: today + 'T15:30:00',
-//                             end: today + 'T23:00:00',
-//                             title: 'M639',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '22',
-//                             resourceId: 'd1',
-//                             start: today + 'T15:00:00',
-//                             end: today + 'T23:00:00',
-//                             title: 'M640',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '3',
-//                             resourceId: 'b1',
-//                             start: today + 'T07:00:00',
-//                             end: today + 'T15:00:00',
-//                             title: 'M995',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '11',
-//                             resourceId: 'f1',
-//                             start: today + 'T00:58:30',
-//                             end: today + 'T05:00:00',
-//                             title: 'M639 orange',
-//                             description: 'This is a  event',
-//                             textColor: 'black',
-//                             color: 'orange',
-//                             url: 'http://localhost',
-//                             editable: true,
-//                         },
-//                         {
-//                             id: '12',
-//                             resourceId: 'f2',
-//                             start: today + 'T05:00:00',
-//                             end: today + 'T08:00:00',
-//                             title: 'M639 green',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '13',
-//                             resourceId: 'f3',
-//                             start: today + 'T08:00:00',
-//                             end: today + 'T12:00:00',
-//                             title: 'M653',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '14',
-//                             resourceId: 'f4',
-//                             start: today + 'T12:00:00',
-//                             end: today + 'T18:00:00',
-//                             title: 'M654',
-//                             description: 'This is a  event'
-//                         },
-//                         {
-//                             id: '15',
-//                             resourceId: 'f5',
-//                             start: today + 'T18:00:00',
-//                             end: today + 'T23:00:00',
-//                             title: 'M016',
-//                             description: 'This is a  event'
-//                         }
+                events: [
+                    // {
+                    //     id: 'GROUP1_PRESS07',
+                    //     resourceId: 'GROUP1_PRESS07_39',
+                    //     start: today + 'T08:00:00',
+                    //     end: today + 'T16:00:00',
+                    //     title: 'M639A',
+                    //     description: 'This is a  event',
+                    //     color: 'red'
+                    // },
+                    // {
+                    //     id: '2',
+                    //     resourceId: 'e1',
+                    //     start: today + 'T07:00:00',
+                    //     end: today + 'T15:00:00',
+                    //     title: 'M639',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '2',
+                    //     resourceId: 'e1',
+                    //     start: today + 'T15:30:00',
+                    //     end: today + 'T23:00:00',
+                    //     start: today + 'T15:30:00',
+                    //     end: today + 'T23:00:00',
+                    //     title: 'M639',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '22',
+                    //     resourceId: 'd1',
+                    //     start: today + 'T15:00:00',
+                    //     end: today + 'T23:00:00',
+                    //     title: 'M640',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '3',
+                    //     resourceId: 'b1',
+                    //     start: today + 'T07:00:00',
+                    //     end: today + 'T15:00:00',
+                    //     title: 'M995',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '11',
+                    //     resourceId: 'f1',
+                    //     start: today + 'T00:58:30',
+                    //     end: today + 'T05:00:00',
+                    //     title: 'M639 orange',
+                    //     description: 'This is a  event',
+                    //     textColor: 'black',
+                    //     color: 'orange',
+                    //     url: 'http://localhost',
+                    //     editable: true,
+                    // },
+                    // {
+                    //     id: '12',
+                    //     resourceId: 'f2',
+                    //     start: today + 'T05:00:00',
+                    //     end: today + 'T08:00:00',
+                    //     title: 'M639 green',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '13',
+                    //     resourceId: 'f3',
+                    //     start: today + 'T08:00:00',
+                    //     end: today + 'T12:00:00',
+                    //     title: 'M653',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '14',
+                    //     resourceId: 'f4',
+                    //     start: today + 'T12:00:00',
+                    //     end: today + 'T18:00:00',
+                    //     title: 'M654',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '15',
+                    //     resourceId: 'f5',
+                    //     start: today + 'T18:00:00',
+                    //     end: today + 'T23:00:00',
+                    //     title: 'M016',
+                    //     description: 'This is a  event'
+                    // }
                 ],
 
 
                 schedulerLicenseKey:
                     'CC-Attribution-NonCommercial-NoDerivatives'
             })
-            ;
-            // $("[href]")
-            // var elms = $("[data-resource-id]");
-            var elms = $("[data-resource-id][id]");
-            // fc-event-container
-            // cc('[data-resource-id]');
-            // cc(elms);
-            $.each(elms, function (key, e) {
 
-                // cc(e.id);
 
-                $.contextMenu({
-                    // selector: "[data-resource-id]",
-                    // selector: "[data-resource-id][id]",
-                    selector: "#" + e.id,
-                    callback: function (key, options) {
-                        // cc(this);
-                        callbk(key, options);
-                        // var m = "clicked..: " + key;
-                        // window.console && console.log(m) || alert(m);
-                    },
-                    items: {
-                        "title": {name: e.id, icon: "fa-cog"},
-                        "sep1": "---------",
-                        "edit": {name: "Edit", icon: "fa-edit"},
-                        "cut": {name: "Cut", icon: "fa-scissors"},
-                        "copy": {name: "Copy", icon: "fa-files-o"},
-                        "paste": {name: "Paste", icon: "fa-clipboard"},
-                        "delete": {name: "Delete", icon: "fa-times"},
-                        // "quit": {name: "Quit", icon: "quit"}
-                    }
-                });
-            });
+            // var elms = $("[data-resource-id][id]");
+            // $.each(elms, function (key, e) {
+            //     $.contextMenu({
+            //         // selector: "[data-resource-id]",
+            //         // selector: "[data-resource-id][id]",
+            //         selector: "#" + e.id,
+            //         callback: function (key, options) {
+            //             // cc(this);
+            //             callbk(key, options);
+            //             // var m = "clicked..: " + key;
+            //             // window.console && console.log(m) || alert(m);
+            //         },
+            //         items: {
+            //             "title": {name: e.id, icon: "fa-cog"},
+            //             "sep1": "---------",
+            //             "edit": {name: "Edit", icon: "fa-edit"},
+            //             "cut": {name: "Cut", icon: "fa-scissors"},
+            //             "copy": {name: "Copy", icon: "fa-files-o"},
+            //             "paste": {name: "Paste", icon: "fa-clipboard"},
+            //             "delete": {name: "Delete", icon: "fa-times"},
+            //             // "quit": {name: "Quit", icon: "quit"}
+            //         }
+            //     });
+            // });
 
 
             var callbk = function (key, options) {
@@ -1903,33 +1893,36 @@
         }
 
         function orderTableRefresh(event) {
-            // cc('------');
-            // cc(event);
+            // cc('orderTableRefresh');
+            // cc(event.id + ' / ' + event.resourceId);
+            // cc(orderTable);
             // var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
             var OrderNumber = event.id.split('_')[0];
             var Operation;
-            for (var i = 0; i < orderTable.dataSet.length; i++) {
-                if (orderTable.dataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.dataSet[i].WCG == event.resourceId.split('_')[0]) {
+            for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+                // cc();
+                // cc(orderTable.originalDataSet[i].OrderNumber + ' / ' + orderTable.originalDataSet[i].WCG+' / '+orderTable.originalDataSet.length);
+                if (orderTable.originalDataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.originalDataSet[i].WCG == event.resourceId.split('_')[0]) {
 
-                    orderTable.dataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
-                    orderTable.dataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
-                    orderTable.dataSet[i].Press = event.resourceId.split('_')[1];
-                    orderTable.dataSet[i].Status = 'Scheduled';
+                    orderTable.originalDataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    orderTable.originalDataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    orderTable.originalDataSet[i].Press = event.resourceId.split('_')[1];
+                    orderTable.originalDataSet[i].Status = 'Scheduled';
                     orderTable.reload();
 
-                    Operation = orderTable.dataSet[i].Operation;
+                    Operation = orderTable.originalDataSet[i].Operation;
                     MESM_OrderOperation_UPD(
-                        orderTable.dataSet[i].ID,
-                        orderTable.dataSet[i].Quantity,
-                        orderTable.dataSet[i].Status,
-                        orderTable.dataSet[i].SchedStart,
-                        orderTable.dataSet[i].SchedFinish,
-                        orderTable.dataSet[i].Press
+                        orderTable.originalDataSet[i].ID,
+                        orderTable.originalDataSet[i].Quantity,
+                        orderTable.originalDataSet[i].Status,
+                        orderTable.originalDataSet[i].SchedStart,
+                        orderTable.originalDataSet[i].SchedFinish,
+                        orderTable.originalDataSet[i].Press
                     );
 
                     if (_eventDragStart.resourceId != event.resourceId) {
-                        ActivityLogADD('Assigned', orderTable.dataSet[i].OrderNumber + '_' + orderTable.dataSet[i].Sort + ' => ' +
-                            event.resourceId.split('_')[1] + ' ', orderTable.dataSet[i].OrderNumber + '_' + orderTable.dataSet[i].Sort);
+                        ActivityLogADD('Assigned', orderTable.originalDataSet[i].OrderNumber + '_' + orderTable.originalDataSet[i].Sort + ' => ' +
+                            event.resourceId.split('_')[1] + ' ', orderTable.originalDataSet[i].OrderNumber + '_' + orderTable.originalDataSet[i].Sort);
                         // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
                     }
                     break;
@@ -1978,6 +1971,8 @@
         // }
 
         function timeCorrection(OrderNumber) {
+            cc('timeCorrection');
+
             var AE = $('#calendar').fullCalendar('clientEvents');
             var corr = [[-1, null, null, null], [-1, null, null, null], [-1, null, null, null]];
             for (var n = 0; n < AE.length; n++) {
@@ -2012,12 +2007,12 @@
 
             if (corr[2][0] >= 0 && corr[1][0] >= 0) {
                 if (corr[2][1] < corr[1][2]) {
-                    cc('fix p');
-                    cc(corr[2][1] + ' / ' + corr[2][2]);
+                    // cc('fix p');
+                    // cc(corr[2][1] + ' / ' + corr[2][2]);
                     var duruing = moment(corr[1][2], "YYYY-MM-DD HH:mm:ss").diff(moment(corr[2][1], "YYYY-MM-DD HH:mm:ss"));
                     corr[2][2] = moment(corr[2][2]).add(duruing).format('YYYY-MM-DD HH:mm:ss');
                     corr[2][1] = corr[1][2];
-                    cc(corr[2][1] + ' / ' + corr[2][2]);
+                    // cc(corr[2][1] + ' / ' + corr[2][2]);
                     removeScheduleEvent(OrderNumber + '_PACKING');
                     addScheduleEvent(corr[2][3].resourceId, OrderNumber + '_PACKING', corr[2][1], corr[2][2]);
                     corr[2][3].start._d = corr[2][1];
@@ -2124,7 +2119,7 @@
         function quickAction(e) {
             cc('quickAction');
             var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
-            cc(TableCOL);
+            // cc(TableCOL);
             var _ID = TableCOL[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
@@ -2429,13 +2424,13 @@
         }
 
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
-            cc('updOrder::updOrder');
-            cc(_ID);
-            cc(_Quantity);
-            cc(_Status);
-            cc(_SchedStart);
-            cc(_SchedFinish);
-            cc(_Press);
+            // cc('MESM_OrderOperation_UPD');
+            // cc(_ID);
+            // cc(_Quantity);
+            // cc(_Status);
+            // cc(_SchedStart);
+            // cc(_SchedFinish);
+            // cc(_Press);
 
 
             if (_SchedStart == '' || _SchedFinish == '') {
@@ -2450,13 +2445,13 @@
             }
 
 
-            for (var i = 0; i < orderTable.dataSet.length; i++) {
-                // cc(i + ' / ' + orderTable.dataSet[i].OrderNumber);
-                if (orderTable.dataSet[i].ID == _ID) {
-                    orderTable.dataSet[i].SchedStart = _SchedStart;
-                    orderTable.dataSet[i].SchedFinish = _SchedFinish;
-                    orderTable.dataSet[i].Press = _Press;
-                    orderTable.dataSet[i].Status = _Status.substring(0, 1);
+            for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+                // cc(i + ' / ' + orderTable.originalDataSet[i].OrderNumber);
+                if (orderTable.originalDataSet[i].ID == _ID) {
+                    orderTable.originalDataSet[i].SchedStart = _SchedStart;
+                    orderTable.originalDataSet[i].SchedFinish = _SchedFinish;
+                    orderTable.originalDataSet[i].Press = _Press;
+                    orderTable.originalDataSet[i].Status = _Status.substring(0, 1);
                     break;
                 }
             }
@@ -2512,7 +2507,7 @@
                 "&Param.9=" +
                 '2' +
                 "&Content-Type=text/xml";
-
+            // cc(' show url');
             // cc(urlProc);
 
             var xhttp = new XMLHttpRequest();
@@ -2695,18 +2690,18 @@
                     if (key == 'delete') {
                         // cc(options.selector.substring(1).split('_')[0]);
                         // cc(options.selector.substring(1).split('_')[1]);
-                        for (var i = 0; i < orderTable.dataSet.length; i++) {
-                            if (orderTable.dataSet[i].OrderNumber == options.selector.substring(1).split('_')[0] &&
-                                orderTable.dataSet[i].Sort == options.selector.substring(1).split('_')[1]) {
-                                // cc(orderTable.dataSet[i].OrderNumber );
-                                // cc(orderTable.dataSet[i].Sort );
+                        for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+                            if (orderTable.originalDataSet[i].OrderNumber == options.selector.substring(1).split('_')[0] &&
+                                orderTable.originalDataSet[i].Sort == options.selector.substring(1).split('_')[1]) {
+                                // cc(orderTable.originalDataSet[i].OrderNumber );
+                                // cc(orderTable.originalDataSet[i].Sort );
                                 //
-                                // orderTable.dataSet[i].Press = '';
-                                // orderTable.dataSet[i].Status = 'Unscheduled';
+                                // orderTable.originalDataSet[i].Press = '';
+                                // orderTable.originalDataSet[i].Status = 'Unscheduled';
 
                                 removeScheduleEvent(options.selector.substring(1));
                                 // MESM_OrderOperation_UPD();
-                                MESM_OrderOperation_UPD(orderTable.dataSet[i].ID, orderTable.dataSet[i].Quantity, 'Unscheduled', '', '', '');
+                                MESM_OrderOperation_UPD(orderTable.originalDataSet[i].ID, orderTable.originalDataSet[i].Quantity, 'Unscheduled', '', '', '');
                                 orderTable.reload();
                                 break;
                             }
