@@ -905,12 +905,12 @@
                             }
                             // cc('mmmArray');
                             // cc(mmmArray);
-
+//
                             // SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
                             // FROM Customers
                             // INNER JOIN Orders
                             // ON Orders.CustomerID=Customers.CustomerID AND Orders.OrderID > 10300;
-
+//
                             // var url = localHost ? "MESM_ProdOrd.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml";
                             // cc(url);
                             // getData(url, function (dataRows) {
@@ -923,7 +923,7 @@
                             // cc(data);
                             // var md = data.Mold;
                             // var gp = data.WorkCenter;
-
+//
                             // var availableRow = false;
                             // var wcID;
                             // for (var m = 0; m < workCenter.length; m++) {
@@ -935,7 +935,7 @@
                             //         }
                             //     }
                             // }
-
+//
                             // var _status = 1;                    // Unscheduled
                             //
                             // if (data.Status == 'S') {           //Scheduled
@@ -947,7 +947,7 @@
                             // } else if (data.Status == 'N') {    //No Material
                             //     _status = 5
                             // }
-
+//
                             // MESM_ProductionOrders.push({
                             //     // "RecordID": data.ID,
                             //     "OrderNumber": data.OrderNumber,
@@ -1413,19 +1413,19 @@
 
                 eventClick: function (event, element) {
                     // cc(event);
-//                    cc('eventCLICKED');
-//                    cc(event);
-//                     event.title = "CLICKED ON";
-//                    cc(event.start._d);
-
+                    // cc('eventCLICKED');
+                    // cc(event);
+                    // event.title = "CLICKED ON";
+                    // cc(event.start._d);
+                    //
                     // event.start._d = new Date(event.start.format());
                     // $('#calendar').fullCalendar('updateEvent', event);
-
-//                    $('#calendar').fullCalendar('refetchEvents');
-
+                    //
+                    // $('#calendar').fullCalendar('refetchEvents');
+                    //
                     // $('#calendar').fullCalendar('refresh');
-
-//                    $('#calendar').fullCalendar('refetchEventSources');
+                    //
+                    // $('#calendar').fullCalendar('refetchEventSources');
                 },
 
 
@@ -1450,7 +1450,7 @@
                     // if (_s == _t) {
                     //     return true;
                     // } else return false;
-
+                    //
                     // if (draggedEvent.id === '999') {
                     //     return String(dropLocation.resourceId).indexOf('a') >= 0; // boolean
                     // }
@@ -1644,11 +1644,11 @@
                     // // cc(event.start._d);
                     // cc(moment.utc(event.start._d).format('MM/DD/YYYY HH:mm:ss'));
                     // cc(moment.utc(event.end._d).format('MM/DD/YYYY HH:mm:ss'));
-
+//
                     // var elm=document.getElementById(event.id);
                     // cc('elm');
                     // cc(elm);
-
+//
                     // element.bind('mousedown', function (e) {
                     //     if (e.which == 3) {
                     //         alert('Right mouse button pressed');
@@ -1767,93 +1767,93 @@
                     '300px',
                 events:
                     [
-//                    {
-//                        id: 'GROUP1_PRESS07',
-//                        resourceId: 'GROUP1_PRESS07_39',
-//                        start: today + 'T08:00:00',
-//                        end: today + 'T16:00:00',
-//                        title: 'M639A',
-//                        description: 'This is a  event',
-//                        color: 'red'
-//                    },
-//                    {
-//                        id: '2',
-//                        resourceId: 'e1',
-//                        start: today + 'T07:00:00',
-//                        end: today + 'T15:00:00',
-//                        title: 'M639',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '2',
-//                        resourceId: 'e1',
-////                        start: today + 'T15:30:00',
-////                        end: today + 'T23:00:00',
-//                        start: today + 'T15:30:00',
-//                        end: today + 'T23:00:00',
-//                        title: 'M639',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '22',
-//                        resourceId: 'd1',
-//                        start: today + 'T15:00:00',
-//                        end: today + 'T23:00:00',
-//                        title: 'M640',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '3',
-//                        resourceId: 'b1',
-//                        start: today + 'T07:00:00',
-//                        end: today + 'T15:00:00',
-//                        title: 'M995',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '11',
-//                        resourceId: 'f1',
-//                        start: today + 'T00:58:30',
-//                        end: today + 'T05:00:00',
-//                        title: 'M639 orange',
-//                        description: 'This is a  event',
-//                        textColor: 'black',
-//                        color: 'orange',
-//                        url: 'http://localhost',
-//                        editable: true,
-//                    },
-//                    {
-//                        id: '12',
-//                        resourceId: 'f2',
-//                        start: today + 'T05:00:00',
-//                        end: today + 'T08:00:00',
-//                        title: 'M639 green',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '13',
-//                        resourceId: 'f3',
-//                        start: today + 'T08:00:00',
-//                        end: today + 'T12:00:00',
-//                        title: 'M653',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '14',
-//                        resourceId: 'f4',
-//                        start: today + 'T12:00:00',
-//                        end: today + 'T18:00:00',
-//                        title: 'M654',
-//                        description: 'This is a  event'
-//                    },
-//                    {
-//                        id: '15',
-//                        resourceId: 'f5',
-//                        start: today + 'T18:00:00',
-//                        end: today + 'T23:00:00',
-//                        title: 'M016',
-//                        description: 'This is a  event'
-//                    }
+//                         {
+//                             id: 'GROUP1_PRESS07',
+//                             resourceId: 'GROUP1_PRESS07_39',
+//                             start: today + 'T08:00:00',
+//                             end: today + 'T16:00:00',
+//                             title: 'M639A',
+//                             description: 'This is a  event',
+//                             color: 'red'
+//                         },
+//                         {
+//                             id: '2',
+//                             resourceId: 'e1',
+//                             start: today + 'T07:00:00',
+//                             end: today + 'T15:00:00',
+//                             title: 'M639',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '2',
+//                             resourceId: 'e1',
+// //                        start: today + 'T15:30:00',
+// //                        end: today + 'T23:00:00',
+//                             start: today + 'T15:30:00',
+//                             end: today + 'T23:00:00',
+//                             title: 'M639',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '22',
+//                             resourceId: 'd1',
+//                             start: today + 'T15:00:00',
+//                             end: today + 'T23:00:00',
+//                             title: 'M640',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '3',
+//                             resourceId: 'b1',
+//                             start: today + 'T07:00:00',
+//                             end: today + 'T15:00:00',
+//                             title: 'M995',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '11',
+//                             resourceId: 'f1',
+//                             start: today + 'T00:58:30',
+//                             end: today + 'T05:00:00',
+//                             title: 'M639 orange',
+//                             description: 'This is a  event',
+//                             textColor: 'black',
+//                             color: 'orange',
+//                             url: 'http://localhost',
+//                             editable: true,
+//                         },
+//                         {
+//                             id: '12',
+//                             resourceId: 'f2',
+//                             start: today + 'T05:00:00',
+//                             end: today + 'T08:00:00',
+//                             title: 'M639 green',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '13',
+//                             resourceId: 'f3',
+//                             start: today + 'T08:00:00',
+//                             end: today + 'T12:00:00',
+//                             title: 'M653',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '14',
+//                             resourceId: 'f4',
+//                             start: today + 'T12:00:00',
+//                             end: today + 'T18:00:00',
+//                             title: 'M654',
+//                             description: 'This is a  event'
+//                         },
+//                         {
+//                             id: '15',
+//                             resourceId: 'f5',
+//                             start: today + 'T18:00:00',
+//                             end: today + 'T23:00:00',
+//                             title: 'M016',
+//                             description: 'This is a  event'
+//                         }
                 ],
 
 
@@ -2189,8 +2189,8 @@
             //     // addScheduleEvent(e.id, _OrderNumber, _SchedStart, _SchedFinish);
             //     ActivityLogADD('Scheduled', _OrderNumber + ' ', '');
             // }
-
-
+            //
+            //
             // if (_Status == 'Unscheduled') {
             //
             //     if (_Action.indexOf('assign') >= 0) {
@@ -4205,16 +4205,16 @@
 </ul>
 <!--<div class="form-group m-form__group row">-->
 
-    <!--<div class="col-lg-4 col-md-9 col-sm-12">-->
-        <!--<div class='input-group pull-right' id='m_daterangepicker_4'>-->
-            <!--<input type='text' class="form-control m-input" readonly placeholder="Select date & time range"/>-->
-            <!--<div class="input-group-append">-->
-													<!--&lt;!&ndash;<span class="input-group-text">&ndash;&gt;-->
-														<!--&lt;!&ndash;<i class="la la-calendar-check-o"></i>&ndash;&gt;-->
-													<!--&lt;!&ndash;</span>&ndash;&gt;-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+<!--<div class="col-lg-4 col-md-9 col-sm-12">-->
+<!--<div class='input-group pull-right' id='m_daterangepicker_4'>-->
+<!--<input type='text' class="form-control m-input" readonly placeholder="Select date & time range"/>-->
+<!--<div class="input-group-append">-->
+<!--&lt;!&ndash;<span class="input-group-text">&ndash;&gt;-->
+<!--&lt;!&ndash;<i class="la la-calendar-check-o"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 <!--</div>-->
 
 <input id="user_roles" type="hidden" value="{IllumLoginRoles}" style="display:block;width:1000px;" readonly/>
