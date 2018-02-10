@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rowsets CachedTime="" DateCreated="2018-02-09T15:35:00" EndDate="2018-02-09T15:35:00" StartDate="2018-02-09T14:35:00" Version="15.1 SP2 Patch 16 (Dec 21, 2016)">
+    <Rowset>
+        <Columns>
+            <Column Description="ID" MaxRange="1" MinRange="0" Name="ID" SQLDataType="-5" SourceColumn="ID"/>
+            <Column Description="OrderNumber" MaxRange="1" MinRange="0" Name="OrderNumber" SQLDataType="-9" SourceColumn="OrderNumber"/>
+            <Column Description="Material" MaxRange="1" MinRange="0" Name="Material" SQLDataType="-9" SourceColumn="Material"/>
+            <Column Description="RoutingNo" MaxRange="1" MinRange="0" Name="RoutingNo" SQLDataType="-9" SourceColumn="RoutingNo"/>
+            <Column Description="Counter" MaxRange="1" MinRange="0" Name="Counter" SQLDataType="-9" SourceColumn="Counter"/>
+            <Column Description="TaskListGroup" MaxRange="1" MinRange="0" Name="TaskListGroup" SQLDataType="-9" SourceColumn="TaskListGroup"/>
+            <Column Description="Description" MaxRange="1" MinRange="0" Name="Description" SQLDataType="-9" SourceColumn="Description"/>
+            <Column Description="ActivityType1" MaxRange="1" MinRange="0" Name="ActivityType1" SQLDataType="-9" SourceColumn="ActivityType1"/>
+            <Column Description="MIISchedStartDate" MaxRange="1" MinRange="0" Name="MIISchedStartDate" SQLDataType="91" SourceColumn="MIISchedStartDate"/>
+            <Column Description="MIISchedStartTime" MaxRange="1" MinRange="0" Name="MIISchedStartTime" SQLDataType="92" SourceColumn="MIISchedStartTime"/>
+            <Column Description="MIISchedFinDate" MaxRange="1" MinRange="0" Name="MIISchedFinDate" SQLDataType="91" SourceColumn="MIISchedFinDate"/>
+            <Column Description="MIISchedFinTime" MaxRange="1" MinRange="0" Name="MIISchedFinTime" SQLDataType="92" SourceColumn="MIISchedFinTime"/>
+            <Column Description="Unit" MaxRange="1" MinRange="0" Name="Unit" SQLDataType="-9" SourceColumn="Unit"/>
+            <Column Description="Quantity" MaxRange="1" MinRange="0" Name="Quantity" SQLDataType="3" SourceColumn="Quantity"/>
+            <Column Description="Scrap" MaxRange="1" MinRange="0" Name="Scrap" SQLDataType="3" SourceColumn="Scrap"/>
+            <Column Description="EarlySchedStart" MaxRange="1" MinRange="0" Name="EarlySchedStart" SQLDataType="12" SourceColumn="EarlySchedStart"/>
+            <Column Description="EarlySchedFin" MaxRange="1" MinRange="0" Name="EarlySchedFin" SQLDataType="12" SourceColumn="EarlySchedFin"/>
+            <Column Description="MIISchedStart" MaxRange="1" MinRange="0" Name="MIISchedStart" SQLDataType="12" SourceColumn="MIISchedStart"/>
+            <Column Description="MIISchedFin" MaxRange="1" MinRange="0" Name="MIISchedFin" SQLDataType="12" SourceColumn="MIISchedFin"/>
+            <Column Description="WorkCenterID" MaxRange="1" MinRange="0" Name="WorkCenterID" SQLDataType="4" SourceColumn="WorkCenterID"/>
+            <Column Description="WorkCenter" MaxRange="1" MinRange="0" Name="WorkCenter" SQLDataType="-9" SourceColumn="WorkCenter"/>
+            <Column Description="OrderScheduledKey" MaxRange="1" MinRange="0" Name="OrderScheduledKey" SQLDataType="-9" SourceColumn="OrderScheduledKey"/>
+            <Column Description="PrtNumber" MaxRange="1" MinRange="0" Name="PrtNumber" SQLDataType="-9" SourceColumn="PrtNumber"/>
+            <Column Description="Color" MaxRange="1" MinRange="0" Name="Color" SQLDataType="-9" SourceColumn="Color"/>
+            <Column Description="SystemStatus" MaxRange="1" MinRange="0" Name="SystemStatus" SQLDataType="-9" SourceColumn="SystemStatus"/>
+            <Column Description="Operation" MaxRange="1" MinRange="0" Name="Operation" SQLDataType="-9" SourceColumn="Operation"/>
+            <Column Description="orderStatusName" MaxRange="1" MinRange="0" Name="orderStatusName" SQLDataType="-9" SourceColumn="orderStatusName"/>
+            <Column Description="OperationStatus" MaxRange="1" MinRange="0" Name="OperationStatus" SQLDataType="12" SourceColumn="OperationStatus"/>
+            <Column Description="MaterialDescription" MaxRange="1" MinRange="0" Name="MaterialDescription" SQLDataType="-9" SourceColumn="MaterialDescription"/>
+        </Columns>
+        <Row>
+            <ID>100</ID>
+            <OrderNumber>000001009807</OrderNumber>
+            <Material>000000000000326728</Material>
+            <RoutingNo>0000009909</RoutingNo>
+            <Counter>00000003</Counter>
+            <TaskListGroup>N</TaskListGroup>
+            <Description>PACKING</Description>
+            <ActivityType1>ZHD1</ActivityType1>
+            <MIISchedStartDate>2018-02-08T00:00:00</MIISchedStartDate>
+            <MIISchedStartTime>1970-01-01T14:15:00</MIISchedStartTime>
+            <MIISchedFinDate>2018-02-08T00:00:00</MIISchedFinDate>
+            <MIISchedFinTime>1970-01-01T20:14:59</MIISchedFinTime>
+            <Unit>EA</Unit>
+            <Quantity>600</Quantity>
+            <Scrap>0</Scrap>
+            <EarlySchedStart>2018-02-0821:00:00</EarlySchedStart>
+            <EarlySchedFin>2018-02-0823:59:59</EarlySchedFin>
+            <MIISchedStart>2018-02-0814:15:00</MIISchedStart>
+            <MIISchedFin>2018-02-0820:14:59</MIISchedFin>
+            <WorkCenterID>20</WorkCenterID>
+            <WorkCenter>PACKING</WorkCenter>
+            <OrderScheduledKey>---</OrderScheduledKey>
+            <PrtNumber>---</PrtNumber>
+            <Color>---</Color>
+            <SystemStatus>REL</SystemStatus>
+            <Operation>0030</Operation>
+            <orderStatusName>CRTD</orderStatusName>
+            <OperationStatus>ACTIVE</OperationStatus>
+            <MaterialDescription>UNIVERSAL CORD TENSIONER HSG-MOD B</MaterialDescription>
+        </Row>
+    </Rowset>
+</Rowsets>
