@@ -505,6 +505,7 @@
         /*text-align: center;*/
         /*}*/
 
+
         /*#Cell-TitleMH, #Cell-TitleMH2 {*/
         /*text-align: center;*/
         /*}*/
@@ -654,7 +655,8 @@
         // -----------------	LOAD	------------------------
 
         function roleSecurity() {
-            // disableButtons();
+            // cc(Number('a123'));
+            disableButtons();
             getUnitID();
             // document.getElementById("mytext").value = "My value";
 
@@ -713,7 +715,7 @@
             var Param1 = selected_StationID
             var paramStr = "Param.1=" + encodeURIComponent(Param1);
             var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_ActiveOrderPacking&" + paramStr + "&ts=" + timestamp + "&Content-Type=text/xml";
-            cc('getActiveOrderData' + ': ' + queryStr);
+            // cc('getActiveOrderData' + ': ' + queryStr);
             // alert(queryStr);
             getData(queryStr, parseJsonGetActiveOrder);
         }
@@ -1213,7 +1215,9 @@
                             {path: "SampleWeight"}
                         ],
                     formatter: function (TotalWeight, BoxWeight, SampleWeight) {
-                        return Math.round((Number(TotalWeight) - Number(BoxWeight)) / Number(SampleWeight));
+                        if (Math.round((Number(TotalWeight) - Number(BoxWeight)) / Number(SampleWeight)) >= 0) {
+                            return Math.round((Number(TotalWeight) - Number(BoxWeight)) / Number(SampleWeight));
+                        } else return 0;
                     }
                 }).addStyleClass('classTV'),
             sortProperty: '',
@@ -1243,7 +1247,7 @@
             filterProperty: '',
             width: "26%"
         })).attachRowSelectionChange(function (oEvent) {
-            cc(TableRuntime.getSelectedIndex());
+            // cc(TableRuntime.getSelectedIndex());
             if (TableRuntime.getSelectedIndex() >= 0) {
 
                 var getSelectedIndex = TableRuntime.getSelectedIndex();
@@ -1263,18 +1267,21 @@
                     CreatedOn: XMLModelRuntime.getProperty("CreatedOn", oEvent.getParameter("rowContext")),
                     ModifiedBy: XMLModelRuntime.getProperty("ModifiedBy", oEvent.getParameter("rowContext")),
                     ModifiedOn: XMLModelRuntime.getProperty("ModifiedOn", oEvent.getParameter("rowContext")),
+                    Operation: XMLModelRuntime.getProperty("Operation", oEvent.getParameter("rowContext")),
+                    recordStatusID: XMLModelRuntime.getProperty("recordStatusID", oEvent.getParameter("rowContext")),
                 };
 
-                cc(TableRuntimeSelect);
+                // cc(TableRuntimeSelect);
 
                 var QTY = Math.round((Number(TableRuntimeSelect.TotalWeight - Number(TableRuntimeSelect.BoxWeight)) / Number(TableRuntimeSelect.SampleWeight)));
+                if (QTY < 0) QTY = 0;
                 oCore.byId('ButtonCalibration').setText('EDIT');
-                oCore.byId('MatrixLayoutRuntime_1_2').setValue(QTY);
-                oCore.byId('MatrixLayoutRuntime_1_4').setValue(TableRuntimeSelect.BoxID);
+                // oCore.byId('MatrixLayoutRuntime_1_2').setValue(QTY);
+                // oCore.byId('MatrixLayoutRuntime_1_4').setValue(TableRuntimeSelect.BoxID);
             } else {
                 oCore.byId('ButtonCalibration').setText('ADD');
-                oCore.byId('MatrixLayoutRuntime_1_2').setValue('');
-                oCore.byId('MatrixLayoutRuntime_1_4').setValue('');
+                // oCore.byId('MatrixLayoutRuntime_1_2').setValue('');
+                // oCore.byId('MatrixLayoutRuntime_1_4').setValue('');
             }
             // selectedIndex = selIndex;
             // if (selIndex >= 0) {
@@ -1308,6 +1315,8 @@
             CreatedOn: '',
             ModifiedBy: '',
             ModifiedOn: '',
+            Operation: '',
+            recordStatusID: '',
         };
         MatrixLayoutRuntime.addRow(new sap.ui.commons.layout.MatrixLayoutRow({
             // id : 'oRow0',
@@ -1336,7 +1345,7 @@
                     id: 'MatrixLayoutRuntime_1_2',
                     tooltip: 'Box ID',
                     editable: false,
-                    value: '1000',
+                    value: '',
                     width: '100%',
                     textAlign: sap.ui.core.TextAlign.Center,
                 })),
@@ -1363,7 +1372,7 @@
                     id: 'MatrixLayoutRuntime_1_4',
                     tooltip: 'Box #',
                     editable: false,
-                    value: '0001',
+                    value: '',
                     width: '100%',
                     textAlign: sap.ui.core.TextAlign.Center,
                 })),
@@ -1403,7 +1412,7 @@
                 }).addContent(new sap.ui.commons.Button({
                     text: "ADD",
                     id: "ButtonCalibration",
-                    width: "100%",
+                    width: "120px",
                     height: "70px",
                     // press : function() {},
                 }).attachPress(doOpenCV)),
@@ -1422,7 +1431,7 @@
                 }).addContent(new sap.ui.commons.Button({
                     text: "DOWNTIME",
                     id: "BT-Downtime",
-                    width: "100%",
+                    width: "120px",
                     height: "70px",
                     // press : function() {},
                 }).attachPress(doOpenDT)),
@@ -1442,7 +1451,7 @@
                 }).addContent(new sap.ui.commons.Button({
                     text: "COMPONENTS",
                     id: "BT-Components",
-                    width: "100%",
+                    width: "120px",
                     height: "70px",
                     // press : function() {},
                 }).attachPress(doOpenCOM)),
@@ -2027,7 +2036,7 @@
             width: '390px',
             columns: 1,
             widths: ['400px']
-        });
+        })
 
         var oMatrixLGT = new sap.ui.commons.layout.MatrixLayout({
             id: 'MatrixILGT',
@@ -2039,7 +2048,9 @@
 
         var oTitleLG = new sap.ui.commons.Label({
             id: 'L-LG',
-            text: 'LOG ON'
+            text: 'LOG ON',
+            textAlign: sap.ui.core.TextAlign.Center,
+            width: "100%",
         });
 
         oMatrixLG.createRow(oTitleLG);
@@ -2048,7 +2059,9 @@
             id: 'L-ClockID',
             visible: true,
             text: ' OPERATOR CLOCK ID',
-            width: '120px'
+            width: '120px',
+            textAlign: sap.ui.core.TextAlign.Center,
+            width: "100%",
         });
 
         oMatrixLG.createRow(oLabelClockID);
@@ -2059,7 +2072,8 @@
             editable: true,
             maxLength: 11,
             visible: true,
-            width: '180px'
+            width: '180px',
+            textAlign: sap.ui.core.TextAlign.Center,
         });
         oTF_ClockID.addEventDelegate({
             onAfterRendering: function () {
@@ -2072,6 +2086,7 @@
             }
         });
 
+        // oMatrixLG.createRow(oTF_ClockID);
         oMatrixLG.createRow(oTF_ClockID);
 
         oMatrixLG.createRow('');
@@ -2117,7 +2132,7 @@
                         selecte_UserName = (jasondata[i]['Name']);
                         oCore.byId("BT-LogOn").setText('LOG OUT');
                         is_UserLoged = 1;
-                        cc("selecte_UserID " + selecte_UserID);
+                        // cc("selecte_UserID " + selecte_UserID);
                     }
                     else {
 
@@ -2170,7 +2185,7 @@
                 var selectedRow = oTableOL.getRows()[selIndex];
                 var selectedRowContext = oEvent.getParameter("rowContext");
                 selected_OrderID = oModelOL.getProperty("OrderNumber", selectedRowContext);
-                cc('OrderNumber ' + selected_OrderID);
+                // cc('OrderNumber ' + selected_OrderID);
                 createTableRuntime();
             }
             else {
@@ -2187,10 +2202,26 @@
             var timestamp = new Date().getTime();
             //alert(selected_StationID);
             var Param1 = escapeSQLString(selected_OrderID);
-            var Param1 = '000001009806';
+            // var Param1 = '000001009806';
             var paramStr = "Param.1=" + encodeURIComponent(Param1);
             //alert(paramStr);
             var url = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/WEIGHUP/QUERIES/get_RuntimeData&" + paramStr + "&ts=" + timestamp + "&Content-Type=text/xml";
+            getData(url, function (data) {
+                cc(data);
+                var tw = 0, a1, a2, a3, av;
+                for (var n = 0; n < data.length; n++) {
+                    a1 = isNaN(Number(data[n].TotalWeight)) ? 0 : Number(data[n].TotalWeight);
+                    a2 = isNaN(Number(data[n].BoxWeight)) ? 0 : Number(data[n].BoxWeight);
+                    a3 = isNaN(Number(data[n].SampleWeight)) ? 0 : Number(data[n].SampleWeight);
+                    av = (a1 - a2) / a3;
+                    av = isNaN(Number(av)) ? 0 : Math.round(av * 100) / 100;
+                    if (av < 0) av = 0;
+                    tw = av + tw;
+                }
+                // cc('tw ' + tw + ' ' + data.length);
+                oCore.byId('MatrixLayoutRuntime_1_2').setValue(tw);
+                oCore.byId('MatrixLayoutRuntime_1_4').setValue(data.length);
+            })
             // cc(url);
             // var XMLModelRuntime = new sap.ui.model.xml.XMLModel();
 
@@ -2244,7 +2275,7 @@
         function createTableWorkorders() {
             // Bind the table rows to this model
             var timestamp = new Date().getTime();
-            //alert(selected_StationID);
+            // alert(selected_StationID);
             var Param1 = escapeSQLString(selected_StationID);
             var paramStr = "Param.1=" + encodeURIComponent(Param1);
             //alert(paramStr);
@@ -2255,9 +2286,8 @@
             createColumnsWorkorders();
             oTableOL.setModel(oModelOL);
             oTableOL.bindRows("/Rowset/Row");
-
             is_order_table_created = 1;
-        };
+        }
 
         function updateTableWorkorders() {
             oTableOL.clearSelection();
@@ -2483,7 +2513,7 @@
                     textAlign: sap.ui.core.TextAlign.Center,
                     change: function () {
                         TableRuntimeSelect.BoxID = oCore.byId('MatrixLayoutCalibration_1_2').getValue();
-                        cc(TableRuntimeSelect);
+                        // cc(TableRuntimeSelect);
                     }
                 })),
                 new sap.ui.commons.layout.MatrixLayoutCell({
@@ -2657,10 +2687,16 @@
                         var a1 = Number(oCore.byId("MatrixLayoutCalibration_2_2").getValue());
                         var a2 = Number(oCore.byId("MatrixLayoutCalibration_3_2").getValue());
                         var a3 = Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue());
-
-                        cc(oCore.byId("MatrixLayoutCalibration_4_3").setValue(Math.round((a2 - a1) / a3 * 100) / 100));
-
-                        TableRuntimeSelect.SampleWeight = oCore.byId("MatrixLayoutCalibration_4_3").getValue();
+                        var aa = Math.round((a2 - a1) / a3 * 100) / 100;
+                        if (aa < 0) {
+                            aa = 0
+                        }
+                        oCore.byId("MatrixLayoutCalibration_4_3").setValue(aa);
+                        TableRuntimeSelect.SampleWeight = aa;
+                        //
+                        // cc(oCore.byId("MatrixLayoutCalibration_4_3").setValue(Math.round((a2 - a1) / a3 * 100) / 100));
+                        //
+                        // TableRuntimeSelect.SampleWeight = oCore.byId("MatrixLayoutCalibration_4_3").setValue();
                     },
 
                 })),
@@ -2691,29 +2727,52 @@
                     style: sap.ui.commons.ButtonStyle.Accept,
                     width: "100%",
                     height: "60px",
-                    press: function () {
+                    press: function () {// valid?
+                        // cc(oCore.byId("MatrixLayoutCalibration_4_3"));
+                        // cc(oCore.byId('MatrixLayoutCalibration_1_2').getValue());
+                        // cc(oCore.byId('MatrixLayoutCalibration_4_2').getValue());
+                        // cc(oCore.byId('MatrixLayoutCalibration_4_3').getValue());
+
+                        if (oCore.byId('MatrixLayoutCalibration_1_2').getValue() == ''
+                            || oCore.byId('MatrixLayoutCalibration_4_2').getValue() == ''
+                            || oCore.byId('MatrixLayoutCalibration_4_3').getValue() == '') {
+                            oOverlayContainerCV.close();
+                            cc('invalid form');
+                            return;
+                        }
                         // cc(TableRuntimeSelect.recordID);
                         // var url = '';
                         // cc(moment(TableRuntimeSelect.CreatedOn).format('YYYY-MM-DD HH:mm:ss'));
                         // cc(moment(TableRuntimeSelect.ModifiedOn).format('YYYY-MM-DD HH:mm:ss'));
 
-                        if (moment(TableRuntimeSelect.CreatedOn).format('YYYY-MM-DD HH:mm:ss') == 'Invalid date') {
-                            TableRuntimeSelect.CreatedOn = moment().format('YYYY-MM-DD HH:mm:ss');
-                        }
-                        TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss');
-                        //wxy
-                        cc('getSelectedIndex ' + TableRuntime.getSelectedIndex());
+
+                        //
+                        // cc('getSelectedIndex ' + TableRuntime.getSelectedIndex());
 
                         if (TableRuntime.getSelectedIndex() >= 0) {//EDIT
                             TableRuntimeSelect.ModifiedBy = selecte_UserID;
-                            // TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss');
+                            TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss');
                         } else {//ADD
+                            // cc('OrderNumber ' + selected_OrderID);
+
+                            TableRuntimeSelect.recordID = 0;
+                            TableRuntimeSelect.OrderNumber = selected_OrderID;
+                            TableRuntimeSelect.TotalWeight = 0;
+                            TableRuntimeSelect.ScrapPartNumber = 0;
                             TableRuntimeSelect.CreatedBy = selecte_UserID;
                             TableRuntimeSelect.CreatedOn = moment().format('YYYY-MM-DD HH:mm:ss');
+                            TableRuntimeSelect.Operation = '0030';
+                            TableRuntimeSelect.idUOM = 6;
+                            TableRuntimeSelect.recordStatusID = 0;
+                        }
+                        if (moment(TableRuntimeSelect.CreatedOn).format('YYYY-MM-DD HH:mm:ss') == 'Invalid date') {
+                            TableRuntimeSelect.CreatedOn = moment().format('YYYY-MM-DD HH:mm:ss');
+                        }
+                        if (moment(TableRuntimeSelect.ModifiedOn).format('YYYY-MM-DD HH:mm:ss') == 'Invalid date') {
+                            TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss')
                         }
 
-
-                        cc(TableRuntimeSelect);
+                        // cc(TableRuntimeSelect);
                         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/WEIGHUP/QUERIES/upd_RuntimeData" +
                             "&Param.1=" +
                             TableRuntimeSelect.recordID +
@@ -2739,6 +2798,12 @@
                             TableRuntimeSelect.ModifiedBy +
                             "&Param.12=" +
                             TableRuntimeSelect.ModifiedOn +
+                            "&Param.13=" +
+                            TableRuntimeSelect.Operation +
+                            "&Param.14=" +
+                            TableRuntimeSelect.recordStatusID +
+                            "&Param.15=" +
+                            TableRuntimeSelect.OrderNumber +
                             "&Content-Type=text/xml";
                         // cc(' show url');
                         // cc(urlProc);
@@ -2749,6 +2814,8 @@
                                 // document.getElementById("demo").innerHTML = this.responseText;
                                 cc(urlProc + ' //');
                                 cc(this.responseText);
+                                oOverlayContainerCV.close();
+                                createTableRuntime();
                             }
                         };
                         xhttp.open("GET", urlProc, true);
@@ -3018,12 +3085,13 @@
             oCore.byId('MatrixLayoutCalibration_4_2').setValue('');
             oCore.byId('MatrixLayoutCalibration_4_3').setValue(TableRuntimeSelect.SampleWeight);
 
-            cc(TableRuntimeSelect.recordID);
+            // cc(TableRuntimeSelect.recordID);
 
             // oCore.byId('TF-MoldName').setValue(selected_OrderID);
             // oCore.byId('TF-MoldOriginalCavities').setValue(selected_OriginalCavities);
             // oCore.byId('TF-MoldTotalCavities').setValue(selected_TotalCavities);
-            updateComBoxCavityID();
+            cc('updateComBoxCavityID');
+            // updateComBoxCavityID();
             updateComBoxBlockedReason();
             updateComBoxBlockedHow();
             //document.getElementById("TF-MoldTotalCavities").setAttribute("onfocus", "this.select()");
