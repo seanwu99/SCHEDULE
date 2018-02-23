@@ -811,6 +811,7 @@
                 $.each(mapData, function (i) {
                     if (this.properties['KEY'] == "") {
                         this.value = colors_in  ['_TOLEDO'];
+                        this.color = '#efefef';
 
                     } else {
                         this.drilldown = this.properties['KEY'];
@@ -825,6 +826,13 @@
                         var color_id2 = colors_in[this.properties['KEY'] + '_' + this.properties['NAME']];
                         // this.value = Number(color_id);
                         this.value = Number(color_id2);
+                        if (this.value == 100) {
+                            this.color = '#0080ff';
+                            this.properties['KEY']='';
+                            this.properties['NAME']='';
+                            this.properties['PARAM3']='';
+                        }
+
                     }
                 });
                 var mapName = selectedUnitName;
@@ -955,12 +963,12 @@
 
                         stops: [
 
-                            [parseFloat(StatusColors['ValueStep1']), StatusColors['ColorStep1']],//[0, '#d2d6d1'],
-                            [parseFloat(StatusColors['ValueStep2']), StatusColors['ColorStep2']],//[0.67, '#76ef6e'],
-                            [parseFloat(StatusColors['ValueStep3']), StatusColors['ColorStep3']],//[1, '#31ed23']
-                            // [0.4, '#ef4721'],//[0, '#d2d6d1'],
-                            // [0.46, '#e0da2c'],//[0.67, '#76ef6e'],
-                            // [0.9, '#08d184'],//[1, '#31ed23']
+                            // [parseFloat(StatusColors['ValueStep1']), StatusColors['ColorStep1']],//[0, '#d2d6d1'],
+                            // [parseFloat(StatusColors['ValueStep2']), StatusColors['ColorStep2']],//[0.67, '#76ef6e'],
+                            // [parseFloat(StatusColors['ValueStep3']), StatusColors['ColorStep3']],//[1, '#31ed23']
+                            [0, '#ef4721'],//[0, '#d2d6d1'],
+                            [0.6, '#e0da2c'],//[0.67, '#76ef6e'],
+                            [1, '#08d184'],//[1, '#31ed23']
                             // [1, '#080ff'],
                             //	[0, '#d2d6d1'],
                             // 	[0.60, '#76ef6e'],
