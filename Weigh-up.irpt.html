@@ -638,8 +638,8 @@
 
     <script type="text/javascript" src="Common/js/default.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="Common/css/keyboard.css">
-    <script type="text/javascript" src="Common/js/jquery.keyboard.js"></script>
+    <link rel="stylesheet" type="text/css" href="Common/mottie/keyboard.css">
+    <script type="text/javascript" src="Common/mottie/jquery.keyboard.js"></script>
     <script type="text/javascript" src="Common/js/moment.min.js"></script>
     <script>
 
@@ -690,8 +690,71 @@
             // cc(Number('a123'));
             // disableButtons();
             getUnitID();
-            // document.getElementById("mytext").value = "My value";
 
+            // document.getElementById("mytext").value = "My value";
+            $.extend($.keyboard.keyaction, {
+
+                accept: function (base) {
+                    base.mode = 0; // 0 = login, 1 = logout
+                    clockID = 'access => ' + base.el.id + ' ' + base.checkCombos();
+                    // cc('accept');
+                    // cc(base.el.id);
+                    cc(clockID);
+
+                    if (base.el.id == 'MatrixLayoutCalibration_4_2') {
+                        oCore.byId("MatrixLayoutCalibration_4_2").setValue(base.checkCombos());
+                        if (Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue()) != 0) {
+                            cal();
+                        } else {
+                            oCore.byId("MatrixLayoutCalibration_4_3").setValue('');
+                        }
+                    } else if (base.el.id == 'MatrixLayoutCalibration_1_2') {
+                        oCore.byId("MatrixLayoutCalibration_1_2").setValue(base.checkCombos());
+                        // cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
+                    }
+                    cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
+                    // doLogOperator();
+                    base.close(true);
+                },
+                cancel: function (base) {
+                    base.mode = 1; // 0 = login, 1 = logout
+                    // clockID = 'cancel ' + base.checkCombos();
+                    clockID = 'cancel => ' + base.el.id + ' ' + base.checkCombos();
+                    // doLogOutOperator();
+                    // cc('cancel');
+                    cc(clockID);
+                    if (base.el.id == 'MatrixLayoutCalibration_4_2') {
+                        oCore.byId("MatrixLayoutCalibration_4_2").setValue(base.checkCombos());
+                        if (Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue()) != 0) {
+                            cal();
+                        } else {
+                            oCore.byId("MatrixLayoutCalibration_4_3").setValue('');
+                        }
+                    } else if (base.el.id == 'MatrixLayoutCalibration_1_2') {
+                        oCore.byId("MatrixLayoutCalibration_1_2").setValue(base.checkCombos());
+                    }
+                    cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
+                    base.close(true);
+                }
+            });
+
+            function cal() {
+                var a1 = Number(oCore.byId("MatrixLayoutCalibration_2_2").getValue());
+                var a2 = Number(oCore.byId("MatrixLayoutCalibration_3_2").getValue());
+                var a3 = Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue());
+                var aa = Math.round((a2 - a1) / a3 * 100) / 100;
+                if (aa < 0) {
+                    aa = 0
+                }
+                oCore.byId("MatrixLayoutCalibration_4_3").setValue(aa);
+                TableRuntimeSelect.SampleWeight = aa;
+                //
+                // cc(oCore.byId("MatrixLayoutCalibration_4_3").setValue(Math.round((a2 - a1) / a3 * 100) / 100));
+                //
+                // TableRuntimeSelect.SampleWeight = oCore.byId("MatrixLayoutCalibration_4_3").setValue();
+                oCore.byId('MatrixLayoutCalibration_4_4').setText('SET');
+                oCore.byId('MatrixLayoutCalibration_4_4').setStyle(sap.ui.commons.ButtonStyle.Accept);
+            }
         }
 
         // GET UNIT IDs
@@ -1008,7 +1071,7 @@
             id: "BT-OrderList",
             //style: sap.ui.commons.ButtonStyle.Emph,
             width: "120px",
-            height: "70px",
+            height: "60px",
             //press : function() {},
         })
         oBT_OrderList.attachPress(doOpenOredList);
@@ -1441,7 +1504,7 @@
                     text: "ADD",
                     id: "ButtonCalibration",
                     width: "120px",
-                    height: "70px",
+                    height: "60px",
                     // press : function() {},
                 }).attachPress(doOpenCV)),
                 new sap.ui.commons.layout.MatrixLayoutCell({
@@ -1460,7 +1523,7 @@
                     text: "DOWNTIME",
                     id: "BT-Downtime",
                     width: "120px",
-                    height: "70px",
+                    height: "60px",
                     // press : function() {},
                 }).attachPress(doOpenDT)),
                 new sap.ui.commons.layout.MatrixLayoutCell({
@@ -1480,7 +1543,7 @@
                     text: "COMPONENTS",
                     id: "BT-Components",
                     width: "120px",
-                    height: "70px",
+                    height: "60px",
                     // press : function() {},
                 }).attachPress(doOpenCOM)),
                 new sap.ui.commons.layout.MatrixLayoutCell({
@@ -1714,7 +1777,7 @@
             text: "SCRAP",
             id: "BT-Scrap",
             width: "120px",
-            height: "70px",
+            height: "60px",
             // press : function() {},
         })
         oBT_Scrap.attachPress(doOpenSC);
@@ -1847,6 +1910,32 @@
                         recordStatusID: '',
                     };
 
+                    // $('#MatrixLayoutCalibration_1_2').keyboard({
+                    //     layout: 'num',
+                    //     restrictInput: true,
+                    //     preventPaste: true,
+                    //     autoAccept: false,
+                    //     // initialFocus: true,
+                    //     alwaysOpen: false,
+                    //     // openOn: null,
+                    //     stayOpen: false,
+                    // });
+                    // cc('MatrixLayoutCalibration_1_2');
+                    // cc(oCore.byId('MatrixLayoutCalibration_1_2'));
+                    //
+                    // oCore.byId('MatrixLayoutCalibration_1_2').addEventDelegate({
+                    //     onAfterRendering: function () {
+                    //         cc('addEventDelegate');
+                    //         // do something
+                    //         $('#MatrixLayoutCalibration_1_2').keyboard({
+                    //             layout: 'num',
+                    //             restrictInput: true, // Prevent keys not in the displayed keyboard from being typed in
+                    //             preventPaste: true,  // prevent ctrl-v and right click
+                    //             autoAccept: true
+                    //         });
+                    //     }
+                    // });
+                    cc('TableRuntime.getSelectedIndex() < 0');
                     $('#MatrixLayoutCalibration_1_2').keyboard({
                         layout: 'num',
                         restrictInput: true,
@@ -1943,77 +2032,166 @@
             padding: '15px',
             widths: ['90%']
         });
+        oMatrixSideButtons.addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
+                text: "LOG ON",
+                id: "BT-LogOn",
+                //style: sap.ui.commons.ButtonStyle.Emph,
+                width: "120px",
+                height: "60px",
+                //press : function() {}
+            }).attachPress(doOpenLogOn)),]
+        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
+                text: "FRC-SCRAP",
+                id: "BT-ForcedScrap",
+                //style: sap.ui.commons.ButtonStyle.Emph,
+                width: "120px",
+                height: "60px",
+                // press : function() {},
+            }).attachPress(doForceScrapSwitch)),]
+        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
+                text: "LABEL",
+                id: "BT-LabelPrinting",
+                width: "120px",
+                height: "60px",
+                press: function () {
+                },
+            }).attachPress(doOpenLB)),]
+        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
+                text: "HOLD",
+                id: "BT-Hold",
+                width: "120px",
+                height: "60px",
+                press: function () {
+                },
+            })),]
+        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
+                text: "INSPECTION",
+                id: "BT-PartsInspection",
+                width: "120px",
+                height: "60px",
+                //press : function() {},
+            }).attachPress(doPartsInspection)),]
+        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
+                text: "EMERGENCY",
+                id: "BT-Emergency",
+                style: sap.ui.commons.ButtonStyle.Reject,
+                width: "120px",
+                height: "60px",
+                // press : function() {},
+            }).attachPress(doEmergency)),]
+        }))
 
+        // oBT_LogOn = new sap.ui.commons.Button({
+        //     text: "LOG ON",
+        //     id: "BT-LogOn",
+        //     //style: sap.ui.commons.ButtonStyle.Emph,
+        //     width: "120px",
+        //     height: "60px",
+        //     //press : function() {}
+        // })
+        // oBT_LogOn.attachPress(doOpenLogOn);
+//wxy
+//         oMatrixSideButtons.createRow(oBT_LogOn)
 
-        oBT_LogOn = new sap.ui.commons.Button({
-            text: "LOG ON",
-            id: "BT-LogOn",
-            //style: sap.ui.commons.ButtonStyle.Emph,
-            width: "120px",
-            height: "70px",
-            //press : function() {}
-        })
-        oBT_LogOn.attachPress(doOpenLogOn);
+        // oBT_ForcedScrap = new sap.ui.commons.Button({
+        //     text: "FRC-SCRAP",
+        //     id: "BT-ForcedScrap",
+        //     //style: sap.ui.commons.ButtonStyle.Emph,
+        //     width: "120px",
+        //     height: "60px",
+        //     // press : function() {},
+        // })
+        // oBT_ForcedScrap.attachPress(doForceScrapSwitch);
+        //
+        // oMatrixSideButtons.createRow(oBT_ForcedScrap)
 
-        oMatrixSideButtons.createRow(oBT_LogOn)
+        // var oBT_LabelPrinting = new sap.ui.commons.Button({
+        //     text: "LABEL",
+        //     id: "BT-LabelPrinting",
+        //     width: "120px",
+        //     height: "60px",
+        //     press: function () {
+        //     },
+        // })
+        // oBT_LabelPrinting.attachPress(doOpenLB);
+        //
+        // oMatrixSideButtons.createRow(oBT_LabelPrinting)
 
-        oBT_ForcedScrap = new sap.ui.commons.Button({
-            text: "FRC-SCRAP",
-            id: "BT-ForcedScrap",
-            //style: sap.ui.commons.ButtonStyle.Emph,
-            width: "120px",
-            height: "70px",
-            // press : function() {},
-        })
-        oBT_ForcedScrap.attachPress(doForceScrapSwitch);
+        // var oBT_Hold = new sap.ui.commons.Button({
+        //     text: "HOLD",
+        //     id: "BT-Hold",
+        //     width: "120px",
+        //     height: "60px",
+        //     press: function () {
+        //     },
+        // })
+        //
+        // oMatrixSideButtons.createRow(oBT_Hold)
 
-        oMatrixSideButtons.createRow(oBT_ForcedScrap)
+        // var oBT_PartsInspection = new sap.ui.commons.Button({
+        //     text: "INSPECTION",
+        //     id: "BT-PartsInspection",
+        //     width: "120px",
+        //     height: "60px",
+        //     //press : function() {},
+        // })
+        // oBT_PartsInspection.attachPress(doPartsInspection);
 
-        var oBT_LabelPrinting = new sap.ui.commons.Button({
-            text: "LABEL",
-            id: "BT-LabelPrinting",
-            width: "120px",
-            height: "70px",
-            press: function () {
-            },
-        })
-        oBT_LabelPrinting.attachPress(doOpenLB);
+        // oMatrixSideButtons.createRow(oBT_PartsInspection)
 
-        oMatrixSideButtons.createRow(oBT_LabelPrinting)
-
-        var oBT_Hold = new sap.ui.commons.Button({
-            text: "HOLD",
-            id: "BT-Hold",
-            width: "120px",
-            height: "70px",
-            press: function () {
-            },
-        })
-
-        oMatrixSideButtons.createRow(oBT_Hold)
-
-        var oBT_PartsInspection = new sap.ui.commons.Button({
-            text: "INSPECTION",
-            id: "BT-PartsInspection",
-            width: "120px",
-            height: "70px",
-            //press : function() {},
-        })
-        oBT_PartsInspection.attachPress(doPartsInspection);
-
-        oMatrixSideButtons.createRow(oBT_PartsInspection)
-
-        oBT_Emergency = new sap.ui.commons.Button({
-            text: "EMERGENCY",
-            id: "BT-Emergency",
-            style: sap.ui.commons.ButtonStyle.Reject,
-            width: "120px",
-            height: "70px",
-            // press : function() {},
-        })
-        //oBT_Emergency.attachPress(doEmergency);
-
-        oMatrixSideButtons.createRow(oBT_Emergency)
+        // oBT_Emergency = new sap.ui.commons.Button({
+        //     text: "EMERGENCY",
+        //     id: "BT-Emergency",
+        //     style: sap.ui.commons.ButtonStyle.Reject,
+        //     width: "120px",
+        //     height: "60px",
+        //     // press : function() {},
+        // })
+        // //oBT_Emergency.attachPress(doEmergency);
+        //
+        // oMatrixSideButtons.createRow(oBT_Emergency)
 
         oMatrixMain.createRow(oMatrixOrder, MatrixLayoutRuntime, oMatrixSideButtons);
 
@@ -2194,7 +2372,7 @@
                         text: "SUBMIT",
                         id: "BT-SubmitLogOn",
                         width: "100%",
-                        height: "70px",
+                        height: "60px",
                         // press : function() {},
                     }).attachPress(doSubmitLogOn)),
                 new sap.ui.commons.layout.MatrixLayoutCell()
@@ -2417,7 +2595,7 @@
             id: "BT-OrderStart",
             //style: sap.ui.commons.ButtonStyle.Emph,
             width: "120px",
-            height: "70px",
+            height: "60px",
             //press : function() {},
         })
         oBT_OrderStart.attachPress(setNewActiveOrder);
@@ -2668,13 +2846,23 @@
                         tooltip: 'Box ID',
                         editable: true,
                         value: '',
-                        width: '300px',
+                        width: '295px',
                         textAlign: sap.ui.core.TextAlign.Center,
                         change: function () {
-                            TableRuntimeSelect.BoxID = oCore.byId('MatrixLayoutCalibration_1_2').getValue();
-                            cc(TableRuntimeSelect);
+                            // TableRuntimeSelect.BoxID = oCore.byId('MatrixLayoutCalibration_1_2').getValue();
+                            // cc(TableRuntimeSelect);
                         }
                     })
+                    //     .addEventDelegate({
+                    //     onAfterRendering: function () {
+                    //         $('#MatrixLayoutCalibration_1_2').keyboard({
+                    //             layout: 'num',
+                    //             restrictInput: true,
+                    //             preventPaste: true,
+                    //             autoAccept: true
+                    //         });
+                    //     }
+                    // })
                     // .addEventDelegate({
                     //     onAfterRendering: function () {
                     //         $('#MatrixLayoutCalibration_1_2').keyboard({
@@ -2838,26 +3026,26 @@
                         tooltip: 'Sample Size',
                         editable: true,
                         value: '10',
-                        width: '100%',
+                        width: '195px',
                         textAlign: sap.ui.core.TextAlign.Center,
                         change: function (ev) {
-                            var a1 = Number(oCore.byId("MatrixLayoutCalibration_2_2").getValue());
-                            var a2 = Number(oCore.byId("MatrixLayoutCalibration_3_2").getValue());
-                            var a3 = Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue());
-                            var aa = Math.round((a2 - a1) / a3 * 100) / 100;
-                            if (aa < 0) {
-                                aa = 0
-                            }
-                            oCore.byId("MatrixLayoutCalibration_4_3").setValue(aa);
-                            TableRuntimeSelect.SampleWeight = aa;
-                            //
-                            // cc(oCore.byId("MatrixLayoutCalibration_4_3").setValue(Math.round((a2 - a1) / a3 * 100) / 100));
-                            //
-                            // TableRuntimeSelect.SampleWeight = oCore.byId("MatrixLayoutCalibration_4_3").setValue();
-                            oCore.byId('MatrixLayoutCalibration_4_4').setText('SET');
-                            oCore.byId('MatrixLayoutCalibration_4_4').setStyle(sap.ui.commons.ButtonStyle.Accept);
+                            // var a1 = Number(oCore.byId("MatrixLayoutCalibration_2_2").getValue());
+                            // var a2 = Number(oCore.byId("MatrixLayoutCalibration_3_2").getValue());
+                            // var a3 = Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue());
+                            // var aa = Math.round((a2 - a1) / a3 * 100) / 100;
+                            // if (aa < 0) {
+                            //     aa = 0
+                            // }
+                            // oCore.byId("MatrixLayoutCalibration_4_3").setValue(aa);
+                            // TableRuntimeSelect.SampleWeight = aa;
+                            // //
+                            // // cc(oCore.byId("MatrixLayoutCalibration_4_3").setValue(Math.round((a2 - a1) / a3 * 100) / 100));
+                            // //
+                            // // TableRuntimeSelect.SampleWeight = oCore.byId("MatrixLayoutCalibration_4_3").setValue();
+                            // oCore.byId('MatrixLayoutCalibration_4_4').setText('SET');
+                            // oCore.byId('MatrixLayoutCalibration_4_4').setStyle(sap.ui.commons.ButtonStyle.Accept);
 
-                        },
+                        }
 
                     })
                     // .addEventDelegate({
@@ -2871,6 +3059,16 @@
                     //     }
                     // })
                 ),
+                //     .addEventDelegate({
+                //     onAfterRendering: function () {
+                //         $('#MatrixLayoutCalibration_4_2').keyboard({
+                //             layout: 'num',
+                //             restrictInput: true,
+                //             preventPaste: true,
+                //             autoAccept: true
+                //         });
+                //     }
+                // }),
                 new sap.ui.commons.layout.MatrixLayoutCell({
                     // id: 'Cell-0-2',
                     // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
@@ -2949,6 +3147,7 @@
                             // cc('OrderNumber ' + selected_OrderID);
 
                             TableRuntimeSelect.recordID = 0;
+                            TableRuntimeSelect.BoxID = oCore.byId('MatrixLayoutCalibration_1_2').getValue();
                             TableRuntimeSelect.OrderNumber = selected_OrderID;
                             TableRuntimeSelect.TotalWeight = 0;
                             TableRuntimeSelect.ScrapPartNumber = 0;
@@ -2964,8 +3163,8 @@
                         if (moment(TableRuntimeSelect.ModifiedOn).format('YYYY-MM-DD HH:mm:ss') == 'Invalid date') {
                             TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss')
                         }
-
-                        // cc(TableRuntimeSelect);
+                        cc('?add');
+                        cc(TableRuntimeSelect);
                         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/WEIGHUP/QUERIES/upd_RuntimeData" +
                             "&Param.1=" +
                             TableRuntimeSelect.recordID +
@@ -3255,7 +3454,7 @@
             id: "BT-UpdateCavities",
             //style: sap.ui.commons.ButtonStyle.Emph,
             width: "120px",
-            height: "70px",
+            height: "60px",
             //press : function() {},
         })
         oBT_UpdateCavities.attachPress(doChangeCavities)
@@ -4369,7 +4568,7 @@
             id: "BT-SaveMoldHistory",
             //style: sap.ui.commons.ButtonStyle.Emph,
             width: "120px",
-            height: "70px",
+            height: "60px",
             //press : function() {},
         })
         oBT_SaveMoldHistory.attachPress(doSaveMoldHistory)
@@ -4622,7 +4821,7 @@
             text: "SUBMIT",
             id: "BT-DowntimeCode",
             width: "120px",
-            height: "70px",
+            height: "60px",
             press: function () {
             },
         })
@@ -5116,7 +5315,7 @@
             text: "SUBMIT",
             id: "BT-LabelPrintSubmit",
             width: "120px",
-            height: "70px",
+            height: "60px",
             press: function () {
             },
         })

@@ -10,6 +10,7 @@ var
     chartProcessDefects,
     chartReducedYield;
 
+
 function chartOeeTrendInit(title, series) {
     var chartSeries;
     if (series == null) {
@@ -17,10 +18,11 @@ function chartOeeTrendInit(title, series) {
         var Availability = [];
         var Performance = [];
         var Quality = [];
-        var n = 100;
-        var tm = Math.round(new Date().getTime() / 1000) * 1000 - n * 3000;
+        var n = 1000;
+        var tm = Math.round(new Date().getTime() / 3600000) * 3600000 - n * 3600000;
         for (var i = 0; i < n; i++) {
-            tm += 3000;
+            cc(new Date(tm).toISOString());
+            tm += 3600000;
             Availability.push([tm, 85 + Math.round((Math.random() * 14))]);
             Performance.push([tm, 85 + Math.round((Math.random() * 14))]);
             Quality.push([tm, 85 + Math.round((Math.random() * 14))]);
@@ -104,34 +106,37 @@ function chartOeeTrendInit(title, series) {
             shadow: false,
         },
         rangeSelector: {
-            buttons: [{
-                type: 'minute',
-                count: 1,
-                text: 'm.'
-            }, {
-                type: 'hour',
-                count: 1,
-                text: 'H'
-            }, {
-                type: 'hour',
-                count: 8,
-                text: 'S'
-            }, {
-                type: 'day',
-                count: 1,
-                text: 'D'
-            }, {
-                type: 'week',
-                count: 1,
-                text: 'W'
-            }, {
-                type: 'month',
-                count: 1,
-                text: 'M'
-            }, {
-                type: 'all',
-                text: 'All'
-            }],
+            buttons: [
+                // {
+                //     type: 'minute',
+                //     count: 1,
+                //     text: 'm.'
+                // },
+                // {
+                //     type: 'hour',
+                //     count: 1,
+                //     text: 'H'
+                // },
+                {
+                    type: 'hour',
+                    count: 8,
+                    text: 'S'
+                }, {
+                    type: 'day',
+                    count: 1,
+                    text: 'D'
+                }, {
+                    type: 'week',
+                    count: 1,
+                    text: 'W'
+                }, {
+                    type: 'month',
+                    count: 1,
+                    text: 'M'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }],
             selected: 0
         },
 

@@ -150,12 +150,8 @@
     </script>
 
     <script src="Common/js/default.js"></script>
-
     <script src="Common/js/highcharts/highcharts.js"></script>
-    <script src="Common/js/highcharts/highcharts-more.js"></script>
-    <script src="Common/js/highcharts/solid-gauge.js"></script>
     <script src="Common/js/highcharts/map.js"></script>
-    <script src="Common/js/highcharts/drilldown.js"></script>
 
 
     <script type="text/javascript" id="app-init">
@@ -184,6 +180,7 @@
 
         var role2Access = "";
         var tableCreated = 0;
+
 
         function roleSecurity() {
 
@@ -240,7 +237,7 @@
                         alert("MES Module Role Unknown: " + role2Access);
                         break;
                 }
-                lineChartTest('chart');
+                lineChart_get('AXLEASY4');
             }
         }
 
@@ -350,7 +347,7 @@
             selectedIndex: 0,
             select: function () {
                 selectedMapStatusID = oRBG2.getSelectedItem().getKey();
-                cc('selectedMapStatusID ' + selectedMapStatusID);
+                // cc('selectedMapStatusID ' + selectedMapStatusID);
                 getMapStatus();
 //                getTreeData();
                 updateTableOEEPlant();
@@ -510,7 +507,19 @@
 //		width: "1200px",
             selectionBehavior: sap.ui.table.SelectionBehavior.Row,
             selectionMode: sap.ui.table.SelectionMode.Single
-        });
+        }).attachRowSelectionChange(function (oEvent) {
+            var selIndex = oTable.getSelectedIndex();
+            cc(oTable.getSelectedIndex());
+            // if (oTable.getSelectedIndex() >= 0) {
+            //     document.getElementById('mesm_stock').style.display = 'block';
+            //
+            //     var station = oModel.getProperty("oeeStation", oEvent.getParameter("rowContext"));
+            //     cc(station);
+            //     lineChart_get(station);
+            // } else {
+            //     document.getElementById('mesm_stock').style.display = 'none';
+            // }
+        })
         /*
                 function createColumnsHrchy() {
                     oTable.addColumn(new sap.ui.table.Column({
@@ -695,18 +704,19 @@
             }
         }
 
-        function cc(obj) {
-            console.log(obj)
-        }
 
         // ******************		MAPS		**********************************************************************************************************************************
 
         var colors_in = [];
+        var colors_on = [];
         var StatusColors = [];
         var selectedStatusName = '';
 
+        var getMapStatusReady = false;
+
         function getMapStatus() {
-            cc('getMapStatus');
+            getMapStatusReady = false;
+            // cc('getMapStatus');
             // colors_in = [];
             var timestamp = new Date().getTime();
             var Param1 = selectedPlant;
@@ -714,21 +724,17 @@
             getData("/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_MapStatusData&Param.1=" + Param1 + "&Param.2=" + Param2 + "&ts=" + timestamp + "&Content-Type=text/xml", parseJsonMapStatus);
 
             function parseJsonMapStatus(jsondata) {
-                cc(jsondata);
+                // cc(jsondata);
                 for (var i = 0; i < jsondata.length; i++) {
                     var map_name = jsondata[i]['unitMap'];
                     var map_status = jsondata[i]['statusValue'];
                     var map_parent_name = jsondata[i]['parentName'];
                     var map_key = map_parent_name + "_" + map_name;
-                    cc(map_key);
-                    //wxy
-                    // if (map_key == 'ALL ASSY_AXLEASSY') {
-                    //     cc('map_key==' + map_key);
-                    //     colors_in[map_key] = Math.round(Math.random() * 79) + 20;
-                    //     cc(colors_in[map_key]);
-                    // } else {
+                    // cc(map_key);
+
                     colors_in[map_key] = 100;
-                    // }
+                    colors_on[map_key] = '#0080ff';
+
                     // cc('colors_in[' + map_key + ']= ' + colors_in[map_key]);
 
                 }
@@ -749,12 +755,15 @@
                             vv = data[n].oeeQualValuePerc;
                         }
                         colors_in['ALL ASSY_' + data[n].oeeStation] = vv;
+                        colors_on['ALL ASSY_' + data[n].oeeStation] = '' + vv;
                         // cc(data[n].oeeValuePerc);
                         // cc(data[n].oeeAvailValuePerc);
                         // cc(data[n].oeePerfValuePerc);
                         // cc(data[n].oeeQualValuePerc);
                     }
                     colors_in['_TOLEDO'] = 100;
+                    colors_on['_TOLEDO'] = '#efefef';
+                    getMapStatusReady = true;
                 });
 
             }
@@ -804,7 +813,10 @@
         var sized = true;
 
         function mapsInit() {
-            cc('mapsInit');
+            if (!getMapStatusReady) {
+                return;
+            }
+            // cc('mapsInit');
             getANDMStatusColor();
             $.get('maps/' + selectedUnitName + '.json', function (data) {
                 var mapData = Highcharts.geojson(data);
@@ -812,7 +824,7 @@
                 $.each(mapData, function (i) {
                     if (this.properties['KEY'] == "") {
                         this.value = colors_in  ['_TOLEDO'];
-                        this.color = '#efefef';
+                        this.color = colors_on  ['_TOLEDO'];
 
                     } else {
                         this.drilldown = this.properties['KEY'];
@@ -826,12 +838,13 @@
                         //     "NAME": "COMBO CS ASSY",
                         var color_id2 = colors_in[this.properties['KEY'] + '_' + this.properties['NAME']];
                         // this.value = Number(color_id);
+                        // cc('colors_on ' + color_id2 + ' / ' + colors_on[color_id2]);
                         this.value = Number(color_id2);
-                        if (this.value == 100) {
+                        if (colors_on[this.properties['KEY'] + '_' + this.properties['NAME']] == '#0080ff') {
                             this.color = '#0080ff';
-                            this.properties['KEY']='';
-                            this.properties['NAME']='';
-                            this.properties['PARAM3']='';
+                            this.properties['KEY'] = '';
+                            this.properties['NAME'] = '';
+                            this.properties['PARAM3'] = '';
                         }
 
                     }
@@ -988,6 +1001,25 @@
                             events: {
                                 afterAnimate: function () {
                                     //    cc('afterAnimate');
+                                },
+                                click: function (e) {
+                                    cc('click');
+                                    cc(e.point.name);
+                                    var NAME = '';
+                                    if (e.point.name == 'AXLEASSY') {
+                                        NAME = 'AXLEASSY_OP010A';
+                                    } else if (e.point.name == 'AXLEASY2') {
+                                        NAME = 'AXLEASSY_OP010B';
+                                    } else if (e.point.name == 'AXLEASY3') {
+                                        NAME = 'AXLEASSY_OP010C';
+                                    } else if (e.point.name == 'AXLEASY4') {
+                                        NAME = 'AXLEASSY_OP010D';
+                                    }
+                                    if (NAME != '') {
+                                        setTimeout("location.href = '" + "OEEDashboard.irpt?ROLE=ADM_ALL&NAME=" + NAME + "'", 0);
+                                    }
+
+
                                 }
                             }
                         },
@@ -1143,9 +1175,11 @@
 
         window.setInterval(getChartsData, 10 * 1000);
 
+        // var lineChart = null;
         function lineChartInit(_series, _title) {
             // 		BarChart = null;
-            lineChart = new Highcharts.stockChart('p1', {
+            // Highcharts.stockChart('container', {
+            Highcharts.stockChart('mesm_stock', {
                 credits: {
                     enabled: false,
                     href: 'http://www.rtsperfectplant.com/',
@@ -1168,7 +1202,8 @@
                     text: _title
                 },
                 subtitle: {
-                    text: 'OEE/Availability/Performance/Quality',
+                    // text: 'OEE/Availability/Performance/Quality',
+                    text: null,
                     floating: false,
                     align: 'center',
                     y: 40,
@@ -1180,7 +1215,7 @@
                 chart: {
 
                     type: 'spline',
-                    height: ScreenSize()['y'] - 365,
+                    height: 300,
                     events: {
                         load: function () {
                             // 					alert('load');
@@ -1271,47 +1306,65 @@
             chartReady = true;
         }
 
-        function lineChartTest(_title) {
-//            var oeeArray = [];
-            var dOEE = [];
-            var dAvailability = [];
-            var dPerformance = [];
-            var dQuality = [];
-            var n = 10;
-            var tm = new Date().getTime() - n * 1000;
-            for (var i = 0; i < n; i++) {
-                tm += i * 1000;
-                availability = 60 + Math.round((Math.random() * 40));
-                performance = 60 + Math.round((Math.random() * 40));
-                quality = 60 + Math.round((Math.random() * 40));
-                oee = availability * performance * quality / 10000;
-
-                dAvailability.push([tm, availability]);
-                dPerformance.push([tm, performance]);
-                dQuality.push([tm, quality]);
-                dOEE.push([tm, oee]);
+        function lineChart_get(station) {
+            var Param1;
+            if (station == 'AXLEASSY') {
+                Param1 = 'AXLEASSY_OP010A';
+            } else if (station == 'AXLEASY2') {
+                Param1 = 'AXLEASSY_OP010B';
+            } else if (station == 'AXLEASY3') {
+                Param1 = 'AXLEASSY_OP010C';
+            } else if (station == 'AXLEASY4') {
+                Param1 = 'AXLEASSY_OP010D';
             }
-            var chartSeries = [];
 
-            chartSeries.push({
-                name: 'OEE',
-                data: dOEE
-            });
-            chartSeries.push({
-                name: 'Availability',
-                data: dAvailability
-            });
-            chartSeries.push({
-                name: 'Performance',
-                data: dPerformance
+            var url = '/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_HistoryOEEbyStation&Param.1=' + Param1 + '&Content-Type=text/xml';
+            getData(url, function (data) {
+                // cc(data);
+                var dOEE = [];
+                var dAvailability = [];
+                var dPerformance = [];
+                var dQuality = [];
+                // var n = 10;
+                // var tm = new Date().getTime() - n * 1000;
+                for (var i = 0; i < data.length; i++) {
+                    // tm = new Date(data[i].oeeTimeStamp).getTime();
+                    // availability = data[i].oeeAvailValuePerc;
+                    // performance = data[i].oeePerfValuePerc;
+                    // quality = data[i].oeeQualValuePerc;
+                    // oee = data[i].oeeValuePerc;
+
+                    dAvailability.push([new Date(data[i].oeeTimeStamp).getTime(), Number(data[i].oeeAvailValuePerc)]);
+                    dPerformance.push([new Date(data[i].oeeTimeStamp).getTime(), Number(data[i].oeePerfValuePerc)]);
+                    dQuality.push([new Date(data[i].oeeTimeStamp).getTime(), Number(data[i].oeeQualValuePerc)]);
+                    dOEE.push([new Date(data[i].oeeTimeStamp).getTime(), Number(data[i].oeeValuePerc)]);
+                }
+                var chartSeries = [];
+
+                chartSeries.push({
+                    name: 'OEE',
+                    data: dOEE
+                });
+                chartSeries.push({
+                    name: 'Availability',
+                    data: dAvailability
+                });
+                chartSeries.push({
+                    name: 'Performance',
+                    data: dPerformance
+                });
+
+                chartSeries.push({
+                    name: 'Quality',
+                    data: dQuality
+                });
+                // chartReady = false;
+                lineChartInit(chartSeries, station);
+
             });
 
-            chartSeries.push({
-                name: 'Quality',
-                data: dQuality
-            });
-            chartReady = false;
-            lineChartInit(chartSeries, _title);
+//            var oeeArray = [];
+
         }
     </script>
 
@@ -1336,7 +1389,7 @@
 <div>
     <div id="mesm_container" style="padding-top: 0px;">
         <div id="mesm_maps"></div>
-        <div id="p1"></div>
+        <div id="mesm_stock" style="width: 100%;display: none;"></div>
         <div id="mesm_content"></div>
     </div>
 </div>

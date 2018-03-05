@@ -150,28 +150,9 @@
     </script>
 
     <script src="Common/js/default.js"></script>
+    <script src="Common/js/highcharts/highcharts.js"></script>
+    <script src="Common/js/highcharts/map.js"></script>
 
-    <script src="http://code.highcharts.com/stock/highstock.js"></script>
-    <script src="http://code.highcharts.com/highcharts-more.js"></script>
-    <script src="http://code.highcharts.com/maps/modules/map.js"></script>
-    <script src="http://code.highcharts.com/maps/modules/data.js"></script>
-    <!--<script src="http://code.highcharts.com/modules/exporting.js"></script>-->
-    <!--<script src="http://code.highcharts.com/mapdata/countries/us/us-all.js"></script>-->
-
-    <!--<script src="https://code.highcharts.com/maps/highmaps.js"></script>-->
-    <!--<script src="https://code.highcharts.com/maps/modules/data.js"></script>-->
-    <!--<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>-->
-    <!--<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>-->
-    <!--<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>-->
-    <!--<script src="Common/js/highcharts/highcharts.js"></script>-->
-    <!--<script src="Common/js/highcharts/highcharts-more.js"></script>-->
-    <!--<script src="Common/js/highcharts/solid-gauge.js"></script>-->
-    <!--<script src="Common/js/highcharts/map.js"></script>-->
-    <!--<script src="Common/js/highcharts/drilldown.js"></script>-->
-    <!--<script src="https://code.highcharts.com/stock/highstock.js"></script>-->
-    <!--<script src="https://code.highcharts.com/stock/highstock.js"></script>-->
-    <!--<script src="https://code.highcharts.com/maps/modules/data.js"></script>-->
-    <!--<script src="https://code.highcharts.com/maps/modules/drilldown.js"></script>-->
 
     <script type="text/javascript" id="app-init">
 
@@ -1035,7 +1016,7 @@
                                         NAME = 'AXLEASSY_OP010D';
                                     }
                                     if (NAME != '') {
-                                        setTimeout("location.href = '" + "OEEDashboard.irpt?ROLE=ADM_ALL&NAME=" + NAME + "'", 0);
+                                        setTimeout("location.href = '" + "OEEDashboard_w.irpt?ROLE=ADM_ALL&NAME=" + NAME + "'", 0);
                                     }
 
 

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<script
+        src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+        id="sap-ui-bootstrap"
+        data-sap-ui-theme="sap_belize"
+        data-sap-ui-xx-bindingSyntax="complex"
+        data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3,sap.m">
+
+</script>
+<!--<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+
+
+<div id="container" style="height: 400px; min-width: 310px"></div>
+<button id="button_20">Range</button>
+
+
+<script>
+
+    var seriesOptions = [],
+        seriesCounter = 0,
+        names = ['MSFT', 'AAPL', 'GOOG'];
+
+    /**
+     * Create the chart when all data is loaded
+     * @returns {undefined}
+     */
+    var stock;
+    $(function () {
+
+        chart = $('#container').highcharts();
+
+        // the button action
+        $('#button_20').click(function () {
+            cc('button_20');
+            var s = new Date('2018-01-25 08:00:00').getTime();
+            var e = new Date('2018-01-25 16:00:00').getTime();
+            cc(s);
+            cc(e);
+            chart.xAxis[0].setExtremes(s, e);
+        });
+    })
+
+    function createChart() {
+
+        stock = Highcharts.stockChart('container', {
+
+            rangeSelector: {
+                buttons: [{
+                    type: 'hour',
+                    count: 8,
+                    text: 'shift',
+                    events: {
+                        click: function () {
+                            cc('buttons events click');
+                        }
+                    }
+                }],
+                selected: 0
+            },
+
+            yAxis: {
+                labels: {
+                    formatter: function () {
+                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                    }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 2,
+                    color: 'silver'
+                }]
+            },
+
+            plotOptions: {
+                series: {
+                    compare: 'percent',
+                    showInNavigator: true
+                }
+            },
+
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                valueDecimals: 2,
+                split: true
+            },
+
+            series: seriesOptions
+        });
+    }
+
+    cc(stock);
+
+    function cc(o) {
+        console.log(o);
+    }
+
+    $.each(names, function (i, name) {
+        cc(name);
+
+        $.getJSON(name.toLowerCase() + '-c.json', function (data) {
+
+            seriesOptions[i] = {
+                name: name,
+                data: data
+            };
+
+            // As we're loading the data asynchronously, we don't know what order it will arrive. So
+            // we keep a counter and create the chart when all the data is loaded.
+            seriesCounter += 1;
+
+            if (seriesCounter === names.length) {
+                createChart();
+                cc('stock');
+                cc(stock);
+            }
+        });
+    });
+</script>
+</body>
+</html>
