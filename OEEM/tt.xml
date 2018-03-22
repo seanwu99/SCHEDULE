@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rowsets CachedTime="" DateCreated="2017-05-09T13:18:37" EndDate="2017-05-09T13:18:37" StartDate="2017-05-09T12:18:37" Version="15.0 SP4 Patch 11 (Aug 28, 2015)">
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="MES_STA_OP070_PLC_TSend_CODE" SQLDataType="5" SourceColumn="MES_STA_OP070/PLC/TSend/CODE"/>
+        </Columns>
+        <Row>
+            <DateTime>2017-05-09T13:18:56</DateTime>
+            <MES_STA_OP070_PLC_TSend_CODE>0</MES_STA_OP070_PLC_TSend_CODE>
+        </Row>
+    </Rowset>
+</Rowsets>

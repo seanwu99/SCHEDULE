@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rowsets CachedTime="" DateCreated="2018-03-14T18:02:23" EndDate="2018-03-14T18:02:22" StartDate="2018-03-14T17:02:22" Version="15.0 SP4 Patch 11 (Aug 28, 2015)">
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="CODE" SQLDataType="5" SourceColumn="CODE"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <CODE>0</CODE>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="IdealCycleTimeThreshold" SQLDataType="4" SourceColumn="IdealCycleTimeThreshold"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <IdealCycleTimeThreshold>60000</IdealCycleTimeThreshold>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="SmallStopTimeThreshold" SQLDataType="4" SourceColumn="SmallStopTimeThreshold"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <SmallStopTimeThreshold>5001</SmallStopTimeThreshold>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="CODE" SQLDataType="5" SourceColumn="CODE"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <CODE>0</CODE>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="Cycle" SQLDataType="4" SourceColumn="Cycle"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <Cycle>74223000</Cycle>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE30_RoughRunning" SQLDataType="4" SourceColumn="OEE30_RoughRunning"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE30_RoughRunning>282000</OEE30_RoughRunning>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE51_Rework" SQLDataType="4" SourceColumn="OEE51_Rework"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE51_Rework>186000</OEE51_Rework>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE70_TotalParts" SQLDataType="4" SourceColumn="OEE70_TotalParts"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE70_TotalParts>1197</OEE70_TotalParts>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE71_TotalTime" SQLDataType="4" SourceColumn="OEE71_TotalTime"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE71_TotalTime>95832000</OEE71_TotalTime>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE72_LostTime" SQLDataType="4" SourceColumn="OEE72_LostTime"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE72_LostTime>27377000</OEE72_LostTime>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE73_GoodParts" SQLDataType="4" SourceColumn="OEE73_GoodParts"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE73_GoodParts>1193</OEE73_GoodParts>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE74_BadParts" SQLDataType="4" SourceColumn="OEE74_BadParts"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE74_BadParts>4</OEE74_BadParts>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="Cycle" SQLDataType="4" SourceColumn="Cycle"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <Cycle>57000</Cycle>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE30_RoughRunning" SQLDataType="4" SourceColumn="OEE30_RoughRunning"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE30_RoughRunning>0</OEE30_RoughRunning>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE51_Rework" SQLDataType="4" SourceColumn="OEE51_Rework"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE51_Rework>0</OEE51_Rework>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE70_TotalParts" SQLDataType="4" SourceColumn="OEE70_TotalParts"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE70_TotalParts>0</OEE70_TotalParts>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE71_TotalTime" SQLDataType="4" SourceColumn="OEE71_TotalTime"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE71_TotalTime>59000</OEE71_TotalTime>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE72_LostTime" SQLDataType="4" SourceColumn="OEE72_LostTime"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE72_LostTime>0</OEE72_LostTime>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE73_GoodParts" SQLDataType="4" SourceColumn="OEE73_GoodParts"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE73_GoodParts>0</OEE73_GoodParts>
+        </Row>
+    </Rowset>
+    <Rowset>
+        <Columns>
+            <Column Description="DateTime" MaxRange="0" MinRange="0" Name="DateTime" SQLDataType="93" SourceColumn="DateTime"/>
+            <Column Description="" MaxRange="0" MinRange="0" Name="OEE74_BadParts" SQLDataType="4" SourceColumn="OEE74_BadParts"/>
+        </Columns>
+        <Row>
+            <DateTime>2018-03-14T18:02:02</DateTime>
+            <OEE74_BadParts>0</OEE74_BadParts>
+        </Row>
+    </Rowset>
+</Rowsets>
