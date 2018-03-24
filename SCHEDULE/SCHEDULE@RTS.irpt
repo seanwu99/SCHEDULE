@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
 
 
-    <link href="assets/vendors/custom/fullcalendar/fullcalendar.390.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/vendors/custom/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href="assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="assets/app/default/base/style.bundle.css" rel="stylesheet" type="text/css"/>
-    <link href='assets/vendors/custom/fullcalendar/scheduler.193.css' rel='stylesheet'/>
+    <link href='assets/vendors/custom/fullcalendar/scheduler.css' rel='stylesheet'/>
     <link href="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="assets/app/default/media/img/logo/favicon.png"/>
 
@@ -106,7 +106,6 @@
                     'MESM_ActivityLog_GET.xml' :
                     '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Content-Type=text/xml',
                 function (data) {
-                    cc(data);
                     $.each(data, function (index, value) {
                         logs =
                             '<div class="m-list-timeline__item" >' +
@@ -214,7 +213,6 @@
                                     MIISchedFinTime: moment(v.MIISchedFinTime).format('HH:mm:ss'),
                                     SchedStat: v.SchedStat,
                                     OC: v.OC,
-                                    CtrlKey: v.CtrlKey,
                                 })
                             });
 // cc();
@@ -806,10 +804,8 @@
                     "Mold": MESM_OrderOperationRAW[n].PrtNumber,
                     "Status": MESM_OrderOperationRAW[n].SchedStat,
                     "Press": MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID].unitName,
-                    "CtrlKey": MESM_OrderOperationRAW[n].CtrlKey,
                     'Sort': _Sort,
                     'Operation': MESM_OrderOperationRAW[n].Operation,
-                    'OperationStatus': MESM_OrderOperationRAW[n].OperationStatus,
                 });
 
             }
@@ -972,34 +968,16 @@
                             // cc(WorkCentres);
 
                             scheduleForm(WorkCentres);
-                            cc('scheduleForm');
-                            // cc($('#calendar'));
-
                             // cc('MESM_ProductionOrders');
                             // cc(MESM_ProductionOrders);
-                            // cc('orderTable.originalDataSet');
-                            // cc(orderTable.originalDataSet);
-                            // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-                            //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-                            //
-                            //         addScheduleEvent(
-                            //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-                            //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-                            //             MESM_OrderOperationSort[n].SchedStart,
-                            //             MESM_OrderOperationSort[n].SchedFinish
-                            //         );
-                            //
-                            //     }
-                            // }
-                            for (var n = 0; n < orderTable.originalDataSet.length; n++) {
-                                if (orderTable.originalDataSet[n].Status == 'S') {
-                                    removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
+
+                            for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+                                if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
                                     addScheduleEvent(
-                                        orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                        orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                        orderTable.originalDataSet[n].SchedStart,
-                                        orderTable.originalDataSet[n].SchedFinish
-                                    );
+                                        MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
+                                        MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
+                                        MESM_OrderOperationSort[n].SchedStart,
+                                        MESM_OrderOperationSort[n].SchedFinish);
                                 }
                             }
                         });
@@ -1108,7 +1086,7 @@
                     {
                         field: "Material",
                         title: "Material #",
-                        sortable: true,
+                        sortable: false,
                         filterable: false,
                         width: 160,
 //                            template: "{{OrderID}} - {{ShipCountry}}"
@@ -1128,7 +1106,7 @@
                         field: "SchedStart",
                         title: "SchedStart",
                         width: 140,
-                        sortable: true,
+                        sortable: false,
                         filterable: false,
 //                            responsive: {visible: "lg"}
                     },
@@ -1168,13 +1146,6 @@
                         field: "Press",
                         title: "WorkCenter",
                         width: 90,
-                        sortable: false,
-                        filterable: false,
-                    },
-                    {
-                        field: "CtrlKey",
-                        title: "CtrlKey",
-                        width: 40,
                         sortable: false,
                         filterable: false,
                     },
@@ -1378,94 +1349,14 @@
 
         var _eventDragStart;
         var _eventDragStop;
-        var lastView = '';
-        var viewRender = true;
         var scheduleForm = function (eventSources) {
-            cc('creatSheduleForm');
-            cc(eventSources);
+//            cc('creatSheduleForm');
+//            cc(eventSources);
 
             var today = new Date().toISOString().substr(0, 10);
-            cc('today ' + today);
-//
+
             $('#calendar').fullCalendar({
-                // resourcesInitiallyExpanded: false,
-                viewRender: function (view, element) {
-                    cc('viewRender');
-                    var eArray = $('#calendar').fullCalendar('clientEvents');
-                    cc(eArray);
-                    // cc(view.title);
-                    // 'timelineDay,timelineWeek,timelineMonth'
 
-                    if (lastView != view.title) {
-                        cc(lastView + " / " + view.title);
-                        lastView = view.title;
-                        if (view.name == 'timelineDay') {
-                            // lastView = view.name;
-                            $('#calendar').fullCalendar('option', 'slotDuration', '00:15:00');
-                            $('#calendar').fullCalendar('option', 'snapDuration', '00:15:00');
-                            $('#calendar').fullCalendar('option', 'slotLabelInterval', '01:00:00');
-                            $('#calendar').fullCalendar('option', 'slotWidth', 15);
-                            // slotWidth: 15,
-                            // $('#calendar').fullCalendar('refetchEvents');
-                            // $('#calendar').fullCalendar('rerenderEvents');
-                        } else if (view.name == 'timelineWeek') {
-                            // lastView = view.name;
-                            $('#calendar').fullCalendar('option', 'slotDuration', '02:00:00');
-                            $('#calendar').fullCalendar('option', 'snapDuration', '01:00:00');
-                            $('#calendar').fullCalendar('option', 'slotLabelInterval', '08:00:00');
-                            $('#calendar').fullCalendar('option', 'slotWidth', 15);
-                            // slotWidth: 15,
-                            // $('#calendar').fullCalendar('refetchEvents');
-                            // $('#calendar').fullCalendar('rerenderEvents');
-                        } else if (view.name == 'timelineMonth') {
-                            // lastView = view.name;
-                            $('#calendar').fullCalendar('option', 'slotDuration', '08:00:00');
-                            $('#calendar').fullCalendar('option', 'snapDuration', '01:00:00');
-                            $('#calendar').fullCalendar('option', 'slotLabelInterval', '24:00:00');
-                            $('#calendar').fullCalendar('option', 'slotWidth', 15);
-                            // slotWidth: 15,
-                            // $('#calendar').fullCalendar('refetchEvents');
-                            // $('#calendar').fullCalendar('rerenderEvents');
-                        }
-                        cc('name / ' + view.name);
-                        cc('title /' + view.title);
-
-                        // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-                        //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-                        //         removeScheduleEvent(MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort);
-                        //         // ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
-                        //         addScheduleEvent(
-                        //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-                        //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-                        //             MESM_OrderOperationSort[n].SchedStart,
-                        //             MESM_OrderOperationSort[n].SchedFinish
-                        //         );
-                        //         cc(
-                        //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press + ' / ' +
-                        //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort + ' / ' +
-                        //             MESM_OrderOperationSort[n].SchedStart + ' / ' +
-                        //             MESM_OrderOperationSort[n].SchedFinish
-                        //         );
-                        //     }
-                        // }
-
-                        for (var n = 0; n < orderTable.originalDataSet.length; n++) {
-                            if (orderTable.originalDataSet[n].Status == 'S') {
-                                removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
-                                addScheduleEvent(
-                                    orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                    orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                    orderTable.originalDataSet[n].SchedStart,
-                                    orderTable.originalDataSet[n].SchedFinish
-                                );
-                            }
-                        }
-
-                        var eArray = $('#calendar').fullCalendar('clientEvents');
-                        cc(eArray);
-                    }
-                    // lastView = view.name;
-                },
                 now: today,
                 editable: true,
 //			aspectRatio: 1.8,
@@ -1484,8 +1375,8 @@
                 slotDuration: '00:15:00',
                 slotLabelInterval: '01:00:00',
                 snapDuration: '00:15:00',
-                // minTime: '00:00:00',
-                // maxTime: '24:00:00',
+                minTime: '00:00:00',
+                maxTime: '24:00:00',
                 scrollTime: '00:00:00',
                 noEventsMessage: 'No events to display',
                 agendaEventMinHeight: 50,  //vertical
@@ -1564,8 +1455,7 @@
                     // else {
                     //     return true;
                     // }
-                }
-                ,
+                },
 
 // * * * *
                 eventDragStart: function (event, jsEvent, ui, view) {
@@ -1573,8 +1463,7 @@
                     _eventDragStart = event;
                     // cc(_eventDragStart);
                     // cc(_eventDragStart);
-                }
-                ,
+                },
 
 // * * * *
                 eventDragStop: function (event, jsEvent, ui, view) {
@@ -1582,8 +1471,7 @@
                     // _eventDragStop = event;
                     // cc(_eventDragStop);
 
-                }
-                ,
+                },
 
 // * * * *
                 eventDrop: function (event, delta, revertFunc) {
@@ -1596,23 +1484,20 @@
 //                        revertFunc();
 //                    }
 
-                }
-                ,
+                },
 
 
 // * * *
                 eventResizeStart: function (event, jsEvent, ui, view) {
 //                    cc(event);
-                }
-                ,
+                },
 
 // * * *
                 eventResizeStop: function (event, jsEvent, ui, view) {
                     // cc('eventResizeStop');
                     // cc(event);
                     // scheduleFormUPD(event);
-                }
-                ,
+                },
 
 // * * *
                 eventResize: function (event, jsEvent, ui, view) {
@@ -1621,8 +1506,7 @@
                     _eventDragStart = event;
                     orderTableRefresh(event);
 //                    cc(event);
-                }
-                ,
+                },
 // * * * * *
 
                 // eventRender: function (event, element) {
@@ -1635,11 +1519,7 @@
                 // },
 
                 eventRender: function (event, element, view) {
-
-                    cc('eventRender');
-                    // cc(event);
-                    // cc(element);
-                    // cc(view.options.visibleRange);
+                    // cc('====>eventRender');
                     return;
                     // // cc('event==');
                     // cc(event.id);
@@ -1789,28 +1669,22 @@
                     //         "quit": {name: "Quit", icon: "quit"}
                     //     }
                     // });
-                }
-                ,
+                },
                 dayClick: function () {
 //                    $('#calendar').fullCalendar('next');
-                }
-                ,
+                },
 
                 eventMouseout: function (event, jsEvent, view) {
                     // cc("eventMouseout");
                     // cc(event);
                     // cc(jsEvent);
                     // cc(view);
-                }
-                ,
+                },
 
                 slotWidth: 15,
-                height:
-                    700,
-                selectable:
-                    true,
-                selectHelper:
-                    true,
+                height: 700,
+                selectable: true,
+                selectHelper: true,
                 customButtons:
                     {
                         myCustomButton: {
@@ -1819,18 +1693,6 @@
 
                                 function () {
                                     // cc('CustomButton');
-                                    // $('#calendar').fullCalendar('changeView', 'timelineDay', {
-                                    //     start: '2018-01-01',
-                                    //     end: '2018-11-11'
-                                    // });
-                                    $('#calendar').fullCalendar('changeView', 'timelineWeek', {
-                                        start: '2018-01-01',
-                                        end: '2018-11-11'
-                                    });
-                                    // $('#calendar').fullCalendar('changeView', 'timelineMonth', {
-                                    //     start: '2018-01-01',
-                                    //     end: '2018-11-11'
-                                    // });
                                     // cc('custom button');
 // * * *
 //                            $('#calendar').fullCalendar('removeEvents', 111);
@@ -1861,45 +1723,37 @@
                     center:
                         'title',
                     right:
-                        'timelineDay,timelineWeek,timelineMonth'
+                        'timelineDay,timeline3D,timeline1W,timeline1M'
                 }
                 ,
 
                 defaultView: 'timelineDay',
-                // visibleRange doesn't work for 'timelineDay'
+//                visibleRange doesn't work for 'timelineDay'
+//                visibleRange : {
+//                    start: '2017-11-03T00:00:00',
+//                    end: '2017-11-03T07:00:00'
+//                },
 
-                visibleRange:
-                    {
-                        start: '2018-01-01',
-                        end:
-                            '2018-10-10'
-                    }
-                ,
-//
-//                 validRange:
-//                     {   //works for timelineDay
-//                         start: today + 'T00:00:00',
-//                         end: '2018-03-22' + 'T12:00:00'
-//                     },
+                validRange:
+                    {   //works for timelineDay
+                        // start: today + 'T00:00:00',
+                        // end: today + 'T24:00:00'
+                    },
 
-                // views: {
-                //     timeline3D: {
-                //         type: 'timeline',
-                //         duration: {days: 3}
-                //     },
-                //     timeline1W: {
-                //         type: 'timeline',
-                //         duration: {days: 7}
-                //     },
-                //     timeline1M: {
-                //         type: 'timeline',
-                //         duration: {days: 30}
-                //     },
-                //     timeline1M: {
-                //         type: 'timeline',
-                //         duration: {month: 1}
-                //     }
-                // },
+                views: {
+                    timeline3D: {
+                        type: 'timeline',
+                        duration: {days: 3}
+                    },
+                    timeline1W: {
+                        type: 'timeline',
+                        duration: {week: 1}
+                    },
+                    // timeline1M: {
+                    //     type: 'timeline',
+                    //     duration: {month: 1}
+                    // }
+                },
 
                 resourceGroupField: 'WorkingCenter',
                 resourceLabelText:
@@ -1909,96 +1763,95 @@
                 // eventOverlap: false, // will cause the event to take up entire resource height
                 resourceAreaWidth:
                     '300px',
-                events:
-                    [
-                        // {
-                        //     id: 'GROUP1_PRESS07',
-                        //     resourceId: 'GROUP1_PRESS07_39',
-                        //     start: today + 'T08:00:00',
-                        //     end: today + 'T16:00:00',
-                        //     title: 'M639A',
-                        //     description: 'This is a  event',
-                        //     color: 'red'
-                        // },
-                        // {
-                        //     id: '2',
-                        //     resourceId: 'e1',
-                        //     start: today + 'T07:00:00',
-                        //     end: today + 'T15:00:00',
-                        //     title: 'M639',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '2',
-                        //     resourceId: 'e1',
-                        //     start: today + 'T15:30:00',
-                        //     end: today + 'T23:00:00',
-                        //     start: today + 'T15:30:00',
-                        //     end: today + 'T23:00:00',
-                        //     title: 'M639',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '22',
-                        //     resourceId: 'd1',
-                        //     start: today + 'T15:00:00',
-                        //     end: today + 'T23:00:00',
-                        //     title: 'M640',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '3',
-                        //     resourceId: 'b1',
-                        //     start: today + 'T07:00:00',
-                        //     end: today + 'T15:00:00',
-                        //     title: 'M995',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '11',
-                        //     resourceId: 'f1',
-                        //     start: today + 'T00:58:30',
-                        //     end: today + 'T05:00:00',
-                        //     title: 'M639 orange',
-                        //     description: 'This is a  event',
-                        //     textColor: 'black',
-                        //     color: 'orange',
-                        //     url: 'http://localhost',
-                        //     editable: true,
-                        // },
-                        // {
-                        //     id: '12',
-                        //     resourceId: 'f2',
-                        //     start: today + 'T05:00:00',
-                        //     end: today + 'T08:00:00',
-                        //     title: 'M639 green',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '13',
-                        //     resourceId: 'f3',
-                        //     start: today + 'T08:00:00',
-                        //     end: today + 'T12:00:00',
-                        //     title: 'M653',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '14',
-                        //     resourceId: 'f4',
-                        //     start: today + 'T12:00:00',
-                        //     end: today + 'T18:00:00',
-                        //     title: 'M654',
-                        //     description: 'This is a  event'
-                        // },
-                        // {
-                        //     id: '15',
-                        //     resourceId: 'f5',
-                        //     start: today + 'T18:00:00',
-                        //     end: today + 'T23:00:00',
-                        //     title: 'M016',
-                        //     description: 'This is a  event'
-                        // }
-                    ],
+                events: [
+                    // {
+                    //     id: 'GROUP1_PRESS07',
+                    //     resourceId: 'GROUP1_PRESS07_39',
+                    //     start: today + 'T08:00:00',
+                    //     end: today + 'T16:00:00',
+                    //     title: 'M639A',
+                    //     description: 'This is a  event',
+                    //     color: 'red'
+                    // },
+                    // {
+                    //     id: '2',
+                    //     resourceId: 'e1',
+                    //     start: today + 'T07:00:00',
+                    //     end: today + 'T15:00:00',
+                    //     title: 'M639',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '2',
+                    //     resourceId: 'e1',
+                    //     start: today + 'T15:30:00',
+                    //     end: today + 'T23:00:00',
+                    //     start: today + 'T15:30:00',
+                    //     end: today + 'T23:00:00',
+                    //     title: 'M639',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '22',
+                    //     resourceId: 'd1',
+                    //     start: today + 'T15:00:00',
+                    //     end: today + 'T23:00:00',
+                    //     title: 'M640',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '3',
+                    //     resourceId: 'b1',
+                    //     start: today + 'T07:00:00',
+                    //     end: today + 'T15:00:00',
+                    //     title: 'M995',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '11',
+                    //     resourceId: 'f1',
+                    //     start: today + 'T00:58:30',
+                    //     end: today + 'T05:00:00',
+                    //     title: 'M639 orange',
+                    //     description: 'This is a  event',
+                    //     textColor: 'black',
+                    //     color: 'orange',
+                    //     url: 'http://localhost',
+                    //     editable: true,
+                    // },
+                    // {
+                    //     id: '12',
+                    //     resourceId: 'f2',
+                    //     start: today + 'T05:00:00',
+                    //     end: today + 'T08:00:00',
+                    //     title: 'M639 green',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '13',
+                    //     resourceId: 'f3',
+                    //     start: today + 'T08:00:00',
+                    //     end: today + 'T12:00:00',
+                    //     title: 'M653',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '14',
+                    //     resourceId: 'f4',
+                    //     start: today + 'T12:00:00',
+                    //     end: today + 'T18:00:00',
+                    //     title: 'M654',
+                    //     description: 'This is a  event'
+                    // },
+                    // {
+                    //     id: '15',
+                    //     resourceId: 'f5',
+                    //     start: today + 'T18:00:00',
+                    //     end: today + 'T23:00:00',
+                    //     title: 'M016',
+                    //     description: 'This is a  event'
+                    // }
+                ],
 
 
                 schedulerLicenseKey:
@@ -2123,8 +1976,6 @@
             var AE = $('#calendar').fullCalendar('clientEvents');
             var corr = [[-1, null, null, null], [-1, null, null, null], [-1, null, null, null]];
             for (var n = 0; n < AE.length; n++) {
-                cc('AE ' + n);
-                cc(AE[n]);
                 if (AE[n].id.indexOf(OrderNumber + '_RESIN') >= 0) {
                     corr[0] = [n, moment(AE[n].start._d).utc().format('YYYY-MM-DD HH:mm:ss'),
                         moment(AE[n].end._d).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -2279,7 +2130,7 @@
             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
             var _During = _Action.indexOf('~') >= 0 ? parseInt(_Action.split('~')[1]) : 0;
             var _WorkCenterID = 0;
-            var _Sort = TableCOL[13].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _Sort = TableCOL[12].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 
             // cc('_ID ' + _ID);
             // cc(_During);
@@ -2291,49 +2142,9 @@
                 // }
                 // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
                 // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-
-                // if (_Action.indexOf('PRESS') >= 0) {
-                //     //wxy
-                //     var v_SchedStart = _SchedStart;
-                //     var v_SchedFinish = _SchedFinish;
-                //     var timeNow = (new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 19);
-                //     cc('timeNow / ' + timeNow);
-                //     var ddtt = new Date(v_SchedStart).getTime() - new Date().getTime();
-                //     cc('dt / ' + ddtt);
-                //     var st = (new Date().toISOString());
-                //     var fn = new Date(new Date(_SchedFinish).getTime() - ddtt - new Date().getTimezoneOffset() * 60000).toISOString();
-                //     cc(st + ' / ' + fn);
-                //     st = st.substr(0, 10) + ' ' + st.substr(11, 8);
-                //     fn = fn.substr(0, 10) + ' ' + fn.substr(11, 8);
-                //     cc(st + ' / ' + fn);
-                //     _SchedStart = timeNow;
-                //     _SchedFinish = fn;
-                // }
-//doto wxy
-                cc(_SchedStart);
-                cc(_SchedFinish);
-
-                var ss = new Date(_SchedStart).getTime();
-                ss = parseInt(ss / (15 * 60 * 1000)) * 15 * 60 * 1000;
-                var sf = new Date(_SchedFinish).getTime();
-                sf = Math.round(sf / (15 * 60 * 1000)) * 15 * 60 * 1000;
-                if (sf - ss < 15 * 60 * 1000) {
-                    sf = ss + 15 * 60 * 1000;
-                }
-
-                _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + ' ' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
-                _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + ' ' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
-
-                cc(_SchedStart);
-                cc(_SchedFinish);
-
                 _Status = 'Scheduled';
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                cc('_OrderNumber / ' + _OrderNumber);
-                cc('_Sort / ' + _Sort);
-                cc('e.id. / ' + e.id);
                 ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
-                // ActivityLogADD('Assigned', _OrderNumber + '_' +  ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + e.id.split('_')[1]);
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
             }
@@ -2613,8 +2424,7 @@
         }
 
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
-            cc('MESM_OrderOperation_UPD');
-
+            // cc('MESM_OrderOperation_UPD');
             // cc(_ID);
             // cc(_Quantity);
             // cc(_Status);
@@ -2676,32 +2486,7 @@
             //     "&Param.9=" +
             //     v.OperationStatus +
             //     "&Content-Type=text/xml";
-
-            var _N;
-            for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
-                if (MESM_OrderOperationRAW[n].ID == _ID) {
-                    _N = n;
-                    break;
-                }
-            }
-
-            cc(MESM_OrderOperationRAW[_N].OrderNumber);
-            cc(MESM_OrderOperationRAW[_N].OperationStatus);
-
-            // MESM_OrderOperationSort
             var Status = _Status.substring(0, 1) == 'S' ? 'S' : 'U';
-            var OperationStatus;
-
-            if (MESM_OrderOperationRAW[_N].OperationStatus == 0 && Status == 'S') {
-                OperationStatus = 1;
-                MESM_OrderOperationRAW[_N].OperationStatus = 1;
-            } else if (MESM_OrderOperationRAW[_N].OperationStatus == 1 && Status == 'N') {
-                OperationStatus = 0;
-                MESM_OrderOperationRAW[_N].OperationStatus = 0;
-            } else {
-                OperationStatus = MESM_OrderOperationRAW[_N].OperationStatus;
-            }
-
             var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                 "&Param.1=" +
                 _ID +
@@ -2720,7 +2505,7 @@
                 "&Param.8=" +
                 _WorkCenterID +
                 "&Param.9=" +
-                OperationStatus +
+                '2' +
                 "&Content-Type=text/xml";
             // cc(' show url');
             // cc(urlProc);
@@ -3291,7 +3076,7 @@
                                     </div>
                                 </li>
                                 <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"
-                                    data-dropdown-toggle="click" style="display: none">
+                                    data-dropdown-toggle="click">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-topbar__userpic">
 													<img src="assets/app/media/img/users/user4.jpg"
@@ -3554,10 +3339,9 @@
                                                                 <option value="MOLD4"> MOLD4</option>
                                                                 <option value="MOLD5"> MOLD5</option>
                                                                 <option value="MOLD6"> MOLD6</option>
-                                                                <!--<option value="MOLD6">&#45;&#45;&#45;&#45;</option>-->
-                                                                <option value="RESIN"> RESIN</option>
-                                                                <!--<option value="MOLD6">&#45;&#45;&#45;&#45;</option>-->
-                                                                <option value="PACKING"> PACKING</option>
+                                                                <option value="MOLD6">----</option>
+                                                                <option value="MOLD6"> MOLD6</option>
+                                                                <option value="MOLD6"> MOLD6</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -4434,8 +4218,8 @@
 
 <script src="assets/vendors/base/vendors.bundle.js" type="text/javascript"></script>
 <script src="assets/app/default/base/scripts.bundle.js" type="text/javascript"></script>
-<script src="assets/vendors/custom/fullcalendar/fullcalendar.390.js" type="text/javascript"></script>
-<script src='assets/vendors/custom/fullcalendar/scheduler.193.js'></script>
+<script src="assets/vendors/custom/fullcalendar/fullcalendar.js" type="text/javascript"></script>
+<script src='assets/vendors/custom/fullcalendar/scheduler.js'></script>
 <script src='assets/vendors/custom/fullcalendar/moment.min.js'></script>
 <script src="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.js"></script>
 <script src="getData.js" type="text/javascript"></script>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example order="0">
+
+<title lib="RowGroup">Initialisation</title>
+
+<info><![CDATA[
+
+The examples in this section demonstrate how RowGroup can be initialised in DataTables and how the options for the software can be configured.
+
+]]></info>
+
+</dt-example>

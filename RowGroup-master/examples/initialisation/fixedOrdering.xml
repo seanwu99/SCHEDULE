@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example table-type="html" order="6">
+
+<css lib="datatables rowgroup"/>
+<js lib="jquery datatables rowgroup">
+<![CDATA[
+
+$(document).ready(function() {
+	$('#example').DataTable( {
+		orderFixed: [2, 'asc'],
+		rowGroup: {
+			dataSrc: 2
+		}
+	} );
+} );
+
+]]>
+</js>
+
+<title lib="RowGroup">Fixed ordering</title>
+
+<info><![CDATA[
+
+Grouped information typically makes most sense when the table is also ordered by the data point that is being used to group the rows. In DataTables the `-init orderFixed` option can be used to define an ordering condition that will always be applied before the end user's own ordering.
+
+In this example the table is always ordered by the _Office_ column first, but the end user has the option to order the data inside those groups as they required.
+
+]]></info>
+
+</dt-example>
+

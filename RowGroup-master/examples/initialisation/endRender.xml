@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example table-type="html" order="2">
+
+<css lib="datatables rowgroup"/>
+<js lib="jquery datatables rowgroup">
+<![CDATA[
+
+$(document).ready(function() {
+	$('#example').DataTable( {
+		order: [[2, 'asc']],
+		rowGroup: {
+			startRender: null,
+			endRender: function ( rows, group ) {
+				return group +' ('+rows.count()+')';
+			},
+			dataSrc: 2
+		}
+	} );
+} );
+
+]]>
+</js>
+
+<title lib="RowGroup">End grouping only</title>
+
+<info><![CDATA[
+
+RowGroup provides the option of having a grouping row at the start of a group, at the end of the group or both. A grouping row at the end is typically useful for providing summary information about the group, such as averages, aggregates, summations and other information about the group.
+
+This example shows the grouping start row disabled by the use of the `-init rowGroup.startRender` option being set to `null`, and a grouping end row being used (`-init rowGroup.endRender`) showing the grouping data value and the number of rows in that visible group.
+
+]]></info>
+
+</dt-example>
+

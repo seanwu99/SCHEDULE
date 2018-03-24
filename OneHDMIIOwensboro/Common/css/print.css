@@ -1,0 +1,23 @@
+* { margin: 0 !important; padding: 0 !important; }
+
+body { 
+  height:100%; 
+  overflow: hidden;
+}
+   
+#app_title,#app_menu,#page_title,#MatrixB { 
+   display: none; 
+}
+   
+#mesm_content { 
+   width: auto; 
+    left:0; 
+    top:0;
+   margin: 0 !important; 
+   padding: 0 !important; 
+   border: 0; 
+   float: none !important; 
+   color: black; 
+   background: transparent none; 
+}
+   

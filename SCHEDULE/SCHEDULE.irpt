@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
 
 
-    <link href="assets/vendors/custom/fullcalendar/fullcalendar.390.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/vendors/custom/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href="assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="assets/app/default/base/style.bundle.css" rel="stylesheet" type="text/css"/>
-    <link href='assets/vendors/custom/fullcalendar/scheduler.193.css' rel='stylesheet'/>
+    <link href='assets/vendors/custom/fullcalendar/scheduler.css' rel='stylesheet'/>
     <link href="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="assets/app/default/media/img/logo/favicon.png"/>
 
@@ -809,7 +809,6 @@
                     "CtrlKey": MESM_OrderOperationRAW[n].CtrlKey,
                     'Sort': _Sort,
                     'Operation': MESM_OrderOperationRAW[n].Operation,
-                    'OperationStatus': MESM_OrderOperationRAW[n].OperationStatus,
                 });
 
             }
@@ -977,29 +976,17 @@
 
                             // cc('MESM_ProductionOrders');
                             // cc(MESM_ProductionOrders);
-                            // cc('orderTable.originalDataSet');
-                            // cc(orderTable.originalDataSet);
-                            // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-                            //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-                            //
-                            //         addScheduleEvent(
-                            //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-                            //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-                            //             MESM_OrderOperationSort[n].SchedStart,
-                            //             MESM_OrderOperationSort[n].SchedFinish
-                            //         );
-                            //
-                            //     }
-                            // }
-                            for (var n = 0; n < orderTable.originalDataSet.length; n++) {
-                                if (orderTable.originalDataSet[n].Status == 'S') {
-                                    removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
+
+                            for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+                                if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
+
                                     addScheduleEvent(
-                                        orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                        orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                        orderTable.originalDataSet[n].SchedStart,
-                                        orderTable.originalDataSet[n].SchedFinish
+                                        MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
+                                        MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
+                                        MESM_OrderOperationSort[n].SchedStart,
+                                        MESM_OrderOperationSort[n].SchedFinish
                                     );
+
                                 }
                             }
                         });
@@ -1388,7 +1375,6 @@
             cc('today ' + today);
 //
             $('#calendar').fullCalendar({
-                // resourcesInitiallyExpanded: false,
                 viewRender: function (view, element) {
                     cc('viewRender');
                     var eArray = $('#calendar').fullCalendar('clientEvents');
@@ -1411,7 +1397,7 @@
                         } else if (view.name == 'timelineWeek') {
                             // lastView = view.name;
                             $('#calendar').fullCalendar('option', 'slotDuration', '02:00:00');
-                            $('#calendar').fullCalendar('option', 'snapDuration', '01:00:00');
+                            $('#calendar').fullCalendar('option', 'snapDuration', '02:00:00');
                             $('#calendar').fullCalendar('option', 'slotLabelInterval', '08:00:00');
                             $('#calendar').fullCalendar('option', 'slotWidth', 15);
                             // slotWidth: 15,
@@ -1420,7 +1406,7 @@
                         } else if (view.name == 'timelineMonth') {
                             // lastView = view.name;
                             $('#calendar').fullCalendar('option', 'slotDuration', '08:00:00');
-                            $('#calendar').fullCalendar('option', 'snapDuration', '01:00:00');
+                            $('#calendar').fullCalendar('option', 'snapDuration', '08:00:00');
                             $('#calendar').fullCalendar('option', 'slotLabelInterval', '24:00:00');
                             $('#calendar').fullCalendar('option', 'slotWidth', 15);
                             // slotWidth: 15,
@@ -1429,38 +1415,24 @@
                         }
                         cc('name / ' + view.name);
                         cc('title /' + view.title);
-
-                        // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-                        //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-                        //         removeScheduleEvent(MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort);
-                        //         // ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
-                        //         addScheduleEvent(
-                        //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-                        //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-                        //             MESM_OrderOperationSort[n].SchedStart,
-                        //             MESM_OrderOperationSort[n].SchedFinish
-                        //         );
-                        //         cc(
-                        //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press + ' / ' +
-                        //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort + ' / ' +
-                        //             MESM_OrderOperationSort[n].SchedStart + ' / ' +
-                        //             MESM_OrderOperationSort[n].SchedFinish
-                        //         );
-                        //     }
-                        // }
-
-                        for (var n = 0; n < orderTable.originalDataSet.length; n++) {
-                            if (orderTable.originalDataSet[n].Status == 'S') {
-                                removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
+                        for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+                            if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
+                                removeScheduleEvent(MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort);
+                                // ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
                                 addScheduleEvent(
-                                    orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                    orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                    orderTable.originalDataSet[n].SchedStart,
-                                    orderTable.originalDataSet[n].SchedFinish
+                                    MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
+                                    MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
+                                    MESM_OrderOperationSort[n].SchedStart,
+                                    MESM_OrderOperationSort[n].SchedFinish
+                                );
+                                cc(
+                                    MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press + ' / ' +
+                                    MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort + ' / ' +
+                                    MESM_OrderOperationSort[n].SchedStart + ' / ' +
+                                    MESM_OrderOperationSort[n].SchedFinish
                                 );
                             }
                         }
-
                         var eArray = $('#calendar').fullCalendar('clientEvents');
                         cc(eArray);
                     }
@@ -2613,8 +2585,7 @@
         }
 
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
-            cc('MESM_OrderOperation_UPD');
-
+            // cc('MESM_OrderOperation_UPD');
             // cc(_ID);
             // cc(_Quantity);
             // cc(_Status);
@@ -2676,32 +2647,8 @@
             //     "&Param.9=" +
             //     v.OperationStatus +
             //     "&Content-Type=text/xml";
-
-            var _N;
-            for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
-                if (MESM_OrderOperationRAW[n].ID == _ID) {
-                    _N = n;
-                    break;
-                }
-            }
-
-            cc(MESM_OrderOperationRAW[_N].OrderNumber);
-            cc(MESM_OrderOperationRAW[_N].OperationStatus);
-
-            // MESM_OrderOperationSort
             var Status = _Status.substring(0, 1) == 'S' ? 'S' : 'U';
-            var OperationStatus;
-
-            if (MESM_OrderOperationRAW[_N].OperationStatus == 0 && Status == 'S') {
-                OperationStatus = 1;
-                MESM_OrderOperationRAW[_N].OperationStatus = 1;
-            } else if (MESM_OrderOperationRAW[_N].OperationStatus == 1 && Status == 'N') {
-                OperationStatus = 0;
-                MESM_OrderOperationRAW[_N].OperationStatus = 0;
-            } else {
-                OperationStatus = MESM_OrderOperationRAW[_N].OperationStatus;
-            }
-
+            var OperationStatus = _Status.substring(0, 1) == 'S' ? '1' : '0';
             var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_UPD" +
                 "&Param.1=" +
                 _ID +
@@ -4434,8 +4381,8 @@
 
 <script src="assets/vendors/base/vendors.bundle.js" type="text/javascript"></script>
 <script src="assets/app/default/base/scripts.bundle.js" type="text/javascript"></script>
-<script src="assets/vendors/custom/fullcalendar/fullcalendar.390.js" type="text/javascript"></script>
-<script src='assets/vendors/custom/fullcalendar/scheduler.193.js'></script>
+<script src="assets/vendors/custom/fullcalendar/fullcalendar.js" type="text/javascript"></script>
+<script src='assets/vendors/custom/fullcalendar/scheduler2.js'></script>
 <script src='assets/vendors/custom/fullcalendar/moment.min.js'></script>
 <script src="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.js"></script>
 <script src="getData.js" type="text/javascript"></script>
