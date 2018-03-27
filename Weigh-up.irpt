@@ -699,7 +699,7 @@
                     clockID = 'access => ' + base.el.id + ' ' + base.checkCombos();
                     // cc('accept');
                     // cc(base.el.id);
-                    cc(clockID);
+                    // cc(clockID);
 
                     if (base.el.id == 'MatrixLayoutCalibration_4_2') {
                         oCore.byId("MatrixLayoutCalibration_4_2").setValue(base.checkCombos());
@@ -712,7 +712,7 @@
                         oCore.byId("MatrixLayoutCalibration_1_2").setValue(base.checkCombos());
                         // cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
                     }
-                    cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
+                    // cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
                     // doLogOperator();
                     base.close(true);
                 },
@@ -722,7 +722,7 @@
                     clockID = 'cancel => ' + base.el.id + ' ' + base.checkCombos();
                     // doLogOutOperator();
                     // cc('cancel');
-                    cc(clockID);
+                    // cc(clockID);
                     if (base.el.id == 'MatrixLayoutCalibration_4_2') {
                         oCore.byId("MatrixLayoutCalibration_4_2").setValue(base.checkCombos());
                         if (Number(oCore.byId("MatrixLayoutCalibration_4_2").getValue()) != 0) {
@@ -733,7 +733,7 @@
                     } else if (base.el.id == 'MatrixLayoutCalibration_1_2') {
                         oCore.byId("MatrixLayoutCalibration_1_2").setValue(base.checkCombos());
                     }
-                    cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
+                    // cc(oCore.byId("MatrixLayoutCalibration_1_2").getValue());
                     base.close(true);
                 }
             });
@@ -782,7 +782,7 @@
                 // var url = new URL(url_string);
                 // var c = url.searchParams.get("c");
                 // searchParams
-                cc(queryStr);
+                // cc(queryStr);
                 getData(queryStr, function (jasondata) {
                     if (jasondata.length > 0) {
                         for (var i = 0; i < jasondata.length; i++) {
@@ -836,48 +836,51 @@
 //alert(paramStr);
             var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_ActiveOrderPacking&" + paramStr + "&ts=" + timestamp + "&Content-Type=text/xml";
             // cc('getActiveOrderData' + ': ' + queryStr);
-            cc(queryStr);
-            getData(queryStr, parseJsonGetActiveOrder);
-        }
+            // cc(queryStr);
+            getData(queryStr, function (jasondata) {
+                //  alert(jasondata.length);
+                if (jasondata.length > 0) {
+                    // alert(jasondata.length);
+                    for (var i = 0; i < jasondata.length; i++) {
+                        selected_OrderID = (jasondata[i]['OrderNumber']);
+                        oCore.byId('TF-OrderID').setValue(selected_OrderID);
+                        selected_OrderOperationID = (jasondata[i]['Operation']);
+                        selected_ScheduledStartDate = (jasondata[i]['EarlySchedStartDate']);
+                        selected_ScheduledStartTime = (jasondata[i]['EarlySchedStartTime']);
+                        selected_ScheduledStart = selected_ScheduledStartDate + ":" + selected_ScheduledStartTime;
+                        oCore.byId('TF-OrderStartDate').setValue(selected_ScheduledStart);
+                        selected_PartID = (jasondata[i]['Material']);
+                        oCore.byId('TF-OrderPartID').setValue(selected_PartID);
+                        selected_PartName = (jasondata[i]['MaterialDescription']);
+                        oCore.byId('TF-OrderPartName').setValue(selected_PartName);
+                        selected_TotalCavities = (jasondata[i]['Total_Cavities']);
+                        selected_OriginalCavities = (jasondata[i]['Original_Cavities']);
+                        oCore.byId('TF-StdCavitatiion').setValue(selected_OriginalCavities);
+                        selected_MoldNumber = (jasondata[i]['selected_OrderID']);
+                        oCore.byId('TF-MoldID').setValue(selected_MoldNumber);
+                        selected_ScheduledQty = (jasondata[i]['Quantity']);
+                        oCore.byId('TF-OrderQTY').setValue(selected_ScheduledQty);
+                        selected_StdCycleTime = (jasondata[i]['Quoted_Cycle_Time']);
+                        oCore.byId('TF-StdCycleTime').setValue(selected_StdCycleTime);
+                        selected_NetWeight = (jasondata[i]['NetWeight']);
+                        oCore.byId('TF-PartWeight').setValue(selected_NetWeight);
+                        selected_GrossWT = (jasondata[i]['GrossWT']);
+                        oCore.byId('TF-BoxWeight').setValue(selected_GrossWT);
 
-        function parseJsonGetActiveOrder(jasondata) {
-            //  alert(jasondata.length);
-            if (jasondata.length > 0) {
-                // alert(jasondata.length);
-                for (var i = 0; i < jasondata.length; i++) {
-                    selected_OrderID = (jasondata[i]['OrderNumber']);
-                    oCore.byId('TF-OrderID').setValue(selected_OrderID);
-                    selected_OrderOperationID = (jasondata[i]['Operation']);
-                    selected_ScheduledStartDate = (jasondata[i]['EarlySchedStartDate']);
-                    selected_ScheduledStartTime = (jasondata[i]['EarlySchedStartTime']);
-                    selected_ScheduledStart = selected_ScheduledStartDate + ":" + selected_ScheduledStartTime;
-                    oCore.byId('TF-OrderStartDate').setValue(selected_ScheduledStart);
-                    selected_PartID = (jasondata[i]['Material']);
-                    oCore.byId('TF-OrderPartID').setValue(selected_PartID);
-                    selected_PartName = (jasondata[i]['MaterialDescription']);
-                    oCore.byId('TF-OrderPartName').setValue(selected_PartName);
-                    selected_TotalCavities = (jasondata[i]['Total_Cavities']);
-                    selected_OriginalCavities = (jasondata[i]['Original_Cavities']);
-                    oCore.byId('TF-StdCavitatiion').setValue(selected_OriginalCavities);
-                    selected_MoldNumber = (jasondata[i]['selected_OrderID']);
-                    oCore.byId('TF-MoldID').setValue(selected_MoldNumber);
-                    selected_ScheduledQty = (jasondata[i]['Quantity']);
-                    oCore.byId('TF-OrderQTY').setValue(selected_ScheduledQty);
-                    selected_StdCycleTime = (jasondata[i]['Quoted_Cycle_Time']);
-                    oCore.byId('TF-StdCycleTime').setValue(selected_StdCycleTime);
-                    selected_NetWeight = (jasondata[i]['NetWeight']);
-                    oCore.byId('TF-PartWeight').setValue(selected_NetWeight);
-                    selected_GrossWT = (jasondata[i]['GrossWT']);
-                    oCore.byId('TF-BoxWeight').setValue(selected_GrossWT);
+                        selected_ColorID = (jasondata[i]['VALUE_NEUTRAL']);
+                        selected_ColorName = (jasondata[i]['VALUE_CHAR']);
+                    }
+                    getRuntimeData();
+                } else {
 
-                    selected_ColorID = (jasondata[i]['VALUE_NEUTRAL']);
-                    selected_ColorName = (jasondata[i]['VALUE_CHAR']);
                 }
-                getRuntimeData();
-            } else {
 
-            }
+                // cc('selected_StationID  / ' + selected_StationID);
+                createTableWorkorders();
+
+            });
         }
+
 
         // GET RUNTIME DATA
 
@@ -1169,13 +1172,13 @@
 
         var oL_MoldID = new sap.ui.commons.Label({
             id: 'L-MoldID',
-            text: 'Mold ID'
+            text: 'SAP part weight'
         });
 
         var oTF_MoldID = new sap.ui.commons.TextField({
             id: 'TF-MoldID',
             textAlign: sap.ui.core.TextAlign.Center,
-            tooltip: 'Mold ID',
+            tooltip: 'SAP part weight',
             editable: false,
             value: '',
             width: '90%'
@@ -1351,6 +1354,12 @@
             sortProperty: '',
             filterProperty: '',
             width: "16%"
+        })).addColumn(new sap.ui.table.Column({
+            label: new sap.ui.commons.Label({text: "SAP PART", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
+            template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center}).bindProperty("text", "SAPPARTWEIGHTT").addStyleClass('classTV'),
+            sortProperty: "SAPPARTWEIGHTT",
+            filterProperty: "SAPPARTWEIGHTT",
+            width: "10%"
         })).addColumn(new sap.ui.table.Column({
             label: new sap.ui.commons.Label({text: "Recorded Time", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
             template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center})
@@ -1960,7 +1969,7 @@
                     //         });
                     //     }
                     // });
-                    cc('TableRuntime.getSelectedIndex() < 0');
+                    // cc('TableRuntime.getSelectedIndex() < 0');
                     $('#MatrixLayoutCalibration_1_2').keyboard({
                         layout: 'num',
                         restrictInput: true,
@@ -2477,7 +2486,7 @@
         function doSubmitLogOn() {
             var timestamp = new Date().getTime();
             var Param1 = escapeSQLString($('#TF-ClockID').val());
-            cc(document.getElementById("TF-ClockID"));
+            // cc(document.getElementById("TF-ClockID"));
             var paramStr = "Param.1=" + encodeURIComponent(Param1);
             var queryStr = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/isOperator&" + paramStr + "&ts=" + timestamp + "&Content-Type=text/xml";
             // alert(queryStr);
@@ -2560,10 +2569,11 @@
             }
         });
 
+
         var XMLModelRuntime = new sap.ui.model.xml.XMLModel();
 
         function createTableRuntime() {
-            cc('createTableRuntime');
+            // cc('createTableRuntime');
             // Bind the table rows to this model
             var timestamp = new Date().getTime();
             //alert(selected_StationID);
@@ -2573,7 +2583,7 @@
             //alert(paramStr);
             var url = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/WEIGHUP/QUERIES/get_RuntimeData&" + paramStr + "&ts=" + timestamp + "&Content-Type=text/xml";
             getData(url, function (data) {
-                cc(data);
+                // cc(data);
                 var tw = 0, a1, a2, a3, av;
                 for (var n = 0; n < data.length; n++) {
                     a1 = isNaN(Number(data[n].TotalWeight)) ? 0 : Number(data[n].TotalWeight);
@@ -2645,15 +2655,33 @@
             // alert(selected_StationID);
             var Param1 = escapeSQLString(selected_StationID);
             var paramStr = "Param.1=" + encodeURIComponent(Param1);
-            cc('paramStr ' + paramStr);
+            // cc('paramStr ' + paramStr);
             var url = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/get_Orders&" + paramStr + "&ts=" + timestamp + "&Content-Type=text/xml";
+
             // cc(url);
             oModelOL.loadData(url, "", false);
             // cc(oModelOL.getXML());
             createColumnsWorkorders();
+
             oTableOL.setModel(oModelOL);
             oTableOL.bindRows("/Rowset/Row");
             is_order_table_created = 1;
+
+            getData(url, function (_data) {
+                // cc(_data);
+                for (var n = 0; n < _data.length; n++) {
+                    // cc()
+                    if (_data[n].OperationStatus == 'ACTIVE') {
+                        oTableOL.setSelectedIndex(-1);
+                        oTableOL.setSelectedIndex(n);
+                        cc('setSelectedIndex=' + n);
+                        break;
+                    }
+                }
+                // cc(oTableOL.getSelectedIndex())
+            });
+
+
         }
 
         function updateTableWorkorders() {
@@ -3150,11 +3178,11 @@
                         if (oCore.byId('MatrixLayoutCalibration_1_2').getValue() == ''
                             || oCore.byId('MatrixLayoutCalibration_4_2').getValue() == ''
                             || oCore.byId('MatrixLayoutCalibration_4_3').getValue() == '') {
-                            cc(oCore.byId('MatrixLayoutCalibration_1_2').getValue());
-                            cc(oCore.byId('MatrixLayoutCalibration_4_2').getValue());
-                            cc(oCore.byId('MatrixLayoutCalibration_4_3').getValue());
+                            // cc(oCore.byId('MatrixLayoutCalibration_1_2').getValue());
+                            // cc(oCore.byId('MatrixLayoutCalibration_4_2').getValue());
+                            // cc(oCore.byId('MatrixLayoutCalibration_4_3').getValue());
                             oOverlayContainerCV.close();
-                            cc('invalid form');
+                            // cc('invalid form');
                             return;
                         }
                         // cc(TableRuntimeSelect.recordID);
@@ -3167,23 +3195,27 @@
                         // cc('getSelectedIndex ' + TableRuntime.getSelectedIndex());
 
                         if (TableRuntime.getSelectedIndex() >= 0) {//EDIT
-                            TableRuntimeSelect.ModifiedBy = selecte_UserID;
+                            TableRuntimeSelect.ModifiedBy = document.getElementById("user_name").value;
+                            ;// user_name;
                             TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss');
+                            TableRuntimeSelect.TotalWeight = oCore.byId('MatrixLayoutCalibration_3_2').getValue();
+                            TableRuntimeSelect.PartsTotalNumber = parseInt(oCore.byId('MatrixLayoutCalibration_4_2').getValue());
                         } else {//ADD
                             // cc('OrderNumber ' + selected_OrderID);
 
                             TableRuntimeSelect.recordID = 0;
                             TableRuntimeSelect.BoxID = oCore.byId('MatrixLayoutCalibration_1_2').getValue();
                             TableRuntimeSelect.OrderNumber = selected_OrderID;
-                            TableRuntimeSelect.TotalWeight = oCore.byId('MatrixLayoutCalibration_2_2').getValue();
+                            TableRuntimeSelect.TotalWeight = oCore.byId('MatrixLayoutCalibration_3_2').getValue();
                             TableRuntimeSelect.ScrapPartNumber = 0;
-                            TableRuntimeSelect.CreatedBy = selecte_UserID;
+                            TableRuntimeSelect.CreatedBy = document.getElementById("user_name").value;
+                            ;// user_name;
                             TableRuntimeSelect.CreatedOn = moment().format('YYYY-MM-DD HH:mm:ss');
                             TableRuntimeSelect.Operation = '0030';
                             TableRuntimeSelect.idUOM = 6;
                             TableRuntimeSelect.recordStatusID = 0;
-                            TableRuntimeSelect.PartsTotalNumber = parseInt(oCore.byId('MatrixLayoutCalibration_4_3').getValue());
-                            cc('PartsTotalNumber / ' + TableRuntimeSelect.PartsTotalNumber);
+                            TableRuntimeSelect.PartsTotalNumber = parseInt(oCore.byId('MatrixLayoutCalibration_4_2').getValue());
+                            // cc('PartsTotalNumber / ' + TableRuntimeSelect.PartsTotalNumber);
 
                         }
                         if (moment(TableRuntimeSelect.CreatedOn).format('YYYY-MM-DD HH:mm:ss') == 'Invalid date') {
@@ -3192,8 +3224,8 @@
                         if (moment(TableRuntimeSelect.ModifiedOn).format('YYYY-MM-DD HH:mm:ss') == 'Invalid date') {
                             TableRuntimeSelect.ModifiedOn = moment().format('YYYY-MM-DD HH:mm:ss')
                         }
-                        cc('?add');
-                        cc(TableRuntimeSelect);
+                        // cc('?add');
+                        // cc(TableRuntimeSelect);
                         var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/WEIGHUP/QUERIES/upd_RuntimeData" +
                             "&Param.1=" +
                             TableRuntimeSelect.recordID +
@@ -3498,7 +3530,7 @@
         //**************************************************************************************
 
         function showCavitiesInfo() {
-            cc('showCavitiesInfo');
+            // cc('showCavitiesInfo');
             // TableRuntimeSelect
             oCore.byId('MatrixLayoutCalibration_1_2').setValue(TableRuntimeSelect.BoxID);
             oCore.byId('MatrixLayoutCalibration_2_2').setValue(TableRuntimeSelect.BoxWeight);
@@ -3511,7 +3543,7 @@
             // oCore.byId('TF-MoldName').setValue(selected_OrderID);
             // oCore.byId('TF-MoldOriginalCavities').setValue(selected_OriginalCavities);
             // oCore.byId('TF-MoldTotalCavities').setValue(selected_TotalCavities);
-            cc('updateComBoxCavityID');
+            // cc('updateComBoxCavityID');
             // updateComBoxCavityID();
             updateComBoxBlockedReason();
             updateComBoxBlockedHow();
@@ -4645,7 +4677,7 @@
 
         function doSaveMoldHistory() {
 
-            var Param1 = escapeSQLString(selected_MoldNumber);		// mold id
+            var Param1 = escapeSQLString(selected_MoldNumber);
             var Param2 = escapeSQLString(selected_StationID);			// press id
             var Param3 = "25-01-2018";						//date
             var Param4 = escapeSQLString(selecte_UserID);				// user id
