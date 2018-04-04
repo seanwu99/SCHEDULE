@@ -71,12 +71,17 @@
             // var ul = window.location.href;
             // cc('ul ' + ul);
             if (document.getElementById('workcenter').value.toUpperCase().indexOf('ASSY') >= 0) {
-                workcenterType = 'ASSY'
+                workcenterType = 'ASSY';
+                document.getElementById('ccMenu').innerText = 'Scheduling - Assembly';
             } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('PACKING') >= 0) {
-                workcenterType = 'PACKING'
-            }
-            if (document.getElementById('workcenter').value.toUpperCase().indexOf('RESIN') >= 0) {
-                workcenterType = 'RESIN'
+                workcenterType = 'PACKING';
+                document.getElementById('ccMenu').innerText = 'Scheduling - Packing';
+            } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('RESIN') >= 0) {
+                workcenterType = 'RESIN';
+                document.getElementById('ccMenu').innerText = 'Scheduling - Resin';
+            } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('MOLDING') >= 0) {
+                workcenterType = 'MOLDING';
+                document.getElementById('ccMenu').innerText = 'Scheduling - Molding';
             }
 
             ActivityLogGET();
@@ -190,6 +195,8 @@
                         url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_PACKING&Content-Type=text/xml';
                     } else if (workcenterType == 'RESIN') {
                         url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_RESIN&Content-Type=text/xml';
+                    } else if (workcenterType == 'MOLDING') {
+                        url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_MOLDING&Content-Type=text/xml';
                     }
                     cc(url);
                     getData(url, function (data) {
@@ -722,6 +729,8 @@
                     gp = ['PACKING'];
                 } else if (workcenterType == 'RESIN') {
                     gp = ['RESIN'];
+                } else if (workcenterType == 'MOLDING') {
+                    gp = ['MOLDING'];
                 }
                 for (var g in MESM_FloorMaps_GROUP) {
                     for (var n = 0; n < MESM_FloorMaps_GROUP[g].length; n++) {
@@ -913,6 +922,8 @@
                         url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_PACKING&Content-Type=text/xml';
                     } else if (workcenterType == 'RESIN') {
                         url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_RESIN&Content-Type=text/xml';
+                    } else if (workcenterType == 'MOLDING') {
+                        url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_MOLDING&Content-Type=text/xml';
                     }
                     // cc(url);
                     getData(url, function (DATA) {
@@ -1390,7 +1401,25 @@
             orderTable.hideColumn('Operation');
 
             if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
+                if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
+                    orderTable.hideColumn('Mold')
+
+                }
                 orderTable.hideColumn('CtrlKey');
+                document.getElementById('m_form_type').innerHTML =
+                    '<option value=""> All</option>';
+            }
+
+            if (workcenterType == 'MOLDING') {
+                document.getElementById('m_form_type').innerHTML =
+                    '<option value=""> All</option>\n' +
+                    '<option value="MOLD1">MOLD1</option>\n' +
+                    '<option value="MOLD2">MOLD2</option>\n' +
+                    '<option value="MOLD3">MOLD3</option>\n' +
+                    '<option value="MOLD4">MOLD4</option>\n' +
+                    '<option value="MOLD5">MOLD5</option>\n' +
+                    '<option value="MOLD6">MOLD6</option>\n' +
+                    '<option value="DIE CAST">DIE CAST</option>';
             }
 
 
@@ -1843,7 +1872,7 @@
 
                 slotWidth: 15,
                 height:
-                    700,
+                    800,
                 selectable:
                     true,
                 selectHelper:
@@ -2243,8 +2272,8 @@
                 ranges: {
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Week': [moment().startOf('week'), moment().endOf('week')],
+                    'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 }
@@ -2349,7 +2378,8 @@
 //doto wxy
                 cc(_SchedStart);
                 cc(_SchedFinish);
-
+                _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
+                _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
                 var ss = new Date(_SchedStart).getTime();
                 ss = parseInt(ss / (15 * 60 * 1000)) * 15 * 60 * 1000;
                 var sf = new Date(_SchedFinish).getTime();
@@ -2357,9 +2387,16 @@
                 if (sf - ss < 15 * 60 * 1000) {
                     sf = ss + 15 * 60 * 1000;
                 }
+                cc(ss);
+                cc(sf);
 
-                _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + ' ' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
-                _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + ' ' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+                var SSSS = new Date(ss);
+                var SFSF = new Date(sf);
+                cc(SSSS.toISOString());
+                cc(SFSF.toISOString());
+
+                _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+                _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
 
                 cc(_SchedStart);
                 cc(_SchedFinish);
@@ -3452,7 +3489,7 @@
                 <div class="d-flex align-items-center">
                     <div class="mr-auto">
                         <h3 class="m-subheader__title " id="ccMenu">
-                            Dashboard
+                            Scheduling - All
                         </h3>
                     </div>
                     <div>
@@ -3479,8 +3516,11 @@
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
+                                        <span class="m-portlet__head-icon">
+													<i class="flaticon-list-1"></i>
+                                        </span>
                                         <h3 class="m-portlet__head-text">
-                                            Production Order
+                                            Order Operation
                                         </h3>
                                     </div>
                                 </div>
@@ -3585,16 +3625,17 @@
                                                             <select class="form-control m-bootstrap-select m-bootstrap-select--solid"
                                                                     id="m_form_type">
                                                                 <option value=""> All</option>
-                                                                <option value="MOLD1"> MOLD1</option>
-                                                                <option value="MOLD2"> MOLD2</option>
-                                                                <option value="MOLD3"> MOLD3</option>
-                                                                <option value="MOLD4"> MOLD4</option>
-                                                                <option value="MOLD5"> MOLD5</option>
-                                                                <option value="MOLD6"> MOLD6</option>
+                                                                <option value="ASSY"> ASSY</option>
+                                                                <option value="MOLD1">MOLD1</option>
+                                                                <option value="MOLD2">MOLD2</option>
+                                                                <option value="MOLD3">MOLD3</option>
+                                                                <option value="MOLD4">MOLD4</option>
+                                                                <option value="MOLD5">MOLD5</option>
+                                                                <option value="MOLD6">MOLD6</option>
                                                                 <!--<option value="MOLD6">&#45;&#45;&#45;&#45;</option>-->
-                                                                <option value="RESIN"> RESIN</option>
+                                                                <option value="PACKING">PACKING</option>
+                                                                <option value="RESIN">RESIN</option>
                                                                 <!--<option value="MOLD6">&#45;&#45;&#45;&#45;</option>-->
-                                                                <option value="PACKING"> PACKING</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -3613,9 +3654,9 @@
                                                                 <option value="">All</option>
                                                                 <option value="U">Unscheduled</option>
                                                                 <option value="S">Scheduled</option>
-                                                                <option value="H">Hold</option>
-                                                                <option value="C">Cancelled</option>
-                                                                <option value="N">No Material</option>
+                                                                <!--<option value="H">Hold</option>-->
+                                                                <!--<option value="C">Cancelled</option>-->
+                                                                <!--<option value="N">No Material</option>-->
                                                                 <!--<option value="6">Urgent</option>-->
                                                                 <!--<option value="7">Delayed</option>-->
                                                             </select>
@@ -3760,10 +3801,10 @@
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
 												<span class="m-portlet__head-icon">
-													<i class="flaticon-map-location"></i>
+													<i class="flaticon-calendar-2"></i>
 												</span>
                                         <h3 class="m-portlet__head-text">
-                                            Schedule
+                                            Calendar
                                         </h3>
                                     </div>
                                 </div>
@@ -4432,25 +4473,25 @@
     <i class="la la-arrow-up"></i>
 </div>
 <!-- end::Scroll Top -->            <!-- begin::Quick Nav -->
-<ul class="m-nav-sticky" style="margin-top: 30px;">
+<!--<ul class="m-nav-sticky" style="margin-top: 30px;">-->
 
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Orders" data-placement="left">
-        <a href="#"
-           target="_blank">
-            <i class="la la-cart-arrow-down"></i>
-        </a>
-    </li>
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Documentation" data-placement="left">
-        <a href="#" target="_blank">
-            <i class="la la-code-fork"></i>
-        </a>
-    </li>
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Support" data-placement="left">
-        <a href="#" target="_blank">
-            <i class="la la-life-ring"></i>
-        </a>
-    </li>
-</ul>
+<!--<li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Orders" data-placement="left">-->
+<!--<a href="#"-->
+<!--target="_blank">-->
+<!--<i class="la la-cart-arrow-down"></i>-->
+<!--</a>-->
+<!--</li>-->
+<!--<li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Documentation" data-placement="left">-->
+<!--<a href="#" target="_blank">-->
+<!--<i class="la la-code-fork"></i>-->
+<!--</a>-->
+<!--</li>-->
+<!--<li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Support" data-placement="left">-->
+<!--<a href="#" target="_blank">-->
+<!--<i class="la la-life-ring"></i>-->
+<!--</a>-->
+<!--</li>-->
+<!--</ul>-->
 <!--<div class="form-group m-form__group row">-->
 
 <!--<div class="col-lg-4 col-md-9 col-sm-12">-->
