@@ -1,11 +1,11 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>DEMO</title>
     <style>
-        body{
+        body {
             background-size: 180px;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -18,7 +18,7 @@
             src="/sapui5/resources/sap-ui-core.js"
             data-sap-ui-theme="sap_goldreflection"
             data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3"
-            data-sap-ui-language="en" >
+            data-sap-ui-language="en">
     </script>
     <script type="text/javascript" id="app-init">
 
@@ -41,7 +41,7 @@
         var timestamp = new Date().getTime();
 
         // ******************************************************************************************************************************************************************
-        function doGetData(){
+        function doGetData() {
             var oReqData;
             if (window.XMLHttpRequest) {
                 oReqData = new XMLHttpRequest();
@@ -49,15 +49,15 @@
             if (oReqData != null) {
                 var timestamp = new Date().getTime();
                 // alert(paramStr);
-                var queryStr = "/XMII/Runner?Transaction=OEEM/TRANSACTIONS/OP040_REORG&OutputParameter=*&Content-Type=text/html&ts="+timestamp;
+                var queryStr = "/XMII/Runner?Transaction=OEEM/TRANSACTIONS/OP040_REORG&OutputParameter=*&Content-Type=text/html&ts=" + timestamp;
                 // alert(queryStr);
                 oReqData.open("GET", queryStr, true);
-                oReqData.onreadystatechange = function() {
+                oReqData.onreadystatechange = function () {
                     if (oReqData.readyState == 4)
                         if (oReqData.status == 200) {
                             // Successful -- rebuild the screen
                             // oTACSV.setValue(oReqData.responseText);
-                            if (oReqData.responseText != "")  document.getElementById("oeem_report").innerHTML = oReqData.responseText;
+                            if (oReqData.responseText != "") document.getElementById("oeem_report").innerHTML = oReqData.responseText;
                         } else {
                             alert("Error: " + oReqData.statusText);
                         }
@@ -67,8 +67,9 @@
                 window.alert("Error creating XmlHttpRequest object.");
             }
         }
+
         // ******************************************************************************************************************************************************************
-        function doReset(){
+        function doReset() {
             var oReqData;
             if (window.XMLHttpRequest) {
                 oReqData = new XMLHttpRequest();
@@ -76,10 +77,10 @@
             if (oReqData != null) {
                 var timestamp = new Date().getTime();
                 // alert(paramStr);
-                var queryStr = "/XMII/Runner?Transaction=OEEM/TRANSACTIONS/OP040_RESET&OutputParameter=*&Content-Type=text/html&ts="+timestamp;
+                var queryStr = "/XMII/Runner?Transaction=OEEM/TRANSACTIONS/OP040_RESET&OutputParameter=*&Content-Type=text/html&ts=" + timestamp;
                 // alert(queryStr);
                 oReqData.open("GET", queryStr, true);
-                oReqData.onreadystatechange = function() {
+                oReqData.onreadystatechange = function () {
                     if (oReqData.readyState == 4)
                         if (oReqData.status == 200) {
                             // Successful -- rebuild the screen
@@ -99,19 +100,21 @@
 
 <body onLoad="doGetData()">
 
-<input id="user_roles" type="hidden" value="{IllumLoginRoles}" style="display:block;width:1000px;" readonly />
-<input id="user_role" type="hidden" value="{ROLE}" style="display:block;width:1000px;" readonly />
-<input id="report_serial_number" type="hidden" value="{SN}" style="display:block;width:1000px;" readonly />
-<input id="user_address" type="hidden" value="{Machine}" style="display:block;width:1000px;" readonly />
-<input id="user_email" type="hidden" value="{email}" style="display:block;width:800px;" readonly />
-<input id="user_firstname" type="hidden" value="{firstname}" style="display:block;width:800px;" readonly />
-<input id="user_lastname" type="hidden" value="{lastname}" style="display:block;width:800px;" readonly />
-<input id="user_name" type="hidden" value="{IllumLoginName}" style="display: block;width:1000px;" readonly />
-<input id="user_height" type="hidden" value="{HEIGHT}" style="display: block;width:100px;" readonly />
-<input id="user_address" type="hidden" value="{Machine}" style="display:block;width:1000px;" readonly />
+<input id="user_roles" type="hidden" value="{IllumLoginRoles}" style="display:block;width:1000px;" readonly/>
+<input id="user_role" type="hidden" value="{ROLE}" style="display:block;width:1000px;" readonly/>
+<input id="report_serial_number" type="hidden" value="{SN}" style="display:block;width:1000px;" readonly/>
+<input id="user_address" type="hidden" value="{Machine}" style="display:block;width:1000px;" readonly/>
+<input id="user_email" type="hidden" value="{email}" style="display:block;width:800px;" readonly/>
+<input id="user_firstname" type="hidden" value="{firstname}" style="display:block;width:800px;" readonly/>
+<input id="user_lastname" type="hidden" value="{lastname}" style="display:block;width:800px;" readonly/>
+<input id="user_name" type="hidden" value="{IllumLoginName}" style="display: block;width:1000px;" readonly/>
+<input id="user_height" type="hidden" value="{HEIGHT}" style="display: block;width:100px;" readonly/>
+<input id="user_address" type="hidden" value="{Machine}" style="display:block;width:1000px;" readonly/>
 
 <div id="oeem_report"></div>
 <br>
-<center><button type="button" onclick="doReset()">RESET DATA</button></center>
+<center>
+    <button type="button" onclick="doReset()">RESET DATA</button>
+</center>
 </body>
 </html>
