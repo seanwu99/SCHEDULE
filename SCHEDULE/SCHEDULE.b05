@@ -117,24 +117,10 @@
             // cc(ce);
             // }
             var logs = '';
-
-            var Param1 = '';
-            if (workcenterType == 'ASSY') {
-                Param1 = 'ASSY';
-            } else if (workcenterType == 'PACKING') {
-                Param1 = 'PACKING';
-            } else if (workcenterType == 'RESIN') {
-                Param1 = 'RESIN';
-            } else if (workcenterType == 'MOLDING') {
-                Param1 = 'MOLDING';
-            }
-
             getData(
                 localHost ?
                     'MESM_ActivityLog_GET.xml' :
-                    '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET' +
-                    '&Param.1=' + Param1 +
-                    '&Content-Type=text/xml',
+                    '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Content-Type=text/xml',
                 function (data) {
                     cc(data);
                     $.each(data, function (index, value) {
@@ -1219,14 +1205,14 @@
                         field: "Mold",
                         title: "Mold",
                         width: 70,
-                        sortable: true,
+                        sortable: false,
                         filterable: false,
                     },
                     {
                         field: "Press",
                         title: "WorkCenter",
                         width: 90,
-                        sortable: true,
+                        sortable: false,
                         filterable: false,
                     },
                     {
@@ -1286,7 +1272,6 @@
                                             }
                                         }
                                     }
-                                    cc('prsSTR ==>' + prsSTR);
                                 } else if (e.Sort == 'RESIN') {
                                     prsSTR =
                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
@@ -1307,7 +1292,7 @@
 
                                 var ft = '';
                                 if (prsSTR.length == 0) {
-                                    ft = 'WrongGroup'
+                                    ft='WrongGroup'
                                 }
 
 

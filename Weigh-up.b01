@@ -111,8 +111,7 @@
         #MatrixLayoutCalibration_3_3,
         #MatrixLayoutCalibration_4_2,
         #MatrixLayoutCalibration_4_3,
-        #MatrixLayoutCalibration_4_4,
-	 #MatrixLayoutCalibration_6_1 {
+        #MatrixLayoutCalibration_4_4 {
             /*text-align: left;*/
             font-family: "Arial Black", Arial, Helvetica, sans-serif;
             font-size: 25px;
@@ -204,7 +203,7 @@
         /*  ACTIVE ORDER */
 
         #L-OrderID, #L-OrderStartDate, #L-OrderPartID, #L-OrderPartName, #L-MoldID,
-        #L-StdCavitatiion, #L-OrderQTY, #L-ProcessTime, #L-PartWeight, #L-BoxWeight {
+        #L-StdCavitatiion, #L-OrderQTY, #L-StdCycleTime, #L-PartWeight, #L-BoxWeight {
             font-family: "Lucida Grande", Tahoma;
             font-size: 10px;
             font-weight: lighter;
@@ -217,7 +216,7 @@
         }
 
         #TF-OrderID, #TF-OrderStartDate, #TF-OrderPartID, #TF-MoldID,
-        #TF-StdCavitatiion, #TF-OrderQTY, #TF-ProcessTime, #TF-PartWeight, #TF-BoxWeight {
+        #TF-StdCavitatiion, #TF-OrderQTY, #TF-StdCycleTime, #TF-PartWeight, #TF-BoxWeight {
             font-size: 16px !important;
             height: 35px;
             font-weight: bold;
@@ -665,7 +664,7 @@
         var selected_MoldNumber = "";
         var selected_OriginalCavities = 0;
         var selected_TotalCavities = 0;
-        var selected_ProcessTime = 0;
+        var selected_StdCycleTime = 0;
         var selected_NetWeight = 0;
         var selected_GrossWT = 0;
         // runtime data
@@ -795,7 +794,7 @@
                             selectred_ForceScrapStatus = (jasondata[i]['ScrapStatus']);
                             if (selectred_ForceScrapStatus == 1) {
                                 oCore.byId("BT-ForcedScrap").setStyle("Emph");
-                                oCore.byId("BT-ForcedScrap").setText('STOP-SETUP');
+                                oCore.byId("BT-ForcedScrap").setText('STOP-SCRAP');
                             }
                             getActiveOrderData();
                         }
@@ -861,8 +860,8 @@
                         oCore.byId('TF-MoldID').setValue(selected_MoldNumber);
                         selected_ScheduledQty = (jasondata[i]['Quantity']);
                         oCore.byId('TF-OrderQTY').setValue(selected_ScheduledQty);
-                        selected_ProcessTime = (jasondata[i]['ProcessTime']);
-                        oCore.byId('TF-ProcessTime').setValue(selected_ProcessTime);
+                        selected_StdCycleTime = (jasondata[i]['Quoted_Cycle_Time']);
+                        oCore.byId('TF-StdCycleTime').setValue(selected_StdCycleTime);
                         selected_NetWeight = (jasondata[i]['NetWeight']);
                         oCore.byId('TF-PartWeight').setValue(selected_NetWeight);
                         selected_GrossWT = (jasondata[i]['GrossWT']);
@@ -1061,7 +1060,7 @@
             height: '85px',
             columns: 3,
             padding: '55px',
-            widths: ['28%', '60%', '12%']
+            widths: ['30%', '58%', '12%']
         });
 
         var oCell_Divider1 = new sap.ui.commons.layout.MatrixLayoutCell({hAlign: 'Begin', colSpan: 3});
@@ -1157,7 +1156,7 @@
 
         var oL_OrderPartName = new sap.ui.commons.Label({
             id: 'L-OrderPartName',
-            text: 'Material Desc.'
+            text: 'Material Description'
         });
 
         var oTF_OrderPartName = new sap.ui.commons.TextArea({
@@ -1185,7 +1184,7 @@
             width: '90%'
         });
 
-     //   oMatrixOrder.createRow(oL_MoldID, oTF_MoldID);
+        oMatrixOrder.createRow(oL_MoldID, oTF_MoldID);
 
         var oL_StdCavitatiion = new sap.ui.commons.Label({
             id: 'L-StdCavitatiion',
@@ -1201,7 +1200,7 @@
             width: '90%'
         });
 
-    //    oMatrixOrder.createRow(oL_StdCavitatiion, oTF_StdCavitatiion);
+        oMatrixOrder.createRow(oL_StdCavitatiion, oTF_StdCavitatiion);
 
         var oL_OrderQTY = new sap.ui.commons.Label({
             id: 'L-OrderQTY',
@@ -1219,21 +1218,21 @@
 
         oMatrixOrder.createRow(oL_OrderQTY, oTF_OrderQTY);
 
-        var oL_ProcessTime = new sap.ui.commons.Label({
-            id: 'L-ProcessTime',
-            text: 'Process time[M]'
+        var oL_StdCycleTime = new sap.ui.commons.Label({
+            id: 'L-StdCycleTime',
+            text: 'Std Cycle Time'
         });
 
-        var oTF_ProcessTime = new sap.ui.commons.TextField({
-            id: 'TF-ProcessTime',
+        var oTF_StdCycleTime = new sap.ui.commons.TextField({
+            id: 'TF-StdCycleTime',
             textAlign: sap.ui.core.TextAlign.Center,
-            tooltip: 'Process Time',
+            tooltip: 'Std Cycle Time',
             editable: false,
             value: '',
             width: '90%'
         });
 
-        oMatrixOrder.createRow(oL_ProcessTime, oTF_ProcessTime);
+        oMatrixOrder.createRow(oL_StdCycleTime, oTF_StdCycleTime);
 
         var oL_PartWeight = new sap.ui.commons.Label({
             id: 'L-PartWeight',
@@ -1253,7 +1252,7 @@
 
         var oL_BoxWeight = new sap.ui.commons.Label({
             id: 'L-BoxWeight',
-            text: 'Box Weight [LB]'
+            text: 'Box Weight [g]'
         });
 
         var oTF_BoxWeight = new sap.ui.commons.TextField({
@@ -1317,12 +1316,6 @@
             // template: tv,
             sortProperty: "BoxID",
             filterProperty: "BoxID",
-            width: "12%"
-        })).addColumn(new sap.ui.table.Column({
-            label: new sap.ui.commons.Label({text: "Parts#", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
-            template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center}).bindProperty("text", "PartsNumber").addStyleClass('classTV'),
-            sortProperty: "PartsNumber",
-            filterProperty: "PartsNumber",
             width: "16%"
         })).addColumn(new sap.ui.table.Column({
             label: new sap.ui.commons.Label({text: "Total Weight", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
@@ -1337,7 +1330,13 @@
             filterProperty: "BoxWeight",
             width: "16%"
         })).addColumn(new sap.ui.table.Column({
-            label: new sap.ui.commons.Label({text: "Part Weight", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
+            label: new sap.ui.commons.Label({text: "UOM", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
+            template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center}).bindProperty("text", "UOMName").addStyleClass('classTV'),
+            sortProperty: "UOMName",
+            filterProperty: "UOMName",
+            width: "10%"
+        })).addColumn(new sap.ui.table.Column({
+            label: new sap.ui.commons.Label({text: "PART", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
             template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center})
                 .bindProperty("text", {
                     parts:
@@ -1356,10 +1355,10 @@
             filterProperty: '',
             width: "16%"
         })).addColumn(new sap.ui.table.Column({
-            label: new sap.ui.commons.Label({text: "UOM", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
-            template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center}).bindProperty("text", "UOMName").addStyleClass('classTV'),
-            sortProperty: "UOMName",
-            filterProperty: "UOMName",
+            label: new sap.ui.commons.Label({text: "SAP PART", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
+            template: new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center}).bindProperty("text", "SAPPARTWEIGHTT").addStyleClass('classTV'),
+            sortProperty: "SAPPARTWEIGHTT",
+            filterProperty: "SAPPARTWEIGHTT",
             width: "10%"
         })).addColumn(new sap.ui.table.Column({
             label: new sap.ui.commons.Label({text: "Recorded Time", textAlign: sap.ui.core.TextAlign.Center}).addStyleClass('classLB'),
@@ -1383,7 +1382,7 @@
                 }).addStyleClass('classTV'),
             sortProperty: '',
             filterProperty: '',
-            width: "30%"
+            width: "26%"
         })).attachRowSelectionChange(function (oEvent) {
             // cc(TableRuntime.getSelectedIndex());
             if (TableRuntime.getSelectedIndex() >= 0) {
@@ -1417,7 +1416,7 @@
                 // oCore.byId('MatrixLayoutRuntime_1_2').setValue(QTY);
                 // oCore.byId('MatrixLayoutRuntime_1_4').setValue(TableRuntimeSelect.BoxID);
             } else {
-                oCore.byId('ButtonCalibration').setText('SET');
+                oCore.byId('ButtonCalibration').setText('ADD');
                 // oCore.byId('MatrixLayoutRuntime_1_2').setValue('');
                 // oCore.byId('MatrixLayoutRuntime_1_4').setValue('');
             }
@@ -1460,7 +1459,7 @@
                     // id: 'tOrderID',
                     id: 'MatrixLayoutRuntime_1_1',
                     // MatrixLayoutCalibration
-                    text: 'Total Packed QTY',
+                    text: 'Packed QTY',
                     width: "90%",
                     // design: sap.ui.commons.TextViewDesign.H1,
                     textAlign: sap.ui.core.TextAlign.Right,
@@ -1527,7 +1526,7 @@
                     // id : 'Cell-0-0',
                     // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill1,
                     // height: '60px',
-                    colSpan: 2
+                    colSpan: 1
                 }),
                 new sap.ui.commons.layout.MatrixLayoutCell({
                     // id : 'Cell-0-0',
@@ -1536,7 +1535,7 @@
                     width: '80%',
                     colSpan: 2
                 }).addContent(new sap.ui.commons.Button({
-                    text: "CALIBRATE",
+                    text: "ADD",
                     id: "ButtonCalibration",
                     width: "120px",
                     height: "60px",
@@ -1548,6 +1547,19 @@
                     // height: '60px',
                     colSpan: 1
                 }),
+                new sap.ui.commons.layout.MatrixLayoutCell({
+                    // id : 'Cell-0-0',
+                    // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill1,
+                    // height: '60px',
+                    width: '80%',
+                    colSpan: 2
+                }).addContent(new sap.ui.commons.Button({
+                    text: "DOWNTIME",
+                    id: "BT-Downtime",
+                    width: "120px",
+                    height: "60px",
+                    // press : function() {},
+                }).attachPress(doOpenDT)),
                 new sap.ui.commons.layout.MatrixLayoutCell({
                     // id : 'Cell-0-0',
                     // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill1,
@@ -1796,7 +1808,7 @@
         // }).attachPress(doOpenDT);
 
         var oBT_Scrap = new sap.ui.commons.Button({
-            text: "SETUP",
+            text: "SCRAP",
             id: "BT-Scrap",
             width: "120px",
             height: "60px",
@@ -1908,7 +1920,7 @@
                 oOverlayContainerCV.open();
 
                 if (TableRuntime.getSelectedIndex() < 0) {
-                    oCore.byId('MatrixLayoutCalibration_4_4').setText('SET');
+                    oCore.byId('MatrixLayoutCalibration_4_4').setText('ADD');
                     oCore.byId('MatrixLayoutCalibration_4_4').setStyle(sap.ui.commons.ButtonStyle.Accept);
                     oCore.byId('MatrixLayoutCalibration_1_2').setEditable(true);
 
@@ -2065,7 +2077,7 @@
                 text: "RUNTIME",
                 id: "BT-LogOn",
                 //style: sap.ui.commons.ButtonStyle.Emph,
-                width: "110px",
+                width: "120px",
                 height: "60px",
                 //press : function() {}
             }).attachPress(doOpenLogOn)),]
@@ -2077,10 +2089,10 @@
                 // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
                 // colSpan: 10
             }).addContent(new sap.ui.commons.Button({
-                text: "START-SETUP",
+                text: "FRC-SCRAP",
                 id: "BT-ForcedScrap",
                 //style: sap.ui.commons.ButtonStyle.Emph,
-                width: "110px",
+                width: "120px",
                 height: "60px",
                 // press : function() {},
             }).attachPress(doForceScrapSwitch)),]
@@ -2094,7 +2106,7 @@
             }).addContent(new sap.ui.commons.Button({
                 text: "LABEL",
                 id: "BT-LabelPrinting",
-                width: "110px",
+                width: "120px",
                 height: "60px",
                 press: function () {
                 },
@@ -2107,9 +2119,24 @@
                 // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
                 // colSpan: 10
             }).addContent(new sap.ui.commons.Button({
+                text: "HOLD",
+                id: "BT-Hold",
+                width: "120px",
+                height: "60px",
+                press: function () {
+                },
+            })),]
+        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
+            // id : 'oRow0',
+            height: '80px',
+            cells: [new sap.ui.commons.layout.MatrixLayoutCell({
+                // id: '',
+                // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
+                // colSpan: 10
+            }).addContent(new sap.ui.commons.Button({
                 text: "INSPECTION",
                 id: "BT-PartsInspection",
-                width: "110px",
+                width: "120px",
                 height: "60px",
                 //press : function() {},
             }).attachPress(doPartsInspection)),]
@@ -2121,15 +2148,14 @@
                 // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
                 // colSpan: 10
             }).addContent(new sap.ui.commons.Button({
-                text: "END ORDER",
-                id: "BT-EndOrder",
+                text: "EMERGENCY",
+                id: "BT-Emergency",
                 style: sap.ui.commons.ButtonStyle.Reject,
-                width: "110px",
+                width: "120px",
                 height: "60px",
                 // press : function() {},
-            }).attachPress(doEndOrder)),]
+            }).attachPress(doEmergency)),]
         }))
-
 
         // oBT_LogOn = new sap.ui.commons.Button({
         //     text: "LOG ON",
@@ -2225,13 +2251,13 @@
         function doForceScrapSwitch() {
             if (selectred_ForceScrapStatus == 0) {
                 oCore.byId("BT-ForcedScrap").setStyle("Emph");
-                oCore.byId("BT-ForcedScrap").setText('STOP-SETUP');
+                oCore.byId("BT-ForcedScrap").setText('STOP-SCRAP');
                 selectred_ForceScrapStatus = 1;
                 doChangeDBScrapStatus();
             }
             else {
                 oCore.byId("BT-ForcedScrap").setStyle("Default");
-                oCore.byId("BT-ForcedScrap").setText('START-SETUP');
+                oCore.byId("BT-ForcedScrap").setText('FRC-SCRAP');
                 selectred_ForceScrapStatus = 0;
                 doChangeDBScrapStatus();
             }
@@ -2306,18 +2332,12 @@
 
         function doPartsInspection() {
             // open new window
-            window.open("InspectionDashBoardWeighUp.irpt");
+            window.open("InspectionDashBoard.irpt");
         }
 
         function doEmergency() {
 
         }
-
-	function doEndOrder (){
-		if(!oOverlayContainerEO.isOpen()){
-			oOverlayContainerEO.open();
-		}
-	}
 
         // ***********	OVERLAYS	***************************************************************************************
 
@@ -2590,7 +2610,7 @@
             // oTableOL.bindRows("/Rowset/Row");
 
             is_order_table_created = 1;
-            oCore.byId('ButtonCalibration').setText('CALIBRATE');
+            oCore.byId('ButtonCalibration').setText('ADD');
         }
 
 
@@ -2820,7 +2840,7 @@
         }
 
 
-        // ***************	CALIBRATION  OVERLAY	***************************************************************************************
+        // ***************	CAVITATION  OVERLAY	***************************************************************************************
 
         // var oMatrixCV = new sap.ui.commons.layout.MatrixLayout({
         //     id: 'MatrixCV',
@@ -2865,7 +2885,7 @@
                     // id: 'tOrderID',
                     id: 'MatrixLayoutCalibration_1_1',
                     // MatrixLayoutCalibration
-                    text: 'Box ID / Parts #',
+                    text: 'Box ID',
                     width: "90%",
                     // design: sap.ui.commons.TextViewDesign.H1,
                     textAlign: sap.ui.core.TextAlign.Right,
@@ -2873,7 +2893,7 @@
                 new sap.ui.commons.layout.MatrixLayoutCell({
                     // id: 'Cell-0-2',
                     // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
-                    colSpan: 2,
+                    colSpan: 3,
                     height: '60px',
                 }).addContent(new sap.ui.commons.TextField({
                         id: 'MatrixLayoutCalibration_1_2',
@@ -2911,22 +2931,27 @@
                 new sap.ui.commons.layout.MatrixLayoutCell({
                     // id: 'Cell-0-2',
                     // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill2,
-                    colSpan: 3,
+                    colSpan: 2,
                     height: '60px',
-                }).addContent(new sap.ui.commons.TextField({
+                }).addContent(new sap.ui.commons.DropdownBox({
                     // id: 'tDropdownBox',
                     id: 'MatrixLayoutCalibration_1_3',
 
-                    editable: false,
-		valueState: sap.ui.core.ValueState.Warning,
+                    editable: true,
                     // text: "UPDATE",
-                    tooltip: 'Number of parts in the box',
+                    tooltip: 'DropdownBox',
                     // id: "BT-UpdateCavities",
                     //style: sap.ui.commons.ButtonStyle.Emph,
                     width: "100%",
                     // height: "60px",
                     //press : function() {},
-                   
+                    items: [
+                        new sap.ui.core.ListItem({key: "Setup", text: "Setup"}),
+                        new sap.ui.core.ListItem({key: "Running", text: "Running"}),
+                        new sap.ui.core.ListItem({key: "Cleanup", text: "Cleanup"}),
+                        new sap.ui.core.ListItem({key: "Breakdown", text: "Breakdown"}),
+                        new sap.ui.core.ListItem({key: "Completed", text: "Completed"}),
+                    ],
                 }))]
         })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
             // id : 'oRow0',
@@ -3039,7 +3064,7 @@
                 }).addContent(new sap.ui.commons.Label({
                     // id: 'tSampleSize',
                     id: 'MatrixLayoutCalibration_4_1',
-                    text: 'Sample Size / Weight Each',
+                    text: 'Sample Size / Each',
                     width: "90%",
                     // design: sap.ui.commons.TextViewDesign.H1,
                     textAlign: sap.ui.core.TextAlign.Right,
@@ -3120,7 +3145,7 @@
                 }).addContent(new sap.ui.commons.Button({
                     // id: 'tButton4',
                     id: 'MatrixLayoutCalibration_4_4',
-                    text: "SET",
+                    text: "ADD",
                     // id: "BT-UpdateCavities",
                     style: sap.ui.commons.ButtonStyle.Accept,
                     width: "100%",
@@ -3252,26 +3277,6 @@
                     },
                 }))
             ]
-        })).addRow(new sap.ui.commons.layout.MatrixLayoutRow({
-            // id : 'oRow0',
-            height: '100px',
-            cells: [
-                new sap.ui.commons.layout.MatrixLayoutCell({
-                    // id : 'Cell-0-0',
-                    // backgroundDesign: sap.ui.commons.layout.BackgroundDesign.Fill1,
-	hAlign:sap.ui.commons.layout.HAlign.Center,
-                    height: '60px',
-                    colSpan: 10
-                }).addContent(new sap.ui.commons.Button({
-                    // id: 'tButton2',
-                    id: 'MatrixLayoutCalibration_6_1',
-                    text: "SAVE",
-                    // id: "BT-UpdateCavities",
-                  style: sap.ui.commons.ButtonStyle.Reject,
-                    width: "150px",
-                    height: "60px",
-                   
-                })),]
         }));
 
 
@@ -3518,7 +3523,7 @@
         // oMatrixCV.createRow(oBT_UpdateCavities);
 
         var oOverlayContainerCV = new sap.ui.ux3.OverlayDialog({openButtonVisible: false})
-            .setHeight('640px')
+            .setHeight('600px')
             .setWidth('900px')
             .addContent(MatrixLayoutCalibration);
 
@@ -5383,108 +5388,6 @@
         oOverlayContainerLB.setHeight('550px');
         oOverlayContainerLB.setWidth('900px');
         oOverlayContainerLB.addContent(oMatrixLB);
-
-
-//*******************************************************************************************************************************************
-//*************** 	ORDER FINISHED OVERLAY ************************************************************************************************
-//*******************************************************************************************************************************************
-
-			var oMatrixEO = new sap.ui.commons.layout.MatrixLayout({
-				id : 'MatrixEO',
-				layoutFixed : true,
-				width: '440px',
-				columns : 2,
-				widths : ['220px','220px'] 
-			});
-		
-			var oTitleEO = new sap.ui.commons.Label({
-				id : 'L-EO',
-				text : 'CONFIRM '
-			});
-
-			var oCellTitleEO1 = new sap.ui.commons.layout.MatrixLayoutCell({
-				id : 'Cell-TitleEO1',
-				colSpan : 2 });
-
-			oCellTitleEO1.addContent(oTitleEO);
-
-			oMatrixEO.createRow(oCellTitleEO1 );
-
-			var oL_EO2 = new sap.ui.commons.Label({
-				id : 'L-EO2',
-				text : 'DO YOU WANT TO END PRODUCTION ORDER '
-			});
-
-			var oCellEO2 = new sap.ui.commons.layout.MatrixLayoutCell({
-				id : 'Cell-EO2',
-				colSpan : 2 });
-
-			oCellEO2.addContent(oL_EO2);
-
-			oMatrixEO.createRow(oCellEO2 );
-
-			var oBT_OrderFinishedNot= new sap.ui.commons.Button({
-				text : "NO",
-				id : "BT-OrderFinishedNot",
-				width: "120px",
-				height: "70px",
-				press : function() {oOverlayContainerEO.close()},
-			})
-
-
-			var oBT_OrderFinishedSubmit= new sap.ui.commons.Button({
-				text : "YES",
-				id : "BT-OrderFinishedSubmit",
-				width: "120px",
-				height: "70px",
-				press : function() {},
-			})
-			oBT_OrderFinishedSubmit.attachPress(doOrderFinished);
-
-			oMatrixEO.createRow(oBT_OrderFinishedNot, oBT_OrderFinishedSubmit);
-
-			var oOverlayContainerEO = new sap.ui.ux3.OverlayDialog({openButtonVisible: false});
-			oOverlayContainerEO.setHeight('200px');
-			oOverlayContainerEO.setWidth('450px');
-			oOverlayContainerEO.addContent(oMatrixEO);
-	
-
-			//****************	FUNCTIONS 	******************************************
-
-			function doOrderFinished (){
-
-				//return;
-
-				 if (window.XMLHttpRequest) {
-                				oReqData = new XMLHttpRequest();
-         				   }
-           				 if (oReqData != null) {
-           					var timestamp = new Date().getTime();
-					var Param1 = escapeSQLString(selected_OrderID);
-					var Param2 = escapeSQLString(selected_OrderOperationID);
-				          var paramStr = "Param.1=" + encodeURIComponent(Param1) + "&Param.2=" + encodeURIComponent(Param2);
-					 //alert(paramStr);
-					//return;	
-					var queryStr = 	"/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/STATIONS_HMI/QUERIES/set_OrderFinished&"+paramStr+"&ts="+timestamp+"&Content-Type=text/xml";
-					 oReqData.open("GET", queryStr, true);
-					oReqData.onreadystatechange = function () {
-              					if (oReqData.readyState == 4)
-               					if (oReqData.status == 200) {
-                          					 //alert("Successful ...");   
-							oOverlayContainerEO.close();
-							disableButtons ();
-							oBT_SetUp.setEnabled(false);
-						    } else {
-                         					   alert("Error DB: " + oReqData.statusText);
-                       					 }
-              				  };
-                				oReqData.send();
-          				  } else {
-                				window.alert("Error creating XmlHttpRequest object.");
- 				     }
-    			    }
-
-
 
         // ******************************************************************************************************************************************************************
 

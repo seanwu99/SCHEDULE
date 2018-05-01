@@ -51,9 +51,11 @@
         // var MESM_OrderOperation = [];
         var MESM_FloorMaps = [];
         var MESM_FloorMaps_GROUP = [];
+        var MESM_FloorMaps_GROUP2 = [];
         var WorkCentres = [];
         var mmmSTR = '';
         var mmmArray = [];
+        var mmmArray2 = [];
         var orderTable;
         var MOLD_Master_Tool_List = [];
         var workcenterType = '';
@@ -136,7 +138,7 @@
                     '&Param.1=' + Param1 +
                     '&Content-Type=text/xml',
                 function (data) {
-                    cc(data);
+                    // cc(data);
                     $.each(data, function (index, value) {
                         logs =
                             '<div class="m-list-timeline__item" >' +
@@ -171,16 +173,19 @@
                             'idUnitParent': value.idUnitParent,
                             'unitSqlServer': value.unitSqlServer,
                             'unitSAPID': value.unitSAPID,
-                            'unitMap': value.unitMap
+                            'unitMap': value.unitMap,
+                            'idUnitParent': value.idUnitParent,
                         };
 
                         if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) &&
                             (value.groupType == 'RESIN' || value.groupType == 'MOLDING' || value.groupType == 'PACKING' || value.groupType == 'ASSY')) {
                             MESM_FloorMaps_GROUP[value.recordID] = [];
+                            MESM_FloorMaps_GROUP2[value.unitName] = [];
                         }
                     });
 
                     // cc(MESM_FloorMaps_GROUP);
+                    // cc(MESM_FloorMaps_GROUP2);
 
                     for (var m in MESM_FloorMaps) {
                         for (var g in MESM_FloorMaps_GROUP) {
@@ -188,15 +193,21 @@
                                 MESM_FloorMaps_GROUP[g].push(
                                     {
                                         unitID: m,
-                                        groupType: MESM_FloorMaps[g].groupType
+                                        groupType: MESM_FloorMaps[g].groupType,
+                                        unitName: MESM_FloorMaps[m].unitName,
                                     }
                                 );
+                                MESM_FloorMaps_GROUP2[MESM_FloorMaps[g].unitName].push(
+                                    MESM_FloorMaps[m].unitName
+                                );
+
                             }
                         }
                     }
                     // cc('MESM_FloorMaps');
                     // cc(MESM_FloorMaps);
-                    // cc(MESM_FloorMaps_GROUP);
+                    cc(MESM_FloorMaps_GROUP);
+                    cc(MESM_FloorMaps_GROUP2);
 
                     // cc('MESM_FloorMaps_LineGROUP');
                     //MESM_OrderOperation_GET
@@ -212,7 +223,7 @@
                     } else if (workcenterType == 'MOLDING') {
                         url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_MOLDING&Content-Type=text/xml';
                     }
-                    cc(url);
+                    // cc(url);
                     getData(url, function (data) {
                         $.each(data, function (i, v) {
                             // var EarlySchedStartDate = moment(v.EarlySchedStartDate).format('YYYY-MM-DD');
@@ -937,118 +948,77 @@
                     } else if (workcenterType == 'RESIN') {
                         url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_RESIN&Content-Type=text/xml';
                     } else if (workcenterType == 'MOLDING') {
-                        url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_MOLDING&Content-Type=text/xml';
+                        url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_V2&Content-Type=text/xml';
                     }
-                    // cc(url);
+
+                    // cc(' MOLD_Machine_Matrix_GET_V2 ' + url);
+
                     getData(url, function (DATA) {
-                        cc(url);
-                        cc(DATA);
+                        // cc(url);
+                        // cc(DATA);
                         // for (var n = 0; n < DATA.length; n++) {
                         if (workcenter == 'ASSY' || workcenter == 'PACKING' || workcenter == 'RESIN') {
                             mmmArray = [];
                         } else {
+
+                            // cc('mmmArray2');
+                            // cc(DATA.length);
+                            // cc(DATA);
+
                             for (var n = 0; n < DATA.length; n++) {
-                                var mmms = '';
-                                for (var name in DATA[n]) {
-                                    if (DATA[n][name] == '1') {
-                                        mmms += '_' + name;
+
+                                // cc(DATA[n].WorkCenter + ' _ ' + DATA[n].unitName);
+                                // cc(MESM_FloorMaps_GROUP2[DATA[n].WorkCenter]);
+
+                                if ($.inArray(DATA[n].unitName, MESM_FloorMaps_GROUP2[DATA[n].WorkCenter]) >=0) {
+
+                                    if (typeof mmmArray2[DATA[n].OrderNumber] == 'undefined') {
+                                        //'<a class="dropdown-item" onclick="quickAction(this)" id="MOLD2_PRESS04"><i class="la la-wrench"></i>assign to PRESS04 ~15min</a>';
+
+                                        mmmArray2[DATA[n].OrderNumber] =
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="' +
+                                            DATA[n].WorkCenter + '_' + DATA[n].unitName + '"' +
+                                            '><i class="la la-wrench"></i>assign to ' +
+                                            DATA[n].unitName +
+                                            '</a>';
+                                        // mmmArray2[DATA[n].OrderNumber] = DATA[n].WorkCenter + '_' + DATA[n].unitName;
+                                    } else {
+                                        mmmArray2[DATA[n].OrderNumber] = mmmArray2[DATA[n].OrderNumber] +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="' +
+                                            DATA[n].WorkCenter + '_' + DATA[n].unitName + '"' +
+                                            '><i class="la la-wrench"></i>assign to ' +
+                                            DATA[n].unitName +
+                                            '</a>';
                                     }
-
                                 }
-                                if (mmms.length > 0) {
-//                            cc(DATA[n]['Mold_Number'] + ' / ' + mmms);
-                                    mmmArray[DATA[n]['Mold_Number']] = mmms;
-                                }
-
                             }
+                            // for (var mm in mmmArray2) {
+                            //     cc(mmmArray2[mm]);
+                            // }
+                            //*******************************************************
+                            // for (var n = 0; n < DATA.length; n++) {
+                            //     var mmms = '';
+                            //     for (var name in DATA[n]) {
+                            //         if (DATA[n][name] == '1') {
+                            //             mmms += '_' + name;
+                            //         }
+                            //
+                            //     }
+                            //     if (mmms.length > 0) {
+                            //         mmmArray[DATA[n]['Mold_Number']] = mmms;
+                            //     }
+                            //
+                            // }
+                            //*******************************************************
                         }
 
-                        cc('mmmArray');
-                        cc(mmmArray);
-//
-                        // SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
-                        // FROM Customers
-                        // INNER JOIN Orders
-                        // ON Orders.CustomerID=Customers.CustomerID AND Orders.OrderID > 10300;
-//
-                        // var url = localHost ? "MESM_ProdOrd.xml" : "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ProdOrd_GET&Content-Type=text/xml";
-                        // cc(url);
-                        // getData(url, function (dataRows) {
-//                cc(tableOrdersURL + '/' + dataRows.length);
-//                         cc('dataRows');
-//                         cc(dataRows);
-//                         MESM_ProductionOrders = [];
-//                         $.each(dataRows, function (i, data) {
-                        // cc('dataRows');
-                        // cc(data);
-                        // var md = data.Mold;
-                        // var gp = data.WorkCenter;
-//
-                        // var availableRow = false;
-                        // var wcID;
-                        // for (var m = 0; m < workCenter.length; m++) {
-                        //     if (workCenter[m]['wcg'] == gp) {
-                        //         if (mmmArray[md] != null && mmmArray[md].indexOf(workCenter[m]['MOLD_Machine_Matrix']) > 0) {
-                        //             availableRow = true;
-                        //             wcID = workCenter[m]['id'];
-                        //             m = 999999;
-                        //         }
-                        //     }
-                        // }
-//
-                        // var _status = 1;                    // Unscheduled
-                        //
-                        // if (data.Status == 'S') {           //Scheduled
-                        //     _status = 2
-                        // } else if (data.Status == 'H') {    //Hold
-                        //     _status = 3
-                        // } else if (data.Status == 'C') {    //Cancelled
-                        //     _status = 4
-                        // } else if (data.Status == 'N') {    //No Material
-                        //     _status = 5
-                        // }
-//
-                        // MESM_ProductionOrders.push({
-                        //     // "RecordID": data.ID,
-                        //     "OrderNumber": data.OrderNumber,
-                        //     "MATERIAL": data.Material,
-                        //     "TARGET": data.Target,
-                        //     "StartDate": moment(data.StartDate).format('MMM DD, YYYY'),
-                        //     "EndDate": moment(data.EndDate).format('MMM DD, YYYY'),
-                        //     "StartTime": moment(data.StartTime).format('HH:mm:ss'),
-                        //     "EndTime": moment(data.EndTime).format('HH:mm:ss'),
-                        //     "WCG": data.Group,
-                        //     "Mold": data.Mold,
-                        //     "Status": data.Status,
-                        //     // "wcID": wcID,
-                        //     "Press": data.Press,
-                        // });
-                        // });
-                        orderTableCreat(MESM_OrderOperationSort);
-                        // cc((new Date().getTime() - t0) + ' ms (tableOrders) ');
-                        // cc('WorkCentres');
-                        // cc(WorkCentres);
+                        // cc('mmmArray');
+                        // cc(mmmArray);
 
+                        orderTableCreat(MESM_OrderOperationSort);
                         scheduleForm(WorkCentres);
                         cc('scheduleForm');
-                        // cc($('#calendar'));
 
-                        // cc('MESM_ProductionOrders');
-                        // cc(MESM_ProductionOrders);
-                        // cc('orderTable.originalDataSet');
-                        // cc(orderTable.originalDataSet);
-                        // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-                        //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-                        //
-                        //         addScheduleEvent(
-                        //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-                        //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-                        //             MESM_OrderOperationSort[n].SchedStart,
-                        //             MESM_OrderOperationSort[n].SchedFinish
-                        //         );
-                        //
-                        //     }
-                        // }
                         for (var n = 0; n < orderTable.originalDataSet.length; n++) {
                             if (orderTable.originalDataSet[n].Status == 'S') {
                                 removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
@@ -1243,9 +1213,7 @@
                         sortable: !1,
                         overflow: "visible",
                         template: function (e) {
-                            // cc('Actions==>');
-                            // cc(e);
-                            // cc('<=Actions');
+
                             if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled & Scheduled
 
                                 var wcg = '';
@@ -1262,13 +1230,13 @@
                                 var prsSTR = '';
 
                                 if (e.Sort == 'MOLDING') {
+                                    cc('e.Sort == MOLDING');
+                                    cc(e);
+                                    // cc('<=Actions');
+                                    //************************************
                                     for (var f in MESM_FloorMaps) {
                                         if (MESM_FloorMaps[f].idUnitParent == wcg) {
                                             if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
-                                                // prs.push({
-                                                //     'unitName': MESM_FloorMaps[f].unitName,
-                                                //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
-                                                // });
                                                 prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
                                                     '"' +
                                                     wcgNAME +
@@ -1280,13 +1248,17 @@
                                                     ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
                                                     '</a>';
                                             } else {
-                                                // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
-                                                // cc(mmmArray[e.Mold]);
-                                                // cc(MESM_FloorMaps[f].unitName + ' false');
                                             }
                                         }
                                     }
-                                    cc('prsSTR ==>' + prsSTR);
+                                    //************************************
+
+                                    prsSTR = mmmArray2[e.OrderNumber];
+                                    if (typeof prsSTR == 'undefined') {
+                                        prsSTR = '';
+
+                                    }
+
                                 } else if (e.Sort == 'RESIN') {
                                     prsSTR =
                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
@@ -1309,7 +1281,6 @@
                                 if (prsSTR.length == 0) {
                                     ft = 'WrongGroup'
                                 }
-
 
                                 return e.Status == 'U' ?
                                     '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
@@ -1478,14 +1449,14 @@
             $('#calendar').fullCalendar({
                 // resourcesInitiallyExpanded: false,
                 viewRender: function (view, element) {
-                    cc('viewRender');
+                    cc(' calendar viewRender');
                     var eArray = $('#calendar').fullCalendar('clientEvents');
-                    cc(eArray);
+                    // cc(eArray);
                     // cc(view.title);
                     // 'timelineDay,timelineWeek,timelineMonth'
 
                     if (lastView != view.title) {
-                        cc(lastView + " / " + view.title);
+                        // cc(lastView + " / " + view.title);
                         lastView = view.title;
                         if (view.name == 'timelineDay') {
                             // lastView = view.name;
@@ -1515,8 +1486,8 @@
                             // $('#calendar').fullCalendar('refetchEvents');
                             // $('#calendar').fullCalendar('rerenderEvents');
                         }
-                        cc('name / ' + view.name);
-                        cc('title /' + view.title);
+                        // cc('name / ' + view.name);
+                        // cc('title /' + view.title);
 
                         // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
                         //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
@@ -1550,7 +1521,7 @@
                         }
 
                         var eArray = $('#calendar').fullCalendar('clientEvents');
-                        cc(eArray);
+                        // cc(eArray);
                     }
                     // lastView = view.name;
                 },
@@ -2211,8 +2182,8 @@
             var AE = $('#calendar').fullCalendar('clientEvents');
             var corr = [[-1, null, null, null], [-1, null, null, null], [-1, null, null, null]];
             for (var n = 0; n < AE.length; n++) {
-                cc('AE ' + n);
-                cc(AE[n]);
+                // cc('AE ' + n);
+                // cc(AE[n]);
                 if (AE[n].id.indexOf(OrderNumber + '_RESIN') >= 0) {
                     corr[0] = [n, moment(AE[n].start._d).utc().format('YYYY-MM-DD HH:mm:ss'),
                         moment(AE[n].end._d).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -2373,7 +2344,26 @@
             // cc(_During);
 
             if ((_Status == 'Unscheduled' || _Status == 'Scheduled') && _Action.indexOf('assign') >= 0) {
-                // cc(_Status + ' > assign');
+
+
+                cc(_Status + ' > assign');
+                cc(e);
+                cc(e.id);
+                cc(MESM_FloorMaps);
+                cc(MESM_FloorMaps_GROUP);
+                var groupID = 0;
+                var moldName = e.id.split("_")[0];
+                var workcenterName = e.id.split("_")[1];
+
+                for (var m in MESM_FloorMaps) {
+                    if (MESM_FloorMaps[m].unitName == moldName) {
+                        groupID = MESM_FloorMaps[m].recordID;
+                        break;
+                    }
+                }
+                cc(MESM_FloorMaps_GROUP[groupID]);
+
+                // if(moldName in MESM_FloorMaps_GROUP[groupID])
                 // if (_During < 240) {
                 //     _During = 240
                 // }
@@ -2397,9 +2387,9 @@
                 //     _SchedStart = timeNow;
                 //     _SchedFinish = fn;
                 // }
-//doto wxy
-                cc(_SchedStart);
-                cc(_SchedFinish);
+
+//                 cc(_SchedStart);
+//                 cc(_SchedFinish);
                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
                 _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
                 var ss = new Date(_SchedStart).getTime();
@@ -2409,25 +2399,25 @@
                 if (sf - ss < 15 * 60 * 1000) {
                     sf = ss + 15 * 60 * 1000;
                 }
-                cc(ss);
-                cc(sf);
+                // cc(ss);
+                // cc(sf);
 
                 var SSSS = new Date(ss);
                 var SFSF = new Date(sf);
-                cc(SSSS.toISOString());
-                cc(SFSF.toISOString());
+                // cc(SSSS.toISOString());
+                // cc(SFSF.toISOString());
 
                 _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
                 _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
 
-                cc(_SchedStart);
-                cc(_SchedFinish);
+                // cc(_SchedStart);
+                // cc(_SchedFinish);
 
                 _Status = 'Scheduled';
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                cc('_OrderNumber / ' + _OrderNumber);
-                cc('_Sort / ' + _Sort);
-                cc('e.id. / ' + e.id);
+                // cc('_OrderNumber / ' + _OrderNumber);
+                // cc('_Sort / ' + _Sort);
+                // cc('e.id. / ' + e.id);
                 ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
                 // ActivityLogADD('Assigned', _OrderNumber + '_' +  ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + e.id.split('_')[1]);
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
@@ -2781,8 +2771,8 @@
                 }
             }
 
-            cc(MESM_OrderOperationRAW[_N].OrderNumber);
-            cc(MESM_OrderOperationRAW[_N].OperationStatus);
+            // cc(MESM_OrderOperationRAW[_N].OrderNumber);
+            // cc(MESM_OrderOperationRAW[_N].OperationStatus);
 
             // MESM_OrderOperationSort
             var Status = _Status.substring(0, 1) == 'S' ? 'S' : 'U';
