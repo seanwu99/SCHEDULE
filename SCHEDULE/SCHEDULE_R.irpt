@@ -44,6 +44,12 @@
     <link href="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="assets/app/default/media/img/logo/favicon.png"/>
 
+    <style>
+        .table tbody tr {
+            height: 50px;
+        }
+    </style>
+
     <script>
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
         var MESM_OrderOperationRAW = [];
@@ -1050,17 +1056,40 @@
                         //     }
                         // }
                         //=========================================================================================================================================
+                        var events = [];
                         for (var n = 0; n < orderTable.originalDataSet.length; n++) {
                             if (orderTable.originalDataSet[n].Status == 'S') {
-                                removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
-                                addScheduleEvent(
-                                    orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                    orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                    orderTable.originalDataSet[n].SchedStart,
-                                    orderTable.originalDataSet[n].SchedFinish
-                                );
+                                // removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
+                                events.push(
+                                    {
+                                        id: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                                        resourceId: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                                        start: orderTable.originalDataSet[n].SchedStart,
+                                        end: orderTable.originalDataSet[n].SchedFinish,
+                                        description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                                        color: colors[Math.round(Math.random() * 8)],
+
+                                    });
+                                // addScheduleEvent(
+                                //     orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                                //     orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                                //     orderTable.originalDataSet[n].SchedStart,
+                                //     orderTable.originalDataSet[n].SchedFinish
+                                // );
                             }
                         }
+
+                        // cc(events);
+
+                        for (var n = 0; n < events.length; n++) {
+
+                            cc(events[n]);
+
+                            $('#calendar').fullCalendar('renderEvent', events[n], true);
+
+                        }
+
+
                         //=========================================================================================================================================
                     });
                 });
@@ -1111,7 +1140,7 @@
                 data: {
                     type: "local",
                     source: rows,
-                    pageSize: 10
+                    // pageSize: 10
                 },
                 layout: {
                     theme: "default",
@@ -1120,8 +1149,8 @@
                     // height: 500,
                     footer: false
                 },
-                sortable: !0,
-                pagination: !0,
+                sortable: true,
+                pagination: true,
                 search: {input: $("#generalSearch")},
                 columns: [
                     {
@@ -1266,7 +1295,8 @@
                                 }
                                 // var prs = [];
                                 var prsSTR = '';
-
+                                var groupSTR = '';
+                                var prsRows = 0;
                                 if (e.Sort == 'MOLDING') {
                                     for (var f in MESM_FloorMaps) {
                                         if (MESM_FloorMaps[f].idUnitParent == wcg) {
@@ -1283,8 +1313,9 @@
                                                     '"' +
                                                     '><i class="la la-wrench"></i>' +
                                                     'assign to ' + MESM_FloorMaps[f].unitName +
-                                                    ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
+                                                    // ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
                                                     '</a>';
+                                                prsRows++;
                                             } else {
                                                 // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
                                                 // cc(mmmArray[e.Mold]);
@@ -1292,7 +1323,38 @@
                                             }
                                         }
                                     }
+
+                                    // groupSTR = '<div class="dropdown-divider"></div>';
+                                    for (var i = 1; i <= 6; i++) {
+                                        if (e.WCG.indexOf(i) > 0) {
+                                            groupSTR =
+                                                groupSTR +
+                                                '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
+                                                i + ' *' +
+                                                '</a>';
+                                        } else {
+                                            groupSTR =
+                                                groupSTR +
+                                                '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
+                                                i +
+                                                '</a>'
+                                        }
+
+                                    }
                                     // cc('prsSTR ==>' + prsSTR);
+                                    if (prsSTR.length != 0) {
+                                        prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
+                                    }
+                                    var scrollSTR = '';
+                                    if (e.Status == 'U') {
+                                        if (prsRows * 40 + 250 > 500) {
+                                            scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                        }
+                                    } else if (e.Status == 'S') {
+                                        if (prsRows * 40 + 280 > 500) {
+                                            scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                        }
+                                    }
                                 } else if (e.Sort == 'RESIN') {
                                     prsSTR =
                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
@@ -1313,42 +1375,52 @@
 
                                 var ft = '';
                                 if (prsSTR.length == 0) {
-                                    ft = 'WrongGroup'
+                                    // ft = 'WrongGroup'
                                 }
 
+                                if (e.Sort == 'ASSY') {
+                                    return '';
+                                } else
+                                    return e.Status == 'U' ?
 
-                                return e.Status == 'U' ?
-                                    '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                    // '<div class="dropup ' + "" + '">' +
-                                    '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                    '           <i class="la la-ellipsis-h"></i></a>' +
-                                    '       <div class="dropdown-menu dropdown-menu-right" >' +
-                                    prsSTR +
-                                    '           <div class="dropdown-divider"></div>' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>' +
-                                    ft +
-                                    '</a>' +
-                                    '       </div>' +
-                                    '   </div>' +
-                                    '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                    '       <i class="la la-comment"></i></a>'
-                                    :
-                                    '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                    '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                    '           <i class="la la-ellipsis-h"></i>' +
-                                    '       </a>' +
-                                    '       <div class="dropdown-menu dropdown-menu-right" >' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-cogs"></i>AutoM</a>' +
-                                    prsSTR +
-                                    '           <div class="dropdown-divider"></div>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
-                                    '       </div>' +
-                                    '   </div>' +
-                                    '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                    '       <i class="la la-comment"></i>' +
-                                    '   </a>'
+
+                                        // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+                                        '<div class="dropdown ' + '">' +
+                                        // '<div class="dropup ' + "" + '">' +
+                                        '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+                                        '           <i class="la la-ellipsis-h"></i></a>' +
+                                        '       <div class="dropdown-menu dropdown-menu-right"' +
+                                        scrollSTR +
+                                        '>' +
+                                        prsSTR +
+                                        groupSTR +
+
+                                        // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>' +
+                                        // ft +
+                                        '</a>' +
+                                        '       </div>' +
+                                        '   </div>' +
+                                        '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+                                        '       <i class="la la-comment"></i></a>'
+                                        :
+                                        '<div class="dropdown ' + '">' +
+                                        '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+                                        '           <i class="la la-ellipsis-h"></i>' +
+                                        '       </a>' +
+                                        '       <div class="dropdown-menu dropdown-menu-right" ' +
+                                        scrollSTR +
+                                        '>' +
+                                        // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-cogs"></i>AutoM</a>' +
+                                        prsSTR +
+                                        groupSTR +
+                                        '           <div class="dropdown-divider"></div>' +
+                                        // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
+                                        '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
+                                        '       </div>' +
+                                        '   </div>' +
+                                        '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+                                        '       <i class="la la-comment"></i>' +
+                                        '   </a>'
 
                             } else if (e.Status == 'H') {
                                 return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
@@ -2545,22 +2617,24 @@
 
         }
 
+        var colors = [
+            '#2f7ed8',
+            '#0d233a',
+            '#8bbc21',
+            '#910000',
+            '#1aadce',
+            '#492970',
+            '#f28f43',
+            '#77a1e5',
+            '#c42525',
+            '#a6c96a'
+        ];
+
         function addScheduleEvent(resourceId, elementId, schedleStart, scheduleFinsh) {
 
             // var tbOrderID = _OrderID;
             var today = new Date().toISOString().substr(0, 10);
-            var colors = [
-                '#2f7ed8',
-                '#0d233a',
-                '#8bbc21',
-                '#910000',
-                '#1aadce',
-                '#492970',
-                '#f28f43',
-                '#77a1e5',
-                '#c42525',
-                '#a6c96a'
-            ];
+
 
             // var s = Math.round(Math.random() * 20);
             // var timeStart = 'T00:00:00';
