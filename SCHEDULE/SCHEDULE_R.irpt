@@ -44,11 +44,6 @@
     <link href="assets/global/plugins/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="assets/app/default/media/img/logo/favicon.png"/>
 
-    <style>
-        .table tbody tr {
-            height: 50px;
-        }
-    </style>
 
     <script>
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
@@ -89,11 +84,34 @@
                 workcenterType = 'MOLDING';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Molding';
             }
+            // $('.m_datatable')
+            //     .on(ev, function () {
+            //         cc('m_datatable eeeeeeeeeeeeee');
+            //         cc(ev);
+            //     })
+            // ActivityLogGET();
+            // tbEventsCapture();
 
-            ActivityLogGET();
             orderTablePreparing();
+            // orderTableEvents();
+
+            // $('#OrderOperationTable').bind('resize', function(){
+            //     console.log('OrderOperationTable resized');
+            // });
+            // $('#OrderOperationTable').bind('heightChange', function(){
+            //     alert('xxx');
+            // });
+            // $("#OrderOperationTable").on("click", function () {
+            //     cc('click');
+            // });
+
+            // $("#OrderOperationTable").resize(function () {
+            //     cc('OrderOperationTable resize');
+            //     // $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
+            // });
 
 
+            // $("#OrderOperationTable").trigger("resize");
             // var url = localHost ? 'MESM_Orders.xml' : '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_Orders_GET&Content-Type=text/xml';
             // cc(url);
             // var MESM_Orders_GOT = false;
@@ -114,6 +132,7 @@
             //     }
             // });
         }
+
 
         function ActivityLogGET(t) {
 
@@ -593,21 +612,44 @@
 
         }
 
-        // function arrayProperty() {
-        //     ScheduleEvents['900000'] = {
-        //         resourceId: 'GROUP1_PRESS01',
-        //         start: '01/15/2018 08:00:00',
-        //         end: '01/15/2018 16:30:00'
-        //     };
-        //     cc(ScheduleEvents);
-        //     cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
-        //     for (var _key in ScheduleEvents) {
-        //         cc(_key);
-        //         cc(ScheduleEvents[_key]);
-        //     }
-        //     delete ScheduleEvents['900000'];
-        //     cc('ScheduleEvents.hasOwnProperty("900000") ' + ScheduleEvents.hasOwnProperty('900000'));
-        // }
+        function orderTableEvents() {
+            $('.m_datatable')
+                .on('m-datatable--on-init', function () {
+                    eventsWriter('Datatable init');
+                })
+                .on('m-datatable--on-layout-updated', function () {
+                    eventsWriter('Layout render updated');
+                })
+                .on('m-datatable--on-ajax-done', function () {
+                    eventsWriter('Ajax data successfully updated');
+                })
+                .on('m-datatable--on-ajax-fail', function (e, jqXHR) {
+                    eventsWriter('Ajax error');
+                })
+                .on('m-datatable--on-goto-page', function (e, args) {
+                    eventsWriter('Goto to pagination: ' + args.page);
+                })
+                .on('m-datatable--on-update-perpage', function (e, args) {
+                    eventsWriter('Update page size: ' + args.perpage);
+                })
+                .on('m-datatable--on-reloaded', function (e) {
+                    eventsWriter('Datatable reloaded');
+                })
+                .on('m-datatable--on-check', function (e, args) {
+                    cc('Checkbox active: ' + args.toString());
+                    cc(e);
+                    cc(args);
+                })
+                .on('m-datatable--on-uncheck', function (e, args) {
+                    cc('Checkbox inactive: ' + args.toString());
+                    cc(e);
+                    cc(args);
+                })
+                .on('m-datatable--on-sort', function (e, args) {
+                    eventsWriter('Datatable sorted by ' + args.field + ' ' + args.sort);
+                })
+            ;
+        }
 
         function mainRouting() {
 
@@ -767,7 +809,7 @@
                 // MESM_FloorMaps[f]. MOLD_Machine_Matrix
             }
             cc('/5/====================================================================================================================');
-            cc('mmmST ..');
+            // cc('mmmST ..');
             cc(mmmSTR);
             cc('/ /====================================================================================================================');
             // MESM_OrderOperationMold = [];
@@ -853,7 +895,6 @@
                     'Operation': MESM_OrderOperationRAW[n].Operation,
                     'OperationStatus': MESM_OrderOperationRAW[n].OperationStatus,
                 });
-
             }
             // cc('MESM_OrderOperationMold');
             // cc(MESM_OrderOperationMold);
@@ -959,8 +1000,8 @@
                         }
                         cc('/6/==================================================================');
                         cc(url);
-                        cc('get mmmArray, ' + (new Date().getTime() - mmmArrayTT) + 'ms');
-                        // cc(mmmArray);
+                        cc('mmmArray.length ' + mmmArray.length);
+                        cc('MOLD_Machine_Matrix takes ' + (new Date().getTime() - mmmArrayTT) + 'ms');
                         cc('/ /==================================================================');
 //
                         // SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
@@ -1025,6 +1066,8 @@
                         cc('MESM_OrderOperationSort.length ' + MESM_OrderOperationSort.length);
                         cc('//=============================================');
                         orderTableCreat(MESM_OrderOperationSort);
+
+
                         // cc((new Date().getTime() - t0) + ' ms (tableOrders) ');
                         // cc('WorkCentres');
                         // cc(WorkCentres);
@@ -1035,7 +1078,7 @@
                         cc(WorkCentres);
                         cc('//=============================================');
 
-                        scheduleForm(WorkCentres);
+                        // scheduleForm(WorkCentres);
                         // cc('scheduleForm');
                         // cc($('#calendar'));
 
@@ -1079,15 +1122,24 @@
                             }
                         }
 
+                        cc('//=============================================');
+                        cc('events.length ' + events.length);
+                        cc(events);
+                        cc('//=============================================');
+
+                        scheduleForm(WorkCentres, events);
+                        // $("#dActivityLog").attr('style', 'height: 740px');
+                        cc($("#dActivityLog"));
+                        ActivityLogGET();
                         // cc(events);
 
-                        for (var n = 0; n < events.length; n++) {
-
-                            cc(events[n]);
-
-                            $('#calendar').fullCalendar('renderEvent', events[n], true);
-
-                        }
+                        // for (var n = 0; n < events.length; n++) {
+                        //
+                        //     cc(events[n]);
+                        //
+                        //     $('#calendar').fullCalendar('renderEvent', events[n], true);
+                        //
+                        // }
 
 
                         //=========================================================================================================================================
@@ -1128,10 +1180,46 @@
 
         }
 
+        // function tbEventsCapture() {
+        //     $('.m_datatable')
+        //         .on('m-datatable--on-init', function () {
+        //             cc('Datatable init');
+        //         })
+        //         .on('m-datatable--on-layout-updated', function () {
+        //             cc('Layout render updated');
+        //         })
+        //         .on('m-datatable--on-ajax-done', function () {
+        //             cc('Ajax data successfully updated');
+        //         })
+        //         .on('m-datatable--on-ajax-fail', function (e, jqXHR) {
+        //             cc('Ajax error');
+        //         })
+        //         .on('m-datatable--on-goto-page', function (e, args) {
+        //             cc('Goto to pagination: ' + args.page);
+        //         })
+        //         .on('m-datatable--on-update-perpage', function (e, args) {
+        //             cc('Update page size: ' + args.perpage);
+        //         })
+        //         .on('m-datatable--on-reloaded', function (e) {
+        //             cc('Datatable reloaded');
+        //         })
+        //         .on('m-datatable--on-check', function (e, args) {
+        //             cc('Checkbox active: ' + args.toString());
+        //         })
+        //         .on('m-datatable--on-uncheck', function (e, args) {
+        //             cc('Checkbox inactive: ' + args.toString());
+        //         })
+        //         .on('m-datatable--on-sort', function (e, args) {
+        //             cc('Datatable sorted by ' + args.field + ' ' + args.sort);
+        //         });
+        // };
+
         var orderTableCreat = function (rows) {
             // cc('rows');
             // cc(rows);
 //            if (0 !== $("#m_datatable_latest_orders").length)
+
+
             orderTable = $(".m_datatable").mDatatable({
                 drawCallback: function () {
                     // cc('mDatatable drawCallback');
@@ -1160,11 +1248,19 @@
                         sortable: false,
                         filterable: false,
                         width: 20,
+                        textAlign: "center",
                         selector: {class: "m-checkbox--solid m-checkbox--brand"},
-                        textAlign: "center"
+                        template: function (e) {
+                        }
                     },
+
                     {
-                        field: "Status", title: "Status", width: 100, template: function (e) {
+                        field: "Status",
+                        title: "Status",
+                        width: 100,
+                        sortable: false,
+                        filterable: false,
+                        template: function (e) {
                             var t = {
                                 'U': {title: "Unscheduled", class: "m-badge--brand"},
                                 'S': {title: "Scheduled", class: " m-badge--success"},
@@ -1176,9 +1272,8 @@
                             };
                             return '<span class="m-badge ' + t[e.Status].class + ' m-badge--wide">' + t[e.Status].title + "</span>"
                         },
-                        sortable: false,
-                        filterable: false,
                     },
+
                     {
 
                         field: "ID",
@@ -1496,9 +1591,25 @@
                 ]
             });
 
+            orderTable.on('m-datatable--on-check m-datatable--on-uncheck m-datatable--on-layout-updated', function (e) {
+                cc('orderTable.on');
+                cc(e.currentTarget.innerHTML);
+                // var checkedNodes = orderTable.rows('.m-datatable__row--active').nodes();
+                // cc(checkedNodes);
+                // var count = checkedNodes.length;
+                // $('#m_datatable_selected_number').html(count);
+                // if (count > 0) {
+                //     $('#m_datatable_group_action_form').collapse('show');
+                // } else {
+                //     $('#m_datatable_group_action_form').collapse('hide');
+                // }
+            });
+
+
             orderTable.hideColumn('ID');
             orderTable.hideColumn('Sort');
             orderTable.hideColumn('Operation');
+
 
             if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
                 if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
@@ -1539,8 +1650,11 @@
 //                cc(aa);
             }).val(void 0 !== i.WCG ? i.WCG : "");
 
-            $("#m_form_status, #m_form_type").selectpicker()
+            $("#m_form_status, #m_form_type").selectpicker();
+
+
         };
+
 
         var _eventDragStart;
         var _eventDragStop;
@@ -1548,7 +1662,7 @@
         var lastViewName = '';
         var viewRender = true;
 
-        var scheduleForm = function (eventSources) {
+        var scheduleForm = function (_resources, _events) {
 
 //
             $('#calendar').fullCalendar({
@@ -1562,9 +1676,9 @@
 
                 viewRender: function (view, element) {
                     // cc('viewRender: ' + view.title + ' / ' + view.name);
-                    cc(view);
-                    cc(view.start._d);
-                    cc(view.end._d);
+                    // cc(view);
+                    // cc(view.start._d);
+                    // cc(view.end._d);
                     if (lastViewTitle != view.title) {
                         cc('viewRender / new');
                         lastViewTitle = view.title;
@@ -1729,23 +1843,20 @@
 //                        revertFunc();
 //                    }
 
-                }
-                ,
+                },
 
 
 // * * *
                 eventResizeStart: function (event, jsEvent, ui, view) {
 //                    cc(event);
-                }
-                ,
+                },
 
 // * * *
                 eventResizeStop: function (event, jsEvent, ui, view) {
                     // cc('eventResizeStop');
                     // cc(event);
                     // scheduleFormUPD(event);
-                }
-                ,
+                },
 
 // * * *
                 eventResize: function (event, jsEvent, ui, view) {
@@ -1754,8 +1865,7 @@
                     _eventDragStart = event;
                     orderTableRefresh(event);
 //                    cc(event);
-                }
-                ,
+                },
 // * * * * *
 
                 eventRender: function (event, element, view) {
@@ -1805,11 +1915,11 @@
 
                 resourceGroupField: 'WorkingCenter',
                 resourceLabelText: 'WorkCenter: ',
-                resources: eventSources,
+                resources: _resources,
                 // eventOverlap: false, // will cause the event to take up entire resource height
                 resourceAreaWidth:
                     '300px',
-                events: [],
+                events: _events,
 
                 schedulerLicenseKey:
                     'CC-Attribution-NonCommercial-NoDerivatives'
@@ -3229,8 +3339,8 @@
             <div class="m-content">
 
                 <!--Begin::Main Portlet-->
-                <div class="row">
-                    <div class="col-xl-9">
+                <div class="row" id="OrderOperation">
+                    <div class="col-xl-9" id="OrderOperationTable">
                         <div class="m-portlet m-portlet--mobile ">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
@@ -3416,35 +3526,12 @@
                                         </h3>
                                     </div>
                                 </div>
-                                <!--<div class="m-portlet__head-tools">-->
-                                <!--<ul class="nav nav-pills nav-pills&#45;&#45;brand m-nav-pills&#45;&#45;align-right m-nav-pills&#45;&#45;btn-pill m-nav-pills&#45;&#45;btn-sm"-->
-                                <!--role="tablist">-->
-                                <!--<li class="nav-item m-tabs__item">-->
-                                <!--<a class="nav-link m-tabs__link active" data-toggle="tab"-->
-                                <!--href="#m_widget4_tab1_content" role="tab">-->
-                                <!--Today-->
-                                <!--</a>-->
-                                <!--</li>-->
-                                <!--<li class="nav-item m-tabs__item">-->
-                                <!--<a class="nav-link m-tabs__link" data-toggle="tab"-->
-                                <!--href="#m_widget4_tab2_content" role="tab">-->
-                                <!--Week-->
-                                <!--</a>-->
-                                <!--</li>-->
-                                <!--<li class="nav-item m-tabs__item">-->
-                                <!--<a class="nav-link m-tabs__link" data-toggle="tab"-->
-                                <!--href="#m_widget4_tab3_content" role="tab">-->
-                                <!--Month-->
-                                <!--</a>-->
-                                <!--</li>-->
-                                <!--</ul>-->
-                                <!--</div>-->
                             </div>
                             <div class="m-portlet__body">
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="m_widget4_tab1_content">
-                                        <div class="m-scrollable" data-scrollable="true" data-max-height="740"
-                                             style="height1: 600px; overflow: auto;">
+                                        <!--<div class="m-scrollable" data-scrollable="true" data-max-height="740" style="height1: 600px; overflow: auto;">-->
+                                        <div class="m-scrollable" data-scrollable="true" id="dActivityLog" data-max-height="740">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items">
                                                     <!--<div class="m-list-timeline__item">-->
