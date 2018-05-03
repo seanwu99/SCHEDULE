@@ -93,6 +93,10 @@
             // tbEventsCapture();
 
             orderTablePreparing();
+
+            eventsCapture();
+
+
             // orderTableEvents();
 
             // $('#OrderOperationTable').bind('resize', function(){
@@ -133,8 +137,51 @@
             // });
         }
 
+        function eventsCapture() {
+            $('.m_datatable')
+                .on('m-datatable--on-init', function () {
+                    eventsWriter('Datatable init');
+                })
+                .on('m-datatable--on-layout-updated', function () {
+                    eventsWriter('Layout render updated');
+                })
+                .on('m-datatable--on-ajax-done', function () {
+                    eventsWriter('Ajax data successfully updated');
+                })
+                .on('m-datatable--on-ajax-fail', function (e, jqXHR) {
+                    eventsWriter('Ajax error');
+                })
+                .on('m-datatable--on-goto-page', function (e, args) {
+                    eventsWriter('Goto to pagination: ' + args.page);
+                })
+                .on('m-datatable--on-update-perpage', function (e, args) {
+                    eventsWriter('Update page size: ' + args.perpage);
+                })
+                .on('m-datatable--on-reloaded', function (e) {
+                    eventsWriter('Datatable reloaded');
+                })
+                .on('m-datatable--on-check', function (e, args) {
+                    eventsWriter('Checkbox active: ' + args.toString());
+                })
+                .on('m-datatable--on-uncheck', function (e, args) {
+                    eventsWriter('Checkbox inactive: ' + args.toString());
+                })
+                .on('m-datatable--on-sort', function (e, args) {
+                    eventsWriter('Datatable sorted by ' + args.field + ' ' + args.sort);
+                });
+        };
+
+
+        function eventsWriter(string) {
+            cc('*  *  *');
+            cc(string);
+            cc('*  *  *');
+        };
 
         function ActivityLogGET(t) {
+            // data-max-height="740"
+            // $('#dActivityLog').css('max-height: 740px');
+            // $('#dActivityLog').css('height: 740px');
 
             var logs = '';
 
@@ -612,44 +659,6 @@
 
         }
 
-        function orderTableEvents() {
-            $('.m_datatable')
-                .on('m-datatable--on-init', function () {
-                    eventsWriter('Datatable init');
-                })
-                .on('m-datatable--on-layout-updated', function () {
-                    eventsWriter('Layout render updated');
-                })
-                .on('m-datatable--on-ajax-done', function () {
-                    eventsWriter('Ajax data successfully updated');
-                })
-                .on('m-datatable--on-ajax-fail', function (e, jqXHR) {
-                    eventsWriter('Ajax error');
-                })
-                .on('m-datatable--on-goto-page', function (e, args) {
-                    eventsWriter('Goto to pagination: ' + args.page);
-                })
-                .on('m-datatable--on-update-perpage', function (e, args) {
-                    eventsWriter('Update page size: ' + args.perpage);
-                })
-                .on('m-datatable--on-reloaded', function (e) {
-                    eventsWriter('Datatable reloaded');
-                })
-                .on('m-datatable--on-check', function (e, args) {
-                    cc('Checkbox active: ' + args.toString());
-                    cc(e);
-                    cc(args);
-                })
-                .on('m-datatable--on-uncheck', function (e, args) {
-                    cc('Checkbox inactive: ' + args.toString());
-                    cc(e);
-                    cc(args);
-                })
-                .on('m-datatable--on-sort', function (e, args) {
-                    eventsWriter('Datatable sorted by ' + args.field + ' ' + args.sort);
-                })
-            ;
-        }
 
         function mainRouting() {
 
@@ -880,6 +889,7 @@
                 }
 
                 MESM_OrderOperationSort.push({
+                    "RecordID": MESM_OrderOperationRAW[n].ID,
                     "ID": MESM_OrderOperationRAW[n].ID,
                     "OrderNumber": MESM_OrderOperationRAW[n].OrderNumber,
                     "Material": MESM_OrderOperationRAW[n].Material,
@@ -1064,7 +1074,10 @@
                         // });
                         cc('//=============================================');
                         cc('MESM_OrderOperationSort.length ' + MESM_OrderOperationSort.length);
+                        cc(MESM_OrderOperationSort);
                         cc('//=============================================');
+
+
                         orderTableCreat(MESM_OrderOperationSort);
 
 
@@ -1075,7 +1088,7 @@
 
                         cc('//=============================================');
                         cc('WorkCentres.length ' + WorkCentres.length);
-                        cc(WorkCentres);
+                        // cc(WorkCentres);
                         cc('//=============================================');
 
                         // scheduleForm(WorkCentres);
@@ -1109,6 +1122,7 @@
                                         resourceId: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
                                         start: orderTable.originalDataSet[n].SchedStart,
                                         end: orderTable.originalDataSet[n].SchedFinish,
+                                        title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
                                         description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
                                         color: colors[Math.round(Math.random() * 8)],
 
@@ -1124,12 +1138,14 @@
 
                         cc('//=============================================');
                         cc('events.length ' + events.length);
-                        cc(events);
+                        // cc(events);
                         cc('//=============================================');
 
                         scheduleForm(WorkCentres, events);
+
                         // $("#dActivityLog").attr('style', 'height: 740px');
-                        cc($("#dActivityLog"));
+                        // cc($("#dActivityLog"));
+
                         ActivityLogGET();
                         // cc(events);
 
@@ -1232,7 +1248,7 @@
                 },
                 layout: {
                     theme: "default",
-                    class: "",
+                    class: '',
                     scroll: false,
                     // height: 500,
                     footer: false
@@ -1241,18 +1257,26 @@
                 pagination: true,
                 search: {input: $("#generalSearch")},
                 columns: [
+                    // {
+                    //
+                    //     field: "checkBox",
+                    //     title: "#",
+                    //     sortable: false,
+                    //     filterable: false,
+                    //     width: 20,
+                    //     textAlign: "center",
+                    //     selector: {class: "m-checkbox--solid m-checkbox--brand"},
+                    //     template: function (e) {
+                    //     }
+                    // },
                     {
-
-                        field: "checkBox",
+                        field: "RecordID",
                         title: "#",
-                        sortable: false,
-                        filterable: false,
-                        width: 20,
-                        textAlign: "center",
-                        selector: {class: "m-checkbox--solid m-checkbox--brand"},
-                        template: function (e) {
-                        }
+                        sortable: false, // disable sort for this column
+                        width: 40,
+                        selector: {class: 'm-checkbox--solid m-checkbox--brand'}
                     },
+
 
                     {
                         field: "Status",
@@ -1591,20 +1615,6 @@
                 ]
             });
 
-            orderTable.on('m-datatable--on-check m-datatable--on-uncheck m-datatable--on-layout-updated', function (e) {
-                cc('orderTable.on');
-                cc(e.currentTarget.innerHTML);
-                // var checkedNodes = orderTable.rows('.m-datatable__row--active').nodes();
-                // cc(checkedNodes);
-                // var count = checkedNodes.length;
-                // $('#m_datatable_selected_number').html(count);
-                // if (count > 0) {
-                //     $('#m_datatable_group_action_form').collapse('show');
-                // } else {
-                //     $('#m_datatable_group_action_form').collapse('hide');
-                // }
-            });
-
 
             orderTable.hideColumn('ID');
             orderTable.hideColumn('Sort');
@@ -1651,8 +1661,6 @@
             }).val(void 0 !== i.WCG ? i.WCG : "");
 
             $("#m_form_status, #m_form_type").selectpicker();
-
-
         };
 
 
@@ -2016,8 +2024,8 @@
             var AE = $('#calendar').fullCalendar('clientEvents');
             var corr = [[-1, null, null, null], [-1, null, null, null], [-1, null, null, null]];
             for (var n = 0; n < AE.length; n++) {
-                cc('AE ' + n);
-                cc(AE[n]);
+                // cc('AE ' + n);
+                // cc(AE[n]);
                 if (AE[n].id.indexOf(OrderNumber + '_RESIN') >= 0) {
                     corr[0] = [n, moment(AE[n].start._d).utc().format('YYYY-MM-DD HH:mm:ss'),
                         moment(AE[n].end._d).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -2797,6 +2805,7 @@
 
             // cc(document.getElementById(title));
 
+
             $.contextMenu({
                 selector: '#' + elementId,
                 callback: function (key, options) {
@@ -3531,7 +3540,8 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="m_widget4_tab1_content">
                                         <!--<div class="m-scrollable" data-scrollable="true" data-max-height="740" style="height1: 600px; overflow: auto;">-->
-                                        <div class="m-scrollable" data-scrollable="true" id="dActivityLog" data-max-height="740">
+                                        <div class="m-scrollable" data-scrollable="true" id="dActivityLog"
+                                             style="max-height: 736px;  position: relative; overflow: visible;">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items">
                                                     <!--<div class="m-list-timeline__item">-->
