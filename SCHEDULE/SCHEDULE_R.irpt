@@ -84,13 +84,7 @@
                 workcenterType = 'MOLDING';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Molding';
             }
-            // $('.m_datatable')
-            //     .on(ev, function () {
-            //         cc('m_datatable eeeeeeeeeeeeee');
-            //         cc(ev);
-            //     })
-            // ActivityLogGET();
-            // tbEventsCapture();
+
 
             orderTablePreparing();
 
@@ -305,6 +299,7 @@
                                     SchedStat: v.SchedStat,
                                     OC: v.OC,
                                     CtrlKey: v.CtrlKey,
+                                    ArchivedTimestamp: v.ArchivedTimestamp,
                                 })
                             }
                         );
@@ -904,6 +899,7 @@
                     'Sort': _Sort,
                     'Operation': MESM_OrderOperationRAW[n].Operation,
                     'OperationStatus': MESM_OrderOperationRAW[n].OperationStatus,
+                    'ArchivedTimestamp': MESM_OrderOperationRAW[n].ArchivedTimestamp,
                 });
             }
             // cc('MESM_OrderOperationMold');
@@ -1196,39 +1192,6 @@
 
         }
 
-        // function tbEventsCapture() {
-        //     $('.m_datatable')
-        //         .on('m-datatable--on-init', function () {
-        //             cc('Datatable init');
-        //         })
-        //         .on('m-datatable--on-layout-updated', function () {
-        //             cc('Layout render updated');
-        //         })
-        //         .on('m-datatable--on-ajax-done', function () {
-        //             cc('Ajax data successfully updated');
-        //         })
-        //         .on('m-datatable--on-ajax-fail', function (e, jqXHR) {
-        //             cc('Ajax error');
-        //         })
-        //         .on('m-datatable--on-goto-page', function (e, args) {
-        //             cc('Goto to pagination: ' + args.page);
-        //         })
-        //         .on('m-datatable--on-update-perpage', function (e, args) {
-        //             cc('Update page size: ' + args.perpage);
-        //         })
-        //         .on('m-datatable--on-reloaded', function (e) {
-        //             cc('Datatable reloaded');
-        //         })
-        //         .on('m-datatable--on-check', function (e, args) {
-        //             cc('Checkbox active: ' + args.toString());
-        //         })
-        //         .on('m-datatable--on-uncheck', function (e, args) {
-        //             cc('Checkbox inactive: ' + args.toString());
-        //         })
-        //         .on('m-datatable--on-sort', function (e, args) {
-        //             cc('Datatable sorted by ' + args.field + ' ' + args.sort);
-        //         });
-        // };
 
         var orderTableCreat = function (rows) {
             // cc('rows');
@@ -1239,6 +1202,9 @@
             orderTable = $(".m_datatable").mDatatable({
                 drawCallback: function () {
                     // cc('mDatatable drawCallback');
+                },
+                extensions: {
+                    checkbox: {},
                 },
                 responsive: true,
                 data: {
@@ -1274,7 +1240,9 @@
                         title: "#",
                         sortable: false, // disable sort for this column
                         width: 40,
-                        selector: {class: 'm-checkbox--solid m-checkbox--brand'}
+                        selected: true,
+                        // selector: {class: 'm-checkbox--solid m-checkbox--brand input:disabled'}
+                        selector: {class: 'm-checkbox--solid m-checkbox--brand m-checkbox--success m-checkbox--bold'}
                     },
 
 
@@ -1620,6 +1588,13 @@
             orderTable.hideColumn('Sort');
             orderTable.hideColumn('Operation');
 
+            // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+            //     orderTable.setActive(MESM_OrderOperationSort[n].RecordID);
+            // }
+
+
+            cc('orderTable');
+            cc(orderTable);
 
             if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
                 if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
