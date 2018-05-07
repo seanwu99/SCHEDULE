@@ -899,7 +899,7 @@
                     'Sort': _Sort,
                     'Operation': MESM_OrderOperationRAW[n].Operation,
                     'OperationStatus': MESM_OrderOperationRAW[n].OperationStatus,
-                    'ArchivedTimestamp': MESM_OrderOperationRAW[n].ArchivedTimestamp,
+                    'ArchivedTimestamp': (MESM_OrderOperationRAW[n].SchedStat == 'U') ? false : true,
                 });
             }
             // cc('MESM_OrderOperationMold');
@@ -1194,8 +1194,8 @@
 
 
         var orderTableCreat = function (rows) {
-            // cc('rows');
-            // cc(rows);
+            cc('rows');
+            cc(rows);
 //            if (0 !== $("#m_datatable_latest_orders").length)
 
 
@@ -1240,11 +1240,23 @@
                         title: "#",
                         sortable: false, // disable sort for this column
                         width: 40,
-                        selected: true,
                         // selector: {class: 'm-checkbox--solid m-checkbox--brand input:disabled'}
                         selector: {class: 'm-checkbox--solid m-checkbox--brand m-checkbox--success m-checkbox--bold'}
                     },
 
+                    // {
+                    //     field: "ArchivedTimestamp",
+                    //     title: "X",
+                    //     sortable: false, // disable sort for this column
+                    //     width: 40,
+                    //     template: function (e) {
+                    //         cc(e);
+                    //         // var checked = some_criteria?’checked=”CHECKED”‘:”;
+                    //
+                    //         // return ‘<label class=”m-checkbox m-checkbox–bold m-checkbox–state-success”><input ‘ + checked + ‘ type=”checkbox” /><span></span></label>’
+                    //
+                    //     },
+                    // },
 
                     {
                         field: "Status",
@@ -1589,12 +1601,21 @@
             orderTable.hideColumn('Operation');
 
             // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-            //     orderTable.setActive(MESM_OrderOperationSort[n].RecordID);
+            //     if (MESM_OrderOperationSort[n].ArchivedTimestamp == 'TimeUnavailable') {
+            //         orderTable.setActive(MESM_OrderOperationSort[n].RecordID);
+            //         cc(MESM_OrderOperationSort[n].RecordID);
+            //     } else {
+            //         orderTable.setInactive(MESM_OrderOperationSort[n].RecordID);
+            //     }
+            //
             // }
-
-
             cc('orderTable');
+
             cc(orderTable);
+
+
+            // cc('orderTable');
+            // cc(orderTable);
 
             if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
                 if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {

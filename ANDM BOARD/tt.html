@@ -11,9 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!--begin::Web font -->
-
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-
     <script>
         WebFont.load({
             google: {"families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]},
@@ -22,245 +20,19 @@
             }
         });
     </script>
-
     <script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
             id="sap-ui-bootstrap"
             data-sap-ui-theme="sap_belize"
             data-sap-ui-libs="sap.m">
     </script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-
-    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <!--end::Web font -->
     <!--begin::Base Styles -->
     <link href="vendors.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="style.bundle.hdAndonBoard.css" rel="stylesheet" type="text/css"/>
     <!--end::Base Styles -->
     <link rel="shortcut icon" href="favicon.ico"/>
-
-
     <script>
         $(function () {
-
-            var gaugeOptions = {
-
-                chart: {
-                    type: 'solidgauge'
-                },
-
-                title: null,
-
-                pane: {
-                    center: ['50%', '80%'],
-                    size: '140%',
-                    startAngle: -90,
-                    endAngle: 90,
-                    background: {
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
-                        innerRadius: '60%',
-                        outerRadius: '100%',
-                        shape: 'arc'
-                    }
-                },
-
-                tooltip: {
-                    enabled: false
-                },
-
-                // the value axis
-                yAxis: {
-                    stops: [
-                        [0.1, '#55BF3B'], // green
-                        [0.5, '#DDDF0D'], // yellow
-                        [0.9, '#DF5353'] // red
-                    ],
-                    lineWidth: 0,
-                    minorTickInterval: null,
-                    tickAmount: 2,
-                    title: {
-                        y: -70
-                    },
-                    labels: {
-                        y: 16
-                    }
-                },
-
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            y: 5,
-                            borderWidth: 0,
-                            useHTML: true
-                        }
-                    }
-                },
-                credits: {
-                    enabled: false
-                },
-            };
-
-// The oee gauge
-            var OEE = Highcharts.chart('OEE', Highcharts.merge(gaugeOptions, {
-                yAxis: {
-                    min: 0,
-                    max: 100,
-                    title: {
-                        text: null
-                    }
-                },
-
-
-                series: [{
-                    name: null,
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
-                        '<span style="font-size:12px;color:silver">OEE</span></div>'
-                    },
-                    tooltip: {
-                        valueSuffix: 'OEE'
-                    }
-                }]
-
-            }));
-
-// The AVAILABILITY gauge
-            var AVAILABILITY = Highcharts.chart('AVAILABILITY', Highcharts.merge(gaugeOptions, {
-                yAxis: {
-                    min: 0,
-                    max: 100,
-                    title: {
-                        text: null
-                    }
-                },
-
-                series: [{
-                    name: null,
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
-                        '<span style="font-size:12px;color:silver">AVAILABILITY</span></div>'
-                    },
-                    tooltip: {
-                        valueSuffix: 'AVAILABILITY'
-                    }
-                }]
-
-            }));
-
-// The PERFORMANCE gauge
-            var PERFORMANCE = Highcharts.chart('PERFORMANCE', Highcharts.merge(gaugeOptions, {
-                yAxis: {
-                    min: 0,
-                    max: 100,
-                    title: {
-                        text: null
-                    }
-                },
-
-                series: [{
-                    name: null,
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
-                        '<span style="font-size:12px;color:silver">PERFORMANCE</span></div>'
-                    },
-                    tooltip: {
-                        valueSuffix: 'PERFORMANCE'
-                    }
-                }]
-
-            }));
-
-            // The QUALITY gauge
-            var QUALITY = Highcharts.chart('QUALITY', Highcharts.merge(gaugeOptions, {
-                yAxis: {
-                    min: 0,
-                    max: 100,
-                    title: {
-                        text: null
-                    }
-                },
-
-                series: [{
-                    name: null,
-                    data: [0],
-                    dataLabels: {
-                        format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
-                        '<span style="font-size:12px;color:silver">QUALITY</span></div>'
-                    },
-                    tooltip: {
-                        valueSuffix: 'QUALITY'
-                    }
-                }]
-
-            }));
-// Bring life to the dials
-            setInterval(function () {
-                // Speed
-                var point,
-                    newVal,
-                    inc;
-
-                // OEE
-                if (OEE) {
-                    point = OEE.series[0].points[0];
-                    inc = Math.round((Math.random() - 0.5) * 100);
-                    newVal = point.y + inc;
-
-                    if (newVal < 0 || newVal > 100) {
-                        newVal = point.y - inc;
-                    }
-
-                    point.update(newVal);
-                }
-
-                // AVAILABILITY
-                if (PERFORMANCE) {
-                    point = AVAILABILITY.series[0].points[0];
-                    inc = Math.round((Math.random() - 0.5) * 100);
-                    newVal = point.y + inc;
-
-                    if (newVal < 0 || newVal > 100) {
-                        newVal = point.y - inc;
-                    }
-
-                    point.update(newVal);
-                }
-
-                // PERFORMANCE
-                if (PERFORMANCE) {
-                    point = PERFORMANCE.series[0].points[0];
-                    inc = Math.round((Math.random() - 0.5) * 100);
-                    newVal = point.y + inc;
-
-                    if (newVal < 0 || newVal > 100) {
-                        newVal = point.y - inc;
-                    }
-
-                    point.update(newVal);
-                }
-
-                // QUALITY
-                if (QUALITY) {
-                    point = QUALITY.series[0].points[0];
-                    inc = Math.round((Math.random() - 0.5) * 100);
-                    newVal = point.y + inc;
-
-                    if (newVal < 0 || newVal > 100) {
-                        newVal = point.y - inc;
-                    }
-
-                    point.update(newVal);
-                }
-            }, 2000);
-
-
             for (var n = 1; n <= 60; n++) {
                 var m_wizardX = document.getElementById('m_wizard' + n);
                 var c = 1 + Math.round(Math.random() * 5);
@@ -307,14 +79,6 @@
 <div class="m-portlet m-portlet--full-height">
 
     <div class="m-portlet__body">
-
-        <div style="margin: 0 auto; padding: 0 auto">
-            <div id="OEE" style="width: 25%; height: 250px; float: left"></div>
-            <div id="AVAILABILITY" style="width: 25%; height: 250px; float: left"></div>
-            <div id="PERFORMANCE" style="width: 25%; height: 250px; float: left"></div>
-            <div id="QUALITY" style="width: 25%; height: 250px; float: left"></div>
-        </div>
-
         <!--begin::Section-->
         <div class="m-accordion m-accordion--default m-accordion--toggle-arrow" id="m_accordion_5" role="tablist">
             <!--begin::Item-->
@@ -332,11 +96,11 @@
                 </div>
                 <div class="m-accordion__item-body " id="m_accordion_5_item_1_body" class=" " role="tabpanel"
                      aria-labelledby="m_accordion_5_item_1_head" data-parent="#m_accordion_5">
-                    <div class="m-accordion__item-content" >
-                        <div class="row" style="height: 85px">
+                    <div class="m-accordion__item-content">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard1"
-                                     style="padding: 0px auto; margin: 0px auto;">
+                                     style="padding: 0px auto; margin: 0px auto;  ">
                                     <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
@@ -370,6 +134,7 @@
                                     <!--</div>-->
                                 </div>
                             </div>
+
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--success" id="m_wizard2"
                                      style="padding: 0px auto; margin: 0px auto;  ">
@@ -389,8 +154,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label2">
+                                                             style="font-size: 30px;  color: white" id="step-label2">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -427,8 +191,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label3">
+                                                             style="font-size: 30px;  color: white" id="step-label3">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -465,8 +228,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label4">
+                                                             style="font-size: 30px;  color: white" id="step-label4">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -503,8 +265,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label5">
+                                                             style="font-size: 30px;  color: white" id="step-label5">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -541,8 +302,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label6">
+                                                             style="font-size: 30px;  color: white" id="step-label6">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -559,10 +319,8 @@
                                     <!--</div>-->
                                 </div>
                             </div>
-
-
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard7"
                                      style="padding: 0px auto; margin: 0px auto; ">
@@ -582,8 +340,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label7">
+                                                             style="font-size: 30px;  color: white" id="step-label7">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -620,8 +377,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label8">
+                                                             style="font-size: 30px;  color: white" id="step-label8">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -658,8 +414,7 @@
 																	</span>
                                                         </a>
                                                         <div class="m-wizard__step-label "
-                                                             style="font-size: 30px;  color: white"
-                                                             id="step-label9">
+                                                             style="font-size: 30px;  color: white" id="step-label9">
                                                             9999.99
                                                         </div>
                                                         <!--<div class="m-wizard__step-icon">-->
@@ -676,6 +431,7 @@
                                     <!--</div>-->
                                 </div>
                             </div>
+
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--warning" id="m_wizard10"
                                      style="padding: 0px auto; margin: 0px auto; ">
@@ -787,7 +543,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard13"
                                      style="padding: 0px auto; margin: 0px auto; ">
@@ -1010,7 +766,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard19"
                                      style="padding: 0px auto; margin: 0px auto; ">
@@ -1233,7 +989,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard25"
                                      style="padding: 0px auto; margin: 0px auto; ">
@@ -1456,7 +1212,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard31"
                                      style="padding: 0px auto; margin: 0px auto; ">
@@ -1679,11 +1435,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard37"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1720,7 +1476,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--success" id="m_wizard38"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1757,7 +1513,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--primary" id="m_wizard39"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1794,7 +1550,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--warning" id="m_wizard40"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1831,7 +1587,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--info" id="m_wizard41"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1868,7 +1624,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--metal" id="m_wizard42"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1901,11 +1657,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard43"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1942,7 +1698,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--success" id="m_wizard44"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -1979,7 +1735,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--primary" id="m_wizard45"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2016,7 +1772,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--warning" id="m_wizard46"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2053,7 +1809,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--info" id="m_wizard47"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2090,7 +1846,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--metal" id="m_wizard48"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2124,11 +1880,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard49"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2165,7 +1921,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--success" id="m_wizard50"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2202,7 +1958,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--primary" id="m_wizard51"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2239,7 +1995,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--warning" id="m_wizard52"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2276,7 +2032,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--info" id="m_wizard53"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2313,7 +2069,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--metal" id="m_wizard54"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2347,11 +2103,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 85px">
+                        <div class="row" style="height: 75px">
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--danger" id="m_wizard55"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2388,7 +2144,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--success" id="m_wizard56"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2425,7 +2181,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--primary" id="m_wizard57"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2462,7 +2218,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--warning" id="m_wizard58"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2499,7 +2255,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--info" id="m_wizard59"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2536,7 +2292,7 @@
                             <div class="col-sm-2 ">
                                 <div class="m-wizard m-wizard--4  m-wizard--metal" id="m_wizard60"
                                      style="padding: 0px auto; margin: 0px auto; ">
-                                    <!--<div class="row m-row--no-padding">-->
+                                    <!--<div class="row m-row&#45;&#45;no-padding">-->
                                     <!--begin: Form Wizard Head -->
                                     <div class="m-wizard__head">
                                         <!--begin: Form Wizard Nav -->
@@ -2573,8 +2329,8 @@
                     </div>
                 </div>
             </div>
-            <br/>
-
+            <br/><br/><br/><br/><br/><br/>
+            <img src="Andon-in-manufacturing.jpg" class="rounded" alt="Cinque Terre" width="100%" height="600px">
 
         </div>
 
