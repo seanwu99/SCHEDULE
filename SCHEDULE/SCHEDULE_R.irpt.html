@@ -58,6 +58,7 @@
         var mmmSTR = '';
         var mmmArray = [];
         var orderTable;
+        var orderOpreationTable;
         var MOLD_Master_Tool_List = [];
         var workcenterType = '';
         var runtime;// = new Date().getTime();
@@ -211,7 +212,7 @@
                             MIISchedFinTime: moment(v.MIISchedFinTime).format('HH:mm:ss'),
                             SchedStat: v.SchedStat,
                             OC: v.OC,
-                            CtrlKey: v.CtrlKey,
+                            CtrlKey: (v.CtrlKey === undefined) ? '' : v.CtrlKey,
                             ArchivedTimestamp: v.ArchivedTimestamp,
                             FamilyMold: v.FamilyMold,
                             Concurrent: v.Concurrent,
@@ -406,7 +407,7 @@
                 cc(url);
                 cc('mmmArray.length ' + mmmArray.length);
                 cc(new Date().getTime() - runtime);
-                // cc(mmmArray);
+                cc(mmmArray);
                 cc('/Matrix/==================================================================');
                 mainRouting();
             });
@@ -652,18 +653,18 @@
 //                 cc('mmmArray.length ' + mmmArray.length);
 //                 // cc('MOLD_Machine_Matrix takes ' + (new Date().getTime() - mmmArrayTT) + 'ms');
 //                 cc('/ /==================================================================');
+//
+//             cc('//=============================================');
+//             cc('MESM_OrderOperationSort.length ' + MESM_OrderOperationSort.length);
+//             // cc(MESM_OrderOperationSort.length);
+//             // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+//             //     cc(MESM_OrderOperationSort[n]);
+//             // }
+//             // cc(MESM_OrderOperationSort.toString());
+//             cc('//=============================================');
 
-            cc('//=============================================');
-            cc('MESM_OrderOperationSort.length ' + MESM_OrderOperationSort.length);
-            // cc(MESM_OrderOperationSort.length);
-            // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-            //     cc(MESM_OrderOperationSort[n]);
-            // }
-            // cc(MESM_OrderOperationSort.toString());
-            cc('//=============================================');
 
-
-            orderTableCreat(MESM_OrderOperationSort);
+            // orderTableCreat(MESM_OrderOperationSort);
 
             creatDatatable.init(MESM_OrderOperationSort);
 
@@ -700,28 +701,32 @@
             // }
             //=========================================================================================================================================
             var events = [];
-            for (var n = 0; n < orderTable.originalDataSet.length; n++) {
-                if (orderTable.originalDataSet[n].Status == 'S') {
-                    // removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
-                    events.push(
-                        {
-                            id: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                            resourceId: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                            start: orderTable.originalDataSet[n].SchedStart,
-                            end: orderTable.originalDataSet[n].SchedFinish,
-                            title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                            description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                            color: colors[Math.round(Math.random() * 8)],
 
-                        });
-                    // addScheduleEvent(
-                    //     orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                    //     orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                    //     orderTable.originalDataSet[n].SchedStart,
-                    //     orderTable.originalDataSet[n].SchedFinish
-                    // );
+            if (false) {
+                for (var n = 0; n < orderTable.originalDataSet.length; n++) {
+                    if (orderTable.originalDataSet[n].Status == 'S') {
+                        // removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
+                        events.push(
+                            {
+                                id: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                                resourceId: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                                start: orderTable.originalDataSet[n].SchedStart,
+                                end: orderTable.originalDataSet[n].SchedFinish,
+                                title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                                description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                                color: colors[Math.round(Math.random() * 8)],
+
+                            });
+                        // addScheduleEvent(
+                        //     orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                        //     orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                        //     orderTable.originalDataSet[n].SchedStart,
+                        //     orderTable.originalDataSet[n].SchedFinish
+                        // );
+                    }
                 }
             }
+
 
             cc('//=============================================');
             cc('events.length ' + events.length);
@@ -784,452 +789,446 @@
         // }
 
 
-        var orderTableCreat = function (rows) {
-            cc('rows');
-            cc(rows);
-
-
-            orderTable = $(".m_datatable").mDatatable({
-                drawCallback: function () {
-                    // cc('mDatatable drawCallback');
-                },
-                extensions: {
-                    checkbox: {},
-                },
-                responsive: true,
-                data: {
-                    type: "local",
-                    source: rows,
-                    // pageSize: 10
-                },
-                layout: {
-                    theme: "default",
-                    class: '',
-                    scroll: false,
-                    // height: 500,
-                    footer: false
-                },
-                sortable: true,
-                pagination: true,
-                search: {input: $("#generalSearch")},
-                columns: [
-                    // {
-                    //
-                    //     field: "checkBox",
-                    //     title: "#",
-                    //     sortable: false,
-                    //     filterable: false,
-                    //     width: 20,
-                    //     textAlign: "center",
-                    //     selector: {class: "m-checkbox--solid m-checkbox--brand"},
-                    //     template: function (e) {
-                    //     }
-                    // },
-                    {
-                        field: "RecordID",
-                        title: "#",
-                        sortable: false, // disable sort for this column
-                        width: 40,
-                        // selector: {class: 'm-checkbox--solid m-checkbox--brand input:disabled'}
-                        selector: {
-                            class: 'm-checkbox--solid m-checkbox--brand m-checkbox--success m-checkbox--bold m-datatable__row--active',
-
-                        },
-                        selected: true,
-                    },
-                    {
-                        field: "Status",
-                        title: "Status",
-                        width: 100,
-                        sortable: false,
-                        filterable: false,
-                        template: function (e) {
-                            var t = {
-                                'U': {title: "Unscheduled", class: "m-badge--brand"},
-                                'S': {title: "Scheduled", class: " m-badge--success"},
-                                'H': {title: "Hold", class: " m-badge--warning"},
-                                'C': {title: "Cancelled", class: " m-badge--metal"},
-                                // 'N': {title: "No Material", class: " m-badge--warning"},
-                                // 6: {title: "Urgent", class: " m-badge--danger"},
-                                // 7: {title: "Delayed", class: " m-badge--info"}
-                            };
-                            return '<span class="m-badge ' + t[e.Status].class + ' m-badge--wide">' + t[e.Status].title + "</span>"
-                        },
-                    },
-
-                    {
-
-                        field: "ID",
-                        title: "ID",
-                        sortable: 'asc',
-                        filterable: true,
-                        // visible: true,
-                        width: 100,
-                    },
-
-                    {
-                        field: "OrderNumber",
-                        title: "Order #",
-                        sortable: true,
-                        filterable: true,
-                        width: 100,
-//                            template: "{{OrderID}} - {{ShipCountry}}"
-                    },
-
-                    {
-                        field: "Material",
-                        title: "Material #",
-                        sortable: true,
-                        filterable: false,
-                        width: 160,
-//                            template: "{{OrderID}} - {{ShipCountry}}"
-                    },
-
-                    {
-                        field: "Quantity",
-                        title: "Quantity",
-                        width: 65,
-                        sortable: false,
-                        filterable: false,
-                        // visible: 0,
-//                            responsive: {visible: "lg"}
-                    },
-
-                    {
-                        field: "SchedStart",
-                        title: "SchedStart",
-                        width: 140,
-                        sortable: true,
-                        filterable: false,
-//                            responsive: {visible: "lg"}
-                    },
-                    {
-                        field: "SchedFinish",
-                        title: "SchedFinish",
-                        width: 140,
-                        sortable: false,
-                        filterable: false,
-                    },
-                    {
-                        field: "WCG",
-                        title: "Group",
-                        width: 70,
-                        sortable: true,
-                        filterable: false,
-                    },
-                    {
-                        field: "Mold",
-                        title: "Mold",
-                        width: 70,
-                        sortable: true,
-                        filterable: false,
-                    },
-                    {
-                        field: "Press",
-                        title: "WorkCenter",
-                        width: 90,
-                        sortable: true,
-                        filterable: false,
-                    },
-                    {
-                        field: "CtrlKey",
-                        title: "CtrlKey",
-                        width: 40,
-                        sortable: false,
-                        filterable: false,
-                    },
-                    {
-                        field: "Actions",
-                        width: 80,
-                        title: "Actions",
-                        sortable: !1,
-                        overflow: "visible",
-                        template: function (e) {
-                            // cc('Actions==>');
-                            // cc(e);
-                            // cc('<=Actions');
-                            if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled & Scheduled
-
-                                var wcg = '';
-                                var wcgNAME = '';
-                                for (var f in MESM_FloorMaps) {
-                                    if (e.WCG == MESM_FloorMaps[f].unitName) {
-                                        wcg = MESM_FloorMaps[f].recordID;
-                                        wcgNAME = MESM_FloorMaps[f].unitName;
-                                        break;
-                                        // n = MESM_FloorMaps.length;
-                                    }
-                                }
-                                // var prs = [];
-                                var prsSTR = '';
-                                var groupSTR = '';
-                                var prsRows = 0;
-                                if (e.Sort == 'MOLDING') {
-                                    for (var f in MESM_FloorMaps) {
-                                        if (MESM_FloorMaps[f].idUnitParent == wcg) {
-                                            if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
-                                                // prs.push({
-                                                //     'unitName': MESM_FloorMaps[f].unitName,
-                                                //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
-                                                // });
-                                                prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
-                                                    '"' +
-                                                    wcgNAME +
-                                                    '_' +
-                                                    MESM_FloorMaps[f].unitName +
-                                                    '"' +
-                                                    '><i class="la la-wrench"></i>' +
-                                                    'assign to ' + MESM_FloorMaps[f].unitName +
-                                                    // ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
-                                                    '</a>';
-                                                prsRows++;
-                                            } else {
-                                                // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
-                                                // cc(mmmArray[e.Mold]);
-                                                // cc(MESM_FloorMaps[f].unitName + ' false');
-                                            }
-                                        }
-                                    }
-
-                                    // groupSTR = '<div class="dropdown-divider"></div>';
-                                    for (var i = 1; i <= 6; i++) {
-                                        if (e.WCG.indexOf(i) > 0) {
-                                            groupSTR =
-                                                groupSTR +
-                                                '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
-                                                i + ' *' +
-                                                '</a>';
-                                        } else {
-                                            groupSTR =
-                                                groupSTR +
-                                                '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
-                                                i +
-                                                '</a>'
-                                        }
-
-                                    }
-                                    // cc('prsSTR ==>' + prsSTR);
-                                    if (prsSTR.length != 0) {
-                                        prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
-                                    }
-                                    var scrollSTR = '';
-                                    if (e.Status == 'U') {
-                                        if (prsRows * 40 + 250 > 500) {
-                                            scrollSTR = 'style="overflow-y: scroll; height: 500px"'
-                                        }
-                                    } else if (e.Status == 'S') {
-                                        if (prsRows * 40 + 280 > 500) {
-                                            scrollSTR = 'style="overflow-y: scroll; height: 500px"'
-                                        }
-                                    }
-                                } else if (e.Sort == 'RESIN') {
-                                    prsSTR =
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND02"><i class="la la-wrench"></i>assign to BLEND02' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND03"><i class="la la-wrench"></i>assign to BLEND03' + '</a>';
-                                } else if (e.Sort == 'PACKING') {
-                                    prsSTR =
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK01"><i class="la la-wrench"></i>assign to PACK01' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK02"><i class="la la-wrench"></i>assign to PACK02' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK03"><i class="la la-wrench"></i>assign to PACK03' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK04"><i class="la la-wrench"></i>assign to PACK04' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK05"><i class="la la-wrench"></i>assign to PACK05' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
-                                        '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
-                                }
-
-                                var ft = '';
-                                if (prsSTR.length == 0) {
-                                    // ft = 'WrongGroup'
-                                }
-
-                                if (e.Sort == 'ASSY') {
-                                    return '';
-                                } else
-                                    return e.Status == 'U' ?
-
-
-                                        // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                        '<div class="dropdown ' + '">' +
-                                        // '<div class="dropup ' + "" + '">' +
-                                        '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                        '           <i class="la la-ellipsis-h"></i></a>' +
-                                        '       <div class="dropdown-menu dropdown-menu-right"' +
-                                        scrollSTR +
-                                        '>' +
-                                        prsSTR +
-                                        groupSTR +
-
-                                        // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>' +
-                                        // ft +
-                                        '</a>' +
-                                        '       </div>' +
-                                        '   </div>' +
-                                        '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                        '       <i class="la la-comment"></i></a>'
-                                        :
-                                        '<div class="dropdown ' + '">' +
-                                        '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                        '           <i class="la la-ellipsis-h"></i>' +
-                                        '       </a>' +
-                                        '       <div class="dropdown-menu dropdown-menu-right" ' +
-                                        scrollSTR +
-                                        '>' +
-                                        // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-cogs"></i>AutoM</a>' +
-                                        prsSTR +
-                                        groupSTR +
-                                        '           <div class="dropdown-divider"></div>' +
-                                        // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
-                                        '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
-                                        '       </div>' +
-                                        '   </div>' +
-                                        '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                        '       <i class="la la-comment"></i>' +
-                                        '   </a>'
-
-                            } else if (e.Status == 'H') {
-                                return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                    '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                    '           <i class="la la-ellipsis-h"></i>' +
-                                    '       </a>' +
-                                    '       <div class="dropdown-menu dropdown-menu-right">' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Hold</a>' +
-                                    '       </div>' +
-                                    '   </div>' +
-                                    '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                    '       <i class="la la-comment"></i>' +
-                                    '   </a>';
-                            } else if (e.Status == 'C') {
-                                return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                    '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                    '           <i class="la la-ellipsis-h"></i>' +
-                                    '       </a>' +
-                                    '       <div class="dropdown-menu dropdown-menu-right">' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-                                    // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-                                    '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Order canceled</a>' +
-                                    '       </div>' +
-                                    '   </div>' +
-                                    '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                    '       <i class="la la-comment"></i>' +
-                                    '   </a>';
-                            }
-                            // else if (e.Status == 'N') {
-                            //     return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                            //         '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                            //         '           <i class="la la-ellipsis-h"></i>' +
-                            //         '       </a>' +
-                            //         '       <div class="dropdown-menu dropdown-menu-right">' +
-                            //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-                            //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-                            //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Waiting for Material</a>' +
-                            //         '           <div class="dropdown-divider"></div>' +
-                            //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Cancelled</a>' +
-                            //         '       </div>' +
-                            //         '   </div>' +
-                            //         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                            //         '       <i class="la la-comment"></i>' +
-                            //         '   </a>';
-                            // }
-
-
-                        }
-                    },
-                    // {
-                    //     field: "ID",
-                    //     title: "",
-                    //     width: 0,
-                    // },
-                    {
-                        field: "Sort",
-                        title: "",
-                        visible: false,
-                        width: 100,
-                        sortable: false,
-                        filterable: false,
-                    },
-                    {
-                        field: "Operation",
-                        title: "",
-                        visible: false,
-                        width: 100,
-                        sortable: false,
-                        filterable: false,
-                    },
-                ]
-            });
-
-
-            orderTable.hideColumn('ID');
-            orderTable.hideColumn('Sort');
-            orderTable.hideColumn('Operation');
-
-            // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-            //     if (MESM_OrderOperationSort[n].ArchivedTimestamp == 'TimeUnavailable') {
-            //         cc('setActive' + '(' + MESM_OrderOperationSort[n].RecordID + ')');
-            //         orderTable.setActive(MESM_OrderOperationSort[n].RecordID);
-            //         cc(MESM_OrderOperationSort[n].RecordID);
-            //     } else {
-            //         orderTable.setInactive(MESM_OrderOperationSort[n].RecordID);
-            //         cc('setInactive' + '(' + MESM_OrderOperationSort[n].RecordID + ')');
-            //     }
-            //
-            // }
-            cc('orderTable');
-
-            cc(orderTable);
-
-
-            // cc('orderTable');
-            // cc(orderTable);
-
-            if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
-                if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
-                    orderTable.hideColumn('Mold')
-
-                }
-                orderTable.hideColumn('CtrlKey');
-                document.getElementById('m_form_type').innerHTML =
-                    '<option value=""> All</option>';
-            }
-
-            if (workcenterType == 'MOLDING') {
-                document.getElementById('m_form_type').innerHTML =
-                    '<option value=""> All</option>\n' +
-                    '<option value="MOLD1">MOLD1</option>\n' +
-                    '<option value="MOLD2">MOLD2</option>\n' +
-                    '<option value="MOLD3">MOLD3</option>\n' +
-                    '<option value="MOLD4">MOLD4</option>\n' +
-                    '<option value="MOLD5">MOLD5</option>\n' +
-                    '<option value="MOLD6">MOLD6</option>\n' +
-                    '<option value="DIE CAST">DIE CAST</option>';
-            }
-
-
-            var i = orderTable.getDataSourceQuery();
-
-            $("#m_form_status").on("change", function () {
-                // cc();
-                orderTable.search($(this).val(), "Status");
-                // cc('m_form_status');
-                // cc($(this).val());
-            }).val(void "" !== i.Status ? i.Status : "");
-
-            $("#m_form_type").on("change", function () {
-//                cc(i);
-//                cc(($(this).val()));
-                orderTable.search($(this).val(), "WCG");
-//                cc(aa);
-            }).val(void 0 !== i.WCG ? i.WCG : "");
-
-            $("#m_form_status, #m_form_type").selectpicker();
-
-
-        };
+        //         var orderTableCreat = function (rows) {
+        //             cc('rows');
+        //             cc(rows);
+        //
+        //
+        //             orderTable = $(".m_datatable").mDatatable({
+        //                 drawCallback: function () {
+        //                     // cc('mDatatable drawCallback');
+        //                 },
+        //                 extensions: {
+        //                     checkbox: {},
+        //                 },
+        //                 responsive: true,
+        //                 data: {
+        //                     type: "local",
+        //                     source: rows,
+        //                     // pageSize: 10
+        //                 },
+        //                 layout: {
+        //                     theme: "default",
+        //                     class: '',
+        //                     scroll: false,
+        //                     // height: 500,
+        //                     footer: false
+        //                 },
+        //                 sortable: true,
+        //                 pagination: true,
+        //                 search: {input: $("#generalSearch")},
+        //                 columns: [
+        //                     // {
+        //                     //
+        //                     //     field: "checkBox",
+        //                     //     title: "#",
+        //                     //     sortable: false,
+        //                     //     filterable: false,
+        //                     //     width: 20,
+        //                     //     textAlign: "center",
+        //                     //     selector: {class: "m-checkbox--solid m-checkbox--brand"},
+        //                     //     template: function (e) {
+        //                     //     }
+        //                     // },
+        //                     {
+        //                         field: "RecordID",
+        //                         title: "#",
+        //                         sortable: false, // disable sort for this column
+        //                         width: 40,
+        //                         // selector: {class: 'm-checkbox--solid m-checkbox--brand input:disabled'}
+        //                         selector: {
+        //                             class: 'm-checkbox--solid m-checkbox--brand m-checkbox--success m-checkbox--bold m-datatable__row--active',
+        //
+        //                         },
+        //                         selected: true,
+        //                     },
+        //                     {
+        //                         field: "Status",
+        //                         title: "Status",
+        //                         width: 100,
+        //                         sortable: false,
+        //                         filterable: false,
+        //                         template: function (e) {
+        //                             var t = {
+        //                                 'U': {title: "Unscheduled", class: "m-badge--brand"},
+        //                                 'S': {title: "Scheduled", class: " m-badge--success"},
+        //                                 'H': {title: "Hold", class: " m-badge--warning"},
+        //                                 'C': {title: "Cancelled", class: " m-badge--metal"},
+        //                                 // 'N': {title: "No Material", class: " m-badge--warning"},
+        //                                 // 6: {title: "Urgent", class: " m-badge--danger"},
+        //                                 // 7: {title: "Delayed", class: " m-badge--info"}
+        //                             };
+        //                             return '<span class="m-badge ' + t[e.Status].class + ' m-badge--wide">' + t[e.Status].title + "</span>"
+        //                         },
+        //                     },
+        //
+        //                     {
+        //
+        //                         field: "ID",
+        //                         title: "ID",
+        //                         sortable: 'asc',
+        //                         filterable: true,
+        //                         // visible: true,
+        //                         width: 100,
+        //                     },
+        //
+        //                     {
+        //                         field: "OrderNumber",
+        //                         title: "Order #",
+        //                         sortable: true,
+        //                         filterable: true,
+        //                         width: 100,
+        // //                            template: "{{OrderID}} - {{ShipCountry}}"
+        //                     },
+        //
+        //                     {
+        //                         field: "Material",
+        //                         title: "Material #",
+        //                         sortable: true,
+        //                         filterable: false,
+        //                         width: 160,
+        // //                            template: "{{OrderID}} - {{ShipCountry}}"
+        //                     },
+        //
+        //                     {
+        //                         field: "Quantity",
+        //                         title: "Quantity",
+        //                         width: 65,
+        //                         sortable: false,
+        //                         filterable: false,
+        //                         // visible: 0,
+        // //                            responsive: {visible: "lg"}
+        //                     },
+        //
+        //                     {
+        //                         field: "SchedStart",
+        //                         title: "SchedStart",
+        //                         width: 140,
+        //                         sortable: true,
+        //                         filterable: false,
+        // //                            responsive: {visible: "lg"}
+        //                     },
+        //                     {
+        //                         field: "SchedFinish",
+        //                         title: "SchedFinish",
+        //                         width: 140,
+        //                         sortable: false,
+        //                         filterable: false,
+        //                     },
+        //                     {
+        //                         field: "WCG",
+        //                         title: "Group",
+        //                         width: 70,
+        //                         sortable: true,
+        //                         filterable: false,
+        //                     },
+        //                     {
+        //                         field: "Mold",
+        //                         title: "Mold",
+        //                         width: 70,
+        //                         sortable: true,
+        //                         filterable: false,
+        //                     },
+        //                     {
+        //                         field: "Press",
+        //                         title: "WorkCenter",
+        //                         width: 90,
+        //                         sortable: true,
+        //                         filterable: false,
+        //                     },
+        //                     {
+        //                         field: "CtrlKey",
+        //                         title: "CtrlKey",
+        //                         width: 40,
+        //                         sortable: false,
+        //                         filterable: false,
+        //                     },
+        //                     {
+        //                         field: "Actions",
+        //                         width: 80,
+        //                         title: "Actions",
+        //                         sortable: !1,
+        //                         overflow: "visible",
+        //                         template: function (e) {
+        //                             // cc('Actions==>');
+        //                             // cc(e);
+        //                             // cc('<=Actions');
+        //                             if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled & Scheduled
+        //
+        //                                 var wcg = '';
+        //                                 var wcgNAME = '';
+        //                                 for (var f in MESM_FloorMaps) {
+        //                                     if (e.WCG == MESM_FloorMaps[f].unitName) {
+        //                                         wcg = MESM_FloorMaps[f].recordID;
+        //                                         wcgNAME = MESM_FloorMaps[f].unitName;
+        //                                         break;
+        //                                         // n = MESM_FloorMaps.length;
+        //                                     }
+        //                                 }
+        //                                 // var prs = [];
+        //                                 var prsSTR = '';
+        //                                 var groupSTR = '';
+        //                                 var prsRows = 0;
+        //                                 if (e.Sort == 'MOLDING') {
+        //                                     for (var f in MESM_FloorMaps) {
+        //                                         if (MESM_FloorMaps[f].idUnitParent == wcg) {
+        //                                             if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
+        //                                                 // prs.push({
+        //                                                 //     'unitName': MESM_FloorMaps[f].unitName,
+        //                                                 //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
+        //                                                 // });
+        //                                                 prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
+        //                                                     '"' +
+        //                                                     wcgNAME +
+        //                                                     '_' +
+        //                                                     MESM_FloorMaps[f].unitName +
+        //                                                     '"' +
+        //                                                     '><i class="la la-wrench"></i>' +
+        //                                                     'assign to ' + MESM_FloorMaps[f].unitName +
+        //                                                     // ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
+        //                                                     '</a>';
+        //                                                 prsRows++;
+        //                                             } else {
+        //                                                 // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
+        //                                                 // cc(mmmArray[e.Mold]);
+        //                                                 // cc(MESM_FloorMaps[f].unitName + ' false');
+        //                                             }
+        //                                         }
+        //                                     }
+        //
+        //                                     // groupSTR = '<div class="dropdown-divider"></div>';
+        //                                     for (var i = 1; i <= 6; i++) {
+        //                                         if (e.WCG.indexOf(i) > 0) {
+        //                                             groupSTR =
+        //                                                 groupSTR +
+        //                                                 '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
+        //                                                 i + ' *' +
+        //                                                 '</a>';
+        //                                         } else {
+        //                                             groupSTR =
+        //                                                 groupSTR +
+        //                                                 '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
+        //                                                 i +
+        //                                                 '</a>'
+        //                                         }
+        //
+        //                                     }
+        //                                     // cc('prsSTR ==>' + prsSTR);
+        //                                     if (prsSTR.length != 0) {
+        //                                         prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
+        //                                     }
+        //                                     var scrollSTR = '';
+        //                                     if (e.Status == 'U') {
+        //                                         if (prsRows * 40 + 250 > 500) {
+        //                                             scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+        //                                         }
+        //                                     } else if (e.Status == 'S') {
+        //                                         if (prsRows * 40 + 280 > 500) {
+        //                                             scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+        //                                         }
+        //                                     }
+        //                                 } else if (e.Sort == 'RESIN') {
+        //                                     prsSTR =
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND02"><i class="la la-wrench"></i>assign to BLEND02' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND03"><i class="la la-wrench"></i>assign to BLEND03' + '</a>';
+        //                                 } else if (e.Sort == 'PACKING') {
+        //                                     prsSTR =
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK01"><i class="la la-wrench"></i>assign to PACK01' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK02"><i class="la la-wrench"></i>assign to PACK02' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK03"><i class="la la-wrench"></i>assign to PACK03' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK04"><i class="la la-wrench"></i>assign to PACK04' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK05"><i class="la la-wrench"></i>assign to PACK05' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
+        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
+        //                                 }
+        //
+        //                                 var ft = '';
+        //                                 if (prsSTR.length == 0) {
+        //                                     // ft = 'WrongGroup'
+        //                                 }
+        //
+        //                                 if (e.Sort == 'ASSY') {
+        //                                     return '';
+        //                                 } else
+        //                                     return e.Status == 'U' ?
+        //
+        //
+        //                                         // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+        //                                         '<div class="dropdown ' + '">' +
+        //                                         // '<div class="dropup ' + "" + '">' +
+        //                                         '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+        //                                         '           <i class="la la-ellipsis-h"></i></a>' +
+        //                                         '       <div class="dropdown-menu dropdown-menu-right"' +
+        //                                         scrollSTR +
+        //                                         '>' +
+        //                                         prsSTR +
+        //                                         groupSTR +
+        //
+        //                                         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>' +
+        //                                         // ft +
+        //                                         '</a>' +
+        //                                         '       </div>' +
+        //                                         '   </div>' +
+        //                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+        //                                         '       <i class="la la-comment"></i></a>'
+        //                                         :
+        //                                         '<div class="dropdown ' + '">' +
+        //                                         '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+        //                                         '           <i class="la la-ellipsis-h"></i>' +
+        //                                         '       </a>' +
+        //                                         '       <div class="dropdown-menu dropdown-menu-right" ' +
+        //                                         scrollSTR +
+        //                                         '>' +
+        //                                         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-cogs"></i>AutoM</a>' +
+        //                                         prsSTR +
+        //                                         groupSTR +
+        //                                         '           <div class="dropdown-divider"></div>' +
+        //                                         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
+        //                                         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
+        //                                         '       </div>' +
+        //                                         '   </div>' +
+        //                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+        //                                         '       <i class="la la-comment"></i>' +
+        //                                         '   </a>'
+        //
+        //                             } else if (e.Status == 'H') {
+        //                                 return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+        //                                     '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+        //                                     '           <i class="la la-ellipsis-h"></i>' +
+        //                                     '       </a>' +
+        //                                     '       <div class="dropdown-menu dropdown-menu-right">' +
+        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
+        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
+        //                                     '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Hold</a>' +
+        //                                     '       </div>' +
+        //                                     '   </div>' +
+        //                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+        //                                     '       <i class="la la-comment"></i>' +
+        //                                     '   </a>';
+        //                             } else if (e.Status == 'C') {
+        //                                 return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+        //                                     '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+        //                                     '           <i class="la la-ellipsis-h"></i>' +
+        //                                     '       </a>' +
+        //                                     '       <div class="dropdown-menu dropdown-menu-right">' +
+        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
+        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
+        //                                     '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Order canceled</a>' +
+        //                                     '       </div>' +
+        //                                     '   </div>' +
+        //                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+        //                                     '       <i class="la la-comment"></i>' +
+        //                                     '   </a>';
+        //                             }
+        //                             // else if (e.Status == 'N') {
+        //                             //     return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+        //                             //         '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+        //                             //         '           <i class="la la-ellipsis-h"></i>' +
+        //                             //         '       </a>' +
+        //                             //         '       <div class="dropdown-menu dropdown-menu-right">' +
+        //                             //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
+        //                             //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
+        //                             //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Waiting for Material</a>' +
+        //                             //         '           <div class="dropdown-divider"></div>' +
+        //                             //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Cancelled</a>' +
+        //                             //         '       </div>' +
+        //                             //         '   </div>' +
+        //                             //         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+        //                             //         '       <i class="la la-comment"></i>' +
+        //                             //         '   </a>';
+        //                             // }
+        //
+        //
+        //                         }
+        //                     },
+        //                     // {
+        //                     //     field: "ID",
+        //                     //     title: "",
+        //                     //     width: 0,
+        //                     // },
+        //                     {
+        //                         field: "Sort",
+        //                         title: "",
+        //                         visible: false,
+        //                         width: 100,
+        //                         sortable: false,
+        //                         filterable: false,
+        //                     },
+        //                     {
+        //                         field: "Operation",
+        //                         title: "",
+        //                         visible: false,
+        //                         width: 100,
+        //                         sortable: false,
+        //                         filterable: false,
+        //                     },
+        //                 ]
+        //             });
+        //
+        //
+        //             orderTable.hideColumn('ID');
+        //             orderTable.hideColumn('Sort');
+        //             orderTable.hideColumn('Operation');
+        //
+        //             // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+        //             //     if (MESM_OrderOperationSort[n].ArchivedTimestamp == 'TimeUnavailable') {
+        //             //         cc('setActive' + '(' + MESM_OrderOperationSort[n].RecordID + ')');
+        //             //         orderTable.setActive(MESM_OrderOperationSort[n].RecordID);
+        //             //         cc(MESM_OrderOperationSort[n].RecordID);
+        //             //     } else {
+        //             //         orderTable.setInactive(MESM_OrderOperationSort[n].RecordID);
+        //             //         cc('setInactive' + '(' + MESM_OrderOperationSort[n].RecordID + ')');
+        //             //     }
+        //             //
+        //             // }
+        //             cc('orderTable');
+        //
+        //             cc(orderTable);
+        //
+        //
+        //             // cc('orderTable');
+        //             // cc(orderTable);
+        //
+        //             if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
+        //                 if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
+        //                     orderTable.hideColumn('Mold')
+        //
+        //                 }
+        //                 orderTable.hideColumn('CtrlKey');
+        //                 document.getElementById('m_form_type').innerHTML =
+        //                     '<option value=""> All</option>';
+        //             }
+        //
+        //             if (workcenterType == 'MOLDING') {
+        //                 document.getElementById('m_form_type').innerHTML =
+        //                     '<option value=""> All</option>\n' +
+        //                     '<option value="MOLD1">MOLD1</option>\n' +
+        //                     '<option value="MOLD2">MOLD2</option>\n' +
+        //                     '<option value="MOLD3">MOLD3</option>\n' +
+        //                     '<option value="MOLD4">MOLD4</option>\n' +
+        //                     '<option value="MOLD5">MOLD5</option>\n' +
+        //                     '<option value="MOLD6">MOLD6</option>\n' +
+        //                     '<option value="DIE CAST">DIE CAST</option>';
+        //             }
+        //
+        //
+        //             // var i = orderTable.getDataSourceQuery();
+        //
+        //             // $("#m_form_status").on("change", function () {
+        //             //     orderTable.search($(this).val(), "Status");
+        //             // }).val(void "" !== i.Status ? i.Status : "");
+        //             //
+        //             // $("#m_form_type").on("change", function () {
+        //             //     orderTable.search($(this).val(), "WCG");
+        //             // }).val(void 0 !== i.WCG ? i.WCG : "");
+        //             //
+        //             // $("#m_form_status, #m_form_type").selectpicker();
+        //
+        //
+        //         };
 
 
         var _eventDragStart;
@@ -1509,37 +1508,65 @@
         }
 
         function orderTableRefresh(event) {
-            // cc('orderTableRefresh');
-            // cc(event.id + ' / ' + event.resourceId);
+            cc('orderTableRefresh');
+            cc(event.id + ' / ' + event.resourceId);
             // cc(orderTable);
             // var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
             var OrderNumber = event.id.split('_')[0];
             var Operation;
-            for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+
+            for (var i = 0; i < orderOpreationTable.rows('').count(); i++) {
                 // cc();
                 // cc(orderTable.originalDataSet[i].OrderNumber + ' / ' + orderTable.originalDataSet[i].WCG+' / '+orderTable.originalDataSet.length);
-                if (orderTable.originalDataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.originalDataSet[i].WCG == event.resourceId.split('_')[0]) {
+                // if (orderTable.originalDataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.originalDataSet[i].WCG == event.resourceId.split('_')[0]) {
+                if (orderOpreationTable.cell({row: i, column: 2}).data() == event.id.split('_')[0] &&//OrderNumber
+                    orderOpreationTable.cell({row: i, column: 7}).data() == event.resourceId.split('_')[0]) {//WCG
+                    // orderTable.originalDataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
+                    // orderTable.originalDataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
+                    orderOpreationTable.cell({
+                        row: i,
+                        column: 5
+                    }).data(moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss'));
+                    orderOpreationTable.cell({
+                        row: i,
+                        column: 6
+                    }).data(moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss'));
 
-                    orderTable.originalDataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
-                    orderTable.originalDataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
-                    orderTable.originalDataSet[i].Press = event.resourceId.split('_')[1];
-                    orderTable.originalDataSet[i].Status = 'Scheduled';
-                    orderTable.reload();
+                    // orderTable.originalDataSet[i].Press = event.resourceId.split('_')[1];
+                    orderOpreationTable.cell({row: i, column: 11}).data(event.resourceId.split('_')[1]);
+                    // orderTable.originalDataSet[i].Status = 'Scheduled';
+                    orderOpreationTable.cell({row: i, column: 1}).data('S');
+                    // orderTable.reload();
 
-                    Operation = orderTable.originalDataSet[i].Operation;
+                    // Operation = orderTable.originalDataSet[i].Operation;
+                    Operation = '';// orderTable.originalDataSet[i].Operation;
+                    console.log(orderOpreationTable.cell({row: i, column: 0}).data(),
+                        orderOpreationTable.cell({row: i, column: 4}).data(),
+                        'Scheduled',
+                        orderOpreationTable.cell({row: i, column: 5}).data(),
+                        orderOpreationTable.cell({row: i, column: 6}).data(),
+                        orderOpreationTable.cell({row: i, column: 11}).data());
                     MESM_OrderOperation_UPD(
-                        orderTable.originalDataSet[i].ID,
-                        orderTable.originalDataSet[i].Quantity,
-                        orderTable.originalDataSet[i].Status,
-                        orderTable.originalDataSet[i].SchedStart,
-                        orderTable.originalDataSet[i].SchedFinish,
-                        orderTable.originalDataSet[i].Press
+                        // orderTable.originalDataSet[i].ID,
+                        // orderTable.originalDataSet[i].Quantity,
+                        // orderTable.originalDataSet[i].Status,
+                        // orderTable.originalDataSet[i].SchedStart,
+                        // orderTable.originalDataSet[i].SchedFinish,
+                        // orderTable.originalDataSet[i].Press
+                        orderOpreationTable.cell({row: i, column: 0}).data(),
+                        orderOpreationTable.cell({row: i, column: 4}).data(),
+                        'Scheduled',
+                        orderOpreationTable.cell({row: i, column: 5}).data(),
+                        orderOpreationTable.cell({row: i, column: 6}).data(),
+                        orderOpreationTable.cell({row: i, column: 11}).data()
                     );
 
                     if (_eventDragStart.resourceId != event.resourceId) {
-                        ActivityLogADD('Assigned', orderTable.originalDataSet[i].OrderNumber + '_' + orderTable.originalDataSet[i].Sort + ' => ' +
-                            event.resourceId.split('_')[1] + ' ', orderTable.originalDataSet[i].OrderNumber + '_' + orderTable.originalDataSet[i].Sort);
-                        // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                        ActivityLogADD('Assigned', orderOpreationTable.cell({row: i, column: 2}).data() +
+                            '_' + orderOpreationTable.cell({row: i, column: 13}).data() +
+                            ' => ' + event.resourceId.split('_')[1] + ' ',
+                            orderOpreationTable.cell({row: i, column: 2}).data() +
+                            '_' + orderOpreationTable.cell({row: i, column: 13}).data());
                     }
                     break;
                 }
@@ -1718,7 +1745,6 @@
         }
 
 
-
         function DB_UPD(urlProc) {
             // cc(urlProc);
             var xhttp = new XMLHttpRequest();
@@ -1732,150 +1758,159 @@
             xhttp.send();
         }
 
+        //         function quickAction(e) {
+        //
+        //             cc('quickAction');
+        //             cc(e);
+        //             var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
+        //             cc(TableCOL);
+        //             var _ID = TableCOL[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _OrderNumber = TableCOL[3].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _Quantity = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _SchedStart = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _SchedFinish = TableCOL[7].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
+        //             var _During = _Action.indexOf('~') >= 0 ? parseInt(_Action.split('~')[1]) : 0;
+        //             var _WorkCenterID = 0;
+        //             var _Sort = TableCOL[13].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+        //
+        //             // cc('_ID ' + _ID);
+        //             // cc(_During);
+        //
+        //             if ((_Status == 'Unscheduled' || _Status == 'Scheduled') && _Action.indexOf('assign') >= 0) {
+        //                 // cc(_Status + ' > assign');
+        //                 // if (_During < 240) {
+        //                 //     _During = 240
+        //                 // }
+        //                 // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
+        //                 // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
+        //
+        //                 // if (_Action.indexOf('PRESS') >= 0) {
+        //                 //     //wxy
+        //                 //     var v_SchedStart = _SchedStart;
+        //                 //     var v_SchedFinish = _SchedFinish;
+        //                 //     var timeNow = (new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 19);
+        //                 //     cc('timeNow / ' + timeNow);
+        //                 //     var ddtt = new Date(v_SchedStart).getTime() - new Date().getTime();
+        //                 //     cc('dt / ' + ddtt);
+        //                 //     var st = (new Date().toISOString());
+        //                 //     var fn = new Date(new Date(_SchedFinish).getTime() - ddtt - new Date().getTimezoneOffset() * 60000).toISOString();
+        //                 //     cc(st + ' / ' + fn);
+        //                 //     st = st.substr(0, 10) + ' ' + st.substr(11, 8);
+        //                 //     fn = fn.substr(0, 10) + ' ' + fn.substr(11, 8);
+        //                 //     cc(st + ' / ' + fn);
+        //                 //     _SchedStart = timeNow;
+        //                 //     _SchedFinish = fn;
+        //                 // }
+        // //doto wxy
+        //                 cc(_SchedStart);
+        //                 cc(_SchedFinish);
+        //                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
+        //                 _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
+        //                 var ss = new Date(_SchedStart).getTime();
+        //                 ss = parseInt(ss / (15 * 60 * 1000)) * 15 * 60 * 1000;
+        //                 var sf = new Date(_SchedFinish).getTime();
+        //                 sf = Math.round(sf / (15 * 60 * 1000)) * 15 * 60 * 1000;
+        //                 if (sf - ss < 15 * 60 * 1000) {
+        //                     sf = ss + 15 * 60 * 1000;
+        //                 }
+        //                 cc(ss);
+        //                 cc(sf);
+        //
+        //                 var SSSS = new Date(ss);
+        //                 var SFSF = new Date(sf);
+        //                 cc(SSSS.toISOString());
+        //                 cc(SFSF.toISOString());
+        //
+        //                 _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+        //                 _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+        //
+        //                 cc(_SchedStart);
+        //                 cc(_SchedFinish);
+        //
+        //
+        //                 _Status = 'Scheduled';
+        //                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
+        //                 cc('_OrderNumber / ' + _OrderNumber);
+        //                 cc('_Sort / ' + _Sort);
+        //                 cc('e.id. / ' + e.id);
+        //                 cc('_Press / ' + _Press);
+        //                 cc('_Action / ' + _Action);
+        //                 ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+        //                 // ActivityLogADD('Assigned', _OrderNumber + '_' +  ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + e.id.split('_')[1]);
+        //                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+        //                 addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+        //             }
+        //
+        //             if (_Action.indexOf('Cancelled') >= 0) {
+        //                 // // cc(_Status + ' >Cancelled');
+        //                 // _SchedStart = '';
+        //                 // _SchedFinish = '';
+        //                 // _Status = 'Cancelled';
+        //                 // _Press = '';
+        //                 MESM_OrderOperation_UPD(_ID, _Quantity, 'Cancelled', '', '', '');
+        //                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
+        //                 ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
+        //             }
+        //
+        //             if (_Status == 'Scheduled' && _Action.indexOf('Unscheduled') >= 0) {
+        //                 // // cc(_Status + ' >Unscheduled');
+        //                 // _SchedStart = '';
+        //                 // _SchedFinish = '';
+        //                 // _Status = 'Unscheduled';
+        //                 // _Press = '';
+        //                 MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
+        //                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
+        //                 ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
+        //             }
+        //
+        //
+        //             orderTable.reload();
+        //         }
+
+        var rIndex = 0;
+
         function quickAction(e) {
 
             cc('quickAction');
-            cc(e);
-            var TableCOL = e.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes;
-            cc(TableCOL);
-            var _ID = TableCOL[2].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _OrderNumber = TableCOL[3].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Quantity = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _SchedStart = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _SchedFinish = TableCOL[7].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
-            var _During = _Action.indexOf('~') >= 0 ? parseInt(_Action.split('~')[1]) : 0;
-            var _WorkCenterID = 0;
-            var _Sort;// = TableCOL[13].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            // cc(e);
+            // cc(orderOpreationTable.cell({row: 0, column: 0}).data());
+            // cc(orderTable);
 
-            // cc('_ID ' + _ID);
-            // cc(_During);
-
-            if ((_Status == 'Unscheduled' || _Status == 'Scheduled') && _Action.indexOf('assign') >= 0) {
-                // cc(_Status + ' > assign');
-                // if (_During < 240) {
-                //     _During = 240
-                // }
-                // _SchedStart = new Date().toISOString().substr(0, 10) + ' 00:00:00';
-                // _SchedFinish = moment(_SchedStart).add(_During, 'minute').format('YYYY-MM-DD HH:mm:ss');
-
-                // if (_Action.indexOf('PRESS') >= 0) {
-                //     //wxy
-                //     var v_SchedStart = _SchedStart;
-                //     var v_SchedFinish = _SchedFinish;
-                //     var timeNow = (new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 19);
-                //     cc('timeNow / ' + timeNow);
-                //     var ddtt = new Date(v_SchedStart).getTime() - new Date().getTime();
-                //     cc('dt / ' + ddtt);
-                //     var st = (new Date().toISOString());
-                //     var fn = new Date(new Date(_SchedFinish).getTime() - ddtt - new Date().getTimezoneOffset() * 60000).toISOString();
-                //     cc(st + ' / ' + fn);
-                //     st = st.substr(0, 10) + ' ' + st.substr(11, 8);
-                //     fn = fn.substr(0, 10) + ' ' + fn.substr(11, 8);
-                //     cc(st + ' / ' + fn);
-                //     _SchedStart = timeNow;
-                //     _SchedFinish = fn;
-                // }
-//doto wxy
-                cc(_SchedStart);
-                cc(_SchedFinish);
-                _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
-                _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
-                var ss = new Date(_SchedStart).getTime();
-                ss = parseInt(ss / (15 * 60 * 1000)) * 15 * 60 * 1000;
-                var sf = new Date(_SchedFinish).getTime();
-                sf = Math.round(sf / (15 * 60 * 1000)) * 15 * 60 * 1000;
-                if (sf - ss < 15 * 60 * 1000) {
-                    sf = ss + 15 * 60 * 1000;
+            var ROW = e.parentElement.parentElement.parentElement.parentElement.childNodes;
+            // cc(ROW);
+            var _OrderNumber = ROW[1].innerText;
+            var _Material = ROW[2].innerText;
+            var _ID = 0;// ROW[0].innerText;
+            for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+                if (MESM_OrderOperationSort[n].OrderNumber == _OrderNumber && MESM_OrderOperationSort[n].Material == _Material) {
+                    _ID = MESM_OrderOperationSort[n].RecordID;
                 }
-                cc(ss);
-                cc(sf);
-
-                var SSSS = new Date(ss);
-                var SFSF = new Date(sf);
-                cc(SSSS.toISOString());
-                cc(SFSF.toISOString());
-
-                _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
-                _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
-
-                cc(_SchedStart);
-                cc(_SchedFinish);
-
-
-                _Status = 'Scheduled';
-                removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                cc('_OrderNumber / ' + _OrderNumber);
-                cc('_Sort / ' + _Sort);
-                cc('e.id. / ' + e.id);
-                cc('_Press / ' + _Press);
-                cc('_Action / ' + _Action);
-                ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
-                // ActivityLogADD('Assigned', _OrderNumber + '_' +  ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + e.id.split('_')[1]);
-                MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
             }
-
-            if (_Action.indexOf('Cancelled') >= 0) {
-                // // cc(_Status + ' >Cancelled');
-                // _SchedStart = '';
-                // _SchedFinish = '';
-                // _Status = 'Cancelled';
-                // _Press = '';
-                MESM_OrderOperation_UPD(_ID, _Quantity, 'Cancelled', '', '', '');
-                removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
+            // cc(_ID);
+            for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
+                if (orderOpreationTable.cell({row: n, column: 0}).data() == _ID) {
+                    rIndex = n;
+                    break;
+                }
             }
+            // cc(rIndex);
 
-            if (_Status == 'Scheduled' && _Action.indexOf('Unscheduled') >= 0) {
-                // // cc(_Status + ' >Unscheduled');
-                // _SchedStart = '';
-                // _SchedFinish = '';
-                // _Status = 'Unscheduled';
-                // _Press = '';
-                MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
-                removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
-            }
-
-
-            orderTable.reload();
-        }
-
-        function quickAction2(e) {
-
-            cc('quickAction2');
-            cc(e);
-            var TableCOL = e.parentElement.parentElement.parentElement.parentElement.childNodes;
-            cc(TableCOL);
-            var _ID = TableCOL[0].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Action = e.innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Status = TableCOL[1].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _OrderNumber = TableCOL[3].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Quantity = TableCOL[4].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _SchedStart = TableCOL[5].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _SchedFinish = TableCOL[6].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _Action = e.innerText;
+            var _Status = orderOpreationTable.cell({row: rIndex, column: 1}).data();
+            var _Quantity = orderOpreationTable.cell({row: rIndex, column: 4}).data();
+            var _SchedStart = orderOpreationTable.cell({row: rIndex, column: 5}).data();
+            var _SchedFinish = orderOpreationTable.cell({row: rIndex, column: 6}).data();
             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
-            var _During = _Action.indexOf('~') >= 0 ? parseInt(_Action.split('~')[1]) : 0;
-            var _Group =TableCOL[7].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-            var _Sort = TableCOL[13].innerText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+            var _Group = orderOpreationTable.cell({row: rIndex, column: 7}).data();
+            var _Sort = orderOpreationTable.cell({row: rIndex, column: 13}).data();
 
-            if (_Group.indexOf('MOLD') >= 0) {
-                _Sort = 'MOLDING'
-            }
 
-            cc('_OrderNumber / ' + _OrderNumber);
-            cc('_Sort / ' + _Sort);
-            cc('e.id. / ' + e.id);
-            cc('_Press. / ' + _Press);
-            cc('_Action. / ' + _Action);
-
-            if ((_Status == 'Unscheduled' || _Status == 'Scheduled') && _Action.indexOf('assign') >= 0) {
+            if ((_Status == 'U' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
                 cc('assign');
-                cc(_SchedStart);
-                cc(_SchedFinish);
+
                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
                 _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
                 var ss = new Date(_SchedStart).getTime();
@@ -1885,19 +1920,14 @@
                 if (sf - ss < 15 * 60 * 1000) {
                     sf = ss + 15 * 60 * 1000;
                 }
-                cc(ss);
-                cc(sf);
 
                 var SSSS = new Date(ss);
                 var SFSF = new Date(sf);
-                cc(SSSS.toISOString());
-                cc(SFSF.toISOString());
+
 
                 _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
                 _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
 
-                cc(_SchedStart);
-                cc(_SchedFinish);
 
                 _Status = 'Scheduled';
 
@@ -1905,9 +1935,13 @@
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
 
                 ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
-                // ActivityLogADD('Assigned', _OrderNumber + '_' +  ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + e.id.split('_')[1]);
+                // ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+
+                orderOpreationTable.cell({row: rIndex, column: 1}).data('S').draw();
+                orderOpreationTable.cell({row: rIndex, column: 11}).data(_Press).draw();
+
             }
 
             if (_Action.indexOf('Cancelled') >= 0) {
@@ -1921,30 +1955,50 @@
                 ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
             }
 
-            if (_Status == 'Scheduled' && _Action.indexOf('Unscheduled') >= 0) {
+            if (_Status == 'S' && _Action.indexOf('Unscheduled') >= 0) {
                 cc(_Status + ' >Unscheduled');
                 // _SchedStart = '';
                 // _SchedFinish = '';
                 // _Status = 'Unscheduled';
                 // _Press = '';
                 MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
+
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
                 ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
+                orderOpreationTable.cell({row: rIndex, column: 1}).data('U').draw();
+                orderOpreationTable.cell({row: rIndex, column: 11}).data('').draw();
+                // MESM_OrderOperationRAW
+                for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
+                    if (MESM_OrderOperationRAW[n].ID == orderOpreationTable.cell({row: rIndex, column: 0}).data()) {
+                        // orderOpreationTable.cell({row: rIndex, column: 1}).data('U');
+                        orderOpreationTable.cell({
+                            row: rIndex,
+                            column: 5
+                        }).data(MESM_OrderOperationRAW[n].EarlySchedStartDate + ' ' + MESM_OrderOperationRAW[n].EarlySchedStartTime);
+                        orderOpreationTable.cell({
+                            row: rIndex,
+                            column: 6
+                        }).data(MESM_OrderOperationRAW[n].EarlySchedFinDate + ' ' + MESM_OrderOperationRAW[n].EarlySchedFinTime);
+                        // orderOpreationTable.cell({row: rIndex, column: 11}).data();
+                    }
+                }
             }
 
+            // orderOpreationTable.cell({row: 0, column: 0}).data(999).draw();
+            // orderOpreationTable.cell({row: 0, column: 1}).data('U').draw();
+            // orderTable.reload();
 
-            orderTable.reload();
         }
 
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
             cc('MESM_OrderOperation_UPD');
 
-            // cc(_ID);
-            // cc(_Quantity);
-            // cc(_Status);
-            // cc(_SchedStart);
-            // cc(_SchedFinish);
-            // cc(_Press);
+            cc(_ID);
+            cc(_Quantity);
+            cc(_Status);
+            cc(_SchedStart);
+            cc(_SchedFinish);
+            cc(_Press);
 
 
             if (_SchedStart == '' || _SchedFinish == '') {
@@ -1959,16 +2013,17 @@
             }
 
 
-            for (var i = 0; i < orderTable.originalDataSet.length; i++) {
-                // cc(i + ' / ' + orderTable.originalDataSet[i].OrderNumber);
-                if (orderTable.originalDataSet[i].ID == _ID) {
-                    orderTable.originalDataSet[i].SchedStart = _SchedStart;
-                    orderTable.originalDataSet[i].SchedFinish = _SchedFinish;
-                    orderTable.originalDataSet[i].Press = _Press;
-                    orderTable.originalDataSet[i].Status = _Status.substring(0, 1);
-                    break;
-                }
-            }
+            // for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+            //     // cc(i + ' / ' + orderTable.originalDataSet[i].OrderNumber);
+            //     if (orderTable.originalDataSet[i].ID == _ID) {
+            //         orderTable.originalDataSet[i].SchedStart = _SchedStart;
+            //         orderTable.originalDataSet[i].SchedFinish = _SchedFinish;
+            //         orderTable.originalDataSet[i].Press = _Press;
+            //         orderTable.originalDataSet[i].Status = _Status.substring(0, 1);
+            //         break;
+            //     }
+            // }
+
             var _WorkCenterID = 0;
 
             if (_Press != '') {
@@ -1979,7 +2034,6 @@
                     }
                 }
             }
-
 
 
             var _N;
@@ -2266,17 +2320,16 @@
 
         var creatDatatable = {
             init: function (data) {
-                // cc(data);
-                cc(data);
-                var table = $("#m_table_1").DataTable({
+                cc('creatDatatable.init');
+                orderOpreationTable = $("#m_table_1").DataTable({
                     lengthMenu: [5, 10, 25, 50, 100],
                     pageLength: 1000,
                     pagingType: "full_numbers",
                     data: data,
+
                     columns: [
                         {data: 'RecordID'},
                         {data: 'Status'},
-                        {data: 'ID'},
                         {data: 'OrderNumber'},
                         {data: 'Material'},
                         {data: 'Quantity'},
@@ -2288,8 +2341,11 @@
                         {data: 'Concurrent'},
                         {data: 'Press'},
                         {data: 'CtrlKey'},
-                        // {data: 'Actions'},
+                        {data: 'Sort'},
+                        {data: 'Actions'},
                     ],
+                    order: [[2, "asc"]],
+
                     responsive: true,
                     select: {
                         style: 'multi',
@@ -2302,6 +2358,7 @@
                     //     <span></span>
                     // </label>`;
                     // },
+                    fixedColumns: true,
                     columnDefs: [
                         // {
                         //     targets: 0,
@@ -2318,12 +2375,13 @@
                         {
                             targets: 0,
                             title: '',
-                            // visible: false,
-                            orderable: true,
+                            visible: false,
+                            orderable: false,
                         },
                         {
                             targets: 1,
                             title: 'Status',
+                            visible: true,
                             orderable: true,
                             render: function (data, type, full, meta) {
                                 // var status = {
@@ -2349,64 +2407,76 @@
                         },
                         {
                             targets: 2,
-                            title: 'ID',
-                            visible: false,
+                            title: 'Order #',
+                            visible: true,
                             orderable: true,
                         },
                         {
                             targets: 3,
-                            title: 'Order #',
-                            orderable: true,
-                        },
-                        {
-                            targets: 4,
                             title: 'Material #',
-                            orderable: true,
-                        },
-                        {
-                            targets: 5,
-                            title: 'Quantity',
+                            visible: true,
                             orderable: false,
                         },
                         {
-                            targets: 6,
+                            targets: 4,
+                            title: 'Qty',
+                            visible: true,
+                            orderable: false,
+                        },
+                        {
+                            targets: 5,
                             title: 'SchedStart',
+
+
+                            visible: true,
                             orderable: true,
                         },
                         {
-                            targets: 7,
+                            targets: 6,
                             title: 'SchedFinish',
                             orderable: false,
                         },
                         {
-                            targets: 8,
+                            targets: 7,
                             title: 'Group',
+                            visible: true,
+                            orderable: true,
+                        },
+                        {
+                            targets: 8,
+                            title: 'Mold',
+                            visible: true,
                             orderable: true,
                         },
                         {
                             targets: 9,
-                            title: 'Mold',
+                            title: 'F.Mold',
+                            visible: true,
                             orderable: true,
                         },
                         {
                             targets: 10,
-                            title: 'FamilyMold',
+                            title: 'Con.',
+                            visible: true,
                             orderable: true,
                         },
                         {
                             targets: 11,
-                            title: 'Concurrent',
+                            title: 'WorkCenter',
+                            visible: true,
                             orderable: true,
                         },
                         {
                             targets: 12,
-                            title: 'WorkCenter',
-                            orderable: true,
+                            title: 'Key',
+                            // width: 60,
+                            visible: true,
+                            orderable: false,
                         },
                         {
                             targets: 13,
-                            title: 'CtrlKey',
-                            visible: true,
+                            title: 'Sort',
+                            visible: false,
                             orderable: false,
                         },
                         {
@@ -2435,12 +2505,12 @@
                                     if (e.Sort == 'MOLDING') {
                                         for (var f in MESM_FloorMaps) {
                                             if (MESM_FloorMaps[f].idUnitParent == wcg) {
-                                                if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
+                                                if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0) {
                                                     // prs.push({
                                                     //     'unitName': MESM_FloorMaps[f].unitName,
                                                     //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
                                                     // });
-                                                    prsSTR += '<a class="dropdown-item" onclick="quickAction2(this)" id=' +
+                                                    prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
                                                         '"' +
                                                         wcgNAME +
                                                         '_' +
@@ -2464,13 +2534,13 @@
                                             if (e.WCG.indexOf(i) > 0) {
                                                 groupSTR =
                                                     groupSTR +
-                                                    '<a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-wrench"></i>MOLD' +
+                                                    '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
                                                     i + ' *' +
                                                     '</a>';
                                             } else {
                                                 groupSTR =
                                                     groupSTR +
-                                                    '<a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-wrench"></i>MOLD' +
+                                                    '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
                                                     i +
                                                     '</a>'
                                             }
@@ -2492,20 +2562,20 @@
                                         }
                                     } else if (e.Sort == 'RESIN') {
                                         prsSTR =
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="RESIN_BLEND02"><i class="la la-wrench"></i>assign to BLEND02' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="RESIN_BLEND03"><i class="la la-wrench"></i>assign to BLEND03' + '</a>';
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND02"><i class="la la-wrench"></i>assign to BLEND02' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND03"><i class="la la-wrench"></i>assign to BLEND03' + '</a>';
                                     } else if (e.Sort == 'PACKING') {
                                         prsSTR =
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK01"><i class="la la-wrench"></i>assign to PACK01' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK02"><i class="la la-wrench"></i>assign to PACK02' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK03"><i class="la la-wrench"></i>assign to PACK03' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK04"><i class="la la-wrench"></i>assign to PACK04' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK05"><i class="la la-wrench"></i>assign to PACK05' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction2(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK01"><i class="la la-wrench"></i>assign to PACK01' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK02"><i class="la la-wrench"></i>assign to PACK02' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK03"><i class="la la-wrench"></i>assign to PACK03' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK04"><i class="la la-wrench"></i>assign to PACK04' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK05"><i class="la la-wrench"></i>assign to PACK05' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
                                     }
 
                                     var ft = '';
@@ -2516,28 +2586,29 @@
                                     if (e.Sort == 'ASSY') {
                                         return '';
                                     } else
-                                        return e.Status == 'U' ?
-
-
-                                            // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                            '<span class="dropdown ' + '">' +
-                                            // '<div class="dropup ' + "" + '">' +
-                                            '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                            '           <i class="la la-ellipsis-h"></i></a>' +
-                                            '       <div class="dropdown-menu dropdown-menu-right"' +
-                                            scrollSTR +
-                                            '>' +
-                                            prsSTR +
-                                            groupSTR +
-
-                                            // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-times-circle"></i>' +
-                                            // ft +
-                                            '</a>' +
-                                            '       </div>' +
-                                            '   </span>' +
-                                            '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                            '       <i class="la la-comment"></i></a>'
-                                            :
+                                        return '' +
+                                            // // ?e.Status == 'U' ?
+                                            //
+                                            //
+                                            //     // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+                                            //     '<span class="dropdown ' + '">' +
+                                            //     // '<div class="dropup ' + "" + '">' +
+                                            //     '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+                                            //     '           <i class="la la-ellipsis-h"></i></a>' +
+                                            //     '       <div class="dropdown-menu dropdown-menu-right"' +
+                                            //     scrollSTR +
+                                            //     '>' +
+                                            //     prsSTR +
+                                            //     groupSTR +
+                                            //
+                                            //     // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-times-circle"></i>' +
+                                            //     // ft +
+                                            //     '</a>' +
+                                            //     '       </div>' +
+                                            //     '   </span>' +
+                                            //     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+                                            //     '       <i class="la la-comment"></i></a>'
+                                            //     :
                                             '<span class="dropdown ' + '">' +
                                             '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
                                             '           <i class="la la-ellipsis-h"></i>' +
@@ -2549,8 +2620,7 @@
                                             prsSTR +
                                             groupSTR +
                                             '           <div class="dropdown-divider"></div>' +
-                                            // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
-                                            '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
+                                            '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
                                             '       </div>' +
                                             '   </span>' +
                                             '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
@@ -2565,7 +2635,7 @@
                                         '       <div class="dropdown-menu dropdown-menu-right">' +
                                         // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-edit" "></i>Action I</a>' +
                                         // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-leaf"></i>Action II</a>' +
-                                        '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-info-circle"></i>Hold</a>' +
+                                        '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Hold</a>' +
                                         '       </div>' +
                                         '   </span>' +
                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
@@ -2579,7 +2649,7 @@
                                         '       <div class="dropdown-menu dropdown-menu-right">' +
                                         // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-edit" "></i>Action I</a>' +
                                         // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-leaf"></i>Action II</a>' +
-                                        '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-info-circle"></i>Order canceled</a>' +
+                                        '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Order canceled</a>' +
                                         '       </div>' +
                                         '   </span>' +
                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
@@ -2635,10 +2705,10 @@
                 //hide the first column
                 // table.column(0).visible(false);
 
-                table.row(':eq(5)', {page: 'current'}).select();
-                table.row(':eq(15)', {page: 'current'}).select();
-                table.row(':eq(25)', {page: 'current'}).select();
-                table.page.len(10).draw();
+                orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
+                orderOpreationTable.row(':eq(15)', {page: 'current'}).select();
+                orderOpreationTable.row(':eq(25)', {page: 'current'}).select();
+                orderOpreationTable.page.len(10).draw();
 
             }
         };
@@ -2713,10 +2783,9 @@
                     <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                         <div class="m-stack__item m-topbar__nav-wrapper">
                             <ul class="m-topbar__nav m-nav m-nav--inline">
-                                <li class="
-	m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light"
-                                    data-dropdown-toggle="click" data-dropdown-persistent="true" id="m_quicksearch"
-                                    data-search-type="dropdown">
+                                <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light"
+                                    m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown"
+                                    m-dropdown-persistent="1">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-nav__link-icon">
 													<i class="flaticon-search-1"></i>
@@ -2751,7 +2820,7 @@
                                     </div>
                                 </li>
                                 <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width"
-                                    data-dropdown-toggle="click" data-dropdown-persistent="true">
+                                    m-dropdown-toggle="click" m-dropdown-persistent="1">
                                     <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon">
                                         <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small m-badge--danger"></span>
                                         <span class="m-nav__link-icon">
@@ -2803,10 +2872,7 @@
                                                                         <div class="m-list-timeline__item">
                                                                             <span class="m-list-timeline__badge -m-list-timeline__badge--state-success"></span>
                                                                             <span class="m-list-timeline__text">
-																						13 new order received
-                                                                                <span class="m-badge m-badge--danger m-badge--wide">
-																							urgent
-																						</span>
+																						12 new users registered
 																					</span>
                                                                             <span class="m-list-timeline__time">
 																						Just now
@@ -2833,13 +2899,67 @@
 																						20 mins
 																					</span>
                                                                         </div>
+                                                                        <div class="m-list-timeline__item">
+                                                                            <span class="m-list-timeline__badge"></span>
+                                                                            <span class="m-list-timeline__text">
+																						DB overloaded 80%
+																						<span class="m-badge m-badge--info m-badge--wide">
+																							settled
+																						</span>
+																					</span>
+                                                                            <span class="m-list-timeline__time">
+																						1 hr
+																					</span>
+                                                                        </div>
+                                                                        <div class="m-list-timeline__item">
+                                                                            <span class="m-list-timeline__badge"></span>
+                                                                            <span class="m-list-timeline__text">
+																						System error -
+																						<a href="#" class="m-link">
+																							Check
+																						</a>
+																					</span>
+                                                                            <span class="m-list-timeline__time">
+																						2 hrs
+																					</span>
+                                                                        </div>
+                                                                        <div class="m-list-timeline__item m-list-timeline__item--read">
+                                                                            <span class="m-list-timeline__badge"></span>
+                                                                            <span href="" class="m-list-timeline__text">
+																						New order received
+																						<span class="m-badge m-badge--danger m-badge--wide">
+																							urgent
+																						</span>
+																					</span>
+                                                                            <span class="m-list-timeline__time">
+																						7 hrs
+																					</span>
+                                                                        </div>
+                                                                        <div class="m-list-timeline__item m-list-timeline__item--read">
+                                                                            <span class="m-list-timeline__badge"></span>
+                                                                            <span class="m-list-timeline__text">
+																						Production server down
+																					</span>
+                                                                            <span class="m-list-timeline__time">
+																						3 hrs
+																					</span>
+                                                                        </div>
+                                                                        <div class="m-list-timeline__item">
+                                                                            <span class="m-list-timeline__badge"></span>
+                                                                            <span class="m-list-timeline__text">
+																						Production server up
+																					</span>
+                                                                            <span class="m-list-timeline__time">
+																						5 hrs
+																					</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="tab-pane" id="topbar_notifications_events"
                                                              role="tabpanel">
-                                                            <div class="m-scrollable" m-scrollabledata-scrollable="true"
+                                                            <div class="m-scrollable" data-scrollable="true"
                                                                  data-max-height="250" data-mobile-max-height="200">
                                                                 <div class="m-list-timeline m-list-timeline--skin-light">
                                                                     <div class="m-list-timeline__items">
@@ -2921,7 +3041,7 @@
                                     </div>
                                 </li>
                                 <li class="m-nav__item m-topbar__quick-actions m-topbar__quick-actions--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push m-dropdown--mobile-full-width m-dropdown--skin-light"
-                                    data-dropdown-toggle="click">
+                                    m-dropdown-toggle="click">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
                                         <span class="m-nav__link-badge m-badge m-badge--dot m-badge--info m--hide"></span>
                                         <span class="m-nav__link-icon">
@@ -2942,8 +3062,8 @@
                                             </div>
                                             <div class="m-dropdown__body m-dropdown__body--paddingless">
                                                 <div class="m-dropdown__content">
-                                                    <div class="m-scrollable" data-scrollable="false"
-                                                         data-max-height="380" data-mobile-max-height="200">
+                                                    <div class="data" data="false" data-max-height="380"
+                                                         data-mobile-max-height="200">
                                                         <div class="m-nav-grid m-nav-grid--skin-light">
                                                             <div class="m-nav-grid__row">
                                                                 <a href="#" class="m-nav-grid__item">
@@ -2981,7 +3101,7 @@
                                     </div>
                                 </li>
                                 <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"
-                                    data-dropdown-toggle="click" style="display: none">
+                                    m-dropdown-toggle="click" style="display: none">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-topbar__userpic">
 													<img src="assets/app/media/img/users/user4.jpg"
@@ -3223,88 +3343,89 @@
                                 </div>
                             </div>
 
-                            <div class="m-portlet__body">
+                            <!--<div class="m-portlet__body">-->
 
-                                <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
-                                    <div class="row align-items-center">
-                                        <div class="col-xl-12 order-2 order-xl-1">
-                                            <div class="form-group m-form__group row align-items-center">
+                            <!--<div class="m-form m-form&#45;&#45;label-align-right m&#45;&#45;margin-top-20 m&#45;&#45;margin-bottom-30">-->
+                            <!--<div class="row align-items-center">-->
+                            <!--<div class="col-xl-12 order-2 order-xl-1">-->
+                            <!--&lt;!&ndash;<div class="form-group m-form__group row align-items-center">&ndash;&gt;-->
 
-                                                <div class="col-md-5">
-                                                    <div class="m-form__group m-form__group--inline">
-                                                        <div class="m-form__label">
-                                                            <label class="m-label m-label--single"
-                                                                   style="white-space:nowrap">
-                                                                WorkCenter Group:
-                                                            </label>
-                                                        </div>
-                                                        <div class="m-form__control">
-                                                            <select class="form-control m-bootstrap-select m-bootstrap-select--solid"
-                                                                    id="m_form_type">
-                                                                <option value=""> All</option>
-                                                                <option value="ASSY"> ASSY</option>
-                                                                <option value="MOLD1">MOLD1</option>
-                                                                <option value="MOLD2">MOLD2</option>
-                                                                <option value="MOLD3">MOLD3</option>
-                                                                <option value="MOLD4">MOLD4</option>
-                                                                <option value="MOLD5">MOLD5</option>
-                                                                <option value="MOLD6">MOLD6</option>
-                                                                <!--<option value="MOLD6">&#45;&#45;&#45;&#45;</option>-->
-                                                                <option value="PACKING">PACKING</option>
-                                                                <option value="RESIN">RESIN</option>
-                                                                <!--<option value="MOLD6">&#45;&#45;&#45;&#45;</option>-->
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-md-none m--margin-bottom-10"></div>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <div class="m-form__group m-form__group--inline">
-                                                        <!--<div class="m-form__label">-->
-                                                        <!--<label>-->
-                                                        <!---->
-                                                        <!--</label>-->
-                                                        <!--</div>-->
-                                                        <div class="m-form__control">
-                                                            <select class="form-control m-bootstrap-select m-bootstrap-select--solid"
-                                                                    id="m_form_status">
-                                                                <option value="">All</option>
-                                                                <option value="U">Unscheduled</option>
-                                                                <option value="S">Scheduled</option>
-                                                                <!--<option value="H">Hold</option>-->
-                                                                <!--<option value="C">Cancelled</option>-->
-                                                                <!--<option value="N">No Material</option>-->
-                                                                <!--<option value="6">Urgent</option>-->
-                                                                <!--<option value="7">Delayed</option>-->
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-md-none m--margin-bottom-10"></div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <div class="m-input-icon m-input-icon--left">
-                                                        <input type="text"
-                                                               class="form-control m-input m-input--solid"
-                                                               placeholder="Search..." id="generalSearch">
-                                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-															<span>
-																<i class="la la-search"></i>
-															</span>
-														</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--begin: Datatable -->
-                                <div class="m_datatable" id="m_datatable_latest_orders"></div>
-                                <!--end: Datatable -->
-                            </div>
+                            <!--&lt;!&ndash;<div class="col-md-5">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="m-form__group m-form__group&#45;&#45;inline">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="m-form__label">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<label class="m-label m-label&#45;&#45;single"&ndash;&gt;-->
+                            <!--&lt;!&ndash;style="white-space:nowrap">&ndash;&gt;-->
+                            <!--&lt;!&ndash;WorkCenter Group:&ndash;&gt;-->
+                            <!--&lt;!&ndash;</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="m-form__control">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<select class="form-control m-bootstrap-select m-bootstrap-select&#45;&#45;solid"&ndash;&gt;-->
+                            <!--&lt;!&ndash;id="m_form_type">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value=""> All</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="ASSY"> ASSY</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="MOLD1">MOLD1</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="MOLD2">MOLD2</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="MOLD3">MOLD3</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="MOLD4">MOLD4</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="MOLD5">MOLD5</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="MOLD6">MOLD6</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="MOLD6">&#45;&#45;&#45;&#45;</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="PACKING">PACKING</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="RESIN">RESIN</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="MOLD6">&#45;&#45;&#45;&#45;</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="d-md-none m&#45;&#45;margin-bottom-10"></div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="col-md-5">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="m-form__group m-form__group&#45;&#45;inline">&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<div class="m-form__label">&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<label>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;</label>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="m-form__control">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<select class="form-control m-bootstrap-select m-bootstrap-select&#45;&#45;solid"&ndash;&gt;-->
+                            <!--&lt;!&ndash;id="m_form_status">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="">All</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="U">Unscheduled</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="S">Scheduled</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="H">Hold</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="C">Cancelled</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="N">No Material</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="6">Urgent</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<option value="7">Delayed</option>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="d-md-none m&#45;&#45;margin-bottom-10"></div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="col-md-2">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="m-input-icon m-input-icon&#45;&#45;left">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<input type="text"&ndash;&gt;-->
+                            <!--&lt;!&ndash;class="form-control m-input m-input&#45;&#45;solid"&ndash;&gt;-->
+                            <!--&lt;!&ndash;placeholder="Search..." id="generalSearch">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<span class="m-input-icon__icon m-input-icon__icon&#45;&#45;left">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<i class="la la-search"></i>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash;begin: Datatable &ndash;&gt;-->
+                            <!--<div class="m_datatable" id="m_datatable_latest_orders"></div>-->
+                            <!--&lt;!&ndash;end: Datatable &ndash;&gt;-->
+                            <!--</div>-->
 
                             <div class="m-portlet__body">
                                 <!--begin: Datatable -->
                                 <table class="table table-striped- table-bordered table-hover table-checkable"
+                                       style="white-space: nowrap "
                                        id="m_table_1">
                                 </table>
                             </div>
@@ -3329,7 +3450,7 @@
                                     <div class="tab-pane active" id="m_widget4_tab1_content">
                                         <!--<div class="m-scrollable" data-scrollable="true" data-max-height="740" style="height1: 600px; overflow: auto;">-->
                                         <div class="m-scrollable" data-scrollable="true" id="dActivityLog"
-                                             style="max-height: 736px;  position: relative; overflow: visible;">
+                                             style="max-height: 550px;  position: relative; overflow: visible; white-space: nowrap">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items">
                                                     <!--<div class="m-list-timeline__item">-->
