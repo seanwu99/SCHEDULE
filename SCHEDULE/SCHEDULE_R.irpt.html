@@ -674,10 +674,10 @@
             // cc(WorkCentres);
 
 
-            cc('//=============================================');
-            cc('WorkCentres.length ' + WorkCentres.length);
+            // cc('//=============================================');
+            // cc('WorkCentres.length ' + WorkCentres.length);
             // cc(WorkCentres);
-            cc('//=============================================');
+            // cc('//=============================================');
 
             // scheduleForm(WorkCentres);
             // cc('scheduleForm');
@@ -687,14 +687,15 @@
             // cc(MESM_ProductionOrders);
             // cc('orderTable.originalDataSet');
             // cc(orderTable.originalDataSet);
+
             // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
+            //     // cc(MESM_OrderOperationSort[n]);
             //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-            //
             //         addScheduleEvent(
             //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
             //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-            //             MESM_OrderOperationSort[n].SchedStart,
-            //             MESM_OrderOperationSort[n].SchedFinish
+            //             MESM_OrderOperationSort[n].SchedStart.replace('T', ' '),
+            //             MESM_OrderOperationSort[n].SchedFinish.replace('T', ' ')
             //         );
             //
             //     }
@@ -702,36 +703,42 @@
             //=========================================================================================================================================
             var events = [];
 
-            if (false) {
-                for (var n = 0; n < orderTable.originalDataSet.length; n++) {
-                    if (orderTable.originalDataSet[n].Status == 'S') {
-                        // removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
-                        events.push(
-                            {
-                                id: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                resourceId: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                start: orderTable.originalDataSet[n].SchedStart,
-                                end: orderTable.originalDataSet[n].SchedFinish,
-                                title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                                description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                                color: colors[Math.round(Math.random() * 8)],
+            for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
+                // cc(orderOpreationTable.cell({row: n, column: 1}).data());
+                if (orderOpreationTable.cell({row: n, column: 1}).data() == 'S') {
+                    // removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
+                    events.push(
+                        {
+                            // id: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                            // resourceId: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                            // start: orderTable.originalDataSet[n].SchedStart,
+                            // end: orderTable.originalDataSet[n].SchedFinish,
+                            // title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                            // description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                            // color: colors[Math.round(Math.random() * 8)],
+                            id:orderOpreationTable.cell({row: n, column: 2}).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
+                            resourceId: orderOpreationTable.cell({row: n, column: 7}).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
+                            start: orderOpreationTable.cell({row: n, column: 5}).data(),
+                            end: orderOpreationTable.cell({row: n, column: 6}).data(),
+                            title: orderOpreationTable.cell({row: n, column: 2}).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
+                            description: orderOpreationTable.cell({row: n, column: 7}).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
+                            color: colors[Math.round(Math.random() * 8)],
 
-                            });
-                        // addScheduleEvent(
-                        //     orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
-                        //     orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
-                        //     orderTable.originalDataSet[n].SchedStart,
-                        //     orderTable.originalDataSet[n].SchedFinish
-                        // );
-                    }
+                        });
+                    // addScheduleEvent(
+                    //     orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
+                    //     orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
+                    //     orderTable.originalDataSet[n].SchedStart,
+                    //     orderTable.originalDataSet[n].SchedFinish
+                    // );
                 }
             }
 
 
-            cc('//=============================================');
-            cc('events.length ' + events.length);
-            // cc(events);
-            cc('//=============================================');
+            // cc('//=============================================');
+            // cc('events.length ' + events.length);
+            // // cc(events);
+            // cc('//=============================================');
 
             scheduleForm(WorkCentres, events);
 
@@ -1870,7 +1877,7 @@
         //             orderTable.reload();
         //         }
 
-        var rIndex = 0;
+        var n = 0;
 
         function quickAction(e) {
 
@@ -1892,20 +1899,20 @@
             // cc(_ID);
             for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
                 if (orderOpreationTable.cell({row: n, column: 0}).data() == _ID) {
-                    rIndex = n;
+                    n = n;
                     break;
                 }
             }
             // cc(rIndex);
 
             var _Action = e.innerText;
-            var _Status = orderOpreationTable.cell({row: rIndex, column: 1}).data();
-            var _Quantity = orderOpreationTable.cell({row: rIndex, column: 4}).data();
-            var _SchedStart = orderOpreationTable.cell({row: rIndex, column: 5}).data();
-            var _SchedFinish = orderOpreationTable.cell({row: rIndex, column: 6}).data();
+            var _Status = orderOpreationTable.cell({row: n, column: 1}).data();
+            var _Quantity = orderOpreationTable.cell({row: n, column: 4}).data();
+            var _SchedStart = orderOpreationTable.cell({row: n, column: 5}).data();
+            var _SchedFinish = orderOpreationTable.cell({row: n, column: 6}).data();
             var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
-            var _Group = orderOpreationTable.cell({row: rIndex, column: 7}).data();
-            var _Sort = orderOpreationTable.cell({row: rIndex, column: 13}).data();
+            var _Group = orderOpreationTable.cell({row: n, column: 7}).data();
+            var _Sort = orderOpreationTable.cell({row: n, column: 13}).data();
 
 
             if ((_Status == 'U' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
@@ -1939,8 +1946,8 @@
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
 
-                orderOpreationTable.cell({row: rIndex, column: 1}).data('S').draw();
-                orderOpreationTable.cell({row: rIndex, column: 11}).data(_Press).draw();
+                orderOpreationTable.cell({row: n, column: 1}).data('S').draw();
+                orderOpreationTable.cell({row: n, column: 11}).data(_Press).draw();
 
             }
 
@@ -1965,18 +1972,18 @@
 
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
                 ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
-                orderOpreationTable.cell({row: rIndex, column: 1}).data('U').draw();
-                orderOpreationTable.cell({row: rIndex, column: 11}).data('').draw();
+                orderOpreationTable.cell({row: n, column: 1}).data('U').draw();
+                orderOpreationTable.cell({row: n, column: 11}).data('').draw();
                 // MESM_OrderOperationRAW
                 for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
-                    if (MESM_OrderOperationRAW[n].ID == orderOpreationTable.cell({row: rIndex, column: 0}).data()) {
+                    if (MESM_OrderOperationRAW[n].ID == orderOpreationTable.cell({row: n, column: 0}).data()) {
                         // orderOpreationTable.cell({row: rIndex, column: 1}).data('U');
                         orderOpreationTable.cell({
-                            row: rIndex,
+                            row: n,
                             column: 5
                         }).data(MESM_OrderOperationRAW[n].EarlySchedStartDate + ' ' + MESM_OrderOperationRAW[n].EarlySchedStartTime);
                         orderOpreationTable.cell({
-                            row: rIndex,
+                            row: n,
                             column: 6
                         }).data(MESM_OrderOperationRAW[n].EarlySchedFinDate + ' ' + MESM_OrderOperationRAW[n].EarlySchedFinTime);
                         // orderOpreationTable.cell({row: rIndex, column: 11}).data();
@@ -2199,7 +2206,11 @@
         ];
 
         function addScheduleEvent(resourceId, elementId, schedleStart, scheduleFinsh) {
-
+            cc('addScheduleEvent');
+            cc(resourceId);
+            cc(elementId);
+            cc(schedleStart);
+            cc(scheduleFinsh);
             // var tbOrderID = _OrderID;
             var today = new Date().toISOString().substr(0, 10);
 
@@ -2706,8 +2717,6 @@
                 // table.column(0).visible(false);
 
                 orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
-                orderOpreationTable.row(':eq(15)', {page: 'current'}).select();
-                orderOpreationTable.row(':eq(25)', {page: 'current'}).select();
                 orderOpreationTable.page.len(10).draw();
 
             }
