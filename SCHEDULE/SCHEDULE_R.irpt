@@ -51,6 +51,8 @@
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
         var MESM_OrderOperationRAW = [];
         var MESM_OrderOperationSort = [];
+        var newOrder = 0;
+        var newOrderEntry = new Date();
         // var MESM_OrderOperation = [];
         var MESM_FloorMaps = [];
         var MESM_FloorMaps_GROUP = [];
@@ -87,9 +89,6 @@
 
 
         function ActivityLogGET(t) {
-            // data-max-height="740"
-            // $('#dActivityLog').css('max-height: 740px');
-            // $('#dActivityLog').css('height: 740px');
 
             var logs = '';
 
@@ -119,7 +118,7 @@
                             moment(value.occurred).fromNow() + '</span></div>' +
                             logs;
                     });
-
+                    cc(logs);
                     document.getElementById("ActivityLog").innerHTML = logs;
                     cc('/1/=======================================================================================');
                     cc('/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET');
@@ -213,6 +212,7 @@
                             SchedStat: v.SchedStat,
                             OC: v.OC,
                             CtrlKey: (v.CtrlKey === undefined) ? '' : v.CtrlKey,
+                            EntryTimestamp: v.EntryTimestamp,
                             ArchivedTimestamp: v.ArchivedTimestamp,
                             FamilyMold: v.FamilyMold,
                             Concurrent: v.Concurrent,
@@ -608,8 +608,38 @@
                     'Sort': _Sort,
                     'Operation': MESM_OrderOperationRAW[n].Operation,
                     'OperationStatus': MESM_OrderOperationRAW[n].OperationStatus,
-                    'ArchivedTimestamp': (MESM_OrderOperationRAW[n].SchedStat == 'U') ? false : true,
+                    'EntryTimestamp': MESM_OrderOperationRAW[n].EntryTimestamp,
+                    'ArchivedTimestamp': MESM_OrderOperationRAW[n].ArchivedTimestamp,
                 });
+                // cc(MESM_OrderOperationRAW[n].ID + ' / ' + MESM_OrderOperationRAW[n].ArchivedTimestamp);
+                // cc(MESM_OrderOperationRAW[n].ID + ' / ' + MESM_OrderOperationRAW[n].EntryTimestamp);
+                if (MESM_OrderOperationRAW[n].ArchivedTimestamp == 'TimeUnavailable') {
+                    newOrder++;
+                    if (new Date(newOrderEntry).getTime() > new Date(MESM_OrderOperationRAW[n].EntryTimestamp).getTime()) {
+                        newOrderEntry = MESM_OrderOperationRAW[n].EntryTimestamp;
+                    }
+
+                }
+            }
+            cc(newOrder);
+            cc(newOrderEntry);
+
+
+            if (newOrder > 0) {
+                document.getElementById("newOrder").innerHTML = '' +
+                    '<div class="m-list-timeline__item">\n' +
+                    '    <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>\n' +
+                    '    <span class="m-list-timeline__text">' +
+                    newOrder +
+                    ' new order received<span\n' +
+                    '            class="m-badge m-badge--danger m-badge--wide"> new </span></span>\n' +
+                    '    <span class="m-list-timeline__time">' +
+                    moment(newOrderEntry).fromNow() +
+                    '</span>\n' +
+                    '</div>';
+
+            } else {
+                document.getElementById("m_topbar_notification_icon").style.display = 'none';
             }
 
 
@@ -716,12 +746,24 @@
                             // title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
                             // description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
                             // color: colors[Math.round(Math.random() * 8)],
-                            id:orderOpreationTable.cell({row: n, column: 2}).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
-                            resourceId: orderOpreationTable.cell({row: n, column: 7}).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
+                            id: orderOpreationTable.cell({
+                                row: n,
+                                column: 2
+                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
+                            resourceId: orderOpreationTable.cell({
+                                row: n,
+                                column: 7
+                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
                             start: orderOpreationTable.cell({row: n, column: 5}).data(),
                             end: orderOpreationTable.cell({row: n, column: 6}).data(),
-                            title: orderOpreationTable.cell({row: n, column: 2}).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
-                            description: orderOpreationTable.cell({row: n, column: 7}).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
+                            title: orderOpreationTable.cell({
+                                row: n,
+                                column: 2
+                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
+                            description: orderOpreationTable.cell({
+                                row: n,
+                                column: 7
+                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
                             color: colors[Math.round(Math.random() * 8)],
 
                         });
@@ -742,8 +784,6 @@
 
             scheduleForm(WorkCentres, events);
 
-            // $("#dActivityLog").attr('style', 'height: 740px');
-            // cc($("#dActivityLog"));
 
             ActivityLogGET();
             // cc(events);
@@ -794,448 +834,6 @@
         //
         //
         // }
-
-
-        //         var orderTableCreat = function (rows) {
-        //             cc('rows');
-        //             cc(rows);
-        //
-        //
-        //             orderTable = $(".m_datatable").mDatatable({
-        //                 drawCallback: function () {
-        //                     // cc('mDatatable drawCallback');
-        //                 },
-        //                 extensions: {
-        //                     checkbox: {},
-        //                 },
-        //                 responsive: true,
-        //                 data: {
-        //                     type: "local",
-        //                     source: rows,
-        //                     // pageSize: 10
-        //                 },
-        //                 layout: {
-        //                     theme: "default",
-        //                     class: '',
-        //                     scroll: false,
-        //                     // height: 500,
-        //                     footer: false
-        //                 },
-        //                 sortable: true,
-        //                 pagination: true,
-        //                 search: {input: $("#generalSearch")},
-        //                 columns: [
-        //                     // {
-        //                     //
-        //                     //     field: "checkBox",
-        //                     //     title: "#",
-        //                     //     sortable: false,
-        //                     //     filterable: false,
-        //                     //     width: 20,
-        //                     //     textAlign: "center",
-        //                     //     selector: {class: "m-checkbox--solid m-checkbox--brand"},
-        //                     //     template: function (e) {
-        //                     //     }
-        //                     // },
-        //                     {
-        //                         field: "RecordID",
-        //                         title: "#",
-        //                         sortable: false, // disable sort for this column
-        //                         width: 40,
-        //                         // selector: {class: 'm-checkbox--solid m-checkbox--brand input:disabled'}
-        //                         selector: {
-        //                             class: 'm-checkbox--solid m-checkbox--brand m-checkbox--success m-checkbox--bold m-datatable__row--active',
-        //
-        //                         },
-        //                         selected: true,
-        //                     },
-        //                     {
-        //                         field: "Status",
-        //                         title: "Status",
-        //                         width: 100,
-        //                         sortable: false,
-        //                         filterable: false,
-        //                         template: function (e) {
-        //                             var t = {
-        //                                 'U': {title: "Unscheduled", class: "m-badge--brand"},
-        //                                 'S': {title: "Scheduled", class: " m-badge--success"},
-        //                                 'H': {title: "Hold", class: " m-badge--warning"},
-        //                                 'C': {title: "Cancelled", class: " m-badge--metal"},
-        //                                 // 'N': {title: "No Material", class: " m-badge--warning"},
-        //                                 // 6: {title: "Urgent", class: " m-badge--danger"},
-        //                                 // 7: {title: "Delayed", class: " m-badge--info"}
-        //                             };
-        //                             return '<span class="m-badge ' + t[e.Status].class + ' m-badge--wide">' + t[e.Status].title + "</span>"
-        //                         },
-        //                     },
-        //
-        //                     {
-        //
-        //                         field: "ID",
-        //                         title: "ID",
-        //                         sortable: 'asc',
-        //                         filterable: true,
-        //                         // visible: true,
-        //                         width: 100,
-        //                     },
-        //
-        //                     {
-        //                         field: "OrderNumber",
-        //                         title: "Order #",
-        //                         sortable: true,
-        //                         filterable: true,
-        //                         width: 100,
-        // //                            template: "{{OrderID}} - {{ShipCountry}}"
-        //                     },
-        //
-        //                     {
-        //                         field: "Material",
-        //                         title: "Material #",
-        //                         sortable: true,
-        //                         filterable: false,
-        //                         width: 160,
-        // //                            template: "{{OrderID}} - {{ShipCountry}}"
-        //                     },
-        //
-        //                     {
-        //                         field: "Quantity",
-        //                         title: "Quantity",
-        //                         width: 65,
-        //                         sortable: false,
-        //                         filterable: false,
-        //                         // visible: 0,
-        // //                            responsive: {visible: "lg"}
-        //                     },
-        //
-        //                     {
-        //                         field: "SchedStart",
-        //                         title: "SchedStart",
-        //                         width: 140,
-        //                         sortable: true,
-        //                         filterable: false,
-        // //                            responsive: {visible: "lg"}
-        //                     },
-        //                     {
-        //                         field: "SchedFinish",
-        //                         title: "SchedFinish",
-        //                         width: 140,
-        //                         sortable: false,
-        //                         filterable: false,
-        //                     },
-        //                     {
-        //                         field: "WCG",
-        //                         title: "Group",
-        //                         width: 70,
-        //                         sortable: true,
-        //                         filterable: false,
-        //                     },
-        //                     {
-        //                         field: "Mold",
-        //                         title: "Mold",
-        //                         width: 70,
-        //                         sortable: true,
-        //                         filterable: false,
-        //                     },
-        //                     {
-        //                         field: "Press",
-        //                         title: "WorkCenter",
-        //                         width: 90,
-        //                         sortable: true,
-        //                         filterable: false,
-        //                     },
-        //                     {
-        //                         field: "CtrlKey",
-        //                         title: "CtrlKey",
-        //                         width: 40,
-        //                         sortable: false,
-        //                         filterable: false,
-        //                     },
-        //                     {
-        //                         field: "Actions",
-        //                         width: 80,
-        //                         title: "Actions",
-        //                         sortable: !1,
-        //                         overflow: "visible",
-        //                         template: function (e) {
-        //                             // cc('Actions==>');
-        //                             // cc(e);
-        //                             // cc('<=Actions');
-        //                             if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled & Scheduled
-        //
-        //                                 var wcg = '';
-        //                                 var wcgNAME = '';
-        //                                 for (var f in MESM_FloorMaps) {
-        //                                     if (e.WCG == MESM_FloorMaps[f].unitName) {
-        //                                         wcg = MESM_FloorMaps[f].recordID;
-        //                                         wcgNAME = MESM_FloorMaps[f].unitName;
-        //                                         break;
-        //                                         // n = MESM_FloorMaps.length;
-        //                                     }
-        //                                 }
-        //                                 // var prs = [];
-        //                                 var prsSTR = '';
-        //                                 var groupSTR = '';
-        //                                 var prsRows = 0;
-        //                                 if (e.Sort == 'MOLDING') {
-        //                                     for (var f in MESM_FloorMaps) {
-        //                                         if (MESM_FloorMaps[f].idUnitParent == wcg) {
-        //                                             if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0 && MESM_FloorMaps[f].unitName != e.Press) {
-        //                                                 // prs.push({
-        //                                                 //     'unitName': MESM_FloorMaps[f].unitName,
-        //                                                 //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
-        //                                                 // });
-        //                                                 prsSTR += '<a class="dropdown-item" onclick="quickAction(this)" id=' +
-        //                                                     '"' +
-        //                                                     wcgNAME +
-        //                                                     '_' +
-        //                                                     MESM_FloorMaps[f].unitName +
-        //                                                     '"' +
-        //                                                     '><i class="la la-wrench"></i>' +
-        //                                                     'assign to ' + MESM_FloorMaps[f].unitName +
-        //                                                     // ' ~' + Math.round(0.5 + e.Quantity / MOLD_Master_Tool_List[e.Mold] / 15) * 15 + 'min' +
-        //                                                     '</a>';
-        //                                                 prsRows++;
-        //                                             } else {
-        //                                                 // cc(MESM_FloorMaps[f].MOLD_Machine_Matrix);
-        //                                                 // cc(mmmArray[e.Mold]);
-        //                                                 // cc(MESM_FloorMaps[f].unitName + ' false');
-        //                                             }
-        //                                         }
-        //                                     }
-        //
-        //                                     // groupSTR = '<div class="dropdown-divider"></div>';
-        //                                     for (var i = 1; i <= 6; i++) {
-        //                                         if (e.WCG.indexOf(i) > 0) {
-        //                                             groupSTR =
-        //                                                 groupSTR +
-        //                                                 '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
-        //                                                 i + ' *' +
-        //                                                 '</a>';
-        //                                         } else {
-        //                                             groupSTR =
-        //                                                 groupSTR +
-        //                                                 '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
-        //                                                 i +
-        //                                                 '</a>'
-        //                                         }
-        //
-        //                                     }
-        //                                     // cc('prsSTR ==>' + prsSTR);
-        //                                     if (prsSTR.length != 0) {
-        //                                         prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
-        //                                     }
-        //                                     var scrollSTR = '';
-        //                                     if (e.Status == 'U') {
-        //                                         if (prsRows * 40 + 250 > 500) {
-        //                                             scrollSTR = 'style="overflow-y: scroll; height: 500px"'
-        //                                         }
-        //                                     } else if (e.Status == 'S') {
-        //                                         if (prsRows * 40 + 280 > 500) {
-        //                                             scrollSTR = 'style="overflow-y: scroll; height: 500px"'
-        //                                         }
-        //                                     }
-        //                                 } else if (e.Sort == 'RESIN') {
-        //                                     prsSTR =
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND01"><i class="la la-wrench"></i>assign to BLEND01' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND02"><i class="la la-wrench"></i>assign to BLEND02' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="RESIN_BLEND03"><i class="la la-wrench"></i>assign to BLEND03' + '</a>';
-        //                                 } else if (e.Sort == 'PACKING') {
-        //                                     prsSTR =
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK01"><i class="la la-wrench"></i>assign to PACK01' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK02"><i class="la la-wrench"></i>assign to PACK02' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK03"><i class="la la-wrench"></i>assign to PACK03' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK04"><i class="la la-wrench"></i>assign to PACK04' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK05"><i class="la la-wrench"></i>assign to PACK05' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
-        //                                         '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
-        //                                 }
-        //
-        //                                 var ft = '';
-        //                                 if (prsSTR.length == 0) {
-        //                                     // ft = 'WrongGroup'
-        //                                 }
-        //
-        //                                 if (e.Sort == 'ASSY') {
-        //                                     return '';
-        //                                 } else
-        //                                     return e.Status == 'U' ?
-        //
-        //
-        //                                         // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-        //                                         '<div class="dropdown ' + '">' +
-        //                                         // '<div class="dropup ' + "" + '">' +
-        //                                         '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-        //                                         '           <i class="la la-ellipsis-h"></i></a>' +
-        //                                         '       <div class="dropdown-menu dropdown-menu-right"' +
-        //                                         scrollSTR +
-        //                                         '>' +
-        //                                         prsSTR +
-        //                                         groupSTR +
-        //
-        //                                         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>' +
-        //                                         // ft +
-        //                                         '</a>' +
-        //                                         '       </div>' +
-        //                                         '   </div>' +
-        //                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-        //                                         '       <i class="la la-comment"></i></a>'
-        //                                         :
-        //                                         '<div class="dropdown ' + '">' +
-        //                                         '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-        //                                         '           <i class="la la-ellipsis-h"></i>' +
-        //                                         '       </a>' +
-        //                                         '       <div class="dropdown-menu dropdown-menu-right" ' +
-        //                                         scrollSTR +
-        //                                         '>' +
-        //                                         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-cogs"></i>AutoM</a>' +
-        //                                         prsSTR +
-        //                                         groupSTR +
-        //                                         '           <div class="dropdown-divider"></div>' +
-        //                                         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-check-circle"></i>Scheduled</a>' +
-        //                                         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
-        //                                         '       </div>' +
-        //                                         '   </div>' +
-        //                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-        //                                         '       <i class="la la-comment"></i>' +
-        //                                         '   </a>'
-        //
-        //                             } else if (e.Status == 'H') {
-        //                                 return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-        //                                     '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-        //                                     '           <i class="la la-ellipsis-h"></i>' +
-        //                                     '       </a>' +
-        //                                     '       <div class="dropdown-menu dropdown-menu-right">' +
-        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-        //                                     '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Hold</a>' +
-        //                                     '       </div>' +
-        //                                     '   </div>' +
-        //                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-        //                                     '       <i class="la la-comment"></i>' +
-        //                                     '   </a>';
-        //                             } else if (e.Status == 'C') {
-        //                                 return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-        //                                     '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-        //                                     '           <i class="la la-ellipsis-h"></i>' +
-        //                                     '       </a>' +
-        //                                     '       <div class="dropdown-menu dropdown-menu-right">' +
-        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-        //                                     // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-        //                                     '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Order canceled</a>' +
-        //                                     '       </div>' +
-        //                                     '   </div>' +
-        //                                     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-        //                                     '       <i class="la la-comment"></i>' +
-        //                                     '   </a>';
-        //                             }
-        //                             // else if (e.Status == 'N') {
-        //                             //     return '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-        //                             //         '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-        //                             //         '           <i class="la la-ellipsis-h"></i>' +
-        //                             //         '       </a>' +
-        //                             //         '       <div class="dropdown-menu dropdown-menu-right">' +
-        //                             //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-edit" "></i>Action I</a>' +
-        //                             //         // '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-leaf"></i>Action II</a>' +
-        //                             //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-info-circle"></i>Waiting for Material</a>' +
-        //                             //         '           <div class="dropdown-divider"></div>' +
-        //                             //         '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Cancelled</a>' +
-        //                             //         '       </div>' +
-        //                             //         '   </div>' +
-        //                             //         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-        //                             //         '       <i class="la la-comment"></i>' +
-        //                             //         '   </a>';
-        //                             // }
-        //
-        //
-        //                         }
-        //                     },
-        //                     // {
-        //                     //     field: "ID",
-        //                     //     title: "",
-        //                     //     width: 0,
-        //                     // },
-        //                     {
-        //                         field: "Sort",
-        //                         title: "",
-        //                         visible: false,
-        //                         width: 100,
-        //                         sortable: false,
-        //                         filterable: false,
-        //                     },
-        //                     {
-        //                         field: "Operation",
-        //                         title: "",
-        //                         visible: false,
-        //                         width: 100,
-        //                         sortable: false,
-        //                         filterable: false,
-        //                     },
-        //                 ]
-        //             });
-        //
-        //
-        //             orderTable.hideColumn('ID');
-        //             orderTable.hideColumn('Sort');
-        //             orderTable.hideColumn('Operation');
-        //
-        //             // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-        //             //     if (MESM_OrderOperationSort[n].ArchivedTimestamp == 'TimeUnavailable') {
-        //             //         cc('setActive' + '(' + MESM_OrderOperationSort[n].RecordID + ')');
-        //             //         orderTable.setActive(MESM_OrderOperationSort[n].RecordID);
-        //             //         cc(MESM_OrderOperationSort[n].RecordID);
-        //             //     } else {
-        //             //         orderTable.setInactive(MESM_OrderOperationSort[n].RecordID);
-        //             //         cc('setInactive' + '(' + MESM_OrderOperationSort[n].RecordID + ')');
-        //             //     }
-        //             //
-        //             // }
-        //             cc('orderTable');
-        //
-        //             cc(orderTable);
-        //
-        //
-        //             // cc('orderTable');
-        //             // cc(orderTable);
-        //
-        //             if (workcenterType == 'ASSY' || workcenterType == 'PACKING' || workcenterType == 'RESIN') {
-        //                 if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
-        //                     orderTable.hideColumn('Mold')
-        //
-        //                 }
-        //                 orderTable.hideColumn('CtrlKey');
-        //                 document.getElementById('m_form_type').innerHTML =
-        //                     '<option value=""> All</option>';
-        //             }
-        //
-        //             if (workcenterType == 'MOLDING') {
-        //                 document.getElementById('m_form_type').innerHTML =
-        //                     '<option value=""> All</option>\n' +
-        //                     '<option value="MOLD1">MOLD1</option>\n' +
-        //                     '<option value="MOLD2">MOLD2</option>\n' +
-        //                     '<option value="MOLD3">MOLD3</option>\n' +
-        //                     '<option value="MOLD4">MOLD4</option>\n' +
-        //                     '<option value="MOLD5">MOLD5</option>\n' +
-        //                     '<option value="MOLD6">MOLD6</option>\n' +
-        //                     '<option value="DIE CAST">DIE CAST</option>';
-        //             }
-        //
-        //
-        //             // var i = orderTable.getDataSourceQuery();
-        //
-        //             // $("#m_form_status").on("change", function () {
-        //             //     orderTable.search($(this).val(), "Status");
-        //             // }).val(void "" !== i.Status ? i.Status : "");
-        //             //
-        //             // $("#m_form_type").on("change", function () {
-        //             //     orderTable.search($(this).val(), "WCG");
-        //             // }).val(void 0 !== i.WCG ? i.WCG : "");
-        //             //
-        //             // $("#m_form_status, #m_form_type").selectpicker();
-        //
-        //
-        //         };
 
 
         var _eventDragStart;
@@ -2103,9 +1701,13 @@
         }
 
         function ActivityLogADD(actType, actMSG, actID) {
-            // cc('ev ' + ev);
-            // cc('_Action ' + _Action);
-            // cc('tag ' + tag);
+            cc('==========================================');
+            cc('ActivityLogADD');
+            cc('actType ' + actType);
+            cc('actMSG ' + actMSG);
+            cc('actID ' + actID);
+            cc('==========================================');
+
             var occurred = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 19);
             var receiver = '';
             var events = '';
@@ -2139,56 +1741,32 @@
                     '<span class="m-badge m-badge--success  m-badge--wide">Scheduled</span></span>';
             }
 
-            if (localHost) {
-                events = events.replace("%23", "#");
-                events = events.replace("%23", "#");
 
-                // if (document.getElementById("ActivityLog").innerHTML.indexOf(events) < 0) {
-                document.getElementById("ActivityLog").innerHTML =
-                    '<div class="m-list-timeline__item">' +
-                    events +
-                    '<span class="m-list-timeline__time" style="white-space: nowrap;">' +
-                    moment(occurred).fromNow() + '</span></div>' +
-                    document.getElementById("ActivityLog").innerHTML;
-                // }
+            cc('&Param.1= ' + receiver);
+            cc('&Param.2= ' + events);
+            // cc('&Param.3= ' + occurred);
 
-            } else {
-                var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
-                    "&Param.1=" +
-                    receiver +
-                    "&Param.2=" +
-                    events +
-                    "&Param.3=" +
-                    occurred
+            var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
+                "&Param.1=" +
+                receiver +
+                "&Param.2=" +
+                events +
+                "&Param.3=" +
+                occurred +
                 "&Content-Type=text/xml";
-                // cc(urlProc);
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        // cc(urlProc+' //');
-                        // cc(this.responseText);
-                        ActivityLogGET();
-                    }
-                };
-                xhttp.open("GET", urlProc, true);
-                xhttp.send();
-            }
+            cc('MESM_ActivityLog_ADD');
+            cc(' urlProc ' + urlProc);
 
-
-            // var div =
-            //     '<div class="m-list-timeline__item">' +
-            //     '  <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>' +
-            //     '  <span href="" class="m-list-timeline__text">' +
-            //     '    New order received' +
-            //     '    <span class="m-badge m-badge--danger m-badge--wide">urgent</span>' +
-            //     '  </span>' +
-            //     '  <span class="m-list-timeline__time">7 hrs</span>' +
-            //     '</div>'
-            //
-            //
-            // var elm = document.getElementById("m-list-timeline__items");
-            // // cc(elm.innerHTML);
-            // elm.innerHTML = div + elm.innerHTML;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    cc(urlProc + ' //');
+                    // cc(this.responseText);
+                    ActivityLogGET();
+                }
+            };
+            xhttp.open("GET", urlProc, true);
+            xhttp.send();
 
         }
 
@@ -2358,10 +1936,10 @@
                     order: [[2, "asc"]],
 
                     responsive: true,
-                    select: {
-                        style: 'multi',
-                        // selector: 'td:first-child .m-checkable',
-                    },
+                    // select: {
+                    //     style: 'multi',
+                    //     // selector: 'td:first-child .m-checkable',
+                    // },
                     // headerCallback: function (thead, data, start, end, display) {
                     //     thead.getElementsByTagName('th')[0].innerHTML = `
                     // <label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">
@@ -2409,6 +1987,7 @@
                                     'S': {title: "Scheduled", class: " m-badge--success"},
                                     'H': {title: "Hold", class: " m-badge--warning"},
                                     'C': {title: "Cancelled", class: " m-badge--metal"},
+                                    'N': {title: "Cancelled", class: " m-badge--danger"},
                                 };
                                 if (typeof status[data] === 'undefined') {
                                     return data;
@@ -2716,8 +2295,20 @@
                 //hide the first column
                 // table.column(0).visible(false);
 
-                orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
-                orderOpreationTable.page.len(10).draw();
+                for (var n = 0; n < orderOpreationTable.rows().count(); n++) {
+
+                    cc(orderOpreationTable.row(n).data());
+
+                    if (orderOpreationTable.row(n).data().ArchivedTimestamp == 'TimeUnavailable') {
+
+                        // orderOpreationTable.row(n).select();
+                    }
+                }
+
+
+                // orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
+
+                // orderOpreationTable.page.len(10).draw();
 
             }
         };
@@ -2830,7 +2421,8 @@
                                 </li>
                                 <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width"
                                     m-dropdown-toggle="click" m-dropdown-persistent="1">
-                                    <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon">
+                                    <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon"
+                                       style="display: inline-list-item">
                                         <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small m-badge--danger"></span>
                                         <span class="m-nav__link-icon">
 													<i class="flaticon-music-2"></i>
@@ -2877,91 +2469,87 @@
                                                             <div class="m-scrollable" data-scrollable="true"
                                                                  data-max-height="250" data-mobile-max-height="200">
                                                                 <div class="m-list-timeline m-list-timeline--skin-light">
-                                                                    <div class="m-list-timeline__items">
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge -m-list-timeline__badge--state-success"></span>
-                                                                            <span class="m-list-timeline__text">
-																						12 new users registered
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						Just now
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						System shutdown
-																						<span class="m-badge m-badge--success m-badge--wide">
-																							pending
-																						</span>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						14 mins
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						New invoice received
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						20 mins
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						DB overloaded 80%
-																						<span class="m-badge m-badge--info m-badge--wide">
-																							settled
-																						</span>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						1 hr
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						System error -
-																						<a href="#" class="m-link">
-																							Check
-																						</a>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						2 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item m-list-timeline__item--read">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span href="" class="m-list-timeline__text">
-																						New order received
-																						<span class="m-badge m-badge--danger m-badge--wide">
-																							urgent
-																						</span>
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						7 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item m-list-timeline__item--read">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						Production server down
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						3 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">
-																						Production server up
-																					</span>
-                                                                            <span class="m-list-timeline__time">
-																						5 hrs
-																					</span>
-                                                                        </div>
+                                                                    <div class="m-list-timeline__items" id="newOrder">
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge -m-list-timeline__badge&#45;&#45;state-success"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">12 new users registered</span>-->
+                                                                        <!--<span class="m-list-timeline__time">Just now</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">-->
+                                                                        <!--System shutdown-->
+                                                                        <!--<span class="m-badge m-badge&#45;&#45;success m-badge&#45;&#45;wide">-->
+                                                                        <!--pending-->
+                                                                        <!--</span>-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--14 mins-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">-->
+                                                                        <!--New invoice received-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--20 mins-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">-->
+                                                                        <!--DB overloaded 80%-->
+                                                                        <!--<span class="m-badge m-badge&#45;&#45;info m-badge&#45;&#45;wide">-->
+                                                                        <!--settled-->
+                                                                        <!--</span>-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--1 hr-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">-->
+                                                                        <!--System error - -->
+                                                                        <!--<a href="#" class="m-link">-->
+                                                                        <!--Check-->
+                                                                        <!--</a>-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--2 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item m-list-timeline__item&#45;&#45;read">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span href="" class="m-list-timeline__text">-->
+                                                                        <!--New order received-->
+                                                                        <!--<span class="m-badge m-badge&#45;&#45;danger m-badge&#45;&#45;wide">-->
+                                                                        <!--urgent-->
+                                                                        <!--</span>-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--7 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item m-list-timeline__item&#45;&#45;read">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">-->
+                                                                        <!--Production server down-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--3 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge"></span>-->
+                                                                        <!--<span class="m-list-timeline__text">-->
+                                                                        <!--Production server up-->
+                                                                        <!--</span>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--5 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2972,60 +2560,60 @@
                                                                  data-max-height="250" data-mobile-max-height="200">
                                                                 <div class="m-list-timeline m-list-timeline--skin-light">
                                                                     <div class="m-list-timeline__items">
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge m-list-timeline__badge--state1-success"></span>
-                                                                            <a href="" class="m-list-timeline__text">
-                                                                                New order received
-                                                                            </a>
-                                                                            <span class="m-list-timeline__time">
-																						Just now
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge m-list-timeline__badge--state1-danger"></span>
-                                                                            <a href="" class="m-list-timeline__text">
-                                                                                New invoice received
-                                                                            </a>
-                                                                            <span class="m-list-timeline__time">
-																						20 mins
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge m-list-timeline__badge--state1-success"></span>
-                                                                            <a href="" class="m-list-timeline__text">
-                                                                                Production server up
-                                                                            </a>
-                                                                            <span class="m-list-timeline__time">
-																						5 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge m-list-timeline__badge--state1-info"></span>
-                                                                            <a href="" class="m-list-timeline__text">
-                                                                                New order received
-                                                                            </a>
-                                                                            <span class="m-list-timeline__time">
-																						7 hrs
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge m-list-timeline__badge--state1-info"></span>
-                                                                            <a href="" class="m-list-timeline__text">
-                                                                                System shutdown
-                                                                            </a>
-                                                                            <span class="m-list-timeline__time">
-																						11 mins
-																					</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge m-list-timeline__badge--state1-info"></span>
-                                                                            <a href="" class="m-list-timeline__text">
-                                                                                Production server down
-                                                                            </a>
-                                                                            <span class="m-list-timeline__time">
-																						3 hrs
-																					</span>
-                                                                        </div>
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;state1-success"></span>-->
+                                                                        <!--<a href="" class="m-list-timeline__text">-->
+                                                                        <!--New order received-->
+                                                                        <!--</a>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--Just now-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;state1-danger"></span>-->
+                                                                        <!--<a href="" class="m-list-timeline__text">-->
+                                                                        <!--New invoice received-->
+                                                                        <!--</a>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--20 mins-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;state1-success"></span>-->
+                                                                        <!--<a href="" class="m-list-timeline__text">-->
+                                                                        <!--Production server up-->
+                                                                        <!--</a>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--5 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;state1-info"></span>-->
+                                                                        <!--<a href="" class="m-list-timeline__text">-->
+                                                                        <!--New order received-->
+                                                                        <!--</a>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--7 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;state1-info"></span>-->
+                                                                        <!--<a href="" class="m-list-timeline__text">-->
+                                                                        <!--System shutdown-->
+                                                                        <!--</a>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--11 mins-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
+                                                                        <!--<div class="m-list-timeline__item">-->
+                                                                        <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;state1-info"></span>-->
+                                                                        <!--<a href="" class="m-list-timeline__text">-->
+                                                                        <!--Production server down-->
+                                                                        <!--</a>-->
+                                                                        <!--<span class="m-list-timeline__time">-->
+                                                                        <!--3 hrs-->
+                                                                        <!--</span>-->
+                                                                        <!--</div>-->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -3462,6 +3050,7 @@
                                              style="max-height: 550px;  position: relative; overflow: visible; white-space: nowrap">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items">
+
                                                     <!--<div class="m-list-timeline__item">-->
                                                     <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;success"></span>-->
                                                     <!--<span class="m-list-timeline__text">13 new order received<span-->
@@ -3492,7 +3081,8 @@
                                                     <!--</div>-->
                                                     <!--<div class="m-list-timeline__item">-->
                                                     <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;warning"></span>-->
-                                                    <!--<span class="m-list-timeline__text">System error - <a href="#" class="m-link">Check</a></span>-->
+                                                    <!--<span class="m-list-timeline__text">System error - <a href="#"-->
+                                                    <!--class="m-link">Check</a></span>-->
                                                     <!--<span class="m-list-timeline__time">2 hrs</span>-->
                                                     <!--</div>-->
                                                     <!--<div class="m-list-timeline__item">-->
@@ -3507,7 +3097,8 @@
                                                     <!--</div>-->
                                                     <!--<div class="m-list-timeline__item">-->
                                                     <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;success"></span>-->
-                                                    <!--<span href="" class="m-list-timeline__text">New order received <span-->
+                                                    <!--<span href=""-->
+                                                    <!--class="m-list-timeline__text">New order received <span-->
                                                     <!--class="m-badge m-badge&#45;&#45;danger m-badge&#45;&#45;wide">urgent</span></span>-->
                                                     <!--<span class="m-list-timeline__time">7 hrs</span>-->
                                                     <!--</div>-->
