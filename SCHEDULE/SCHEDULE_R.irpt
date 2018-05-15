@@ -81,6 +81,7 @@
                 workcenterType = 'MOLDING';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Molding';
             }
+
             getMatrix();
             orderTablePreparing();
 
@@ -118,7 +119,7 @@
                             moment(value.occurred).fromNow() + '</span></div>' +
                             logs;
                     });
-                    cc(logs);
+                    // cc(logs);
                     document.getElementById("ActivityLog").innerHTML = logs;
                     cc('/1/=======================================================================================');
                     cc('/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET');
@@ -1513,7 +1514,7 @@
             var _Sort = orderOpreationTable.cell({row: n, column: 13}).data();
 
 
-            if ((_Status == 'U' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
+            if ((_Status == 'U' || _Status == 'V' ||_Status == 'S') && _Action.indexOf('assign') >= 0) {
                 cc('assign');
 
                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
@@ -1987,7 +1988,7 @@
                                     'S': {title: "Scheduled", class: " m-badge--success"},
                                     'H': {title: "Hold", class: " m-badge--warning"},
                                     'C': {title: "Cancelled", class: " m-badge--metal"},
-                                    'N': {title: "Cancelled", class: " m-badge--danger"},
+                                    'V': {title: "New", class: " m-badge--danger"},
                                 };
                                 if (typeof status[data] === 'undefined') {
                                     return data;
@@ -2076,7 +2077,7 @@
                             orderable: false,
                             render: function (data, type, e, meta) {
 
-                                if (e.Status == 'U' || e.Status == 'S') {    //Unscheduled & Scheduled
+                                if (e.Status == 'U' || e.Status == 'S' || e.Status == 'V') {    //Unscheduled & Scheduled
 
                                     var wcg = '';
                                     var wcgNAME = '';
@@ -2302,6 +2303,8 @@
                     if (orderOpreationTable.row(n).data().ArchivedTimestamp == 'TimeUnavailable') {
 
                         // orderOpreationTable.row(n).select();
+                        // cc(orderOpreationTable.cell({row: n, column: 1}).data())
+                        orderOpreationTable.cell({row: n, column: 1}).data('V');
                     }
                 }
 
@@ -2434,7 +2437,7 @@
                                             <div class="m-dropdown__header m--align-center"
                                                  style="background: url(assets/app/media/img/misc/notification_bg.jpg); background-size: cover;">
 														<span class="m-dropdown__header-title">
-															9 New
+															1 New
 														</span>
                                                 <span class="m-dropdown__header-subtitle">
 															User Notifications
