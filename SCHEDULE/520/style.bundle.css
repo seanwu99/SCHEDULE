@@ -24397,7 +24397,7 @@ button:active, button:focus {
     vertical-align: middle;
     width: 100%;
     padding: 0 5px 0 0;
-    font-size: 1rem
+    font-size: 0.85rem
 }
 
 .m-list-timeline__items .m-list-timeline__item .m-list-timeline__text:hover {

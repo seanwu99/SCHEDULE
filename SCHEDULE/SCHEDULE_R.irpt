@@ -116,7 +116,7 @@
                             '<div class="m-list-timeline__item" >' +
                             value.events +
                             '<span class="m-list-timeline__time" >' +
-                            moment(value.occurred).fromNow() + '</span></div>' +
+                            moment(value.occurred).fromNow().replace(' ago', '') + '</span></div>' +
                             logs;
                     });
                     // cc(logs);
@@ -221,7 +221,7 @@
                     }
                 );
                 cc('MESM_OrderOperationRAW');
-                cc(MESM_OrderOperationRAW);
+                // cc(MESM_OrderOperationRAW);
                 for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
 
                     var _init = false;
@@ -386,12 +386,14 @@
                 // cc(url);
                 // cc(DATA);
                 // for (var n = 0; n < DATA.length; n++) {
+                var mmmArraylength = DATA.length;
                 if (workcenter == 'ASSY' || workcenter == 'PACKING' || workcenter == 'RESIN') {
                     mmmArray = [];
                 } else {
                     for (var n = 0; n < DATA.length; n++) {
                         var mmms = '';
                         for (var name in DATA[n]) {
+                            // mmmArraylength++;
                             if (DATA[n][name] == '1') {
                                 mmms += '_' + name;
                             }
@@ -406,9 +408,9 @@
                 }
                 cc('/Matrix/==================================================================');
                 cc(url);
-                cc('mmmArray.length ' + mmmArray.length);
+                cc('mmmArray.length ' + mmmArraylength);
                 cc(new Date().getTime() - runtime);
-                cc(mmmArray);
+                // cc(mmmArray);
                 cc('/Matrix/==================================================================');
                 mainRouting();
             });
@@ -1168,9 +1170,13 @@
                     );
 
                     if (_eventDragStart.resourceId != event.resourceId) {
-                        ActivityLogADD('Assigned', orderOpreationTable.cell({row: i, column: 2}).data() +
-                            '_' + orderOpreationTable.cell({row: i, column: 13}).data() +
-                            ' => ' + event.resourceId.split('_')[1] + ' ',
+                        // ActivityLogADD('Assigned', orderOpreationTable.cell({row: i, column: 2}).data() +
+                        //     '_' + orderOpreationTable.cell({row: i, column: 13}).data() +
+                        //     ' => ' + event.resourceId.split('_')[1] + ' ',
+                        //     orderOpreationTable.cell({row: i, column: 2}).data() +
+                        //     '_' + orderOpreationTable.cell({row: i, column: 13}).data());
+                        ActivityLogADD('Assigned', orderOpreationTable.cell({row: i, column: 2}).data() + ' ' +
+                            event.resourceId.split('_')[1] + ' ',
                             orderOpreationTable.cell({row: i, column: 2}).data() +
                             '_' + orderOpreationTable.cell({row: i, column: 13}).data());
                     }
@@ -1540,8 +1546,8 @@
 
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
 
-                ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
-                // ActivityLogADD('Assigned', _OrderNumber + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                ActivityLogADD('Assigned', _OrderNumber + ' ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
 
@@ -1570,7 +1576,8 @@
                 MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
 
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
+                // ActivityLogADD('Unscheduled', _OrderNumber, '');
+                ActivityLogADD('Unscheduled', _OrderNumber + '//', '');
                 orderOpreationTable.cell({row: n, column: 1}).data('U').draw();
                 orderOpreationTable.cell({row: n, column: 11}).data('').draw();
                 // MESM_OrderOperationRAW
@@ -1599,12 +1606,12 @@
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
             cc('MESM_OrderOperation_UPD');
 
-            cc(_ID);
-            cc(_Quantity);
-            cc(_Status);
-            cc(_SchedStart);
-            cc(_SchedFinish);
-            cc(_Press);
+            // cc(_ID);
+            // cc(_Quantity);
+            // cc(_Status);
+            // cc(_SchedStart);
+            // cc(_SchedFinish);
+            // cc(_Press);
 
 
             if (_SchedStart == '' || _SchedFinish == '') {
@@ -1650,8 +1657,8 @@
                 }
             }
 
-            cc(MESM_OrderOperationRAW[_N].OrderNumber);
-            cc(MESM_OrderOperationRAW[_N].OperationStatus);
+            // cc(MESM_OrderOperationRAW[_N].OrderNumber);
+            // cc(MESM_OrderOperationRAW[_N].OperationStatus);
 
             // MESM_OrderOperationSort
             var Status = _Status.substring(0, 1) == 'S' ? 'S' : 'U';
@@ -1702,12 +1709,12 @@
         }
 
         function ActivityLogADD(actType, actMSG, actID) {
-            cc('==========================================');
-            cc('ActivityLogADD');
-            cc('actType ' + actType);
-            cc('actMSG ' + actMSG);
-            cc('actID ' + actID);
-            cc('==========================================');
+            // cc('==========================================');
+            // cc('ActivityLogADD');
+            // cc('actType ' + actType);
+            // cc('actMSG ' + actMSG);
+            // cc('actID ' + actID);
+            // cc('==========================================');
 
             var occurred = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 19);
             var receiver = '';
@@ -1723,6 +1730,7 @@
                     '</a></span>';
 
             } else if (actType == 'Unscheduled') {
+
                 events =
                     '<span class="m-list-timeline__badge m-list-timeline__badge--primary"></span>' +
                     '<span class="m-list-timeline__text">%23' +
@@ -1743,8 +1751,8 @@
             }
 
 
-            cc('&Param.1= ' + receiver);
-            cc('&Param.2= ' + events);
+            // cc('&Param.1= ' + receiver);
+            // cc('&Param.2= ' + events);
             // cc('&Param.3= ' + occurred);
 
             var urlProc = "/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_ADD" +
@@ -1786,10 +1794,10 @@
 
         function addScheduleEvent(resourceId, elementId, schedleStart, scheduleFinsh) {
             cc('addScheduleEvent');
-            cc(resourceId);
-            cc(elementId);
-            cc(schedleStart);
-            cc(scheduleFinsh);
+            // cc(resourceId);
+            // cc(elementId);
+            // cc(schedleStart);
+            // cc(scheduleFinsh);
             // var tbOrderID = _OrderID;
             var today = new Date().toISOString().substr(0, 10);
 
@@ -1986,11 +1994,11 @@
                                 //     7: {'title': 'Warning', 'class': ' m-badge--warning'},
                                 // };
                                 var status = {
-                                    'U': {title: "Unscheduled", class: "m-badge--brand"},
+                                    'U': {title: "Unschedule", class: "m-badge--brand"},
                                     'S': {title: "Scheduled", class: " m-badge--success"},
                                     'H': {title: "Hold", class: " m-badge--warning"},
                                     'C': {title: "Cancelled", class: " m-badge--metal"},
-                                    'V': {title: "New Order", class: " m-badge--danger"},
+                                    'V': {title: "New order", class: " m-badge--danger"},
                                 };
                                 if (typeof status[data] === 'undefined') {
                                     return data;
@@ -2008,7 +2016,7 @@
                             targets: 3,
                             title: 'Material #',
                             visible: true,
-                            orderable: false,
+                            orderable: true,
                         },
                         {
                             targets: 4,
@@ -2027,7 +2035,7 @@
                         {
                             targets: 6,
                             title: 'SchedFinish',
-                            orderable: false,
+                            orderable: true,
                         },
                         {
                             targets: 7,
@@ -2077,6 +2085,7 @@
                             // width: 120,
                             title: 'Actions',
                             orderable: false,
+                            "searchable": false,
                             render: function (data, type, e, meta) {
 
                                 if (e.Status == 'U' || e.Status == 'S' || e.Status == 'V') {    //Unscheduled & Scheduled
@@ -2300,7 +2309,7 @@
 
                 for (var n = 0; n < orderOpreationTable.rows().count(); n++) {
 
-                    cc(orderOpreationTable.row(n).data());
+                    // cc(orderOpreationTable.row(n).data());
 
                     if (orderOpreationTable.row(n).data().ArchivedTimestamp == 'TimeUnavailable') {
 
@@ -2313,7 +2322,7 @@
 
                 // orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
 
-                // orderOpreationTable.page.len(10).draw();
+                orderOpreationTable.page.len(10).draw();
 
             }
         };
@@ -2814,7 +2823,7 @@
 
                 <!--Begin::Main Portlet-->
                 <div class="row" id="OrderOperation">
-                    <div class="col-xl-9" id="OrderOperationTable">
+                    <div class="col-xl-10" id="OrderOperationTable">
                         <div class="m-portlet m-portlet--mobile ">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
@@ -3000,7 +3009,7 @@
 
                         </div>
                     </div>
-                    <div class="col-xl-3">
+                    <div class="col-xl-2">
                         <!--begin:: Widgets/Audit Log-->
                         <div class="m-portlet m-portlet--full-height ">
                             <div class="m-portlet__head">
@@ -3016,10 +3025,12 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="m_widget4_tab1_content">
                                         <!--<div class="m-scrollable" data-scrollable="true" data-max-height="740" style="height1: 600px; overflow: auto;">-->
+                                        <!--<div class="m-scrollable" data-scrollable="true" id="dActivityLog" style="max-height: 550px;  position: relative; overflow: visible; white-space: nowrap">-->
                                         <div class="m-scrollable" data-scrollable="true" id="dActivityLog"
-                                             style="max-height: 550px;  position: relative; overflow: visible; white-space: nowrap">
+                                             style="max-height: 600px;  position: relative; overflow: visible; ">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
-                                                <div id="ActivityLog" class="m-list-timeline__items">
+                                                <div id="ActivityLog" class="m-list-timeline__items"
+                                                     style="font-size: small">
 
                                                     <!--<div class="m-list-timeline__item">-->
                                                     <!--<span class="m-list-timeline__badge m-list-timeline__badge&#45;&#45;success"></span>-->
@@ -3091,7 +3102,7 @@
                 <div class="row" id="m_portlet">
                     <div class="col-xl-12">
                         <!--begin::Portlet-->
-                        <div class="m-portlet" >
+                        <div class="m-portlet">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
