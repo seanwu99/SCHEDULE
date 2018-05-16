@@ -1514,7 +1514,7 @@
             var _Sort = orderOpreationTable.cell({row: n, column: 13}).data();
 
 
-            if ((_Status == 'U' || _Status == 'V' ||_Status == 'S') && _Action.indexOf('assign') >= 0) {
+            if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
                 cc('assign');
 
                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
@@ -1915,6 +1915,7 @@
                     lengthMenu: [5, 10, 25, 50, 100],
                     pageLength: 1000,
                     pagingType: "full_numbers",
+                    processing: true,
                     data: data,
 
                     columns: [
@@ -1934,6 +1935,7 @@
                         {data: 'Sort'},
                         {data: 'Actions'},
                     ],
+
                     order: [[2, "asc"]],
 
                     responsive: true,
@@ -1988,7 +1990,7 @@
                                     'S': {title: "Scheduled", class: " m-badge--success"},
                                     'H': {title: "Hold", class: " m-badge--warning"},
                                     'C': {title: "Cancelled", class: " m-badge--metal"},
-                                    'V': {title: "New", class: " m-badge--danger"},
+                                    'V': {title: "New Order", class: " m-badge--danger"},
                                 };
                                 if (typeof status[data] === 'undefined') {
                                     return data;
@@ -2341,9 +2343,9 @@
 
                 <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
                     <!--<div class="m-stack__item m-stack__item&#45;&#45;middle m-brand__logo">-->
-                        <a href="index.html" class="m-brand__logo-wrapper">
-                            <img alt="" src="logo.png"/>
-                        </a>
+                    <a href="#" class="m-brand__logo-wrapper">
+                        <img alt="" src="logo.png"/>
+                    </a>
                     <!--</div>-->
 
                     <!-- BEGIN: Topbar -->
@@ -2632,15 +2634,15 @@
                                                         <div class="m-nav-grid m-nav-grid--skin-light">
                                                             <div class="m-nav-grid__row">
                                                                 <a href="#" class="m-nav-grid__item">
-                                                                    <i class="m-nav-grid__icon flaticon-file"></i>
+                                                                    <i class="m-nav-grid__icon flaticon-list-1"></i>
                                                                     <span class="m-nav-grid__text">
-																				Generate Report
+																				Order Operation
 																			</span>
                                                                 </a>
-                                                                <a href="#" class="m-nav-grid__item">
-                                                                    <i class="m-nav-grid__icon flaticon-time"></i>
+                                                                <a href="#m_portlet" class="m-nav-grid__item">
+                                                                    <i class="m-nav-grid__icon flaticon-calendar-2"></i>
                                                                     <span class="m-nav-grid__text">
-																				Add New Event
+																				Calendar
 																			</span>
                                                                 </a>
                                                             </div>
@@ -3086,10 +3088,10 @@
                 <!--End::Main Portlet-->
 
                 <!--Begin::Main Portlet-->
-                <div class="row">
+                <div class="row" id="m_portlet">
                     <div class="col-xl-12">
                         <!--begin::Portlet-->
-                        <div class="m-portlet" id="m_portlet">
+                        <div class="m-portlet" >
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
