@@ -2338,52 +2338,17 @@
     <header class="m-grid__item    m-header " data-minimize-offset="200" data-minimize-mobile-offset="200">
         <div class="m-container m-container--fluid m-container--full-height">
             <div class="m-stack m-stack--ver m-stack--desktop">
-                <!--&lt;!&ndash; BEGIN: Brand &ndash;&gt;-->
-                <!--<div class="m-stack__item m-brand  m-brand&#45;&#45;skin-dark">-->
-                <!--<div class="m-stack m-stack&#45;&#45;ver m-stack&#45;&#45;general">-->
-                <!--<div class="m-stack__item m-stack__item&#45;&#45;middle m-brand__logo">-->
-                <!--<a href="index.html" class="m-brand__logo-wrapper">-->
-                <!--&lt;!&ndash;<img alt="" src="assets/demo/default/media/img/logo/logo_default_dark.png"/>&ndash;&gt;-->
-                <!--</a>-->
-                <!--</div>-->
-                <!--<div class="m-stack__item m-stack__item&#45;&#45;middle m-brand__tools">-->
-                <!--&lt;!&ndash; BEGIN: Left Aside Minimize Toggle &ndash;&gt;-->
-                <!--<a href="javascript:;" id="m_aside_left_minimize_toggle"-->
-                <!--class="m-brand__icon m-brand__toggler m-brand__toggler&#45;&#45;left m&#45;&#45;visible-desktop-inline-block					 ">-->
-                <!--<span></span>-->
-                <!--</a>-->
-                <!--&lt;!&ndash; END &ndash;&gt;-->
-                <!--&lt;!&ndash; BEGIN: Responsive Aside Left Menu Toggler &ndash;&gt;-->
-                <!--<a href="javascript:;" id="m_aside_left_offcanvas_toggle"-->
-                <!--class="m-brand__icon m-brand__toggler m-brand__toggler&#45;&#45;left m&#45;&#45;visible-tablet-and-mobile-inline-block">-->
-                <!--<span></span>-->
-                <!--</a>-->
-                <!--&lt;!&ndash; END &ndash;&gt;-->
-                <!--&lt;!&ndash; BEGIN: Responsive Header Menu Toggler &ndash;&gt;-->
-                <!--<a id="m_aside_header_menu_mobile_toggle" href="javascript:;"-->
-                <!--class="m-brand__icon m-brand__toggler m&#45;&#45;visible-tablet-and-mobile-inline-block">-->
-                <!--<span></span>-->
-                <!--</a>-->
-                <!--&lt;!&ndash; END &ndash;&gt;-->
-                <!--&lt;!&ndash; BEGIN: Topbar Toggler &ndash;&gt;-->
-                <!--<a id="m_aside_header_topbar_mobile_toggle" href="javascript:;"-->
-                <!--class="m-brand__icon m&#45;&#45;visible-tablet-and-mobile-inline-block">-->
-                <!--<i class="flaticon-more"></i>-->
-                <!--</a>-->
-                <!--&lt;!&ndash; BEGIN: Topbar Toggler &ndash;&gt;-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--&lt;!&ndash; END: Brand &ndash;&gt;-->
+
                 <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
-                    <!-- BEGIN: Horizontal Menu -->
-                    <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark "
-                            id="m_aside_header_menu_mobile_close_btn">
-                        <i class="la la-close"></i>
-                    </button>
+                    <!--<div class="m-stack__item m-stack__item&#45;&#45;middle m-brand__logo">-->
+                        <a href="index.html" class="m-brand__logo-wrapper">
+                            <img alt="" src="logo.png"/>
+                        </a>
+                    <!--</div>-->
 
                     <!-- BEGIN: Topbar -->
                     <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
+
                         <div class="m-stack__item m-topbar__nav-wrapper">
                             <ul class="m-topbar__nav m-nav m-nav--inline">
                                 <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light"
