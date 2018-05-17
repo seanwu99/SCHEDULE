@@ -72,6 +72,7 @@
         var MOLD_Master_Tool_List = [];
         var workcenterType = '';
         var runtime;// = new Date().getTime();
+        var rawCount = 0;
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
@@ -96,6 +97,12 @@
 
         }
 
+        function dataReady() {
+            rawCount++;
+            if (rawCount == 3) {
+                mainRouting();
+            }
+        }
 
         function ActivityLogGET(t) {
 
@@ -111,29 +118,20 @@
             } else if (workcenterType == 'MOLDING') {
                 Param1 = 'MOLDING';
             }
-
-            getData(
-                localHost ?
-                    'MESM_ActivityLog_GET.xml' :
-                    '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET' +
-                    '&Param.1=' + Param1 +
-                    '&Content-Type=text/xml',
-                function (data) {
-                    $.each(data, function (index, value) {
-                        logs =
-                            '<div class="m-list-timeline__item" >' +
-                            value.events +
-                            '<span class="m-list-timeline__time" >' +
-                            moment(value.occurred).fromNow().replace(' ago', '') + '</span></div>' +
-                            logs;
-                    });
-                    // cc(logs);
-                    document.getElementById("ActivityLog").innerHTML = logs;
-                    cc('/1/=======================================================================================');
-                    cc('/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET');
-                    // cc(logs);
-                    cc('/1/=======================================================================================');
-                })
+            var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Param.1=' + Param1 + '&Content-Type=text/xml';
+            getData(url, function (data) {
+                cc(url);
+                $.each(data, function (index, value) {
+                    logs =
+                        '<div class="m-list-timeline__item" >' +
+                        value.events +
+                        '<span class="m-list-timeline__time" >' +
+                        moment(value.occurred).fromNow().replace(' ago', '') + '</span></div>' +
+                        logs;
+                });
+                // cc(logs);
+                document.getElementById("ActivityLog").innerHTML = logs;
+            })
 
         }
 
@@ -163,7 +161,8 @@
                             MESM_FloorMaps_GROUP[value.recordID] = [];
                         }
                     });
-
+                    cc('MESM_FloorMaps');
+                    cc(MESM_FloorMaps);
                     // cc(MESM_FloorMaps_GROUP);
 
                     for (var m in MESM_FloorMaps) {
@@ -183,7 +182,7 @@
                     cc(new Date().getTime() - runtime);
                     // cc(MESM_FloorMaps_GROUP);
                     cc('/2/==========================================================================================================');
-                    // getMatrix();
+                    dataReady();
                 }
             );
 
@@ -229,8 +228,11 @@
                         })
                     }
                 );
+
                 cc('MESM_OrderOperationRAW');
                 cc(MESM_OrderOperationRAW);
+
+
                 for (var n = 0; n < MESM_OrderOperationRAW.length; n++) {
 
                     var _init = false;
@@ -295,7 +297,11 @@
                                     _init = true;
                                 }
                             }
-                            MESM_OrderOperationRAW[n].WorkCenter = 'ASSY';
+                            if (MESM_OrderOperationRAW[n].WorkCenter.toUpperCase().indexOf("ASSYM") >= 0) {
+                                MESM_OrderOperationRAW[n].WorkCenter = 'ASSYM';
+                            } else {
+                                MESM_OrderOperationRAW[n].WorkCenter = 'ASSY';
+                            }
                         }
                     }
 
@@ -370,14 +376,11 @@
                 cc(url);
                 cc(new Date().getTime() - runtime);
                 cc('/3/==========================================================================================================');
-                if (workcenterType == 'ASSY') {
-                    mainRouting();
-                }
-                // MOLD_Master_Tool_List_GET();
 
-
+                dataReady();
             });
         }
+
 
         function getMatrix() {
 
@@ -423,12 +426,10 @@
                 cc(new Date().getTime() - runtime);
                 // cc(mmmArray);
                 cc('/Matrix/==================================================================');
-                if (workcenterType == 'MOLDING') {
-                    mainRouting();
-                }
-
+                dataReady();
             });
         }
+
 
         function mainRouting() {
 
@@ -547,38 +548,44 @@
 
             WorkCentres = [];
 
-            for (var ss = 0; ss < 4; ss++) {
-                var gp = ['RESIN', 'MOLDING', 'PACKING', 'ASSY'];
-                if (workcenterType == 'ASSY') {
-                    gp = ['ASSY', 'ASSYM'];
-                } else if (workcenterType == 'PACKING') {
-                    gp = ['PACKING'];
-                } else if (workcenterType == 'RESIN') {
-                    gp = ['RESIN'];
-                } else if (workcenterType == 'MOLDING') {
-                    gp = ['MOLDING'];
-                }
-                for (var g in MESM_FloorMaps_GROUP) {
-                    for (var n = 0; n < MESM_FloorMaps_GROUP[g].length; n++) {
-                        if (MESM_FloorMaps_GROUP[g][n].groupType == gp[ss]) {
-                            WorkCentres.push(
-                                {
-                                    id: MESM_FloorMaps[g].unitName + '_' + MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID].unitName,
-                                    WorkingCenter: MESM_FloorMaps[g].unitDescr,
-                                    title: MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID].unitDescr,
-                                    wcg: MESM_FloorMaps[g].unitName,
-                                    MOLD_Machine_Matrix: MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID]['MOLD_Machine_Matrix'],
-                                    children: [
+            // for (var ss = 0; ss < 4; ss++) {
+            var gp = '';// ['RESIN', 'MOLDING', 'PACKING', 'ASSY'];
+            if (workcenterType == 'ASSY') {
+                // gp = ['ASSY', 'ASSYM'];
+                gp = 'ASSY';
+
+            } else if (workcenterType == 'PACKING') {
+                // gp = ['PACKING'];
+                gp = 'PACKING';
+            } else if (workcenterType == 'RESIN') {
+                gp = 'RESIN';
+                // gp = ['RESIN'];
+            } else if (workcenterType == 'MOLDING') {
+                gp = 'MOLDING';
+                // gp = ['MOLDING'];
+            }
+            cc('workcenterType ' + workcenterType);
+            for (var g in MESM_FloorMaps_GROUP) {
+                for (var n = 0; n < MESM_FloorMaps_GROUP[g].length; n++) {
+                    if (MESM_FloorMaps_GROUP[g][n].groupType == gp) {
+                        WorkCentres.push(
+                            {
+                                id: MESM_FloorMaps[g].unitName + '_' + MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID].unitName,
+                                WorkingCenter: MESM_FloorMaps[g].unitDescr,
+                                title: MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID].unitDescr,
+                                wcg: MESM_FloorMaps[g].unitName,
+                                MOLD_Machine_Matrix: MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID]['MOLD_Machine_Matrix'],
+                                children: [
 //                                {id: 'a1', title: 'M649A', occupancy: 10, eventColor: 'blue'},
-                                    ]
-                                }
-                            );
-                        }
+                                ]
+                            }
+                        );
                     }
                 }
             }
-            // cc('MESM_FloorMaps_GROUP');
-            // cc(MESM_FloorMaps_GROUP);
+            // }
+            cc('WorkCentres');
+            cc(WorkCentres);
 
 
             // MESM_OrderOperationMold = [];
@@ -607,6 +614,9 @@
                     _Sort = 'PACKING';
                 }
 
+                // cc('WorkCenterID');
+                // cc(MESM_OrderOperationRAW[n].WorkCenterID);
+                //undefined
                 MESM_OrderOperationSort.push({
                     "RecordID": MESM_OrderOperationRAW[n].ID,
                     "ID": MESM_OrderOperationRAW[n].ID,
@@ -617,8 +627,8 @@
                     "SchedFinish": moment(MESM_OrderOperationRAW[n].MIISchedFinDate + ' ' + MESM_OrderOperationRAW[n].MIISchedFinTime).format('YYYY-MM-DD HH:mm:ss'),
                     "WCG": MESM_OrderOperationRAW[n].WorkCenter,
                     "Mold": MESM_OrderOperationRAW[n].PrtNumber,
-                    "FamilyMold": MESM_OrderOperationRAW[n].FamilyMold,
-                    "Concurrent": MESM_OrderOperationRAW[n].Concurrent,
+                    "FamilyMold": MESM_OrderOperationRAW[n].FamilyMold === undefined ? '' : MESM_OrderOperationRAW[n].FamilyMold,
+                    "Concurrent": MESM_OrderOperationRAW[n].Concurrent === undefined ? '' : MESM_OrderOperationRAW[n].Concurrent,
                     "Status": MESM_OrderOperationRAW[n].SchedStat,
                     "Press": MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperationRAW[n].WorkCenterID].unitName,
                     "CtrlKey": MESM_OrderOperationRAW[n].CtrlKey,
@@ -2099,7 +2109,7 @@
                         },
                         {
                             targets: 14,
-                            // width: 120,
+                            visible: true,
                             title: 'Actions',
                             orderable: false,
                             "searchable": false,
@@ -2334,6 +2344,15 @@
                         // cc(orderOpreationTable.cell({row: n, column: 1}).data())
                         orderOpreationTable.cell({row: n, column: 1}).data('V');
                     }
+                }
+
+                if (workcenterType == 'ASSY') {
+                    orderOpreationTable.column(8).visible(false);
+                    orderOpreationTable.column(9).visible(false);
+                    orderOpreationTable.column(10).visible(false);
+                    orderOpreationTable.column(12).visible(false);
+                    orderOpreationTable.column(13).visible(false);
+                    // orderOpreationTable.column(14).visible(false);
                 }
 
 

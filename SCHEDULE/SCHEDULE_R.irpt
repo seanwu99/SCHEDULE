@@ -286,7 +286,12 @@
                                     _init = true;
                                 }
                             }
-                            MESM_OrderOperationRAW[n].WorkCenter = 'ASSY';
+                            if (MESM_OrderOperationRAW[n].WorkCenter.toUpperCase().indexOf("ASSYM") >= 0) {
+                                MESM_OrderOperationRAW[n].WorkCenter = 'ASSYM';
+                            } else {
+                                MESM_OrderOperationRAW[n].WorkCenter = 'ASSY';
+                            }
+
                         }
                     }
 
