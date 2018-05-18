@@ -23,16 +23,23 @@
         /*min-width: 1520px;*/
         /*margin: 0 auto;*/
         /*}*/
-        @media (min-width: 1900px) {
-        }
+        /*@media (min-width: 1900px) {*/
+        /*}*/
     </style>
-    <script id="sap-ui-bootstrap"
-            src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js"
-            data-sap-ui-libs="sap.m"
-            data-sap-ui-theme="sap_belize"
-            data-sap-ui-xx-bindingSyntax="complex"
-            data-sap-ui-compatVersion="edge">
+    <!--<script id="sap-ui-bootstrap"-->
+    <!--src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js"-->
+    <!--data-sap-ui-libs="sap.m"-->
+    <!--data-sap-ui-theme="sap_belize"-->
+    <!--data-sap-ui-xx-bindingSyntax="complex"-->
+    <!--data-sap-ui-compatVersion="edge">-->
+    <!--</script>-->
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+            crossorigin="anonymous">
     </script>
+
     <script src="webfont.js"></script>
     <script>
         WebFont.load({
@@ -68,37 +75,29 @@
         var mmmArray = [];
         var orderTable;
         var orderOpreationTable;
-        var workcenterType = '';
+        var GROUP = '';
         var runtime;// = new Date().getTime();
         var rawCount = 0;
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
             runtime = new Date().getTime();
-            if (document.getElementById('workcenter').value.toUpperCase().indexOf('ASSY') >= 0) {
-                workcenterType = 'ASSY';
+            if (document.getElementById('GROUP').value.toUpperCase().indexOf('ASSY') >= 0) {
+                GROUP = 'ASSY';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Assembly';
-            } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('PACKING') >= 0) {
-                workcenterType = 'PACKING';
+            } else if (document.getElementById('GROUP').value.toUpperCase().indexOf('PACKING') >= 0) {
+                GROUP = 'PACKING';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Packing';
-            } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('RESIN') >= 0) {
-                workcenterType = 'RESIN';
+            } else if (document.getElementById('GROUP').value.toUpperCase().indexOf('RESIN') >= 0) {
+                GROUP = 'RESIN';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Resin';
-            } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('MOLDING') >= 0) {
-                workcenterType = 'MOLDING';
+            } else if (document.getElementById('GROUP').value.toUpperCase().indexOf('MOLDING') >= 0) {
+                GROUP = 'MOLDING';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Molding';
-            } else if (document.getElementById('workcenter').value.toUpperCase().indexOf('ALL') >= 0) {
-                workcenterType = 'ALL';
+            } else if (document.getElementById('GROUP').value.toUpperCase().indexOf('ALL') >= 0) {
+                GROUP = 'ALL';
                 document.getElementById('ccMenu').innerText = 'Scheduling - ALL';
             }
-
-
-            // x => x.prop2=="yutu"
-            // console.log([{prop1: "abc", prop2: "qwe"},
-            //     {prop1: "bnmb", prop2: "yutu"},
-            //     {prop1: "zxvz", prop2: "qwrq"}].findIndex(function (x) {
-            //     return x.prop2 == "yutu"
-            // }));
 
 
             MESM_FloorMaps_GET();
@@ -117,16 +116,9 @@
 
             var logs = '';
 
-            var Param1 = '';
-            if (workcenterType == 'ASSY') {
-                Param1 = 'ASSY';
-            } else if (workcenterType == 'PACKING') {
-                Param1 = 'PACKING';
-            } else if (workcenterType == 'RESIN') {
-                Param1 = 'RESIN';
-            } else if (workcenterType == 'MOLDING') {
-                Param1 = 'MOLDING';
-            } else if (workcenterType == 'ALL') {
+            var Param1 = GROUP;
+
+            if (GROUP == 'ALL') {
                 Param1 = '';
             }
             var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Param.1=' + Param1 + '&Content-Type=text/xml';
@@ -161,7 +153,7 @@
                         };
 
                         if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) &&
-                            (value.groupType == 'RESIN' || value.groupType == 'MOLDING' || value.groupType == 'PACKING' || value.groupType == 'ASSY' || value.groupType == 'ASSYM')) {
+                            (value.groupType == 'RESIN' || value.groupType == 'MOLDING' || value.groupType == 'PACKING' || value.groupType == 'ASSY')) {
                             MESM_FloorMaps_GROUP[value.recordID] = [];
                         }
                     });
@@ -193,15 +185,15 @@
 
         function MESM_OrderOperation_GET() {
             var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET&Content-Type=text/xml';
-            if (workcenterType == 'ASSY') {
+            if (GROUP == 'ASSY') {
                 url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_ASSY&Content-Type=text/xml';
-            } else if (workcenterType == 'PACKING') {
+            } else if (GROUP == 'PACKING') {
                 url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_PACKING&Content-Type=text/xml';
-            } else if (workcenterType == 'RESIN') {
+            } else if (GROUP == 'RESIN') {
                 url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_RESIN&Content-Type=text/xml';
-            } else if (workcenterType == 'MOLDING') {
+            } else if (GROUP == 'MOLDING') {
                 url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_MOLDING&Content-Type=text/xml';
-            } else if (workcenterType == 'ALL') {
+            } else if (GROUP == 'ALL') {
                 url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_ALL&Content-Type=text/xml';
             }
             getData(url, function (data) {
@@ -389,26 +381,9 @@
         }
 
         function MOLD_Machine_Matrix_GET() {
-            var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Content-Type=text/xml';
-            if (workcenterType == 'ASSY') {
-                url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_ASSY&Content-Type=text/xml';
-            } else if (workcenterType == 'PACKING') {
-                url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_PACKING&Content-Type=text/xml';
-            } else if (workcenterType == 'RESIN') {
-                url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_RESIN&Content-Type=text/xml';
-            }
-            // else if (workcenterType == 'MOLDING') {
-            //     url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_MOLDING&Content-Type=text/xml';
-            // }
-
-            getData(url, function (DATA) {
-                // cc(url);
-                // cc(DATA);
-                // for (var n = 0; n < DATA.length; n++) {
-                var mmmArraylength = DATA.length;
-                if (workcenter == 'ASSY' || workcenter == 'PACKING' || workcenter == 'RESIN') {
-                    mmmArray = [];
-                } else {
+            if (GROUP == 'ALL' || GROUP == 'MOLDING') {
+                var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Content-Type=text/xml';
+                getData(url, function (DATA) {
                     for (var n = 0; n < DATA.length; n++) {
                         var mmms = '';
                         for (var name in DATA[n]) {
@@ -424,15 +399,18 @@
                         }
 
                     }
-                }
-                cc('/Matrix/==================================================================');
-                cc(url);
-                cc('mmmArray.length ' + mmmArraylength);
-                cc(new Date().getTime() - runtime);
-                // cc(mmmArray);
-                cc('/Matrix/==================================================================');
+                    // }
+                    cc('/Matrix/==================================================================');
+                    cc('mmmArray.length ' + DATA.length);
+                    cc(new Date().getTime() - runtime);
+                    cc(mmmArray);
+                    cc('/Matrix/==================================================================');
+                    dataLoading();
+                });
+            } else {
+                mmmArray = [];
                 dataLoading();
-            });
+            }
         }
 
 
@@ -555,24 +533,24 @@
 
             // for (var ss = 0; ss < 4; ss++) {
             var gp = '';// ['RESIN', 'MOLDING', 'PACKING', 'ASSY'];
-            if (workcenterType == 'ASSY') {
+            if (GROUP == 'ASSY') {
                 // gp = ['ASSY', 'ASSYM'];
                 gp = 'ASSY';
 
-            } else if (workcenterType == 'PACKING') {
+            } else if (GROUP == 'PACKING') {
                 // gp = ['PACKING'];
                 gp = 'PACKING';
-            } else if (workcenterType == 'RESIN') {
+            } else if (GROUP == 'RESIN') {
                 gp = 'RESIN';
                 // gp = ['RESIN'];
-            } else if (workcenterType == 'MOLDING') {
+            } else if (GROUP == 'MOLDING') {
                 gp = 'MOLDING';
                 // gp = ['MOLDING'];
             }
-            cc('workcenterType ' + workcenterType);
+            cc('GROUP: ' + GROUP);
             for (var g in MESM_FloorMaps_GROUP) {
                 for (var n = 0; n < MESM_FloorMaps_GROUP[g].length; n++) {
-                    if (MESM_FloorMaps_GROUP[g][n].groupType == gp || workcenterType == 'ALL') {
+                    if (MESM_FloorMaps_GROUP[g][n].groupType == gp || GROUP == 'ALL') {
                         WorkCentres.push(
                             {
                                 id: MESM_FloorMaps[g].unitName + '_' + MESM_FloorMaps[MESM_FloorMaps_GROUP[g][n].unitID].unitName,
@@ -592,8 +570,9 @@
             for (var m = 0; m < WorkCentres.length - 1; m++) {
                 for (var n = m + 1; n < WorkCentres.length; n++) {
                     if (WorkCentres[m].id > WorkCentres[n].id) {
-                        // [WorkCentres[m], WorkCentres[n]] = [WorkCentres[n], WorkCentres[m]];
-
+                        var tmp = WorkCentres[n];
+                        WorkCentres[n] = WorkCentres[m];
+                        WorkCentres[m] = tmp;
                     }
                 }
             }
@@ -684,94 +663,9 @@
             }
 
 
-            // var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET&Param.1=' + mmmSTR + '&Content-Type=text/xml';
-            // if (workcenterType == 'ASSY') {
-            //     url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_ASSY&Content-Type=text/xml';
-            // } else if (workcenterType == 'PACKING') {
-            //     url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_PACKING&Content-Type=text/xml';
-            // } else if (workcenterType == 'RESIN') {
-            //     url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_RESIN&Content-Type=text/xml';
-            // } else if (workcenterType == 'MOLDING') {
-            //     url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MOLD_Machine_Matrix_GET_MOLDING&Content-Type=text/xml';
-            // }
-            // cc(url);
-            // var mmmArrayTT = new Date().getTime();
-
-            // getData(url, function (DATA) {
-//                 // cc(url);
-//                 // cc(DATA);
-//                 // for (var n = 0; n < DATA.length; n++) {
-//                 if (workcenter == 'ASSY' || workcenter == 'PACKING' || workcenter == 'RESIN') {
-//                     mmmArray = [];
-//                 } else {
-//                     for (var n = 0; n < DATA.length; n++) {
-//                         var mmms = '';
-//                         for (var name in DATA[n]) {
-//                             if (DATA[n][name] == '1') {
-//                                 mmms += '_' + name;
-//                             }
-//
-//                         }
-//                         if (mmms.length > 0) {
-// //                            cc(DATA[n]['Mold_Number'] + ' / ' + mmms);
-//                             mmmArray[DATA[n]['Mold_Number']] = mmms;
-//                         }
-//
-//                     }
-//                 }
-//                 cc('/6/==================================================================');
-//                 cc(url);
-//                 cc('mmmArray.length ' + mmmArray.length);
-//                 // cc('MOLD_Machine_Matrix takes ' + (new Date().getTime() - mmmArrayTT) + 'ms');
-//                 cc('/ /==================================================================');
-//
-//             cc('//=============================================');
-//             cc('MESM_OrderOperationSort.length ' + MESM_OrderOperationSort.length);
-//             // cc(MESM_OrderOperationSort.length);
-//             // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-//             //     cc(MESM_OrderOperationSort[n]);
-//             // }
-//             // cc(MESM_OrderOperationSort.toString());
-//             cc('//=============================================');
-
-
-            // orderTableCreat(MESM_OrderOperationSort);
-
             creatDatatable.init(MESM_OrderOperationSort);
 
 
-            // cc((new Date().getTime() - t0) + ' ms (tableOrders) ');
-            // cc('WorkCentres');
-            // cc(WorkCentres);
-
-
-            // cc('//=============================================');
-            // cc('WorkCentres.length ' + WorkCentres.length);
-            // cc(WorkCentres);
-            // cc('//=============================================');
-
-            // scheduleForm(WorkCentres);
-            // cc('scheduleForm');
-            // cc($('#calendar'));
-
-            // cc('MESM_ProductionOrders');
-            // cc(MESM_ProductionOrders);
-            // cc('orderTable.originalDataSet');
-            // cc(orderTable.originalDataSet);
-
-            // for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-            //     // cc(MESM_OrderOperationSort[n]);
-            //     if (MESM_OrderOperationSort[n].Press != '' && MESM_OrderOperationSort[n].Status == 'S') {
-            //         addScheduleEvent(
-            //             MESM_OrderOperationSort[n].WCG + '_' + MESM_OrderOperationSort[n].Press,
-            //             MESM_OrderOperationSort[n].OrderNumber + '_' + MESM_OrderOperationSort[n].Sort,
-            //             MESM_OrderOperationSort[n].SchedStart.replace('T', ' '),
-            //             MESM_OrderOperationSort[n].SchedFinish.replace('T', ' ')
-            //         );
-            //
-            //     }
-            // }
-            //=========================================================================================================================================
             var events = [];
 
             for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
@@ -1649,12 +1543,12 @@
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
             cc('MESM_OrderOperation_UPD');
 
-            // cc(_ID);
-            // cc(_Quantity);
-            // cc(_Status);
-            // cc(_SchedStart);
-            // cc(_SchedFinish);
-            // cc(_Press);
+            cc(_ID);
+            cc(_Quantity);
+            cc(_Status);
+            cc(_SchedStart);
+            cc(_SchedFinish);
+            cc(_Press);
 
 
             if (_SchedStart == '' || _SchedFinish == '') {
@@ -1737,8 +1631,8 @@
                 "&Param.9=" +
                 OperationStatus +
                 "&Content-Type=text/xml";
-            // cc(' show url');
-            // cc(urlProc);
+            cc('MESM_OrderOperation_UPD');
+            cc(urlProc);
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -2364,7 +2258,7 @@
                     }
                 }
 
-                if (workcenterType == 'ASSY' || workcenterType == 'PACKING') {
+                if (GROUP == 'ASSY' || GROUP == 'PACKING') {
                     orderOpreationTable.column(8).visible(false);
                     orderOpreationTable.column(9).visible(false);
                     orderOpreationTable.column(10).visible(false);
@@ -2973,84 +2867,6 @@
                                 </div>
                             </div>
 
-                            <!--<div class="m-portlet__body">-->
-
-                            <!--<div class="m-form m-form&#45;&#45;label-align-right m&#45;&#45;margin-top-20 m&#45;&#45;margin-bottom-30">-->
-                            <!--<div class="row align-items-center">-->
-                            <!--<div class="col-xl-12 order-2 order-xl-1">-->
-                            <!--&lt;!&ndash;<div class="form-group m-form__group row align-items-center">&ndash;&gt;-->
-
-                            <!--&lt;!&ndash;<div class="col-md-5">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="m-form__group m-form__group&#45;&#45;inline">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="m-form__label">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label class="m-label m-label&#45;&#45;single"&ndash;&gt;-->
-                            <!--&lt;!&ndash;style="white-space:nowrap">&ndash;&gt;-->
-                            <!--&lt;!&ndash;WorkCenter Group:&ndash;&gt;-->
-                            <!--&lt;!&ndash;</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="m-form__control">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<select class="form-control m-bootstrap-select m-bootstrap-select&#45;&#45;solid"&ndash;&gt;-->
-                            <!--&lt;!&ndash;id="m_form_type">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value=""> All</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="ASSY"> ASSY</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="MOLD1">MOLD1</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="MOLD2">MOLD2</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="MOLD3">MOLD3</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="MOLD4">MOLD4</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="MOLD5">MOLD5</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="MOLD6">MOLD6</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="MOLD6">&#45;&#45;&#45;&#45;</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="PACKING">PACKING</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="RESIN">RESIN</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="MOLD6">&#45;&#45;&#45;&#45;</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="d-md-none m&#45;&#45;margin-bottom-10"></div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="col-md-5">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="m-form__group m-form__group&#45;&#45;inline">&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<div class="m-form__label">&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<label>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;</label>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="m-form__control">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<select class="form-control m-bootstrap-select m-bootstrap-select&#45;&#45;solid"&ndash;&gt;-->
-                            <!--&lt;!&ndash;id="m_form_status">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="">All</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="U">Unscheduled</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<option value="S">Scheduled</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="H">Hold</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="C">Cancelled</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="N">No Material</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="6">Urgent</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<option value="7">Delayed</option>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="d-md-none m&#45;&#45;margin-bottom-10"></div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="col-md-2">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="m-input-icon m-input-icon&#45;&#45;left">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<input type="text"&ndash;&gt;-->
-                            <!--&lt;!&ndash;class="form-control m-input m-input&#45;&#45;solid"&ndash;&gt;-->
-                            <!--&lt;!&ndash;placeholder="Search..." id="generalSearch">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<span class="m-input-icon__icon m-input-icon__icon&#45;&#45;left">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<i class="la la-search"></i>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--&lt;!&ndash;begin: Datatable &ndash;&gt;-->
-                            <!--<div class="m_datatable" id="m_datatable_latest_orders"></div>-->
-                            <!--&lt;!&ndash;end: Datatable &ndash;&gt;-->
-                            <!--</div>-->
 
                             <div class="m-portlet__body">
                                 <!--begin: Datatable -->
@@ -3872,7 +3688,7 @@
 <input id="user_roles" type="hidden" value="{IllumLoginRoles}" style="display:block;width:1000px;" readonly/>
 <input id="user_role" type="hidden" value="{ROLE}" style="display:block;width:1000px;" readonly/>
 <input id="user_name" type="hidden" value="{IllumLoginName}" style="display: block;width:1000px;" readonly/>
-<input id="workcenter" type="hidden" value="{workcenter}" style="display:block;width:1000px;" readonly/>
+<input id="GROUP" type="hidden" value="{GROUP}" style="display:block;width:1000px;" readonly/>
 
 <!--<script src="assets/vendors/base/vendors.bundle.js" type="text/javascript"></script>-->
 <script src="520/vendors.bundle.js" type="text/javascript"></script>
