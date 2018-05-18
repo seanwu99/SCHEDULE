@@ -139,6 +139,10 @@
 
         // });
         function MESM_FloorMaps_GET() {
+            var groupA = [GROUP];
+            if (GROUP == 'ALL') {
+                groupA = ['RESIN', 'MOLDING', 'PACKING', 'ASSY'];
+            }
             getData("/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml", function (data) {
                     $.each(data, function (index, value) {
                         MESM_FloorMaps[value.recordID] = {
@@ -151,8 +155,7 @@
                             'idUnitParent': value.idUnitParent,
                         };
 
-                        if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) &&
-                            (value.groupType == 'RESIN' || value.groupType == 'MOLDING' || value.groupType == 'PACKING' || value.groupType == 'ASSY')) {
+                        if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0)) {
                             MESM_FloorMaps_GROUP[value.recordID] = [];
                         }
                     });
@@ -201,7 +204,7 @@
                             MIISchedStartTime: (v.MIISchedStartTime == 'TimeUnavailable') ? moment(v.EarlySchedStartTime).format('HH:mm:ss') : moment(v.MIISchedStartTime).format('HH:mm:ss'),
                             MIISchedFinTime: (v.MIISchedFinTime == 'TimeUnavailable') ? moment(v.EarlySchedFinTime).format('HH:mm:ss') : moment(v.MIISchedFinTime).format('HH:mm:ss'),
                             SchedStart: function () {
-                                if (v.MIISchedStartDate == 'TimeUnavailable' || v.MIISchedStartTime == 'TimeUnavailable' ) {
+                                if (v.MIISchedStartDate == 'TimeUnavailable' || v.MIISchedStartTime == 'TimeUnavailable') {
                                     return moment(moment(v.EarlySchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.EarlySchedStartTime).format('HH:mm:ss')).format('YYYY-MM-DD HH:mm:ss');
                                 } else {
                                     return moment(moment(v.MIISchedStartDate).format('YYYY-MM-DD') + ' ' + moment(v.MIISchedStartTime).format('HH:mm:ss')).format('YYYY-MM-DD HH:mm:ss');
