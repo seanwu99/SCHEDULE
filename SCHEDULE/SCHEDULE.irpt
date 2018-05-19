@@ -588,8 +588,8 @@
                     }
                 }
             }
-            cc('WorkCentres');
-            cc(WorkCentres);
+            // cc('WorkCentres');
+            // cc(WorkCentres);
 
             // var newOrderEntry = new Date(MESM_OrderOperation[0].ActualReleaseDate);
 
@@ -733,8 +733,8 @@
             // cc('events.length ' + events.length);
             // // cc(events);
             // cc('//=============================================');
-            cc(WorkCentres);
-            cc(events);
+            // cc(WorkCentres);
+            // cc(events);
             scheduleForm(WorkCentres, events);
 
 
@@ -1506,8 +1506,8 @@
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
 
-                orderOpreationTable.cell({row: rowN, column: 1}).data('S').draw();
-                orderOpreationTable.cell({row: rowN, column: 11}).data(_Press).draw();
+                orderOpreationTable.cell({row: rowN, column: 1}).data('S');//.draw();
+                orderOpreationTable.cell({row: rowN, column: 11}).data(_Press);//.draw();
 
             }
 
@@ -1533,8 +1533,8 @@
                 removeScheduleEvent(_OrderNumber + '_' + _Sort);
                 // ActivityLogADD('Unscheduled', _OrderNumber, '');
                 ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
-                orderOpreationTable.cell({row: rowN, column: 1}).data('U').draw();
-                orderOpreationTable.cell({row: rowN, column: 11}).data('').draw();
+                orderOpreationTable.cell({row: rowN, column: 1}).data('U');//.draw();
+                orderOpreationTable.cell({row: rowN, column: 11}).data('');//.draw();
                 // MESM_OrderOperationRAW
                 for (var n = 0; n < MESM_OrderOperation.length; n++) {
                     if (MESM_OrderOperation[n].ID == orderOpreationTable.cell({row: n, column: 0}).data()) {
@@ -1559,14 +1559,14 @@
         }
 
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
-            cc('MESM_OrderOperation_UPD');
+            // cc('MESM_OrderOperation_UPD');
 
-            cc(_ID);
-            cc(_Quantity);
-            cc(_Status);
-            cc(_SchedStart);
-            cc(_SchedFinish);
-            cc(_Press);
+            // cc(_ID);
+            // cc(_Quantity);
+            // cc(_Status);
+            // cc(_SchedStart);
+            // cc(_SchedFinish);
+            // cc(_Press);
 
 
             if (_SchedStart == '' || _SchedFinish == '') {
@@ -1649,8 +1649,8 @@
                 "&Param.9=" +
                 OperationStatus +
                 "&Content-Type=text/xml";
-            cc('MESM_OrderOperation_UPD');
-            cc(urlProc);
+            // cc('MESM_OrderOperation_UPD');
+            // cc(urlProc);
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -2077,6 +2077,7 @@
                                     var prsSTR = '';
                                     var groupSTR = '';
                                     var prsRows = 0;
+                                    var scrollSTR = '';
                                     if (e.Sort == 'MOLDING') {
                                         for (var f in MESM_FloorMaps) {
                                             // cc(MESM_FloorMaps[f].idUnitParent);
@@ -2128,7 +2129,7 @@
                                         if (prsSTR.length != 0) {
                                             prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
                                         }
-                                        var scrollSTR = '';
+                                        scrollSTR = '';
                                         if (e.SchedStat == 'U') {
                                             if (prsRows * 40 + 250 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 500px"'
@@ -2154,56 +2155,113 @@
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
+                                    } else if (e.Sort == 'ASSY') {
+                                        if (e.WorkCenter == 'ASSYM') {
+                                            prsSTR =
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM01"><i class="la la-wrench"></i>assign to ASSYM01' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM02"><i class="la la-wrench"></i>assign to ASSYM02' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM03"><i class="la la-wrench"></i>assign to ASSYM03' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM04"><i class="la la-wrench"></i>assign to ASSYM04' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM05"><i class="la la-wrench"></i>assign to ASSYM05' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM06"><i class="la la-wrench"></i>assign to ASSYM06' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM07"><i class="la la-wrench"></i>assign to ASSYM07' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM08"><i class="la la-wrench"></i>assign to ASSYM08' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM09"><i class="la la-wrench"></i>assign to ASSYM09' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM10"><i class="la la-wrench"></i>assign to ASSYM10' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM11"><i class="la la-wrench"></i>assign to ASSYM11' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM12"><i class="la la-wrench"></i>assign to ASSYM12' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM13"><i class="la la-wrench"></i>assign to ASSYM13' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM14"><i class="la la-wrench"></i>assign to ASSYM14' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM15"><i class="la la-wrench"></i>assign to ASSYM15' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM16"><i class="la la-wrench"></i>assign to ASSYM16' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM17"><i class="la la-wrench"></i>assign to ASSYM17' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM18"><i class="la la-wrench"></i>assign to ASSYM18' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM19"><i class="la la-wrench"></i>assign to ASSYM19' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM20"><i class="la la-wrench"></i>assign to ASSYM20' + '</a>';
+                                        } else if (e.WorkCenter == 'ASSY') {
+                                            prsSTR =
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY01"><i class="la la-wrench"></i>assign to ASSY01' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY02"><i class="la la-wrench"></i>assign to ASSY02' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY03"><i class="la la-wrench"></i>assign to ASSY03' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY04"><i class="la la-wrench"></i>assign to ASSY04' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY05"><i class="la la-wrench"></i>assign to ASSY05' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY06"><i class="la la-wrench"></i>assign to ASSY06' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY07"><i class="la la-wrench"></i>assign to ASSY07' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY08"><i class="la la-wrench"></i>assign to ASSY08' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY09"><i class="la la-wrench"></i>assign to ASSY09' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY10"><i class="la la-wrench"></i>assign to ASSY10' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY11"><i class="la la-wrench"></i>assign to ASSY11' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY12"><i class="la la-wrench"></i>assign to ASSY12' + '</a>' +
+
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY16"><i class="la la-wrench"></i>assign to ASSY16' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY17"><i class="la la-wrench"></i>assign to ASSY17' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY18"><i class="la la-wrench"></i>assign to ASSY18' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY19"><i class="la la-wrench"></i>assign to ASSY19' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY20"><i class="la la-wrench"></i>assign to ASSY20' + '</a>';
+                                        }
+                                        if (prsSTR.length != 0) {
+                                            prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
+                                        }
+                                        scrollSTR = '';
+                                        if (e.SchedStat == 'U') {
+                                            if (prsRows * 40 + 250 > 500) {
+                                                scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                            }
+                                        } else if (e.SchedStat == 'S') {
+                                            if (prsRows * 40 + 280 > 500) {
+                                                scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                            }
+                                        }
                                     }
 
-                                    var ft = '';
-                                    if (prsSTR.length == 0) {
-                                        // ft = 'WrongGroup'
-                                    }
+                                    // var ft = '';
+                                    // if (prsSTR.length == 0) {
+                                    //     // ft = 'WrongGroup'
+                                    // }
 
-                                    if (e.Sort == 'ASSY') {
-                                        return '';
-                                    } else
-                                        return '' +
-                                            // // ?e.Status == 'U' ?
-                                            //
-                                            //
-                                            //     // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
-                                            //     '<span class="dropdown ' + '">' +
-                                            //     // '<div class="dropup ' + "" + '">' +
-                                            //     '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                            //     '           <i class="la la-ellipsis-h"></i></a>' +
-                                            //     '       <div class="dropdown-menu dropdown-menu-right"' +
-                                            //     scrollSTR +
-                                            //     '>' +
-                                            //     prsSTR +
-                                            //     groupSTR +
-                                            //
-                                            //     // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-times-circle"></i>' +
-                                            //     // ft +
-                                            //     '</a>' +
-                                            //     '       </div>' +
-                                            //     '   </span>' +
-                                            //     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                            //     '       <i class="la la-comment"></i></a>'
-                                            //     :
-                                            '<span class="dropdown ' + '">' +
-                                            '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
-                                            '           <i class="la la-ellipsis-h"></i>' +
-                                            '       </a>' +
-                                            '       <div class="dropdown-menu dropdown-menu-right" ' +
-                                            scrollSTR +
-                                            '>' +
-                                            // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-cogs"></i>AutoM</a>' +
-                                            prsSTR +
-                                            groupSTR +
-                                            '           <div class="dropdown-divider"></div>' +
-                                            '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
-                                            '       </div>' +
-                                            '   </span>' +
-                                            '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
-                                            '       <i class="la la-comment"></i>' +
-                                            '   </a>'
+                                    // if (e.Sort == 'ASSY') {
+                                    //     return '';
+                                    // } else
+                                    return '' +
+                                        // // ?e.Status == 'U' ?
+                                        //
+                                        //
+                                        //     // '<div class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
+                                        //     '<span class="dropdown ' + '">' +
+                                        //     // '<div class="dropup ' + "" + '">' +
+                                        //     '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+                                        //     '           <i class="la la-ellipsis-h"></i></a>' +
+                                        //     '       <div class="dropdown-menu dropdown-menu-right"' +
+                                        //     scrollSTR +
+                                        //     '>' +
+                                        //     prsSTR +
+                                        //     groupSTR +
+                                        //
+                                        //     // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-times-circle"></i>' +
+                                        //     // ft +
+                                        //     '</a>' +
+                                        //     '       </div>' +
+                                        //     '   </span>' +
+                                        //     '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+                                        //     '       <i class="la la-comment"></i></a>'
+                                        //     :
+                                        '<span class="dropdown ' + '">' +
+                                        '       <a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
+                                        '           <i class="la la-ellipsis-h"></i>' +
+                                        '       </a>' +
+                                        '       <div class="dropdown-menu dropdown-menu-right" ' +
+                                        scrollSTR +
+                                        '>' +
+                                        // '           <a class="dropdown-item" onclick="quickAction2(this)"><i class="la la-cogs"></i>AutoM</a>' +
+                                        prsSTR +
+                                        groupSTR +
+                                        '           <div class="dropdown-divider"></div>' +
+                                        '           <a class="dropdown-item" onclick="quickAction(this)"><i class="la la-times-circle"></i>Unscheduled</a>' +
+                                        '       </div>' +
+                                        '   </span>' +
+                                        '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
+                                        '       <i class="la la-comment"></i>' +
+                                        '   </a>'
 
                                 } else if (e.SchedStat == 'H') {
                                     return '<span class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
