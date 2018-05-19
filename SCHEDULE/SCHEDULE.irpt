@@ -699,7 +699,10 @@
                             resourceId: orderOpreationTable.cell({
                                 row: n,
                                 column: 7
-                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
+                            }).data() + '_' + MESM_FloorMaps[orderOpreationTable.cell({
+                                row: n,
+                                column: 11
+                            }).data()].unitName,
                             start: orderOpreationTable.cell({row: n, column: 5}).data(),
                             end: orderOpreationTable.cell({row: n, column: 6}).data(),
                             title: orderOpreationTable.cell({
@@ -709,7 +712,10 @@
                             description: orderOpreationTable.cell({
                                 row: n,
                                 column: 7
-                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
+                            }).data() + '_' + MESM_FloorMaps[orderOpreationTable.cell({
+                                row: n,
+                                column: 11
+                            }).data()].unitName,
                             color: colors[Math.round(Math.random() * 8)],
 
                         });
@@ -727,7 +733,8 @@
             // cc('events.length ' + events.length);
             // // cc(events);
             // cc('//=============================================');
-
+            cc(WorkCentres);
+            cc(events);
             scheduleForm(WorkCentres, events);
 
 
@@ -1442,7 +1449,7 @@
             var _ID = 0;// ROW[0].innerText;
             for (var n = 0; n < MESM_OrderOperation.length; n++) {
                 if (MESM_OrderOperation[n].OrderNumber == _OrderNumber && MESM_OrderOperation[n].Material == _Material) {
-                    _ID = MESM_OrderOperation[n].RecordID;
+                    _ID = MESM_OrderOperation[n].ID;
                 }
             }
             // cc(_ID);
