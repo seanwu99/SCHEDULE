@@ -65,7 +65,6 @@
     <script>
         var localHost = true && (window.location.href.indexOf('http://localhost') >= 0);
         var MESM_OrderOperation = [];
-        var MESM_OrderOperationSort = [];
         var newOrder = [0, '2017-01-01 00:00:00'];
         // var MESM_OrderOperation = [];
         var MESM_FloorMaps = [];
@@ -190,6 +189,18 @@
             getData(url, function (data) {
                 $.each(data, function (i, v) {
 
+                        var Sort = '';
+                        if (v.WorkCenter.toUpperCase().indexOf("MOLD") >= 0 || v.WorkCenterText.toUpperCase().indexOf("MOLD") >= 0) {
+                            Sort = 'MOLDING';
+                        } else if (v.WorkCenter.toUpperCase().indexOf("ASSY") >= 0 || v.WorkCenterText.toUpperCase().indexOf("ASSY") >= 0) {
+                            Sort = 'ASSY';
+                        } else if (v.WorkCenter.toUpperCase().indexOf("PACK") >= 0 || v.WorkCenterText.toUpperCase().indexOf("PACK") >= 0) {
+                            Sort = 'PACKING';
+                        } else if (v.WorkCenter.toUpperCase().indexOf("RESIN") >= 0 || v.WorkCenterText.toUpperCase().indexOf("RESIN") >= 0) {
+                            Sort = 'RESIN';
+                        }
+
+
                         MESM_OrderOperation.push({
                             ID: v.ID,
                             OrderNumber: v.OrderNumber,
@@ -229,18 +240,9 @@
                             ArchivedTimestamp: v.ArchivedTimestamp,
                             FamilyMold: (v.FamilyMold === undefined) ? '' : v.FamilyMold,
                             Concurrent: (v.Concurrent === undefined) ? '' : v.Concurrent,
-                            Sort: function () {
-                                if (v.WorkCenter.toUpperCase().indexOf("MOLD") >= 0 || v.WorkCenterText.toUpperCase().indexOf("MOLD") >= 0) {
-                                    return 'MOLDING';
-                                } else if (v.WorkCenter.toUpperCase().indexOf("ASSY") >= 0 || v.WorkCenterText.toUpperCase().indexOf("ASSY") >= 0) {
-                                    return 'ASSY';
-                                } else if (v.WorkCenter.toUpperCase().indexOf("PACK") >= 0 || v.WorkCenterText.toUpperCase().indexOf("PACK") >= 0) {
-                                    return 'PACKING';
-                                } else if (v.WorkCenter.toUpperCase().indexOf("RESIN") >= 0 || v.WorkCenterText.toUpperCase().indexOf("RESIN") >= 0) {
-                                    return 'RESIN';
-                                }
-                            }
-                        })
+                            Sort: Sort,
+                        });
+
                         if (v.ArchivedTimestamp == 'TimeUnavailable') {
                             newOrder[0]++;
                             if (new Date(newOrder[1]).getTime() < new Date(MESM_OrderOperation[n].ActualReleaseDate).getTime()) {
@@ -589,68 +591,69 @@
             cc('WorkCentres');
             cc(WorkCentres);
 
-            var newOrderEntry = new Date(MESM_OrderOperation[0].ActualReleaseDate);
+            // var newOrderEntry = new Date(MESM_OrderOperation[0].ActualReleaseDate);
 
             // MESM_OrderOperationMold = [];
-            for (var n = 0; n < MESM_OrderOperation.length; n++) {
+            // for (var n = 0; n < MESM_OrderOperation.length; n++) {
+            //
+            //     var _Sort = '';
+            //     if (MESM_OrderOperation[n].Operation == '0010') {
+            //         _Sort = 'RESIN';
+            //     } else if (MESM_OrderOperation[n].Operation == '0020') {
+            //         _Sort = 'MOLDING';
+            //     } else if (MESM_OrderOperation[n].Operation == '0030') {
+            //         _Sort = 'PACKING';
+            //     } else if (MESM_OrderOperation[n].Operation == '1010') {
+            //         _Sort = 'resin';
+            //     } else if (MESM_OrderOperation[n].Operation == '1020') {
+            //         _Sort = 'MOLDING';
+            //     } else if (MESM_OrderOperation[n].Operation == '1030') {
+            //         _Sort = 'PACKING';
+            //     } else if (MESM_OrderOperation[n].Operation == '1040') {
+            //         _Sort = 'ASSY';
+            //     } else if (MESM_OrderOperation[n].Operation == '2010') {
+            //         _Sort = 'RESIN';
+            //     } else if (MESM_OrderOperation[n].Operation == '2020') {
+            //         _Sort = 'MOLDING';
+            //     } else if (MESM_OrderOperation[n].Operation == '2030') {
+            //         _Sort = 'PACKING';
+            //     }
+            //
+            //     // cc('WorkCenterID');
+            //     // cc(MESM_OrderOperationRAW[n].WorkCenterID);
+            //     //undefined
+            //     MESM_OrderOperationSort.push({
+            //         "RecordID": MESM_OrderOperation[n].ID,
+            //         "ID": MESM_OrderOperation[n].ID,
+            //         "OrderNumber": MESM_OrderOperation[n].OrderNumber,
+            //         "Material": MESM_OrderOperation[n].Material,
+            //         "Quantity": MESM_OrderOperation[n].Quantity,
+            //         "SchedStart": moment(MESM_OrderOperation[n].MIISchedStartDate + ' ' + MESM_OrderOperation[n].MIISchedStartTime).format('YYYY-MM-DD HH:mm:ss'),
+            //         "SchedFinish": moment(MESM_OrderOperation[n].MIISchedFinDate + ' ' + MESM_OrderOperation[n].MIISchedFinTime).format('YYYY-MM-DD HH:mm:ss'),
+            //         "WCG": MESM_OrderOperation[n].WorkCenter,
+            //         "Mold": MESM_OrderOperation[n].PrtNumber,
+            //         "FamilyMold": MESM_OrderOperation[n].FamilyMold === undefined ? '' : MESM_OrderOperation[n].FamilyMold,
+            //         "Concurrent": MESM_OrderOperation[n].Concurrent === undefined ? '' : MESM_OrderOperation[n].Concurrent,
+            //         "Status": MESM_OrderOperation[n].SchedStat,
+            //         "Press": MESM_FloorMaps[MESM_OrderOperation[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperation[n].WorkCenterID].unitName,
+            //         "CtrlKey": MESM_OrderOperation[n].CtrlKey,
+            //         'Sort': MESM_OrderOperation[n].Sort,
+            //         'Operation': MESM_OrderOperation[n].Operation,
+            //         'OperationStatus': MESM_OrderOperation[n].OperationStatus,
+            //         'ActualReleaseDate': MESM_OrderOperation[n].ActualReleaseDate,
+            //         'ArchivedTimestamp': MESM_OrderOperation[n].ArchivedTimestamp,
+            //     });
+            //
+            //     // if (MESM_OrderOperationRAW[n].ArchivedTimestamp == 'TimeUnavailable') {
+            //     //     newOrder++;
+            //     //     if (new Date(newOrderEntry).getTime() < new Date(MESM_OrderOperationRAW[n].ActualReleaseDate).getTime()) {
+            //     //         newOrderEntry = MESM_OrderOperationRAW[n].ActualReleaseDate;
+            //     //     }
+            //     //
+            //     // }
+            // }
 
-                var _Sort = '';
-                if (MESM_OrderOperation[n].Operation == '0010') {
-                    _Sort = 'RESIN';
-                } else if (MESM_OrderOperation[n].Operation == '0020') {
-                    _Sort = 'MOLDING';
-                } else if (MESM_OrderOperation[n].Operation == '0030') {
-                    _Sort = 'PACKING';
-                } else if (MESM_OrderOperation[n].Operation == '1010') {
-                    _Sort = 'resin';
-                } else if (MESM_OrderOperation[n].Operation == '1020') {
-                    _Sort = 'MOLDING';
-                } else if (MESM_OrderOperation[n].Operation == '1030') {
-                    _Sort = 'PACKING';
-                } else if (MESM_OrderOperation[n].Operation == '1040') {
-                    _Sort = 'ASSY';
-                } else if (MESM_OrderOperation[n].Operation == '2010') {
-                    _Sort = 'RESIN';
-                } else if (MESM_OrderOperation[n].Operation == '2020') {
-                    _Sort = 'MOLDING';
-                } else if (MESM_OrderOperation[n].Operation == '2030') {
-                    _Sort = 'PACKING';
-                }
-
-                // cc('WorkCenterID');
-                // cc(MESM_OrderOperationRAW[n].WorkCenterID);
-                //undefined
-                MESM_OrderOperationSort.push({
-                    "RecordID": MESM_OrderOperation[n].ID,
-                    "ID": MESM_OrderOperation[n].ID,
-                    "OrderNumber": MESM_OrderOperation[n].OrderNumber,
-                    "Material": MESM_OrderOperation[n].Material,
-                    "Quantity": MESM_OrderOperation[n].Quantity,
-                    "SchedStart": moment(MESM_OrderOperation[n].MIISchedStartDate + ' ' + MESM_OrderOperation[n].MIISchedStartTime).format('YYYY-MM-DD HH:mm:ss'),
-                    "SchedFinish": moment(MESM_OrderOperation[n].MIISchedFinDate + ' ' + MESM_OrderOperation[n].MIISchedFinTime).format('YYYY-MM-DD HH:mm:ss'),
-                    "WCG": MESM_OrderOperation[n].WorkCenter,
-                    "Mold": MESM_OrderOperation[n].PrtNumber,
-                    "FamilyMold": MESM_OrderOperation[n].FamilyMold === undefined ? '' : MESM_OrderOperation[n].FamilyMold,
-                    "Concurrent": MESM_OrderOperation[n].Concurrent === undefined ? '' : MESM_OrderOperation[n].Concurrent,
-                    "Status": MESM_OrderOperation[n].SchedStat,
-                    "Press": MESM_FloorMaps[MESM_OrderOperation[n].WorkCenterID] == null ? '' : MESM_FloorMaps[MESM_OrderOperation[n].WorkCenterID].unitName,
-                    "CtrlKey": MESM_OrderOperation[n].CtrlKey,
-                    'Sort': MESM_OrderOperation[n].Sort,
-                    'Operation': MESM_OrderOperation[n].Operation,
-                    'OperationStatus': MESM_OrderOperation[n].OperationStatus,
-                    'ActualReleaseDate': MESM_OrderOperation[n].ActualReleaseDate,
-                    'ArchivedTimestamp': MESM_OrderOperation[n].ArchivedTimestamp,
-                });
-
-                // if (MESM_OrderOperationRAW[n].ArchivedTimestamp == 'TimeUnavailable') {
-                //     newOrder++;
-                //     if (new Date(newOrderEntry).getTime() < new Date(MESM_OrderOperationRAW[n].ActualReleaseDate).getTime()) {
-                //         newOrderEntry = MESM_OrderOperationRAW[n].ActualReleaseDate;
-                //     }
-                //
-                // }
-            }
-            cc(MESM_OrderOperationSort);
+            // cc(MESM_OrderOperationSort);
 
 
             if (newOrder[0] > 0) {
@@ -671,7 +674,7 @@
             }
 
 
-            creatDatatable.init(MESM_OrderOperationSort);
+            creatDatatable.init(MESM_OrderOperation);
 
 
             var events = [];
@@ -1437,9 +1440,9 @@
             var _Material = ROW[2].innerText;
 
             var _ID = 0;// ROW[0].innerText;
-            for (var n = 0; n < MESM_OrderOperationSort.length; n++) {
-                if (MESM_OrderOperationSort[n].OrderNumber == _OrderNumber && MESM_OrderOperationSort[n].Material == _Material) {
-                    _ID = MESM_OrderOperationSort[n].RecordID;
+            for (var n = 0; n < MESM_OrderOperation.length; n++) {
+                if (MESM_OrderOperation[n].OrderNumber == _OrderNumber && MESM_OrderOperation[n].Material == _Material) {
+                    _ID = MESM_OrderOperation[n].RecordID;
                 }
             }
             // cc(_ID);
@@ -2005,7 +2008,7 @@
                         },
                         {
                             targets: 10,
-                            title: 'Con.',
+                            title: 'C.',
                             visible: true,
                             orderable: true,
                         },
@@ -2014,10 +2017,22 @@
                             title: 'WorkCenter',
                             visible: true,
                             orderable: true,
+                            render: function (data, type, e, meta) {
+                                // cc('WorkCenter');
+                                // cc(data);
+                                // cc(e);
+                                // cc(meta);
+
+                                if (data != 0) {
+                                    return MESM_FloorMaps[data].unitName;
+                                } else {
+                                    return '';
+                                }
+                            }
                         },
                         {
                             targets: 12,
-                            title: 'Key',
+                            title: 'K.',
                             // width: 60,
                             visible: true,
                             orderable: false,
@@ -2035,27 +2050,33 @@
                             orderable: false,
                             "searchable": false,
                             render: function (data, type, e, meta) {
-
-                                if (e.Status == 'U' || e.Status == 'S' || e.Status == 'V') {    //Unscheduled & Scheduled
+                                // cc('Actions');
+                                // cc(e);
+                                if (e.SchedStat == 'U' || e.SchedStat == 'S' || e.SchedStat == 'V') {    //Unscheduled & Scheduled
 
                                     var wcg = '';
                                     var wcgNAME = '';
                                     for (var f in MESM_FloorMaps) {
-                                        if (e.WCG == MESM_FloorMaps[f].unitName) {
+                                        if (e.WorkCenter == MESM_FloorMaps[f].unitName) {
                                             wcg = MESM_FloorMaps[f].recordID;
                                             wcgNAME = MESM_FloorMaps[f].unitName;
                                             break;
-                                            // n = MESM_FloorMaps.length;
                                         }
                                     }
+                                    // cc(wcg);
+                                    // cc(wcgNAME);
+                                    // cc(e.Sort);
                                     // var prs = [];
                                     var prsSTR = '';
                                     var groupSTR = '';
                                     var prsRows = 0;
                                     if (e.Sort == 'MOLDING') {
                                         for (var f in MESM_FloorMaps) {
+                                            // cc(MESM_FloorMaps[f].idUnitParent);
                                             if (MESM_FloorMaps[f].idUnitParent == wcg) {
-                                                if (mmmArray[e.Mold] != null && mmmArray[e.Mold].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0) {
+                                                // cc('MOLDING ' + e.PrtNumber);
+                                                // cc(mmmArray[e.PrtNumber]);
+                                                if (mmmArray[e.PrtNumber] != null && mmmArray[e.PrtNumber].indexOf(MESM_FloorMaps[f].MOLD_Machine_Matrix) > 0) {
                                                     // prs.push({
                                                     //     'unitName': MESM_FloorMaps[f].unitName,
                                                     //     'MOLD_Machine_Matrix': MESM_FloorMaps[f].MOLD_Machine_Matrix
@@ -2081,7 +2102,7 @@
 
                                         // groupSTR = '<div class="dropdown-divider"></div>';
                                         for (var i = 1; i <= 6; i++) {
-                                            if (e.WCG.indexOf(i) > 0) {
+                                            if (e.WorkCenter.indexOf(i) > 0) {
                                                 groupSTR =
                                                     groupSTR +
                                                     '<a class="dropdown-item" onclick="quickAction(this)"><i class="la la-wrench"></i>MOLD' +
@@ -2101,11 +2122,11 @@
                                             prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
                                         }
                                         var scrollSTR = '';
-                                        if (e.Status == 'U') {
+                                        if (e.SchedStat == 'U') {
                                             if (prsRows * 40 + 250 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 500px"'
                                             }
-                                        } else if (e.Status == 'S') {
+                                        } else if (e.SchedStat == 'S') {
                                             if (prsRows * 40 + 280 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 500px"'
                                             }
@@ -2177,7 +2198,7 @@
                                             '       <i class="la la-comment"></i>' +
                                             '   </a>'
 
-                                } else if (e.Status == 'H') {
+                                } else if (e.SchedStat == 'H') {
                                     return '<span class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
                                         '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
                                         '           <i class="la la-ellipsis-h"></i>' +
@@ -2191,7 +2212,7 @@
                                         '   <a href="#basic" data-toggle="" onclick="sendMSG(this)" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Report">' +
                                         '       <i class="la la-comment"></i>' +
                                         '   </a>';
-                                } else if (e.Status == 'C') {
+                                } else if (e.SchedStat == 'C') {
                                     return '<span class="dropdown ' + (e.getDatatable().getPageSize() - e.getIndex() <= 4 ? "dropup" : "") + '">' +
                                         '       <a href="#draggable" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">' +
                                         '           <i class="la la-ellipsis-h"></i>' +
