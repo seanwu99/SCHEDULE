@@ -99,13 +99,13 @@
 
 
             MESM_FloorMaps_GET();
-            MESM_OrderOperation_GET();
             MOLD_Machine_Matrix_GET();
+            // MESM_OrderOperation_GET();
         }
 
         function dataLoading() {
             rawCount++;
-            if (rawCount == 3) {
+            if (rawCount == 2) {
                 MainRouting();
             }
         }
@@ -178,7 +178,7 @@
                     cc(new Date().getTime() - runtime);
                     // cc(MESM_FloorMaps_GROUP);
                     cc('/2/==========================================================================================================');
-                    dataLoading();
+                    MESM_OrderOperation_GET();
                 }
             );
 
@@ -228,7 +228,7 @@
                                     return moment(moment(v.MIISchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.MIISchedFinTime).format('HH:mm:ss')).format('YYYY-MM-DD HH:mm:ss');
                                 }
                             },
-                            WorkCenterID: v.WorkCenterID,
+                            WorkCenterID: (v.WorkCenterID == 0) ? '' : MESM_FloorMaps[v.WorkCenterID].unitName,
                             WorkCenter: v.WorkCenter,
                             WorkCenterText: v.WorkCenterText,
                             OrderScheduledKey: v.OrderScheduledKey,
@@ -699,10 +699,10 @@
                             resourceId: orderOpreationTable.cell({
                                 row: n,
                                 column: 7
-                            }).data() + '_' + MESM_FloorMaps[orderOpreationTable.cell({
+                            }).data() + '_' + orderOpreationTable.cell({
                                 row: n,
                                 column: 11
-                            }).data()].unitName,
+                            }).data(),
                             start: orderOpreationTable.cell({row: n, column: 5}).data(),
                             end: orderOpreationTable.cell({row: n, column: 6}).data(),
                             title: orderOpreationTable.cell({
@@ -712,10 +712,10 @@
                             description: orderOpreationTable.cell({
                                 row: n,
                                 column: 7
-                            }).data() + '_' + MESM_FloorMaps[orderOpreationTable.cell({
+                            }).data() + '_' + orderOpreationTable.cell({
                                 row: n,
                                 column: 11
-                            }).data()].unitName,
+                            }).data(),
                             color: colors[Math.round(Math.random() * 8)],
 
                         });
@@ -2024,18 +2024,18 @@
                             title: 'WorkCenter',
                             visible: true,
                             orderable: true,
-                            render: function (data, type, e, meta) {
-                                // cc('WorkCenter');
-                                // cc(data);
-                                // cc(e);
-                                // cc(meta);
-
-                                if (data != 0) {
-                                    return MESM_FloorMaps[data].unitName;
-                                } else {
-                                    return '';
-                                }
-                            }
+                            // render: function (data, type, e, meta) {
+                            //     // cc('WorkCenter');
+                            //     // cc(data);
+                            //     // cc(e);
+                            //     // cc(meta);
+                            //
+                            //     if (data != 0) {
+                            //         return MESM_FloorMaps[data].unitName;
+                            //     } else {
+                            //         return '';
+                            //     }
+                            // }
                         },
                         {
                             targets: 12,
