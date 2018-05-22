@@ -1,50 +1,39 @@
-var ListBox = React.createClass({
-    var testData =
-        {
-            ProductID:0,
-            ProductName: "Test Product 1",
-            QuantityPerUnit: "100 units per box",
-            UnitPrice: "49.75",
-            Discontinued: false
-        };
+/////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) Autodesk, Inc. All rights reserved
+// Written by Jaime Rosales 2016 - Forge Developer Partner Services
+//
+// Permission to use, copy, modify, and distribute this software in
+// object code form for any purpose and without fee is hereby granted,
+// provided that the above copyright notice appears in all copies and
+// that both that copyright notice and the limited warranty and
+// restricted rights notice below appear in all supporting
+// documentation.
+//
+// AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS.
+// AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF
+// MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC.
+// DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
+// UNINTERRUPTED OR ERROR FREE.
+/////////////////////////////////////////////////////////////////////////////////
 
-render: function() {
-    return (
-        <button type="button" className="list-group-item" id="product-list">
-        <div className="row vertical-align">
-        <div className="col-sm-8 top">
-        <h4>Top Label</h4>
-    <p>10 boxes at 20 bags</p>
-    </div>
-    <div className="col-sm-3 text-right top">
-        <h4>
-        99.99
-        <small className="text-muted"> EUR</small>
-        </h4>
-        <p>Available</p>
-        </div>
-        <div className="col-sm-1 center">
-        <span className="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
-        </div>
-        </div>
-        </button>
-);
-}
-});
+var credentials = {
 
-var ProductList = React.createClass({
-    render: function() {
-        return (
-            <div className="list-group">
-            <ListBox />
-            <ListBox />
-            <ListBox />
-            </div>
-    )
-    }
-});
+    credentials: {
+        // Replace placeholder below by the Consumer Key and Consumer Secret you got from
+        // http://developer.autodesk.com/ for the production server
+        client_id: '3rMb8kJYKSaXfwh1c209AxoXGyNn1Gnf',
+        client_secret: 'I7b46511ddab1431',
+        grant_type: 'client_credentials',
+        scope: 'viewables:read', // Setup the needed scopes for authorizing your Token
+        callbackUrl: process.env.CALLBACK_URL || 'http://localhost:9001'
+    },
 
-ReactDOM.render(
-<ProductList />,
-    document.getElementById('product-list')
-);
+    // If you which to use the Autodesk View & Data API on the staging server, change this url
+    BaseUrl: 'https://developer.api.autodesk.com',
+    Version: 'v1'
+};
+
+credentials.Authentication = credentials.BaseUrl + '/authentication/' + credentials.Version + '/authenticate'
+
+
+module.exports = credentials;

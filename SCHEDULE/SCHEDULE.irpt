@@ -233,7 +233,7 @@
                             WorkCenterText: v.WorkCenterText,
                             OrderScheduledKey: v.OrderScheduledKey,
                             PrtNumber: v.PrtNumber,
-                            OperationStatus: (v.OperationStatus === undefined || v.OperationStatus=='NA') ? 0 : v.OperationStatus,
+                            OperationStatus: (v.OperationStatus === undefined || v.OperationStatus == 'NA') ? 0 : v.OperationStatus,
                             SchedStat: (v.SchedStat === undefined || v.SchedStat == '---') ? 'U' : v.SchedStat,
                             CtrlKey: (v.CtrlKey === undefined) ? '' : v.CtrlKey,
                             ActualReleaseDate: v.ActualReleaseDate,
@@ -2156,7 +2156,8 @@
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK06"><i class="la la-wrench"></i>assign to PACK06' + '</a>' +
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK07"><i class="la la-wrench"></i>assign to PACK07' + '</a>' +
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK08"><i class="la la-wrench"></i>assign to PACK08' + '</a>' +
-                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>';
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK09"><i class="la la-wrench"></i>assign to PACK09' + '</a>' +
+                                            '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK10"><i class="la la-wrench"></i>assign to PACK10' + '</a>';
                                     } else if (e.Sort == 'ASSY') {
                                         if (e.WorkCenter == 'ASSYM') {
                                             prsSTR =
