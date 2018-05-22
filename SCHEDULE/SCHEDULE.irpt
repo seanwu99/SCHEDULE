@@ -228,13 +228,13 @@
                                     return moment(moment(v.MIISchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.MIISchedFinTime).format('HH:mm:ss')).format('YYYY-MM-DD HH:mm:ss');
                                 }
                             },
-                            WorkCenterID: (v.WorkCenterID == 0) ? '' : MESM_FloorMaps[v.WorkCenterID].unitName,
+                            WorkCenterID: (v.WorkCenterID == 0 || v.WorkCenterID === undefined) ? '' : MESM_FloorMaps[v.WorkCenterID].unitName,
                             WorkCenter: v.WorkCenter,
                             WorkCenterText: v.WorkCenterText,
                             OrderScheduledKey: v.OrderScheduledKey,
                             PrtNumber: v.PrtNumber,
-                            OperationStatus: (v.OperationStatus === undefined) ? 0 : v.OperationStatus,
-                            SchedStat: (v.SchedStat === undefined) ? 'U' : v.SchedStat,
+                            OperationStatus: (v.OperationStatus === undefined || v.OperationStatus=='NA') ? 0 : v.OperationStatus,
+                            SchedStat: (v.SchedStat === undefined || v.SchedStat == '---') ? 'U' : v.SchedStat,
                             CtrlKey: (v.CtrlKey === undefined) ? '' : v.CtrlKey,
                             ActualReleaseDate: v.ActualReleaseDate,
                             ArchivedTimestamp: v.ArchivedTimestamp,
@@ -1474,7 +1474,8 @@
             cc(_Material);
             cc(_SchedStart);
             cc(_SchedFinish);
-
+            cc(e.id);
+            cc(_Press);
             if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
                 cc('assign');
 
@@ -1559,14 +1560,14 @@
         }
 
         function MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press) {
-            // cc('MESM_OrderOperation_UPD');
+            cc('MESM_OrderOperation_UPD');
 
-            // cc(_ID);
-            // cc(_Quantity);
-            // cc(_Status);
-            // cc(_SchedStart);
-            // cc(_SchedFinish);
-            // cc(_Press);
+            cc(_ID);
+            cc(_Quantity);
+            cc(_Status);
+            cc(_SchedStart);
+            cc(_SchedFinish);
+            cc(_Press);
 
 
             if (_SchedStart == '' || _SchedFinish == '') {
@@ -2059,8 +2060,9 @@
                             render: function (data, type, e, meta) {
                                 // cc('Actions');
                                 // cc(e);
+                                // cc(e.SchedStat);
                                 if (e.SchedStat == 'U' || e.SchedStat == 'S' || e.SchedStat == 'V') {    //Unscheduled & Scheduled
-
+                                    // cc('e.SchedStat == \'V\'');
                                     var wcg = '';
                                     var wcgNAME = '';
                                     for (var f in MESM_FloorMaps) {
