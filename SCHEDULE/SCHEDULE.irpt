@@ -187,6 +187,8 @@
         function MESM_OrderOperation_GET() {
             url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_OrderOperation_GET_' + GROUP + '&Content-Type=text/xml';
             getData(url, function (data) {
+                cc('MESM_OrderOperation_GET');
+                cc(data);
                 $.each(data, function (i, v) {
 
                         var Sort = '';
@@ -200,7 +202,8 @@
                             Sort = 'RESIN';
                         }
 
-
+                        // cc('v.WorkCenterID');
+                        // cc(v.WorkCenterID);
                         MESM_OrderOperation.push({
                             ID: v.ID,
                             OrderNumber: v.OrderNumber,
@@ -228,7 +231,7 @@
                                     return moment(moment(v.MIISchedFinDate).format('YYYY-MM-DD') + ' ' + moment(v.MIISchedFinTime).format('HH:mm:ss')).format('YYYY-MM-DD HH:mm:ss');
                                 }
                             },
-                            WorkCenterID: (v.WorkCenterID == 0 || v.WorkCenterID === undefined) ? '' : MESM_FloorMaps[v.WorkCenterID].unitName,
+                            WorkCenterID: (v.WorkCenterID == 0 || v.WorkCenterID === undefined || v.WorkCenterID == 'NA') ? '' : MESM_FloorMaps[v.WorkCenterID].unitName,
                             WorkCenter: v.WorkCenter,
                             WorkCenterText: v.WorkCenterText,
                             OrderScheduledKey: v.OrderScheduledKey,
@@ -1877,6 +1880,7 @@
 
                 orderOpreationTable = $("#m_table_1").DataTable({
                     scrollX: true,
+                    scrollY: false,
                     // scrollCollapse: true,
                     // scroller: true,
                     lengthMenu: [5, 10, 25, 50, 100],
@@ -2132,13 +2136,19 @@
                                             prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
                                         }
                                         scrollSTR = '';
+                                        prsRows = 10;
+                                        cc('prsRows : ' + prsRows);
                                         if (e.SchedStat == 'U') {
                                             if (prsRows * 40 + 250 > 500) {
-                                                scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                                scrollSTR = 'style="overflow-y: scroll; height: 200px"'
                                             }
                                         } else if (e.SchedStat == 'S') {
                                             if (prsRows * 40 + 280 > 500) {
-                                                scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                                scrollSTR = 'style="overflow-y: scroll; height: 200px"'
+                                            }
+                                        } else if (e.SchedStat == 'V') {
+                                            if (prsRows * 40 + 280 > 500) {
+                                                scrollSTR = 'style="overflow-y: scroll; height: 200px"'
                                             }
                                         }
                                     } else if (e.Sort == 'RESIN') {
@@ -2206,17 +2216,18 @@
                                             prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
                                         }
                                         scrollSTR = '';
-                                        if (e.SchedStat == 'U') {
+                                        prsRows = 100;
+                                        if (e.SchedStat == 'U' || e.SchedStat == 'V') {
                                             if (prsRows * 40 + 250 > 500) {
-                                                scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                                scrollSTR = 'style="overflow-y: scroll; height: 200px"'
                                             }
                                         } else if (e.SchedStat == 'S') {
                                             if (prsRows * 40 + 280 > 500) {
-                                                scrollSTR = 'style="overflow-y: scroll; height: 500px"'
+                                                scrollSTR = 'style="overflow-y: scroll; height: 200px"'
                                             }
                                         }
                                     }
-
+                                    scrollSTR = 'style="overflow-y: auto; height: 220px"';
                                     // var ft = '';
                                     // if (prsSTR.length == 0) {
                                     //     // ft = 'WrongGroup'
@@ -2447,7 +2458,8 @@
                                 <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width"
                                     m-dropdown-toggle="click" m-dropdown-persistent="1">
                                     <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon"
-                                       style="display: inline-list-item">
+                                        style="display: b">
+                                        <!--style="display: inline-list-item">-->
                                         <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small m-badge--danger"></span>
                                         <span class="m-nav__link-icon">
 													<i class="flaticon-music-2"></i>
@@ -2966,7 +2978,7 @@
                             </div>
 
 
-                            <div class="m-portlet__body">
+                            <div class="m-portlet__body" >
                                 <!--begin: Datatable -->
                                 <!--<table class="table table-striped- table-bordered table-hover table-checkable display nowrap"-->
                                 <!--style="white-space: nowrap;width:100%"-->
