@@ -202,8 +202,19 @@
                             Sort = 'RESIN';
                         }
 
-                        // cc('v.WorkCenterID');
-                        // cc(v.WorkCenterID);
+                        cc('v.WorkCenterID');
+                        cc(v.WorkCenter);
+                        cc(v.WorkCenterID);
+                        var WorkCenter = v.WorkCenter;
+                        // if (Sort == 'ASSY') {
+                        //     if (['ASSYM', 'ASSY'].indexOf(WorkCenter) < 0) {
+                        //         if (WorkCenter.substr(0, 5) == 'ASSYM') {
+                        //             WorkCenter = 'ASSYM';
+                        //         }else if (WorkCenter.substr(0, 4) == 'ASSY') {
+                        //             WorkCenter = 'ASSY';
+                        //         }
+                        //     }
+                        // }
                         MESM_OrderOperation.push({
                             ID: v.ID,
                             OrderNumber: v.OrderNumber,
@@ -232,7 +243,7 @@
                                 }
                             },
                             WorkCenterID: (v.WorkCenterID == 0 || v.WorkCenterID === undefined || v.WorkCenterID == 'NA') ? '' : MESM_FloorMaps[v.WorkCenterID].unitName,
-                            WorkCenter: v.WorkCenter,
+                            WorkCenter: WorkCenter,
                             WorkCenterText: v.WorkCenterText,
                             OrderScheduledKey: v.OrderScheduledKey,
                             PrtNumber: v.PrtNumber,
@@ -736,8 +747,8 @@
             // cc('events.length ' + events.length);
             // // cc(events);
             // cc('//=============================================');
-            // cc(WorkCentres);
-            // cc(events);
+            cc(WorkCentres);
+            cc(events);
             scheduleForm(WorkCentres, events);
 
 
@@ -1478,6 +1489,7 @@
             cc(_SchedStart);
             cc(_SchedFinish);
             cc(e.id);
+            cc(_Group);
             cc(_Press);
             if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
                 cc('assign');
@@ -1508,7 +1520,9 @@
                 // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
                 ActivityLogADD('Assigned', _OrderNumber + ' ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
-                addScheduleEvent(e.id, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+                // if (_Sort == 'ASSY') {
+                // }
+                addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
 
                 orderOpreationTable.cell({row: rowN, column: 1}).data('S');//.draw();
                 orderOpreationTable.cell({row: rowN, column: 11}).data(_Press);//.draw();
@@ -1752,44 +1766,12 @@
 
         function addScheduleEvent(resourceId, elementId, schedleStart, scheduleFinsh) {
             cc('addScheduleEvent');
-            // cc(resourceId);
-            // cc(elementId);
-            // cc(schedleStart);
-            // cc(scheduleFinsh);
+            cc(resourceId);
+            cc(elementId);
+            cc(schedleStart);
+            cc(scheduleFinsh);
             // var tbOrderID = _OrderID;
             var today = new Date().toISOString().substr(0, 10);
-
-
-            // var s = Math.round(Math.random() * 20);
-            // var timeStart = 'T00:00:00';
-            // if (s < 10) {
-            //     timeStart = 'T0' + s + ':00:00';
-            // } else {
-            //     timeStart = 'T' + s + ':00:00';
-            // }
-            // var d = s + Math.round(4 + Math.random() * 10);
-            // var mm = _During, hh = 0;
-            // hh = Math.floor(mm / 60);
-            // mm = mm - 60 * hh;
-            // var timeEnd;
-            // if (hh > 24) {
-            //     hh = 24
-            // }
-            // if (hh < 10) {
-            //     timeEnd = 'T0' + hh + ':';
-            // } else {
-            //     timeEnd = 'T' + hh + ':';
-            // }
-            // if (mm < 10) {
-            //     timeEnd = timeEnd + '0' + mm + ':00';
-            // } else {
-            //     timeEnd = timeEnd + mm + ':00';
-            // }
-            // var scheduleID = e.id;
-            // cc(scheduleID);
-            // scheduleID = scheduleID.substring(scheduleID.indexOf('_') + 1);
-
-            // cc(document.getElementById(id));
 
 
             $('#calendar').fullCalendar('renderEvent', {
@@ -2062,8 +2044,8 @@
                             orderable: false,
                             "searchable": false,
                             render: function (data, type, e, meta) {
-                                // cc('Actions');
-                                // cc(e);
+                                cc('Actions');
+                                cc(e);
                                 // cc(e.SchedStat);
                                 if (e.SchedStat == 'U' || e.SchedStat == 'S' || e.SchedStat == 'V') {    //Unscheduled & Scheduled
                                     // cc('e.SchedStat == \'V\'');
@@ -2170,6 +2152,7 @@
                                             '<a class="dropdown-item" onclick="quickAction(this)" id="PACKING_PACK10"><i class="la la-wrench"></i>assign to PACK10' + '</a>';
                                     } else if (e.Sort == 'ASSY') {
                                         if (e.WorkCenter == 'ASSYM') {
+
                                             prsSTR =
                                                 '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM01"><i class="la la-wrench"></i>assign to ASSYM01' + '</a>' +
                                                 '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSYM02"><i class="la la-wrench"></i>assign to ASSYM02' + '</a>' +
@@ -2212,6 +2195,16 @@
                                                 '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY19"><i class="la la-wrench"></i>assign to ASSY19' + '</a>' +
                                                 '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY20"><i class="la la-wrench"></i>assign to ASSY20' + '</a>';
                                         }
+                                        // if (e.WorkCenterID.length > 0 && e.WorkCenterID == e.WorkCenter) {
+                                        //     var g = e.WorkCenter.substring(0, 5) == 'ASSYM' ? 'ASSYM' : 'ASSY';
+                                        //     prsSTR = '<a class="dropdown-item" onclick="quickAction(this)" id="' +
+                                        //         g +
+                                        //         '_' +
+                                        //         e.WorkCenterID +
+                                        //         '"><i class="la la-wrench"></i>assign to ' +
+                                        //         e.WorkCenterID +
+                                        //         '</a>';
+                                        // }
                                         if (prsSTR.length != 0) {
                                             prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
                                         }
@@ -2458,7 +2451,7 @@
                                 <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width"
                                     m-dropdown-toggle="click" m-dropdown-persistent="1">
                                     <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon"
-                                        style="display: b">
+                                       style="display: b">
                                         <!--style="display: inline-list-item">-->
                                         <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small m-badge--danger"></span>
                                         <span class="m-nav__link-icon">
@@ -2978,7 +2971,7 @@
                             </div>
 
 
-                            <div class="m-portlet__body" >
+                            <div class="m-portlet__body">
                                 <!--begin: Datatable -->
                                 <!--<table class="table table-striped- table-bordered table-hover table-checkable display nowrap"-->
                                 <!--style="white-space: nowrap;width:100%"-->
