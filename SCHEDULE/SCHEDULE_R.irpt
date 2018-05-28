@@ -126,7 +126,7 @@
             getData(url, function (data) {
                 // cc(url);
                 $.each(data, function (index, value) {
-                    cc(value);
+                    // cc(value);
                     logs =
                         '<div class="m-list-timeline__item" >' +
                         value.events +
@@ -134,7 +134,7 @@
                         moment(value.occurred).fromNow().replace(' ago', '') + '</span></div>' +
                         logs;
                 });
-                cc(logs);
+                // cc(logs);
                 document.getElementById("ActivityLog").innerHTML = logs;
             })
 
@@ -1488,6 +1488,18 @@
                 cc(value.textContent);
             }));
 
+            var conc = 0;
+            cc('ROWS: ' + orderOpreationTable.rows('').count());
+            for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
+                cc(orderOpreationTable.cell({row: n, column: 10}).data());
+                cc(orderOpreationTable.cell({row: n, column: 10}));
+                // if (orderOpreationTable.cell({row: n, column: 0}).data() == _ID) {
+                //     rowN = n;
+                //     break;
+                // }
+            }
+
+
             var _OrderNumber = ROW[1].innerText;
             var _Material = ROW[2].innerText;
             var _Group = ROW[6].innerText;
@@ -1570,6 +1582,8 @@
                 addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Group, _SchedStart, _SchedFinish);
 
                 orderOpreationTable.cell({row: rowN, column: 1}).data('S');//.draw();
+                orderOpreationTable.cell({row: rowN, column: 5}).data(_SchedStart.replace('T', ' '));//.draw();
+                orderOpreationTable.cell({row: rowN, column: 6}).data(_SchedFinish.replace('T', ' '));//.draw();
                 orderOpreationTable.cell({row: rowN, column: 11}).data(_Press);//.draw();
 
             }
@@ -2074,7 +2088,7 @@
                             className: 'dt-body-center',
                             render: function (data, type, full, meta) {
                                 // return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-                                return '<input type="checkbox">';
+                                return '<input type="checkbox" checked="true">';
                             }
                         },
                         {
