@@ -258,7 +258,8 @@
                             ActualReleaseDate: v.ActualReleaseDate,
                             ArchivedTimestamp: v.ArchivedTimestamp,
                             FamilyMold: (v.FamilyMold === undefined) ? '' : v.FamilyMold,
-                            Concurrent: (v.Concurrent === undefined) ? '' : v.Concurrent,
+                            // Concurrent: (v.Concurrent === undefined) ? '' : v.Concurrent,
+                            Concurrent: false,
                             Sort: Sort,
                             ReqQuan: (v.ReqQuan === undefined) ? '' : v.ReqQuan,
                         });
@@ -1491,14 +1492,93 @@
             var conc = 0;
             cc('ROWS: ' + orderOpreationTable.rows('').count());
             for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
-                cc(orderOpreationTable.cell({row: n, column: 10}).data());
-                cc(orderOpreationTable.cell({row: n, column: 10}));
+                if (orderOpreationTable.cell({row: n, column: 10}).data()) {
+                    conc++;
+                }
+                // cc(orderOpreationTable.cell({row: n, column: 10}).data());
+                // cc(orderOpreationTable.cell({row: n, column: 10}));
                 // if (orderOpreationTable.cell({row: n, column: 0}).data() == _ID) {
                 //     rowN = n;
                 //     break;
                 // }
             }
+            cc('conc ' + conc);
 
+            if (conc > 0) {
+                for (var n = 0; n < orderOpreationTable.rows().count(); n++) {
+                    //TODO
+                    if (orderOpreationTable.cell({row: n, column: 10}).data()) {
+                        var nRow = n;
+                        _Action = e.innerText;
+                        _Status = orderOpreationTable.cell({row: n, column: 1}).data();
+                        if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
+                            _OrderNumber = orderOpreationTable.cell({row: n, column: 2}).data();
+                            _Material = orderOpreationTable.cell({row: n, column: 3}).data();
+                            _Quantity = orderOpreationTable.cell({row: n, column: 4}).data();
+                            _SchedStart = orderOpreationTable.cell({row: n, column: 5}).data();
+                            _SchedFinish = orderOpreationTable.cell({row: n, column: 6}).data();
+                            _Group = orderOpreationTable.cell({row: n, column: 7}).data();
+                            _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
+
+                            _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
+                            _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
+                            _ID = orderOpreationTable.cell({row: n, column: 0}).data();
+
+                            var ss = new Date(_SchedStart).getTime();
+                            ss = parseInt(ss / (15 * 60 * 1000)) * 15 * 60 * 1000;
+                            var sf = new Date(_SchedFinish).getTime();
+                            sf = Math.round(sf / (15 * 60 * 1000)) * 15 * 60 * 1000;
+                            if (sf - ss < 15 * 60 * 1000) {
+                                sf = ss + 15 * 60 * 1000;
+                            }
+
+                            var SSSS = new Date(ss);
+                            var SFSF = new Date(sf);
+
+
+                            _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+                            _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+
+
+                            _Status = 'Scheduled';
+
+                            // cc('assign m');
+                            // cc('=====');
+                            // cc(_OrderNumber);
+                            // cc(_Material);
+                            // cc(_SchedStart);
+                            // cc(_SchedFinish);
+                            // cc(e.id);
+                            // cc(_Group);
+                            // cc(_Press);
+                            // cc(_ID);
+                            // cc(_Quantity);
+                            // cc('=====');
+
+                            removeScheduleEvent(_OrderNumber + '_' + _Group);
+
+                            // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                            ActivityLogADD('Assigned', _OrderNumber + ' ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Group);
+                            MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                            // if (_Sort == 'ASSY') {
+                            // }
+                            // addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+                            addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Group, _SchedStart, _SchedFinish);
+
+                            orderOpreationTable.cell({row: n, column: 1}).data('S');//.draw();
+                            orderOpreationTable.cell({row: n, column: 5}).data(_SchedStart.replace('T', ' '));//.draw();
+                            orderOpreationTable.cell({row: n, column: 6}).data(_SchedFinish.replace('T', ' '));//.draw();
+                            orderOpreationTable.cell({row: n, column: 11}).data(_Press);//.draw();
+
+                        }
+
+
+                        _OrderNumber = orderOpreationTable.cell({row: n, column: 10}).data()
+                    }
+                    orderOpreationTable.cell({row: n, column: 10}).data(false);
+                }
+                return;
+            }
 
             var _OrderNumber = ROW[1].innerText;
             var _Material = ROW[2].innerText;
@@ -1540,15 +1620,9 @@
             var _SchedFinish = orderOpreationTable.cell({row: rowN, column: 6}).data();
             _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
             var _Sort = orderOpreationTable.cell({row: rowN, column: 13}).data();
-            cc(_OrderNumber);
-            cc(_Material);
-            cc(_SchedStart);
-            cc(_SchedFinish);
-            cc(e.id);
-            cc(_Group);
-            cc(_Press);
+
+
             if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
-                cc('assign');
 
                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
                 _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
@@ -1569,7 +1643,18 @@
 
 
                 _Status = 'Scheduled';
-
+                // cc('assign s');
+                // cc('=====');
+                // cc(_OrderNumber);
+                // cc(_Material);
+                // cc(_SchedStart);
+                // cc(_SchedFinish);
+                // cc(e.id);
+                // cc(_Group);
+                // cc(_Press);
+                // cc(_ID);
+                // cc(_Quantity);
+                // cc('=====');
 
                 removeScheduleEvent(_OrderNumber + '_' + _Group);
 
@@ -2087,13 +2172,35 @@
                             orderable: false,
                             className: 'dt-body-center',
                             render: function (data, type, full, meta) {
+                                // cc('---')
+                                // cc(data);
+                                // cc(type);
+                                // cc(full);
+                                // cc(meta);
+                                // cc('---');
+                                if (data) {
+                                    return '<input type="checkbox" value="' +
+                                        meta.row + '_' +
+                                        meta.col +
+                                        '" checked >';
+                                } else {
+                                    return '<input type="checkbox" value="' +
+                                        meta.row + '_' +
+                                        meta.col +
+                                        '" >';
+                                }
                                 // return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-                                return '<input type="checkbox" checked="true">';
+                                // return '<input type="checkbox" value="' +
+                                // meta.row + '_' +
+                                // meta.col +
+                                // '" ' +
+                                // (data == true) ? 'checked' : '' +
+                                //     '>';
                             }
                         },
                         {
                             targets: 11,
-                            title: 'Working Centre',
+                            title: 'Working Center',
                             visible: true,
                             orderable: true,
                             // render: function (data, type, e, meta) {
@@ -2141,7 +2248,7 @@
                         },
                         {
                             targets: 13,
-                            title: 'crl Key',
+                            title: 'CRL Key',
                             // width: 60,
                             visible: true,
                             orderable: false,
@@ -2489,6 +2596,38 @@
 
                 orderOpreationTable.page.len(10).draw();
 
+                $('#m_table_1 tbody').on('change', 'input[type="checkbox"]', function () {
+                    // cc('m_table_1 on change');
+                    // cc();
+                    // If checkbox is not checked
+                    // cc(this);
+                    // cc(this.checked);
+                    var nRow = this.value.split('_')[0];
+
+                    // orderOpreationTable.cell({row: n, column: 1}).data('V');
+                    orderOpreationTable.cell({row: nRow, column: 10}).data(this.checked);
+                    // cc(nRow);
+                    // cc(orderOpreationTable.cell({row: nRow, column: 10}).data());
+                    // this.checked = !this.checked;
+                    // if (!this.checked) {
+
+                    // var el = $('#example-select-all').get(0);
+                    // // If "Select all" control is checked and has 'indeterminate' property
+                    // if(el && el.checked && ('indeterminate' in el)){
+                    //     // Set visual state of "Select all" control
+                    //     // as 'indeterminate'
+                    //     el.indeterminate = true;
+                    // }
+                    // }
+                });
+
+                // $('#m_table_1').on('change', 'input.editor-active', function () {
+                //     cc('input.editor-active');
+                //     // editor
+                //     //     .edit( $(this).closest('tr'), false )
+                //     //     .set( 'active', $(this).prop( 'checked' ) ? 1 : 0 )
+                //     //     .submit();
+                // });
             }
         };
 
@@ -3118,7 +3257,7 @@
                                         <!--<div class="m-scrollable" data-scrollable="true" data-max-height="740" style="height1: 600px; overflow: auto;">-->
                                         <!--<div class="m-scrollable" data-scrollable="true" id="dActivityLog" style="max-height: 550px;  position: relative; overflow: visible; white-space: nowrap">-->
                                         <div class="m-scrollable" data-scrollable="true" id="dActivityLog"
-                                             style="max-height: 940px;  position: relative; overflow: visible; ">
+                                             style="max-height: 710px;  position: relative; overflow: visible; ">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items"
                                                      style="font-size: small">
