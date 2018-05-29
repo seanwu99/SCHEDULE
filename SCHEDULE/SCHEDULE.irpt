@@ -18,14 +18,16 @@
     <!--data-sap-ui-xx-bindingSyntax="complex"-->
     <!--data-sap-ui-compatVersion="edge">-->
     <!--</script>-->
-    <style>
-        /*div.dataTables_wrapper {*/
-        /*min-width: 1520px;*/
-        /*margin: 0 auto;*/
-        /*}*/
-        /*@media (min-width: 1900px) {*/
-        /*}*/
-    </style>
+
+    <!--<style>-->
+    <!--div.dataTables_wrapper {-->
+    <!--min-width: 1520px;-->
+    <!--margin: 0 auto;-->
+    <!--}-->
+    <!--@media (min-width: 1900px) {-->
+    <!--}-->
+    <!--</style>-->
+
     <!--<script id="sap-ui-bootstrap"-->
     <!--src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js"-->
     <!--data-sap-ui-libs="sap.m"-->
@@ -49,6 +51,7 @@
             }
         });
     </script>
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
 
 
@@ -114,15 +117,16 @@
 
             var logs = '';
 
-            var Param1 = GROUP;
+            var Param1 = GROUP.substr(0, 4);
 
             if (GROUP == 'ALL') {
                 Param1 = '';
             }
             var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Param.1=' + Param1 + '&Content-Type=text/xml';
             getData(url, function (data) {
-                cc(url);
+                // cc(url);
                 $.each(data, function (index, value) {
+                    // cc(value);
                     logs =
                         '<div class="m-list-timeline__item" >' +
                         value.events +
@@ -202,10 +206,11 @@
                             Sort = 'RESIN';
                         }
 
-                        cc('v.WorkCenterID');
-                        cc(v.WorkCenter);
-                        cc(v.WorkCenterID);
+                        // cc('v.WorkCenterID');
+                        // cc(v.WorkCenter);
+                        // cc(v.WorkCenterID);
                         var WorkCenter = v.WorkCenter;
+
                         // if (Sort == 'ASSY') {
                         //     if (['ASSYM', 'ASSY'].indexOf(WorkCenter) < 0) {
                         //         if (WorkCenter.substr(0, 5) == 'ASSYM') {
@@ -253,8 +258,10 @@
                             ActualReleaseDate: v.ActualReleaseDate,
                             ArchivedTimestamp: v.ArchivedTimestamp,
                             FamilyMold: (v.FamilyMold === undefined) ? '' : v.FamilyMold,
-                            Concurrent: (v.Concurrent === undefined) ? '' : v.Concurrent,
+                            // Concurrent: (v.Concurrent === undefined) ? '' : v.Concurrent,
+                            Concurrent: false,
                             Sort: Sort,
+                            ReqQuan: (v.ReqQuan === undefined) ? '' : v.ReqQuan,
                         });
 
                         if (v.ArchivedTimestamp == 'TimeUnavailable') {
@@ -696,6 +703,19 @@
             for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
                 // cc(orderOpreationTable.cell({row: n, column: 1}).data());
                 if (orderOpreationTable.cell({row: n, column: 1}).data() == 'S') {
+
+
+                    var _Press = orderOpreationTable.cell({
+                        row: n,
+                        column: 11
+                    }).data();
+                    var _Group = '';
+                    for (var m in MESM_FloorMaps) {
+                        if (MESM_FloorMaps[m].unitName == _Press) {
+                            _Group = MESM_FloorMaps[MESM_FloorMaps[m].idUnitParent].unitName;
+                            break;
+                        }
+                    }
                     // removeScheduleEvent(orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort);
                     events.push(
                         {
@@ -706,30 +726,27 @@
                             // title: orderTable.originalDataSet[n].OrderNumber + '_' + orderTable.originalDataSet[n].Sort,
                             // description: orderTable.originalDataSet[n].WCG + '_' + orderTable.originalDataSet[n].Press,
                             // color: colors[Math.round(Math.random() * 8)],
+                            // id: orderOpreationTable.cell({
+                            //     row: n,
+                            //     column: 2
+                            // }).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
                             id: orderOpreationTable.cell({
                                 row: n,
                                 column: 2
-                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
-                            resourceId: orderOpreationTable.cell({
-                                row: n,
-                                column: 7
-                            }).data() + '_' + orderOpreationTable.cell({
-                                row: n,
-                                column: 11
-                            }).data(),
+                            }).data() + '_' + _Group,
+                            resourceId: _Group + '_' +
+                            orderOpreationTable.cell({row: n, column: 11}).data(),
                             start: orderOpreationTable.cell({row: n, column: 5}).data(),
                             end: orderOpreationTable.cell({row: n, column: 6}).data(),
+                            // title: orderOpreationTable.cell({
+                            //     row: n,
+                            //     column: 2
+                            // }).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
                             title: orderOpreationTable.cell({
                                 row: n,
                                 column: 2
-                            }).data() + '_' + orderOpreationTable.cell({row: n, column: 13}).data(),
-                            description: orderOpreationTable.cell({
-                                row: n,
-                                column: 7
-                            }).data() + '_' + orderOpreationTable.cell({
-                                row: n,
-                                column: 11
-                            }).data(),
+                            }).data() + '_' + _Group,
+                            description: _Group + '_' + orderOpreationTable.cell({row: n, column: 11}).data(),
                             color: colors[Math.round(Math.random() * 8)],
 
                         });
@@ -744,8 +761,8 @@
 
 
             // cc('//=============================================');
-            // cc('events.length ' + events.length);
-            // // cc(events);
+            cc('events.length ' + events.length);
+            // cc(events);
             // cc('//=============================================');
             cc(WorkCentres);
             cc(events);
@@ -1134,15 +1151,25 @@
                     );
 
                     if (_eventDragStart.resourceId != event.resourceId) {
-                        // ActivityLogADD('Assigned', orderOpreationTable.cell({row: i, column: 2}).data() +
-                        //     '_' + orderOpreationTable.cell({row: i, column: 13}).data() +
-                        //     ' => ' + event.resourceId.split('_')[1] + ' ',
-                        //     orderOpreationTable.cell({row: i, column: 2}).data() +
-                        //     '_' + orderOpreationTable.cell({row: i, column: 13}).data());
+
+                        var _Press = orderOpreationTable.cell({row: rowN, column: 11}).data();
+                        var _Group;
+                        // var m in MESM_FloorMaps
+                        for (var m in MESM_FloorMaps) {
+                            if (MESM_FloorMaps[m].unitName == _Press) {
+                                _Group = MESM_FloorMaps[MESM_FloorMaps[m].idUnitParent].unitName;
+                                break;
+                            }
+                        }
+
+                        // cc('_Press ' + _Press);
+                        cc('fix gr ' + _Group);
+
                         ActivityLogADD('Assigned', orderOpreationTable.cell({row: i, column: 2}).data() + ' ' +
                             event.resourceId.split('_')[1] + ' ',
                             orderOpreationTable.cell({row: i, column: 2}).data() +
-                            '_' + orderOpreationTable.cell({row: i, column: 13}).data());
+                            // '_' + orderOpreationTable.cell({row: i, column: 13}).data());
+                            '_' + _Group);
                     }
                     break;
                 }
@@ -1456,17 +1483,113 @@
             // cc(orderTable);
 
             var ROW = e.parentElement.parentElement.parentElement.parentElement.childNodes;
-            cc(ROW);
+            // cc(ROW);
+
+            cc($.each(ROW, function (index, value) {
+                cc(value.textContent);
+            }));
+
+            var conc = 0;
+            cc('ROWS: ' + orderOpreationTable.rows('').count());
+            for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
+                if (orderOpreationTable.cell({row: n, column: 10}).data()) {
+                    conc++;
+                }
+                // cc(orderOpreationTable.cell({row: n, column: 10}).data());
+                // cc(orderOpreationTable.cell({row: n, column: 10}));
+                // if (orderOpreationTable.cell({row: n, column: 0}).data() == _ID) {
+                //     rowN = n;
+                //     break;
+                // }
+            }
+            cc('conc ' + conc);
+
+            if (conc > 0) {
+                for (var n = 0; n < orderOpreationTable.rows().count(); n++) {
+                    if (orderOpreationTable.cell({row: n, column: 10}).data()) {
+                        var nRow = n;
+                        _Action = e.innerText;
+                        _Status = orderOpreationTable.cell({row: n, column: 1}).data();
+                        if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
+                            _OrderNumber = orderOpreationTable.cell({row: n, column: 2}).data();
+                            _Material = orderOpreationTable.cell({row: n, column: 3}).data();
+                            _Quantity = orderOpreationTable.cell({row: n, column: 4}).data();
+                            _SchedStart = orderOpreationTable.cell({row: n, column: 5}).data();
+                            _SchedFinish = orderOpreationTable.cell({row: n, column: 6}).data();
+                            _Group = orderOpreationTable.cell({row: n, column: 7}).data();
+                            _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
+
+                            _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
+                            _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
+                            _ID = orderOpreationTable.cell({row: n, column: 0}).data();
+
+                            var ss = new Date(_SchedStart).getTime();
+                            ss = parseInt(ss / (15 * 60 * 1000)) * 15 * 60 * 1000;
+                            var sf = new Date(_SchedFinish).getTime();
+                            sf = Math.round(sf / (15 * 60 * 1000)) * 15 * 60 * 1000;
+                            if (sf - ss < 15 * 60 * 1000) {
+                                sf = ss + 15 * 60 * 1000;
+                            }
+
+                            var SSSS = new Date(ss);
+                            var SFSF = new Date(sf);
+
+
+                            _SchedStart = (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(ss - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+                            _SchedFinish = (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(0, 10) + 'T' + (new Date(sf - (new Date().getTimezoneOffset() * 60000)).toISOString()).substr(11, 8);
+
+
+                            _Status = 'Scheduled';
+
+                            // cc('assign m');
+                            // cc('=====');
+                            // cc(_OrderNumber);
+                            // cc(_Material);
+                            // cc(_SchedStart);
+                            // cc(_SchedFinish);
+                            // cc(e.id);
+                            // cc(_Group);
+                            // cc(_Press);
+                            // cc(_ID);
+                            // cc(_Quantity);
+                            // cc('=====');
+
+                            removeScheduleEvent(_OrderNumber + '_' + _Group);
+
+                            // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                            ActivityLogADD('Assigned', _OrderNumber + ' ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Group);
+                            MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
+                            // if (_Sort == 'ASSY') {
+                            // }
+                            // addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+                            addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Group, _SchedStart, _SchedFinish);
+
+                            orderOpreationTable.cell({row: n, column: 1}).data('S');//.draw();
+                            orderOpreationTable.cell({row: n, column: 5}).data(_SchedStart.replace('T', ' '));//.draw();
+                            orderOpreationTable.cell({row: n, column: 6}).data(_SchedFinish.replace('T', ' '));//.draw();
+                            orderOpreationTable.cell({row: n, column: 11}).data(_Press);//.draw();
+
+                        }
+
+
+                        _OrderNumber = orderOpreationTable.cell({row: n, column: 10}).data()
+                    }
+                    orderOpreationTable.cell({row: n, column: 10}).data(false);
+                }
+                return;
+            }
+
             var _OrderNumber = ROW[1].innerText;
             var _Material = ROW[2].innerText;
+            var _Group = ROW[6].innerText;
 
             var _ID = 0;// ROW[0].innerText;
             for (var n = 0; n < MESM_OrderOperation.length; n++) {
-                if (MESM_OrderOperation[n].OrderNumber == _OrderNumber && MESM_OrderOperation[n].Material == _Material) {
+                if (MESM_OrderOperation[n].OrderNumber == _OrderNumber && MESM_OrderOperation[n].Material == _Material && MESM_OrderOperation[n].WorkCenter == _Group) {
                     _ID = MESM_OrderOperation[n].ID;
                 }
             }
-            // cc(_ID);
+            cc(_ID);
             var rowN = 0;
             for (var n = 0; n < orderOpreationTable.rows('').count(); n++) {
                 if (orderOpreationTable.cell({row: n, column: 0}).data() == _ID) {
@@ -1474,25 +1597,31 @@
                     break;
                 }
             }
-            // cc(rIndex);
+
+            //fix group
+
+            var _Press = orderOpreationTable.cell({row: rowN, column: 11}).data();
+            // var m in MESM_FloorMaps
+            for (var m in MESM_FloorMaps) {
+                if (MESM_FloorMaps[m].unitName == _Press) {
+                    _Group = MESM_FloorMaps[MESM_FloorMaps[m].idUnitParent].unitName;
+                    break;
+                }
+            }
+
+            // cc('_Press ' + _Press);
+            cc('fix gr ' + _Group);
 
             var _Action = e.innerText;
             var _Status = orderOpreationTable.cell({row: rowN, column: 1}).data();
             var _Quantity = orderOpreationTable.cell({row: rowN, column: 4}).data();
             var _SchedStart = orderOpreationTable.cell({row: rowN, column: 5}).data();
             var _SchedFinish = orderOpreationTable.cell({row: rowN, column: 6}).data();
-            var _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
-            var _Group = orderOpreationTable.cell({row: rowN, column: 7}).data();
+            _Press = e.id.indexOf('_') >= 0 ? e.id.split('_')[1] : '';
             var _Sort = orderOpreationTable.cell({row: rowN, column: 13}).data();
-            cc(_OrderNumber);
-            cc(_Material);
-            cc(_SchedStart);
-            cc(_SchedFinish);
-            cc(e.id);
-            cc(_Group);
-            cc(_Press);
+
+
             if ((_Status == 'U' || _Status == 'V' || _Status == 'S') && _Action.indexOf('assign') >= 0) {
-                cc('assign');
 
                 _SchedStart = _SchedStart.substring(0, 10) + 'T' + _SchedStart.substring(11);
                 _SchedFinish = _SchedFinish.substring(0, 10) + 'T' + _SchedFinish.substring(11);
@@ -1513,18 +1642,32 @@
 
 
                 _Status = 'Scheduled';
+                // cc('assign s');
+                // cc('=====');
+                // cc(_OrderNumber);
+                // cc(_Material);
+                // cc(_SchedStart);
+                // cc(_SchedFinish);
+                // cc(e.id);
+                // cc(_Group);
+                // cc(_Press);
+                // cc(_ID);
+                // cc(_Quantity);
+                // cc('=====');
 
-
-                removeScheduleEvent(_OrderNumber + '_' + _Sort);
+                removeScheduleEvent(_OrderNumber + '_' + _Group);
 
                 // ActivityLogADD('Assigned', _OrderNumber + '_' + _Sort + ' => ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
-                ActivityLogADD('Assigned', _OrderNumber + ' ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Sort);
+                ActivityLogADD('Assigned', _OrderNumber + ' ' + e.id.split('_')[1] + ' ', _OrderNumber + '_' + _Group);
                 MESM_OrderOperation_UPD(_ID, _Quantity, _Status, _SchedStart, _SchedFinish, _Press);
                 // if (_Sort == 'ASSY') {
                 // }
-                addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+                // addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Sort, _SchedStart, _SchedFinish);
+                addScheduleEvent(_Group + '_' + _Press, _OrderNumber + '_' + _Group, _SchedStart, _SchedFinish);
 
                 orderOpreationTable.cell({row: rowN, column: 1}).data('S');//.draw();
+                orderOpreationTable.cell({row: rowN, column: 5}).data(_SchedStart.replace('T', ' '));//.draw();
+                orderOpreationTable.cell({row: rowN, column: 6}).data(_SchedFinish.replace('T', ' '));//.draw();
                 orderOpreationTable.cell({row: rowN, column: 11}).data(_Press);//.draw();
 
             }
@@ -1536,8 +1679,8 @@
                 // _Status = 'Cancelled';
                 // _Press = '';
                 MESM_OrderOperation_UPD(_ID, _Quantity, 'Cancelled', '', '', '');
-                removeScheduleEvent(_OrderNumber + '_' + _Sort);
-                ActivityLogADD('Cancelled', _OrderNumber + '_' + _Sort + ' ', '');
+                removeScheduleEvent(_OrderNumber + '_' + _Group);
+                ActivityLogADD('Cancelled', _OrderNumber + '_' + _Group + ' ', '');
             }
 
             if (_Status == 'S' && _Action.indexOf('Unscheduled') >= 0) {
@@ -1546,13 +1689,33 @@
                 // _SchedFinish = '';
                 // _Status = 'Unscheduled';
                 // _Press = '';
-                MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
+                cc(orderOpreationTable.cell({row: rowN, column: 7}).data());
+                cc(orderOpreationTable.cell({row: rowN, column: 11}).data());
+                if (orderOpreationTable.cell({row: rowN, column: 7}).data() == orderOpreationTable.cell({
+                    row: rowN,
+                    column: 11
+                }).data()) {
+                    MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', orderOpreationTable.cell({
+                        row: rowN,
+                        column: 11
+                    }).data());
+                } else {
+                    MESM_OrderOperation_UPD(_ID, _Quantity, 'Unscheduled', '', '', '');
+                }
 
-                removeScheduleEvent(_OrderNumber + '_' + _Sort);
+
+                removeScheduleEvent(_OrderNumber + '_' + _Group);
                 // ActivityLogADD('Unscheduled', _OrderNumber, '');
-                ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Sort + ' ', '');
+                ActivityLogADD('Unscheduled', _OrderNumber + '_' + _Group + ' ', '');
                 orderOpreationTable.cell({row: rowN, column: 1}).data('U');//.draw();
-                orderOpreationTable.cell({row: rowN, column: 11}).data('');//.draw();
+                if (orderOpreationTable.cell({row: rowN, column: 7}).data() != orderOpreationTable.cell({
+                    row: rowN,
+                    column: 11
+                }).data()) {
+                    orderOpreationTable.cell({row: rowN, column: 11}).data('');//.draw();
+                }
+
+
                 // MESM_OrderOperationRAW
                 for (var n = 0; n < MESM_OrderOperation.length; n++) {
                     if (MESM_OrderOperation[n].ID == orderOpreationTable.cell({row: n, column: 0}).data()) {
@@ -1682,12 +1845,12 @@
         }
 
         function ActivityLogADD(actType, actMSG, actID) {
-            // cc('==========================================');
-            // cc('ActivityLogADD');
-            // cc('actType ' + actType);
-            // cc('actMSG ' + actMSG);
-            // cc('actID ' + actID);
-            // cc('==========================================');
+            cc('==========================================');
+            cc('ActivityLogADD');
+            cc('actType ' + actType);
+            cc('actMSG ' + actMSG);
+            cc('actID ' + actID);
+            cc('==========================================');
 
             var occurred = new Date(new Date() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 19);
             var receiver = '';
@@ -1884,6 +2047,7 @@
                         {data: 'FamilyMold'},
                         {data: 'Concurrent'},
                         {data: 'WorkCenterID'},
+                        {data: 'ReqQuan'},
                         {data: 'CtrlKey'},
                         {data: 'Sort'},
                         {data: 'Actions'},
@@ -1953,13 +2117,13 @@
                         },
                         {
                             targets: 2,
-                            title: 'Order #',
+                            title: 'Order Number',
                             visible: true,
                             orderable: true,
                         },
                         {
                             targets: 3,
-                            title: 'Material #',
+                            title: 'Material Number',
                             visible: true,
                             orderable: true,
                         },
@@ -1971,7 +2135,7 @@
                         },
                         {
                             targets: 5,
-                            title: 'SchedStart',
+                            title: 'Sched Start',
 
 
                             visible: true,
@@ -1979,7 +2143,7 @@
                         },
                         {
                             targets: 6,
-                            title: 'SchedFinish',
+                            title: 'Sched Finish',
                             orderable: true,
                         },
                         {
@@ -1996,56 +2160,113 @@
                         },
                         {
                             targets: 9,
-                            title: 'F.Mold',
+                            title: 'Family Mold',
                             visible: true,
                             orderable: true,
                         },
                         {
                             targets: 10,
-                            title: 'C.',
+                            title: 'Conc.',
                             visible: true,
-                            orderable: true,
+                            orderable: false,
+                            className: 'dt-body-center',
+                            render: function (data, type, full, meta) {
+                                // cc('---')
+                                // cc(data);
+                                // cc(type);
+                                // cc(full);
+                                // cc(meta);
+                                // cc('---');
+                                if (data) {
+                                    return '<input type="checkbox" value="' +
+                                        meta.row + '_' +
+                                        meta.col +
+                                        '" checked >';
+                                } else {
+                                    return '<input type="checkbox" value="' +
+                                        meta.row + '_' +
+                                        meta.col +
+                                        '" >';
+                                }
+                                // return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                                // return '<input type="checkbox" value="' +
+                                // meta.row + '_' +
+                                // meta.col +
+                                // '" ' +
+                                // (data == true) ? 'checked' : '' +
+                                //     '>';
+                            }
                         },
                         {
                             targets: 11,
-                            title: 'WorkCenter',
+                            title: 'Working Center',
                             visible: true,
                             orderable: true,
                             // render: function (data, type, e, meta) {
-                            //     // cc('WorkCenter');
-                            //     // cc(data);
-                            //     // cc(e);
-                            //     // cc(meta);
-                            //
-                            //     if (data != 0) {
-                            //         return MESM_FloorMaps[data].unitName;
+                            //     cc('WorkCenter');
+                            //     cc(data);
+                            //     cc(e);
+                            //     if (e.WorkCenterID.length != 0) {
+                            //         return e.WorkCenterID + ' - ' + e.ReqQuan + '%';
                             //     } else {
                             //         return '';
                             //     }
+                            //
+                            //     // cc(meta);
+                            //
+                            //     // if (data != 0) {
+                            //     //     return MESM_FloorMaps[data].unitName;
+                            //     // } else {
+                            //     //     return '';
+                            //     // }
                             // }
                         },
                         {
                             targets: 12,
-                            title: 'K.',
+                            title: 'Oper. Input',
+                            visible: true,
+                            orderable: false,
+                            render: function (data, type, e, meta) {
+                                // cc('WorkCenter');
+                                // cc(data);
+                                // cc(e);
+                                // if (e.WorkCenterID.length != 0) {
+                                //     return e.WorkCenterID + ' - ' + e.ReqQuan + '%';
+                                // } else {
+                                return e.ReqQuan + ' %';
+                                // }
+
+                                // cc(meta);
+
+                                // if (data != 0) {
+                                //     return MESM_FloorMaps[data].unitName;
+                                // } else {
+                                //     return '';
+                                // }
+                            }
+                        },
+                        {
+                            targets: 13,
+                            title: 'CRL Key',
                             // width: 60,
                             visible: true,
                             orderable: false,
                         },
                         {
-                            targets: 13,
+                            targets: 14,
                             title: 'Sort',
                             visible: false,
                             orderable: false,
                         },
                         {
-                            targets: 14,
+                            targets: 15,
                             visible: true,
                             title: 'Actions',
                             orderable: false,
                             "searchable": false,
                             render: function (data, type, e, meta) {
-                                cc('Actions');
-                                cc(e);
+                                // cc('Actions');
+                                // cc(e);
                                 // cc(e.SchedStat);
                                 if (e.SchedStat == 'U' || e.SchedStat == 'S' || e.SchedStat == 'V') {    //Unscheduled & Scheduled
                                     // cc('e.SchedStat == \'V\'');
@@ -2195,16 +2416,16 @@
                                                 '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY19"><i class="la la-wrench"></i>assign to ASSY19' + '</a>' +
                                                 '<a class="dropdown-item" onclick="quickAction(this)" id="ASSY_ASSY20"><i class="la la-wrench"></i>assign to ASSY20' + '</a>';
                                         }
-                                        // if (e.WorkCenterID.length > 0 && e.WorkCenterID == e.WorkCenter) {
-                                        //     var g = e.WorkCenter.substring(0, 5) == 'ASSYM' ? 'ASSYM' : 'ASSY';
-                                        //     prsSTR = '<a class="dropdown-item" onclick="quickAction(this)" id="' +
-                                        //         g +
-                                        //         '_' +
-                                        //         e.WorkCenterID +
-                                        //         '"><i class="la la-wrench"></i>assign to ' +
-                                        //         e.WorkCenterID +
-                                        //         '</a>';
-                                        // }
+                                        if (e.WorkCenterID.length > 0 && e.WorkCenterID == e.WorkCenter) {
+                                            var g = e.WorkCenter.substring(0, 5) == 'ASSYM' ? 'ASSYM' : 'ASSY';
+                                            prsSTR = '<a class="dropdown-item" onclick="quickAction(this)" id="' +
+                                                g +
+                                                '_' +
+                                                e.WorkCenterID +
+                                                '"><i class="la la-wrench"></i>assign to ' +
+                                                e.WorkCenterID +
+                                                '</a>';
+                                        }
                                         if (prsSTR.length != 0) {
                                             prsSTR = prsSTR + '<div class="dropdown-divider"></div>'
                                         }
@@ -2374,6 +2595,38 @@
 
                 orderOpreationTable.page.len(10).draw();
 
+                $('#m_table_1 tbody').on('change', 'input[type="checkbox"]', function () {
+                    // cc('m_table_1 on change');
+                    // cc();
+                    // If checkbox is not checked
+                    // cc(this);
+                    // cc(this.checked);
+                    var nRow = this.value.split('_')[0];
+
+                    // orderOpreationTable.cell({row: n, column: 1}).data('V');
+                    orderOpreationTable.cell({row: nRow, column: 10}).data(this.checked);
+                    // cc(nRow);
+                    // cc(orderOpreationTable.cell({row: nRow, column: 10}).data());
+                    // this.checked = !this.checked;
+                    // if (!this.checked) {
+
+                    // var el = $('#example-select-all').get(0);
+                    // // If "Select all" control is checked and has 'indeterminate' property
+                    // if(el && el.checked && ('indeterminate' in el)){
+                    //     // Set visual state of "Select all" control
+                    //     // as 'indeterminate'
+                    //     el.indeterminate = true;
+                    // }
+                    // }
+                });
+
+                // $('#m_table_1').on('change', 'input.editor-active', function () {
+                //     cc('input.editor-active');
+                //     // editor
+                //     //     .edit( $(this).closest('tr'), false )
+                //     //     .set( 'active', $(this).prop( 'checked' ) ? 1 : 0 )
+                //     //     .submit();
+                // });
             }
         };
 
@@ -2450,8 +2703,7 @@
                                 </li>
                                 <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width"
                                     m-dropdown-toggle="click" m-dropdown-persistent="1">
-                                    <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon"
-                                       style="display: b">
+                                    <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon">
                                         <!--style="display: inline-list-item">-->
                                         <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small m-badge--danger"></span>
                                         <span class="m-nav__link-icon">
@@ -2977,7 +3229,8 @@
                                 <!--style="white-space: nowrap;width:100%"-->
                                 <!--id="m_table_1">-->
                                 <!--</table>-->
-                                <table class="table table-striped- table-bordered table-hover table-checkable display nowrap"
+                                <!--<table class="table table-striped- table-bordered table-hover table-checkable display nowrap"-->
+                                <table class="table table-striped- table-bordered table-hover table-checkable display "
                                        id="m_table_1">
                                 </table>
                             </div>
@@ -3003,7 +3256,7 @@
                                         <!--<div class="m-scrollable" data-scrollable="true" data-max-height="740" style="height1: 600px; overflow: auto;">-->
                                         <!--<div class="m-scrollable" data-scrollable="true" id="dActivityLog" style="max-height: 550px;  position: relative; overflow: visible; white-space: nowrap">-->
                                         <div class="m-scrollable" data-scrollable="true" id="dActivityLog"
-                                             style="max-height: 600px;  position: relative; overflow: visible; ">
+                                             style="max-height: 710px;  position: relative; overflow: visible; ">
                                             <div class="m-list-timeline m-list-timeline--skin-light">
                                                 <div id="ActivityLog" class="m-list-timeline__items"
                                                      style="font-size: small">

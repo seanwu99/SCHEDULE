@@ -1506,7 +1506,6 @@
 
             if (conc > 0) {
                 for (var n = 0; n < orderOpreationTable.rows().count(); n++) {
-                    //TODO
                     if (orderOpreationTable.cell({row: n, column: 10}).data()) {
                         var nRow = n;
                         _Action = e.innerText;
