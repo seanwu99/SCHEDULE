@@ -2199,7 +2199,7 @@
                         },
                         {
                             targets: 11,
-                            title: 'Working Center',
+                            title: 'Work Center',
                             visible: true,
                             orderable: true,
                             // render: function (data, type, e, meta) {
@@ -2247,7 +2247,7 @@
                         },
                         {
                             targets: 13,
-                            title: 'CRL Key',
+                            title: 'Type',
                             // width: 60,
                             visible: true,
                             orderable: false,
