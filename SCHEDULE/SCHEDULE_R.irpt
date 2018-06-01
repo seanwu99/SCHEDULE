@@ -79,6 +79,7 @@
         var GROUP = '';
         var runtime;// = new Date().getTime();
         var rawCount = 0;
+        var tbRows = 10;
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
@@ -1115,11 +1116,12 @@
                     orderOpreationTable.cell({
                         row: i,
                         column: 5
-                    }).data(moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss'));
+                    }).data(moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss')).draw();
+
                     orderOpreationTable.cell({
                         row: i,
                         column: 6
-                    }).data(moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss'));
+                    }).data(moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss')).draw();
 
                     // orderTable.originalDataSet[i].Press = event.resourceId.split('_')[1];
                     orderOpreationTable.cell({row: i, column: 11}).data(event.resourceId.split('_')[1]);
@@ -1129,6 +1131,7 @@
 
                     // Operation = orderTable.originalDataSet[i].Operation;
                     Operation = '';// orderTable.originalDataSet[i].Operation;
+                    cc(' console.log');
                     console.log(orderOpreationTable.cell({row: i, column: 0}).data(),
                         orderOpreationTable.cell({row: i, column: 4}).data(),
                         'Scheduled',
@@ -1152,7 +1155,7 @@
 
                     if (_eventDragStart.resourceId != event.resourceId) {
 
-                        var _Press = orderOpreationTable.cell({row: rowN, column: 11}).data();
+                        var _Press = orderOpreationTable.cell({row: i, column: 11}).data();
                         var _Group;
                         // var m in MESM_FloorMaps
                         for (var m in MESM_FloorMaps) {
@@ -2280,6 +2283,8 @@
                                         }
                                     }
                                     // cc(wcg);
+                                    // cc(MESM_FloorMaps[wcg].unitName);
+                                    // if()
                                     // cc(wcgNAME);
                                     // cc(e.Sort);
                                     // var prs = [];
@@ -2340,7 +2345,7 @@
                                         }
                                         scrollSTR = '';
                                         prsRows = 10;
-                                        cc('prsRows : ' + prsRows);
+                                        // cc('prsRows : ' + prsRows);
                                         if (e.SchedStat == 'U') {
                                             if (prsRows * 40 + 250 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 200px"'
@@ -2353,6 +2358,16 @@
                                             if (prsRows * 40 + 280 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 200px"'
                                             }
+                                        }
+                                        // cc(wcg);
+                                        // cc(MESM_FloorMaps[wcg].unitName);
+                                        if (MESM_FloorMaps[wcg] != undefined && MESM_FloorMaps[wcg].unitName == 'MOLD7') {
+                                            prsSTR =
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS45"><i class="la la-wrench"></i>assign to PRESS45' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS50"><i class="la la-wrench"></i>assign to PRESS50' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS51"><i class="la la-wrench"></i>assign to PRESS51' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS52"><i class="la la-wrench"></i>assign to PRESS52' + '</a>';
+                                            groupSTR = '';
                                         }
                                     } else if (e.Sort == 'RESIN') {
                                         prsSTR =
@@ -2594,6 +2609,39 @@
                 // orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
 
                 orderOpreationTable.page.len(10).draw();
+
+                orderOpreationTable.on('draw', function () {
+                    cc('css');
+                    cc($('.dataTables_scrollBody').css('height'));
+                    cc(orderOpreationTable.rows({ page: 'current' }).nodes().length);
+                    if (orderOpreationTable.rows({page: 'current'}).nodes().length == tbRows) {
+                        return;
+                    } else {
+                        tbRows = orderOpreationTable.rows({page: 'current'}).nodes().length;
+                        if (tbRows < 5) {
+                            // if ($('.dataTables_scrollBody').css('height') != '400px') {
+                            $('.dataTables_scrollBody').css('height', '400px');
+                            orderOpreationTable.draw(false);
+                            // }
+                            // } else {
+                            //     if ($('.dataTables_scrollBody').css('height') != 'auto') {
+                            //         $('.dataTables_scrollBody').css('height', 'auto');
+                            //         orderOpreationTable.draw();
+                            //     }
+
+                        } else {
+                            $('.dataTables_scrollBody').css('height', 'auto');
+                            orderOpreationTable.draw(false);
+                        }
+                    }
+
+                    // $('.dataTables_scrollBody').css('height', '400px');
+                    // orderOpreationTable.draw();
+                    // console.log('Redraw occurred at: ' + new Date().getTime());
+                });
+
+                // $('.dataTables_scrollBody').css('height', '400px');
+                // orderOpreationTable.draw();
 
                 $('#m_table_1 tbody').on('change', 'input[type="checkbox"]', function () {
                     // cc('m_table_1 on change');
@@ -2983,7 +3031,7 @@
                                     m-dropdown-toggle="click" style="display: none">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-topbar__userpic">
-													<img src="assets/app/media/img/users/user4.jpg"
+													<img src="assets/app/media/img/users/user4.png"
                                                          class="m--img-rounded m--marginless m--img-centered" alt=""/>
 												</span>
                                         <span class="m-topbar__username m--hide">
@@ -2997,7 +3045,7 @@
                                                  style="background: url(assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
-                                                        <img src="assets/app/media/img/users/user4.jpg"
+                                                        <img src="assets/app/media/img/users/user4.png"
                                                              class="m--img-rounded m--marginless" alt=""/>
                                                     </div>
                                                     <div class="m-card-user__details">
