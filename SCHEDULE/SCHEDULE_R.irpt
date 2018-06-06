@@ -111,6 +111,10 @@
             MESM_FloorMaps_GET();
             MOLD_Machine_Matrix_GET();
             // MESM_OrderOperation_GET();
+            $("body").tooltip({
+                selector: '[data-toggle="tooltip"]',
+                container: 'body'
+            });
         }
 
         function dataLoading() {
@@ -188,7 +192,7 @@
                                     MESM_FloorMaps_GROUP[value.recordID] = [];
                                 }
                             } else if (GROUP == 'ASSYM') {
-                                if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0)&& value.unitName == 'ASSYM') {
+                                if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0) && value.unitName == 'ASSYM') {
                                     MESM_FloorMaps_GROUP[value.recordID] = [];
                                 }
                             }
@@ -297,6 +301,7 @@
                             Concurrent: false,
                             Sort: Sort,
                             ReqQuan: (v.ReqQuan === undefined) ? '' : v.ReqQuan,
+                            MaterialDescription: (v.MaterialDescription === undefined) ? '' : v.MaterialDescription
                         });
 
                         if (v.ArchivedTimestamp == 'TimeUnavailable') {
@@ -803,6 +808,48 @@
             cc(events);
             scheduleForm(WorkCentres, events);
 
+            $.each(events, function (i, _events) {
+                // cc();
+                $.contextMenu({
+                    selector: '#' + _events.id,
+                    callback: function (key, options) {
+
+                        if (key == 'delete') {
+                            // cc(options.selector.substring(1).split('_')[0]);
+                            // cc(options.selector.substring(1).split('_')[1]);
+                            for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+                                if (orderTable.originalDataSet[i].OrderNumber == options.selector.substring(1).split('_')[0] &&
+                                    orderTable.originalDataSet[i].Sort == options.selector.substring(1).split('_')[1]) {
+                                    // cc(orderTable.originalDataSet[i].OrderNumber );
+                                    // cc(orderTable.originalDataSet[i].Sort );
+                                    //
+                                    // orderTable.originalDataSet[i].Press = '';
+                                    // orderTable.originalDataSet[i].Status = 'Unscheduled';
+
+                                    removeScheduleEvent(options.selector.substring(1));
+                                    // MESM_OrderOperation_UPD();
+                                    MESM_OrderOperation_UPD(orderTable.originalDataSet[i].ID, orderTable.originalDataSet[i].Quantity, 'Unscheduled', '', '', '');
+                                    orderTable.reload();
+                                    break;
+                                }
+                            }
+
+                        }
+                        // var m = "clicked..: " + key;
+                        // window.console && console.log(m) || alert(m);
+                    },
+                    items: {
+                        "title": {name: _events.id, icon: "fa-calendar"},
+                        "sep1": "---------",
+                        "edit": {name: "Edit", icon: "fa-edit"},
+                        "cut": {name: "Cut", icon: "fa-scissors"},
+                        "copy": {name: "Copy", icon: "fa-files-o"},
+                        "paste": {name: "Paste", icon: "fa-clipboard"},
+                        "delete": {name: "Delete", icon: "fa-times"},
+                        // "quit": {name: "Quit", icon: "quit"}
+                    }
+                });
+            });
 
             ActivityLogGET();
             // cc(events);
@@ -1138,13 +1185,22 @@
             // var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
             var OrderNumber = event.id.split('_')[0];
             var Operation;
+            var _Group;
+            // cc(event.resourceId.split('_')[1]);
+            for (var m in MESM_FloorMaps) {
+                if (MESM_FloorMaps[m].unitName == event.resourceId.split('_')[1]) {
+                    _Group = MESM_FloorMaps[MESM_FloorMaps[m].idUnitParent].unitName;
+                    break;
+                }
+            }
+            // cc('_Group ' + _Group);
 
             for (var i = 0; i < orderOpreationTable.rows('').count(); i++) {
                 // cc();
                 // cc(orderTable.originalDataSet[i].OrderNumber + ' / ' + orderTable.originalDataSet[i].WCG+' / '+orderTable.originalDataSet.length);
                 // if (orderTable.originalDataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.originalDataSet[i].WCG == event.resourceId.split('_')[0]) {
                 if (orderOpreationTable.cell({row: i, column: 2}).data() == event.id.split('_')[0] &&//OrderNumber
-                    orderOpreationTable.cell({row: i, column: 7}).data() == event.resourceId.split('_')[0]) {//WCG
+                    _Group == event.resourceId.split('_')[0]) {//WCG
                     // orderTable.originalDataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
                     // orderTable.originalDataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
                     orderOpreationTable.cell({
@@ -2038,6 +2094,8 @@
                 }
             });
 
+            $('#' + elementId).prop('title', 'yourText');
+            ;
             // function callbk(key, options) {
             //     console.log(key);
             //     console.log(options);
@@ -2088,6 +2146,7 @@
                         {data: 'CtrlKey'},
                         {data: 'Sort'},
                         {data: 'Actions'},
+                        {data: 'MaterialDescription'}
                     ],
 
                     order: [[2, "asc"]],
@@ -2163,6 +2222,14 @@
                             title: 'Material Number',
                             visible: true,
                             orderable: true,
+                            render: function (data, type, e, meta) {
+                                // cc(e);
+                                return '' +
+                                    '<span data-toggle="tooltip" data-placement="bottom" title="' +
+                                    e.MaterialDescription + '">' +
+                                    e.Material +
+                                    '</span>'
+                            }
                         },
                         {
                             targets: 4,
@@ -2588,7 +2655,13 @@
                             }
 
                         },
-
+                        {
+                            targets: 16,
+                            title: 'MaterialDescription',
+                            visible: false,
+                            orderable: false,
+                            searchable: true,
+                        },
                         // {
                         //     targets: 14,
                         //     title: 'ccc',
@@ -3481,7 +3554,8 @@
                         </li>
                         <li class="m-nav__item">
                             <a href="#" class="m-nav__link">
-										<span class="m-nav__link-text">
+										<span class="m-nav__link-text" data-toggle="m-tooltip" title="T&C"
+                                              data-placement="left">
 											T&C
 										</span>
                             </a>
