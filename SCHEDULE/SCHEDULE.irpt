@@ -259,6 +259,8 @@
                         //         }
                         //     }
                         // }
+                        // cc('v.WorkCenterID ' + v.WorkCenterID);
+                        // cc('v.WorkCenterID');
                         MESM_OrderOperation.push({
                             ID: v.ID,
                             OrderNumber: v.OrderNumber,
@@ -2270,7 +2272,8 @@
                         },
                         {
                             targets: 10,
-                            title: 'Conc.',
+                            title: 'Con- current',
+                            width: '80',
                             visible: true,
                             orderable: false,
                             className: 'dt-body-center',
@@ -2703,10 +2706,17 @@
                     }
                 }
 
-                if (GROUP == 'ASSYA' || GROUP == 'ASSYM' || GROUP == 'PACKING') {
+                if (GROUP == 'ASSYA' || GROUP == 'ASSYM') {
                     orderOpreationTable.column(8).visible(false);
                     orderOpreationTable.column(9).visible(false);
-                    orderOpreationTable.column(10).visible(false);
+                    // orderOpreationTable.column(10).visible(false);
+                    orderOpreationTable.column(12).visible(false);
+                    orderOpreationTable.column(13).visible(false);
+                    // orderOpreationTable.column(14).visible(false);
+                } else if (GROUP == 'PACKING') {
+                    orderOpreationTable.column(8).visible(false);
+                    orderOpreationTable.column(9).visible(false);
+                    // orderOpreationTable.column(10).visible(false);
                     orderOpreationTable.column(12).visible(false);
                     orderOpreationTable.column(13).visible(false);
                     // orderOpreationTable.column(14).visible(false);
