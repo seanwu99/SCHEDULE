@@ -1,0 +1,1003 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>CT MODULE</title>
+    <style>
+
+        body {
+            background-size: 180px;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: right 40px top 30px;
+            font-family: Arial;
+        }
+
+        #app_header {
+            padding: 10px;
+            padding-left: 40px;
+            padding-top: 15px;
+            padding-bottom: 0px;
+            height: 90px;
+            width: 400px;
+            text-align: center;
+            display: none;
+        }
+
+        #app_title {
+            width: 400px;
+            text-align: center;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 32px;
+            color: #007dc0;
+            padding-bottom: 5px;
+            padding-top: 0px;
+            /*margin-bottom;*/
+            /*20px;*/
+        }
+
+        #app_menu {
+            width: 400px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #page_title {
+            width: 400px;
+            text-align: center;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 28px;
+            color: #cfcfcf;
+        }
+
+        #mesm_maps {
+            /*border-size: 0px;*/
+            /*border-style: solid;*/
+            /*border-color: black;*/
+        }
+
+        #L-Roles {
+            text-align: center;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 28px;
+            color: #cfcfcf;
+            height: 35px;
+        }
+
+        #__button0, #__button1, #__button2 {
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        #MatrixT, #MatrixB {
+            margin: 10px auto;
+        }
+
+        #PlantsList {
+            margin-left: 20px;
+        }
+
+        .seleMenu {
+            position: absolute;
+            padding: 5px;
+            right: 0px;
+            background-color: #007dc0;
+            border-bottom-left-radius: 2px;
+            border-bottom-right-radius: 2px;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            color: #fff;
+            box-shadow: 2px 2px 2px #dfdfdf;
+            cursor: pointer;
+        }
+
+        #B-Alerts, #B-OEE, #B-Availability, #B-Performance, #B-Quality, #B-Settings {
+            width: 140px;
+            height: 25px;
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #RB-Options {
+            width: 600px;
+            height: 20px;
+            font-size: 14px;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            color: #007dc0;
+        }
+
+        #L-SelectedUnit {
+            text-align: center;
+            font-family: "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            /*color: #cfcfcf;*/
+            color: #007dc0;
+        }
+
+        #__cell0 {
+            text-align: right;
+        }
+
+        #__cell1 {
+            height: 40px;
+        }
+
+        #__cell2, #__cell3, #__cell5, #__cell6 {
+            text-align: center;
+        }
+
+        #__cell4 {
+            text-align: left;
+        }
+
+        #__cell9 {
+            text-align: center;
+        }
+
+    </style>
+
+    <script id="sap-ui-bootstrap"
+            src="/sapui5/resources/sap-ui-core.js"
+            data-sap-ui-theme="sap_goldreflection"
+            data-sap-ui-libs="sap.ui.core,sap.ui.commons,sap.ui.table,sap.ui.ux3"
+            data-sap-ui-language="en">
+    </script>
+
+    <script src="Common/js/default.js"></script>
+
+    <script src="Common/js/highcharts/highcharts.js"></script>
+    <script src="Common/js/highcharts/highcharts-more.js"></script>
+    <script src="Common/js/highcharts/solid-gauge.js"></script>
+    <script src="Common/js/highcharts/map.js"></script>
+    <script src="Common/js/highcharts/drilldown.js"></script>
+
+
+    <script type="text/javascript" id="app-init">
+
+        // ****************************************************************************************************************************
+        // Get Core SAP UI5
+        var oCore = sap.ui.getCore();
+        // Initialize screen
+        var nrRows = 8;
+        var selectedIndex = -1;
+        // *********************************************************************************************************************
+        // initialize access
+        var level2Access = "";
+        var plant2Access = "";
+
+        // ***************************  SELECTION TRACKING  & UPDATE PARAMETERS**************************************************************************************
+
+        var selectedPlant = ''; // 1604 Toledo
+        var selectedUnitName = '';			// TOLEDO
+        var selectedUnitID = 0;
+        var selectedParentID = 0;
+        var selectedMapStatusID = 1;	// 1- Alerts, 2- OEE, 3- Availability, 4- Performance, 5 - Quality
+        var selectedTimeFrom = '';
+        var selectedTimeTo = '';
+        var selectedTestID = '0';
+
+        var role2Access = "";
+
+        function roleSecurity() {
+
+            selectedUnitName = document.getElementById("unit_name").value;				//   SETING
+            selectedMapStatusID = document.getElementById("status_id").value;				//   SETING
+
+            selectedTimeFrom = '01-01-2017 00:00';								//   SETING
+            selectedTimeTo = '01-21-2017 00:00';								//   SETING
+
+            var myRoles = document.getElementById("user_roles").value;
+            role2Access = "MESM_" + document.getElementById("user_role").value;
+            if (myRoles.indexOf(role2Access) < 0) {
+                window.location.assign("security.irpt");
+            } else {
+                var roleString = document.getElementById("user_role").value;
+                var roleArray = roleString.split("_");
+                level2Access = roleArray[0];
+                plant2Access = roleArray[1];
+
+                updatePlants(plant2Access);
+                getUnitID(selectedUnitName);
+
+                setTimeout(getTreeData, 1000);
+                setTimeout(pageInit, 2000);
+                var role_ADM = "MESM_ADM_" + plant2Access;
+                var role_ENG = "MESM_ENG_" + plant2Access;
+                var role_SUP = "MESM_SUP_" + plant2Access;
+                var role_OPS = "MESM_OPS_" + plant2Access;
+
+                switch (role2Access) {
+                    case "MESM_ADM_ALL":
+                        // update screen
+                        oCore.byId('L-Roles').setText("ADM ALL PLANTS");
+                        oMatrixT.placeAt('mesm_content');
+                        oMatrixB.placeAt('page_title');
+                        break;
+                    case role_ADM:
+                        // update screen
+                        oMatrixT.placeAt('mesm_content');
+                        oMatrixB.placeAt('app_menu');
+                        break;
+                    case "MESM_OPS_ALL":
+                        // update screen
+                        oMatrixT.placeAt('mesm_content');
+                        oMatrixB.placeAt('app_menu');
+                        break;
+                    case role_OPS:
+                        // update screen
+                        oMatrixT.placeAt('mesm_content');
+                        oMatrixB.placeAt('app_menu');
+                        break;
+                    default:
+                        alert("MES Module Role Unknown: " + role2Access);
+                        break;
+                }
+            }
+        }
+
+        //*************************************************************************************************
+
+        var oMenuButton1 = new sap.ui.commons.MenuButton("B-Settings", {text: "Maps"});
+        var oMenu1 = new sap.ui.commons.Menu("menu1", {ariaDescription: "Map Setup", enabled: true});
+
+        var oMenuItem1 = new sap.ui.commons.MenuItem("item1-0-1", {text: "TOLEDO", enabled: true});
+        oMenu1.addItem(oMenuItem1);
+        //***************************************
+
+        var oMenuItem2 = new sap.ui.commons.MenuItem("item1-0-2", {text: " ALL ASSY", enabled: true});
+        var oMenu2 = new sap.ui.commons.Menu("menu2", {ariaDescription: "ALL ASSY", enabled: true});
+        var oMenuItem21 = new sap.ui.commons.MenuItem("item1-1-2", {text: "ALL ASSY", enabled: true});
+        oMenu2.addItem(oMenuItem21);
+        oMenuItem2.setSubmenu(oMenu2);
+        oMenu1.addItem(oMenuItem2);
+        //***************************************
+
+        var oMenuItem3 = new sap.ui.commons.MenuItem("item1-0-31", {text: "FORD P558", enabled: true});
+        var oMenu3 = new sap.ui.commons.Menu("menu3", {ariaDescription: "FORD P558", enabled: true});
+        var oMenuItem30 = new sap.ui.commons.MenuItem("item1-0-3", {text: "FORD P558", enabled: true});
+        oMenu3.addItem(oMenuItem30);
+        var oMenuItem31 = new sap.ui.commons.MenuItem("item1-1-3", {text: "FORD AXLE ASSY", enabled: true});
+        oMenu3.addItem(oMenuItem31);
+        var oMenuItem32 = new sap.ui.commons.MenuItem("item1-2-3", {text: "FORD CS1 ASSY", enabled: true});
+        oMenu3.addItem(oMenuItem32);
+        var oMenuItem33 = new sap.ui.commons.MenuItem("item1-3-3", {text: "FORD CS2 ASSY", enabled: true});
+        oMenu3.addItem(oMenuItem33);
+        oMenuItem3.setSubmenu(oMenu3);
+        oMenu1.addItem(oMenuItem3);
+        //***************************************
+
+        var oMenuItem4 = new sap.ui.commons.MenuItem("item1-0-41", {text: "JL FRONT_REAR", enabled: true});
+        var oMenu4 = new sap.ui.commons.Menu("menu4", {ariaDescription: "JL FRONT_REAR", enabled: true});
+        var oMenuItem40 = new sap.ui.commons.MenuItem("item1-0-4", {text: "JL FRONT_REAR", enabled: true});
+        oMenu4.addItem(oMenuItem40);
+        var oMenuItem41 = new sap.ui.commons.MenuItem("item1-1-4", {text: "FRONT CS ASSY", enabled: true});
+        oMenu4.addItem(oMenuItem41);
+        var oMenuItem42 = new sap.ui.commons.MenuItem("item1-2-4", {text: "REAR CS ASSY", enabled: true});
+        oMenu4.addItem(oMenuItem42);
+        var oMenuItem43 = new sap.ui.commons.MenuItem("item1-3-4", {text: "FRONT AXLE ASSY", enabled: true});
+        oMenu4.addItem(oMenuItem43);
+        var oMenuItem44 = new sap.ui.commons.MenuItem("item1-4-4", {text: "REAR AXLE ASSY", enabled: true});
+        oMenu4.addItem(oMenuItem44);
+        oMenuItem4.setSubmenu(oMenu4);
+        oMenu1.addItem(oMenuItem4);
+        //***************************************
+
+        var oMenuItem5 = new sap.ui.commons.MenuItem("item1-01-5", {text: "JT COMBO", enabled: true});
+        var oMenu5 = new sap.ui.commons.Menu("menu5", {ariaDescription: "JT COMBO", enabled: true});
+        var oMenuItem50 = new sap.ui.commons.MenuItem("item1-0-5", {text: "JT COMBO", name: "JT COMBO", enabled: true});
+        oMenu5.addItem(oMenuItem50);
+        var oMenuItem51 = new sap.ui.commons.MenuItem("item1-1-5", {text: "COMBO CS ASSY", enabled: true});
+        oMenu5.addItem(oMenuItem51);
+        var oMenuItem52 = new sap.ui.commons.MenuItem("item1-2-5", {text: "COMBO AXLE ASSY", enabled: true});
+        oMenu5.addItem(oMenuItem52);
+        oMenuItem5.setSubmenu(oMenu5);
+        oMenu1.addItem(oMenuItem5);
+
+        oMenuButton1.setMenu(oMenu1);
+
+        oMenuButton1.attachItemSelected(function (oEvent) {
+            selectedUnitName = oCore.byId(oEvent.getParameter("itemId")).getText();
+            getUnitID(selectedUnitName);
+            // showOnlyMap();
+        });
+
+
+        // ****************************************************************************************************************************************************
+
+        function getUnitID(unitName) {
+            var timestamp = new Date().getTime();
+            var unit_name = escapeSQLString(unitName);
+            getData("/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_UnitID_byName&Param.1=" + unit_name + "&ts=" + timestamp + "&Content-Type=text/xml", parseJsonUnitID);
+            function parseJsonUnitID(jsondata) {
+                for (var i = 0; i < jsondata.length; i++) {
+                    selectedParentID = jsondata[i]['recordID'];
+                    //alert(selectedParentID);
+                    selectedPlant = jsondata[i]['unitSAPID'];
+                }
+            }
+        }
+
+        // **************************		BUTTONS MATRIX		***********************************************************************************************
+
+        var oMatrixB = new sap.ui.commons.layout.MatrixLayout({
+            id: 'MatrixB',
+            layoutFixed: true,
+            width: '1180px',
+            columns: 4,
+            widths: ['100px', '300px', '640px', '140px']
+        });
+
+        // ****************************************************************************************************************************************************
+
+        var oLabelRoles = new sap.ui.commons.Label({
+            id: 'L-Roles',
+            visible: true,
+            text: ' '
+        });
+
+        var oRBG2 = new sap.ui.commons.RadioButtonGroup({
+            id: 'RB-Options',
+            tooltip: "Viewing Options",
+            columns: 5,
+            selectedIndex: 0,
+            select: function () {
+                selectedMapStatusID = oRBG2.getSelectedItem().getKey();
+                getMapStatus();
+                getTreeData();
+            }
+        });
+
+        var oItem = new sap.ui.core.Item({
+            text: "Alerts",
+            tooltip: "Alerts",
+            key: "1"
+        });
+        oRBG2.addItem(oItem);
+
+        oItem = new sap.ui.core.Item({
+            text: "OEE",
+            tooltip: "OEE",
+            key: "2"
+        });
+        oRBG2.addItem(oItem);
+
+        oItem = new sap.ui.core.Item({
+            text: "Availability",
+            tooltip: "Availability",
+            key: "3"
+        });
+        oRBG2.addItem(oItem);
+
+        oItem = new sap.ui.core.Item({
+            text: "Performance",
+            tooltip: "Performance",
+            key: "4"
+        });
+        oRBG2.addItem(oItem);
+
+        oItem = new sap.ui.core.Item({
+            text: "Quality",
+            tooltip: "Quality",
+            key: "5"
+        });
+        oRBG2.addItem(oItem);
+
+        oMatrixB.createRow('', oLabelRoles, oRBG2, oMenuButton1);
+
+        // *******************************************************************************
+
+        function doResetMapALRT() {
+            selectedMapStatusID = 1;
+        }
+        function doResetMapOEE() {
+            selectedMapStatusID = 2;
+        }
+        function doResetMapAVLB() {
+            selectedMapStatusID = 3;
+        }
+        function doResetMapPERF() {
+            selectedMapStatusID = 4;
+        }
+        function doResetMapQLT() {
+            selectedMapStatusID = 5;
+        }
+
+        // ******************************************************************************************************************
+
+        var oMatrixT = new sap.ui.commons.layout.MatrixLayout({
+            id: 'MatrixT',
+            layoutFixed: true,
+            width: '98%',
+            columns: 1,
+            widths: ['100%']
+        });
+
+        // ****************************************************************************************************************************************************
+
+        var oLabelPlants = new sap.ui.commons.Label({
+            id: 'L-Plants',
+            visible: true,
+            text: 'SELECTED PLANT '
+        });
+
+        var oDropdownBoxPlants = new sap.ui.commons.DropdownBox({
+            id: "PlantsList",
+            tooltip: 'Active Plants',
+            editable: true,
+            width: '230px',
+            change: function (oEvent) {
+                var endplant = oEvent.oSource.getSelectedItemId();
+                var result = endplant.substring(6, endplant.length);
+                selectedPlant = result;
+            }
+        });
+
+        var oLayout = new sap.ui.layout.HorizontalLayout("LayoutPlants", {
+            content: [oLabelPlants, oDropdownBoxPlants]
+        });
+
+        // **********************************************************************************
+
+        function updatePlants(idPlant) {
+
+            var timestamp = new Date().getTime();
+            getData("/XMII/Illuminator?QueryTemplate=MESM/PLANTS/TRANSACTIONS/getActivePlants_xAcute&Param.1=" + idPlant + "&ts=" + timestamp + "&Content-Type=text/xml", parseJsonPlantsList);
+            function parseJsonPlantsList(jsondata) {
+                oDropdownBoxPlants.destroyItems();
+
+                for (var i = 0; i < jsondata.length; i++) {
+                    item_key = jsondata[i]['PLANT'];
+                    item_text = jsondata[i]['DESC'];
+                    oItem = new sap.ui.core.ListItem({
+                        key: item_key,
+                        text: item_text
+                    });
+                    oDropdownBoxPlants.addItem(oItem);
+                }
+                oDropdownBoxPlants.setSelectedKey(idPlant);
+            }
+        }
+
+        // **************************************		TITLE 	**************************************************************************************************************
+        var oLabelSelectedUnit = new sap.ui.commons.Label({
+            id: 'L-SelectedUnit',
+            visible: true,
+            text: 'SELECTED UNIT ',
+        });
+
+        oCell_SU = new sap.ui.commons.layout.MatrixLayoutCell({height: '30px'});
+        oCell_SU.addContent(oLabelSelectedUnit);
+
+        // **********************************************	UNIT TABLE				******************************************************************************************************
+
+        var oTable = new sap.ui.table.TreeTable({
+            selectionMode: sap.ui.table.SelectionMode.Single,
+            visibleRowCount: nrRows,
+            visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Interactive,
+            allowColumnReordering: true,
+            expandFirstLevel: true,
+            expandSecondLevel: true,
+            selectionBehavior: sap.ui.table.SelectionBehavior.Row,
+            toggleOpenState: function (oEvent) {
+                var iRowIndex = oEvent.getParameter("rowIndex");
+                var oRowContext = oEvent.getParameter("rowContext");
+                var bExpanded = oEvent.getParameter("expanded");
+            }
+        });
+
+        function createColumnsHrchy() {
+            oTable.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "UNIT NAME"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "unitName"),
+                sortProperty: "unitName",
+                filterProperty: "unitName",
+                width: "20%"
+            }));
+            oTable.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "UNIT DESCRIPTION"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "unitDescr"),
+                sortProperty: "unitDescr",
+                filterProperty: "unitDescr",
+                width: "20%"
+            }));
+            oTable.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "UNIT TYPE"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "typeName"),
+                sortProperty: "typeName",
+                filterProperty: "typeName",
+                width: "10%"
+            }));
+            oTable.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "PART"}),
+                template: new sap.ui.commons.TextView().bindProperty("text", "partNumber"),
+                sortProperty: "partNumber",
+                filterProperty: "partNumber",
+                width: "10%"
+            }));
+            oTable.addColumn(new sap.ui.table.Column({
+                label: new sap.ui.commons.Label({text: "ACTIVE"}),
+                template: new sap.ui.commons.Image().bindProperty("src", "src"),
+                width: "5%",
+                hAlign: "Center"
+            }));
+        }
+
+        // Create a data model for oTable
+        var oModel = new sap.ui.model.json.JSONModel();
+
+        // *****************************************************
+
+        var created = false;
+
+        // Get Tree Data
+        function getTreeData() {
+
+            oTable.clearSelection();
+            var timestamp = new Date().getTime();
+            var xmlHttp = new XMLHttpRequest();
+            var xmlDOM;
+
+            var http_string = "/XMII/Runner?Transaction=MESM/ANDM/TRANSACTIONS/getHierarchyHeaders_ANDM&IDPLANT=" + selectedPlant + "&IDUNIT=" + selectedParentID + "&SERVER_SQL=MESM&ts=" + timestamp + "&OutputParameter=HC_OUT&Content-Type=text/xml";
+
+            xmlHttp.open("GET", http_string, false);
+            xmlHttp.send();
+            xmlDOM = xmlHttp.responseXML.documentElement;
+            try {
+                if (xmlDOM.getElementsByTagName("Row")[0].firstChild) {
+
+                    oTable.unbindRows();
+
+                    var opElement = xmlDOM.getElementsByTagName("Row")[0].firstChild;
+                    var oDataFLMP = opElement.firstChild.data;
+                    var ojsonDataFLMP = eval('(' + oDataFLMP + ')');
+                    if (!created) {
+                        createColumnsHrchy();
+                        created = true;
+                    }
+                    oModel.setData(ojsonDataFLMP);
+                    oTable.setModel(oModel);
+                    oTable.bindRows("/root");
+                }
+            } catch (e) {
+                // alert(" Could not retrieve headers ..");
+            }
+        }
+        //Bring the table onto the UI
+        oMatrixT.createRow(oTable);
+
+        // ****************************************************************************************************************************************************
+
+        function cc(o) {
+            console.log(o);
+        }
+
+        // ****************************************************************************************************************************************************
+
+        function ScreenSize() {
+            var a = 100;
+            var w = window;
+            var d = document;
+            var e = d.documentElement;
+            var g = d.getElementsByTagName('body')[0];
+            var sx = w.innerWidth || e.clientWidth || g.clientWidth;
+            var sy = w.innerHeight || e.clientHeight || g.clientHeight;
+            return {
+                x: sx,
+                y: sy
+            }
+        }
+
+        // ******************		MAPS		**********************************************************************************************************************************
+
+        var colors_in = [];
+        var StatusColors = [];
+        var selectedStatusName = '';
+
+        function getMapStatus() {
+            colors_in = [];
+            var timestamp = new Date().getTime();
+            var Param1 = selectedPlant;
+            var Param2 = selectedMapStatusID;
+            getData("/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_MapStatusData&Param.1=" + Param1 + "&Param.2=" + Param2 + "&ts=" + timestamp + "&Content-Type=text/xml", parseJsonMapStatus);
+
+            function parseJsonMapStatus(jsondata) {
+                for (var i = 0; i < jsondata.length; i++) {
+                    var map_name = jsondata[i]['unitMap'];
+                    var map_status = jsondata[i]['statusValue'];
+                    var map_parent_name = jsondata[i]['parentName'];
+                    var map_key = map_parent_name + "_" + map_name;
+                    // alert (map_key);
+                    colors_in[map_key] = map_status;
+                }
+            }
+
+            selectedStatusName = '';
+            switch (Number(selectedMapStatusID)) {
+                case 1 :
+                    selectedStatusName = ' - ALERTS';
+                    break;
+                case 2:
+                    selectedStatusName = ' - OEE';
+                    break;
+                case 3:
+                    selectedStatusName = ' - AVAILABILITY';
+                    break;
+                case 4:
+                    selectedStatusName = ' - PERFORMANCE';
+                    break;
+                case 5:
+                    selectedStatusName = ' - QUALITY';
+                    break;
+                default :
+                    selectedStatusName = ' - ALERTS';
+                    break;
+            }
+            oCore.byId('L-SelectedUnit').setText(selectedUnitName + selectedStatusName)
+
+            mapTitle = [];
+            setTimeout(mapsInit, 600);
+        }
+
+        $(document).ready(function () {
+            $('.seleMenu').click(function () {
+                $('.app_header').slideToggle(300);
+            });
+        });
+
+
+        var mapTitle = [];
+        var highchartMap = null;
+        var highChartSample1 = null;
+        var highChartSample2 = null;
+        var highChartSample3 = null;
+        var highChartSample4 = null;
+        var highChartSample5 = null;
+        var broswerHeigh = 0;
+        var sized = true;
+        function mapsInit() {
+            getANDMStatusColor();
+            $.get('maps/' + selectedUnitName + '.json', function (data) {
+                var mapData = Highcharts.geojson(data);
+
+                $.each(mapData, function (i) {
+                    if (this.properties['KEY'] == "") {
+                        this.value = colors_in    ['_TOLEDO'];
+                        ;
+                    } else {
+                        this.drilldown = this.properties['KEY'];
+                        var this_param3 = this.properties['PARAM3'];
+                        var this_key = this.properties['KEY'];
+                        var this_2keys = this_param3 + "_" + this_key;
+                        // alert(this_2keys);
+                        var color_id = colors_in    [this_2keys];
+                        this.value = Number(color_id);
+                    }
+                });
+                var mapName = selectedUnitName;
+                var outerHeight = window.outerHeight;
+
+                var winW, winH;
+                if (document.body && document.body.offsetWidth) {
+                    winW = document.body.offsetWidth;
+                    winH = document.body.offsetHeight;
+                }
+                if (document.compatMode == 'CSS1Compat' &&
+                    document.documentElement &&
+                    document.documentElement.offsetWidth) {
+                    winW = document.documentElement.offsetWidth;
+                    winH = document.documentElement.offsetHeight;
+                }
+                if (window.innerWidth && window.innerHeight) {
+                    winW = window.innerWidth;
+                    winH = window.innerHeight;
+                }
+                if (!$('#app_header').is(":hidden")) {
+                    winH -= 100;
+                }
+                //cc(winH);
+                if (broswerHeigh != winH) {
+                    broswerHeigh = winH;
+                    sized = true;
+                }
+
+                highchartMap = new Highcharts.Map('mesm_maps', {
+                    chart: {
+                        animation: false,
+                    },
+                    chart: {
+                        //    height: ScreenSize()['y'],
+                        animation: false,
+                        height: winH - 320,
+                        events: {
+                            redraw: function () {
+                                //    cc('redraw');
+                                // this.color = colors_in[this.properties['hc-key'][0]]
+                            },
+                            drilldown: function (e) {
+                                //cc(e.point);
+                                //    cc(e.point.name);
+                                var _drilldown = e.point.drilldown;
+                                $.get('maps/' + _drilldown + '.json', function (data) {
+                                    var mapDrilldown = Highcharts.geojson(data);
+                                    $.each(mapDrilldown, function (i) {
+                                        if (this.properties['hc-key'] != _drilldown) {
+                                            this.drilldown = this.properties['hc-key'];
+                                        }
+                                        var this_param3 = this.properties['PARAM3'];
+                                        var this_key = this.properties['KEY'];
+                                        var this_2keys = this_param3 + "_" + this_key;
+                                        var color_id = colors_in    [this_2keys];
+                                        this.color = color_value;
+                                    });
+                                    mapTitle.push(highchartMap.title.textStr);
+                                    highchartMap.setTitle({text: _drilldown});
+                                    highchartMap.addSingleSeriesAsDrilldown(e.point, {
+                                        borderWidth: 0,
+                                        //   name: e.point.name,
+                                        name: highchartMap.title.textStr,
+                                        data: mapDrilldown,
+                                        dataLabels: {
+                                            enabled: true,
+                                            format: '{point.name}'
+                                        }
+                                    });
+                                    highchartMap.applyDrilldown();
+                                });
+                            },
+                            drillup: function (e) {
+                                highchartMap.setTitle({text: mapTitle.pop()});
+                            },
+                            load: function () {
+                                //	this.color = colors_in[this.properties['hc-key'][0]];
+                            }
+                        }
+                    },
+                    lang: {
+                        drillUpText: " << Back to {series.name}"
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    credits: {
+                        enabled: false,
+                        href: 'http://www.rtsperfectplant.com/',
+                        position: {
+                            align: 'right',
+                            x: -10,
+                            verticalAlign: 'bottom',
+                            y: -5
+                        },
+                        style: {
+                            cursor: 'pointer',
+                            color: '#999999',
+                            fontSize: '9px'
+                        },
+                        text: 'RTS Consulting Inc.'
+                    },
+                    title: {
+                        //text: rootNode.getText(),
+                        text: mapName + selectedStatusName,
+                        style: {
+                            // display: 'none'
+                            display: 'block',
+                            font: 'Arial Black,Arial, Helvetica, sans-serif',
+                            color: '#007dc0',
+                            fontSize: '30px'
+                        },
+                    },
+                    subtitle: {
+                        text: '',
+                        style: {
+                            display: 'none'
+                        }
+                    },
+                    colorAxis: {
+                        min: 1,
+                        //	 type: 'logarithmic',
+                        minColor: StatusColors['minColor'],//'#d2d6d1',
+                        maxColor: StatusColors['maxColor'],//'#31ed23',
+                        stops: [
+                            [parseFloat(StatusColors['ValueStep1']), StatusColors['ColorStep1']],//[0, '#d2d6d1'],
+                            [parseFloat(StatusColors['ValueStep2']), StatusColors['ColorStep2']],//[0.67, '#76ef6e'],
+                            [parseFloat(StatusColors['ValueStep3']), StatusColors['ColorStep3']],//[1, '#31ed23']
+                            //	[0, '#d2d6d1'],
+                            // 	[0.60, '#76ef6e'],
+                            //	[1, '#31ed23']
+                        ]
+                    },
+
+                    mapNavigation: {
+                        enabled: false,
+                        buttonOptions: {
+                            verticalAlign: 'bottom'
+                        }
+                    },
+                    plotOptions: {
+                        series: {
+                            events: {
+                                afterAnimate: function () {
+                                    //    cc('afterAnimate');
+                                }
+                            }
+                        },
+                        map: {
+                            states: {
+                                //  hover: {
+                                //       color: '#EEDD66'
+                                //  },
+                                hover: {
+                                    //color: colors_in[this.properties['hc-key'][0]]
+                                }
+                            }
+                        },
+                        point: {
+                            events: {
+                                click: function () {
+                                    //alert('mouseclick');
+                                },
+                                mouseOver: function () {
+                                    //alert('mouseOver');
+                                },
+                                mouseOut: function () {
+                                    //alert('mouseOut');
+                                }
+                            }
+                        }
+                    },
+
+                    legend: {
+                        layout: 'horizontal',
+                        borderWidth: 0,
+                        // backgroundColor: 'rgba(255,255,255,0.85)',
+                        floating: false,
+                        verticalAlign: 'bottom',
+                        symbolHeight: 12,
+                        symbolWidth: 600,
+                        //width:800,
+                        y: 10
+                    },
+                    series: [{
+                        borderWidth: 0,
+                        animation: false,
+                        data: mapData,
+                        name: mapName,
+                        dataLabels: {
+                            enabled: true,
+                            align: 'center',
+                            verticalAlign: 'middle',
+                            format: '{point.properties.NAME}'
+                        }
+                    }],
+                    drilldown: {
+                        //series: drilldownSeries,
+                        activeDataLabelStyle: {
+                            color: '#FFFFFF',
+                            textDecoration: 'none',
+                            textShadow: '0 0 0px #000000'
+                        },
+                        drillUpButton: {
+                            relativeTo: 'spacingBox',
+                            position: {
+                                x: 0,
+                                y: 60
+                            }
+                        }
+                    }
+
+                });
+            })
+        }
+
+        // ******************		INIT CHARTS		****************
+
+        function getChartsData() {
+            return;
+        }
+
+
+        // ******************		SHOW ONLY MAP		*****************************************************************************
+
+        function showOnlyMap() {
+            var c = document.getElementById('mesm_content');
+            c.style.width = '0%';
+            c.style.height = '0%';
+            $("#charts").hide();
+            var t = document.getElementById('mesm_content');
+            t.style.width = '0%';
+            t.style.height = '0%';
+            $("#mesm_content").hide();
+            var e = document.getElementById('mesm_container');
+            e.style.width = '100%';
+            e.style.height = '100%';
+            e.style.float = 'left';
+            e.style.margin = '0 0 0 5%';
+            var m = document.getElementById('mesm_maps');
+            m.style.width = '100%';
+            m.style.height = '100%';
+            m.style.float = 'left';
+            m.style.margin = '0 0 0 5%'
+            mapsInit()
+
+        }
+
+        // ******************		INITIAL PAGE		*****************************************************************************
+
+        function pageInit() {
+            $.get('maps/' + selectedUnitName + '.json').done(function () {
+                //   cc('done');
+//                nrRows = 7;
+                $("#mesm_maps").show();
+                $("#charts").show();
+                var e = document.getElementById('mesm_container');
+                e.style.width = '65%';
+                e.style.float = 'left';
+                e.style.margin = '0 0 0 5%';
+                getMapStatus();
+                getChartsData();
+                return;
+            }).fail(function (error) {
+//                nrRows = 7;
+                document.getElementById('mesm_maps').style.display = 'none';
+                document.getElementById('charts').style.display = 'none';
+                document.getElementById('mesm_container').style.width = '100%';
+                document.getElementById('mesm_container').style.margin = '0px auto';
+                return;
+            }).always(function () {
+
+            });
+        }
+        function getANDMStatusColor() {
+            var url = "/XMII/Illuminator?QueryTemplate=MESM/ANDM/QUERIES/get_StatusColorsData&Param.1=" + selectedMapStatusID + "&Content-Type=text/xml";
+            getData(url, parseJsonParent);
+            function parseJsonParent(jsondata) {
+                //cc(StatusColors['recordID']);
+                StatusColors['recordID'] = jsondata[0]['recordID'];
+                StatusColors['statusPropertyID'] = jsondata[0]['statusPropertyID'];
+                StatusColors['minColor'] = jsondata[0]['minColor'];
+                StatusColors['maxColor'] = jsondata[0]['maxColor'];
+                StatusColors['ValueStep1'] = jsondata[0]['ValueStep1'];
+                StatusColors['ColorStep1'] = jsondata[0]['ColorStep1'];
+                StatusColors['ValueStep2'] = jsondata[0]['ValueStep2'];
+                StatusColors['ColorStep2'] = jsondata[0]['ColorStep2'];
+                StatusColors['ValueStep3'] = jsondata[0]['ValueStep3'];
+                StatusColors['ColorStep3'] = jsondata[0]['ColorStep3'];
+            }
+        }
+        window.setInterval(getMapStatus, 5 * 1000);
+
+        window.setInterval(getTreeData, 30 * 1000);
+
+        window.setInterval(getChartsData, 10 * 1000);
+
+    </script>
+
+</head>
+
+<body onLoad="roleSecurity()">
+
+<input id="user_roles" type="hidden" value="{IllumLoginRoles}" style="display:block;width:1000px;" readonly/>
+<input id="user_role" type="hidden" value="{ROLE}" style="display:block;width:1000px;" readonly/>
+<input id="user_name" type="hidden" value="{IllumLoginName}" style="display: block;width:1000px;" readonly/>
+<input id="user_height" type="hidden" value="{HEIGHT}" style="display: block;width:100px;" readonly/>
+<input id="user_address" type="hidden" value="{Machine}" style="display:block;width:1000px;" readonly/>
+<input id="unit_name" type="hidden" value="{UNIT}" style="display:block;width:1000px;" readonly/>
+<input id="status_id" type="hidden" value="{STATUS}" style="display:block;width:1000px;" readonly/>
+
+<div id="app_header" class="app_header" style="display: none;">
+    <div id="app_title">CORE TRACEABILITY</div>
+    <div id="page_title"></div>
+    <div id="app_menu"></div>
+</div>
+
+<div class="seleMenu" id="selectStatus" style="margin:0px;"> &nbsp; ANDON &nbsp; </div>
+
+<div>
+    <div id="mesm_container" style="padding-top: 0px;">
+        <div id="mesm_maps"></div>
+        <div id="mesm_content"></div>
+    </div>
+</div>
+</body>
+</html>

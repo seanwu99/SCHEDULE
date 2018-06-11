@@ -79,13 +79,20 @@
         var GROUP = '';
         var runtime;// = new Date().getTime();
         var rawCount = 0;
+        var tbRows = 10;
         // ScheduleEvents.hasOwnProperty('900000');
         // $(function () {
         function roleSecurity() {
             runtime = new Date().getTime();
             if (document.getElementById('GROUP').value.toUpperCase().indexOf('ASSY') >= 0) {
-                GROUP = 'ASSY';
-                document.getElementById('ccMenu').innerText = 'Scheduling - Assembly';
+                if (document.getElementById('GROUP').value.toUpperCase().indexOf('ASSYM') >= 0) {
+                    GROUP = 'ASSYM';
+                    document.getElementById('ccMenu').innerText = 'Scheduling - Assembly Manual';
+                } else {
+                    GROUP = 'ASSYA';
+                    document.getElementById('ccMenu').innerText = 'Scheduling - Assembly Automatic';
+                }
+
             } else if (document.getElementById('GROUP').value.toUpperCase().indexOf('PACK') >= 0) {
                 GROUP = 'PACKING';
                 document.getElementById('ccMenu').innerText = 'Scheduling - Packing';
@@ -104,6 +111,10 @@
             MESM_FloorMaps_GET();
             MOLD_Machine_Matrix_GET();
             // MESM_OrderOperation_GET();
+            $("body").tooltip({
+                selector: '[data-toggle="tooltip"]',
+                container: 'body'
+            });
         }
 
         function dataLoading() {
@@ -118,13 +129,21 @@
             var logs = '';
 
             var Param1 = GROUP.substr(0, 4);
+            var Param2 = '\'\'';
 
             if (GROUP == 'ALL') {
-                Param1 = '';
+                Param1 = null;
+            } else if (GROUP == 'ASSYA') {
+                Param1 = 'ASSY';
+                Param2 = 'ASSYM';
+            } else if (GROUP == 'ASSYM') {
+                Param1 = 'ASSYM';
             }
-            var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Param.1=' + Param1 + '&Content-Type=text/xml';
+
+            var url = '/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_ActivityLog_GET&Param.1=' + Param1 + '&Param.2=' + Param2 + '&Content-Type=text/xml';
             getData(url, function (data) {
-                // cc(url);
+                cc('ActivityLogGET');
+                cc(url);
                 $.each(data, function (index, value) {
                     // cc(value);
                     logs =
@@ -142,9 +161,13 @@
 
         // });
         function MESM_FloorMaps_GET() {
+
             var groupA = [GROUP];
+
             if (GROUP == 'ALL') {
                 groupA = ['RESIN', 'MOLDING', 'PACKING', 'ASSY'];
+            } else if (GROUP == 'ASSYA' || GROUP == 'ASSYM') {
+                groupA = ['ASSY'];
             }
             getData("/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml", function (data) {
                     $.each(data, function (index, value) {
@@ -158,10 +181,26 @@
                             'idUnitParent': value.idUnitParent,
                         };
 
-                        if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0)) {
-                            MESM_FloorMaps_GROUP[value.recordID] = [];
+                        if (GROUP != 'ASSYA' && GROUP != 'ASSYM') {
+                            if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0)) {
+                                MESM_FloorMaps_GROUP[value.recordID] = [];
+                            }
+                        } else {
+                            if (GROUP == 'ASSYA') {
+
+                                if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0) && value.unitName == 'ASSY') {
+                                    MESM_FloorMaps_GROUP[value.recordID] = [];
+                                }
+                            } else if (GROUP == 'ASSYM') {
+                                if (value.unitType == '5' && !MESM_FloorMaps_GROUP.hasOwnProperty(value.recordID) && (value.groupType.indexOf(groupA) >= 0) && value.unitName == 'ASSYM') {
+                                    MESM_FloorMaps_GROUP[value.recordID] = [];
+                                }
+                            }
                         }
+
+
                     });
+
                     cc('MESM_FloorMaps');
                     cc(MESM_FloorMaps);
 
@@ -180,7 +219,7 @@
                     cc('/2/==========================================================================================================');
                     cc('/XMII/Illuminator?QueryTemplate=OneHDMIIOwensboro/SCHEDULE/QUERIES/MESM_FloorMaps_GET&Content-Type=text/xml');
                     cc(new Date().getTime() - runtime);
-                    // cc(MESM_FloorMaps_GROUP);
+                    cc(MESM_FloorMaps_GROUP);
                     cc('/2/==========================================================================================================');
                     MESM_OrderOperation_GET();
                 }
@@ -262,6 +301,7 @@
                             Concurrent: false,
                             Sort: Sort,
                             ReqQuan: (v.ReqQuan === undefined) ? '' : v.ReqQuan,
+                            MaterialDescription: (v.MaterialDescription === undefined) ? '' : v.MaterialDescription
                         });
 
                         if (v.ArchivedTimestamp == 'TimeUnavailable') {
@@ -768,6 +808,48 @@
             cc(events);
             scheduleForm(WorkCentres, events);
 
+            $.each(events, function (i, _events) {
+                // cc();
+                $.contextMenu({
+                    selector: '#' + _events.id,
+                    callback: function (key, options) {
+
+                        if (key == 'delete') {
+                            // cc(options.selector.substring(1).split('_')[0]);
+                            // cc(options.selector.substring(1).split('_')[1]);
+                            for (var i = 0; i < orderTable.originalDataSet.length; i++) {
+                                if (orderTable.originalDataSet[i].OrderNumber == options.selector.substring(1).split('_')[0] &&
+                                    orderTable.originalDataSet[i].Sort == options.selector.substring(1).split('_')[1]) {
+                                    // cc(orderTable.originalDataSet[i].OrderNumber );
+                                    // cc(orderTable.originalDataSet[i].Sort );
+                                    //
+                                    // orderTable.originalDataSet[i].Press = '';
+                                    // orderTable.originalDataSet[i].Status = 'Unscheduled';
+
+                                    removeScheduleEvent(options.selector.substring(1));
+                                    // MESM_OrderOperation_UPD();
+                                    MESM_OrderOperation_UPD(orderTable.originalDataSet[i].ID, orderTable.originalDataSet[i].Quantity, 'Unscheduled', '', '', '');
+                                    orderTable.reload();
+                                    break;
+                                }
+                            }
+
+                        }
+                        // var m = "clicked..: " + key;
+                        // window.console && console.log(m) || alert(m);
+                    },
+                    items: {
+                        "title": {name: _events.id, icon: "fa-calendar"},
+                        "sep1": "---------",
+                        "edit": {name: "Edit", icon: "fa-edit"},
+                        "cut": {name: "Cut", icon: "fa-scissors"},
+                        "copy": {name: "Copy", icon: "fa-files-o"},
+                        "paste": {name: "Paste", icon: "fa-clipboard"},
+                        "delete": {name: "Delete", icon: "fa-times"},
+                        // "quit": {name: "Quit", icon: "quit"}
+                    }
+                });
+            });
 
             ActivityLogGET();
             // cc(events);
@@ -1103,23 +1185,33 @@
             // var _ID, _OrderNumber, _Quantity, _Status, _SchedStart, _SchedFinish, _Press;
             var OrderNumber = event.id.split('_')[0];
             var Operation;
+            var _Group;
+            // cc(event.resourceId.split('_')[1]);
+            for (var m in MESM_FloorMaps) {
+                if (MESM_FloorMaps[m].unitName == event.resourceId.split('_')[1]) {
+                    _Group = MESM_FloorMaps[MESM_FloorMaps[m].idUnitParent].unitName;
+                    break;
+                }
+            }
+            // cc('_Group ' + _Group);
 
             for (var i = 0; i < orderOpreationTable.rows('').count(); i++) {
                 // cc();
                 // cc(orderTable.originalDataSet[i].OrderNumber + ' / ' + orderTable.originalDataSet[i].WCG+' / '+orderTable.originalDataSet.length);
                 // if (orderTable.originalDataSet[i].OrderNumber == event.id.split('_')[0] && orderTable.originalDataSet[i].WCG == event.resourceId.split('_')[0]) {
                 if (orderOpreationTable.cell({row: i, column: 2}).data() == event.id.split('_')[0] &&//OrderNumber
-                    orderOpreationTable.cell({row: i, column: 7}).data() == event.resourceId.split('_')[0]) {//WCG
+                    _Group == event.resourceId.split('_')[0]) {//WCG
                     // orderTable.originalDataSet[i].SchedStart = moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss');
                     // orderTable.originalDataSet[i].SchedFinish = moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss');
                     orderOpreationTable.cell({
                         row: i,
                         column: 5
-                    }).data(moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss'));
+                    }).data(moment.utc(event.start._d).format('YYYY-MM-DD HH:mm:ss')).draw();
+
                     orderOpreationTable.cell({
                         row: i,
                         column: 6
-                    }).data(moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss'));
+                    }).data(moment.utc(event.end._d).format('YYYY-MM-DD HH:mm:ss')).draw();
 
                     // orderTable.originalDataSet[i].Press = event.resourceId.split('_')[1];
                     orderOpreationTable.cell({row: i, column: 11}).data(event.resourceId.split('_')[1]);
@@ -1129,6 +1221,7 @@
 
                     // Operation = orderTable.originalDataSet[i].Operation;
                     Operation = '';// orderTable.originalDataSet[i].Operation;
+                    cc(' console.log');
                     console.log(orderOpreationTable.cell({row: i, column: 0}).data(),
                         orderOpreationTable.cell({row: i, column: 4}).data(),
                         'Scheduled',
@@ -1152,7 +1245,7 @@
 
                     if (_eventDragStart.resourceId != event.resourceId) {
 
-                        var _Press = orderOpreationTable.cell({row: rowN, column: 11}).data();
+                        var _Press = orderOpreationTable.cell({row: i, column: 11}).data();
                         var _Group;
                         // var m in MESM_FloorMaps
                         for (var m in MESM_FloorMaps) {
@@ -2001,6 +2094,8 @@
                 }
             });
 
+            $('#' + elementId).prop('title', 'yourText');
+            ;
             // function callbk(key, options) {
             //     console.log(key);
             //     console.log(options);
@@ -2051,6 +2146,7 @@
                         {data: 'CtrlKey'},
                         {data: 'Sort'},
                         {data: 'Actions'},
+                        {data: 'MaterialDescription'}
                     ],
 
                     order: [[2, "asc"]],
@@ -2126,6 +2222,14 @@
                             title: 'Material Number',
                             visible: true,
                             orderable: true,
+                            render: function (data, type, e, meta) {
+                                // cc(e);
+                                return '' +
+                                    '<span data-toggle="tooltip" data-placement="bottom" title="' +
+                                    e.MaterialDescription + '">' +
+                                    e.Material +
+                                    '</span>'
+                            }
                         },
                         {
                             targets: 4,
@@ -2280,6 +2384,8 @@
                                         }
                                     }
                                     // cc(wcg);
+                                    // cc(MESM_FloorMaps[wcg].unitName);
+                                    // if()
                                     // cc(wcgNAME);
                                     // cc(e.Sort);
                                     // var prs = [];
@@ -2340,7 +2446,7 @@
                                         }
                                         scrollSTR = '';
                                         prsRows = 10;
-                                        cc('prsRows : ' + prsRows);
+                                        // cc('prsRows : ' + prsRows);
                                         if (e.SchedStat == 'U') {
                                             if (prsRows * 40 + 250 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 200px"'
@@ -2353,6 +2459,16 @@
                                             if (prsRows * 40 + 280 > 500) {
                                                 scrollSTR = 'style="overflow-y: scroll; height: 200px"'
                                             }
+                                        }
+                                        // cc(wcg);
+                                        // cc(MESM_FloorMaps[wcg].unitName);
+                                        if (MESM_FloorMaps[wcg] != undefined && MESM_FloorMaps[wcg].unitName == 'MOLD7') {
+                                            prsSTR =
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS45"><i class="la la-wrench"></i>assign to PRESS45' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS50"><i class="la la-wrench"></i>assign to PRESS50' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS51"><i class="la la-wrench"></i>assign to PRESS51' + '</a>' +
+                                                '<a class="dropdown-item" onclick="quickAction(this)" id="MOLD7_PRESS52"><i class="la la-wrench"></i>assign to PRESS52' + '</a>';
+                                            groupSTR = '';
                                         }
                                     } else if (e.Sort == 'RESIN') {
                                         prsSTR =
@@ -2539,7 +2655,13 @@
                             }
 
                         },
-
+                        {
+                            targets: 16,
+                            title: 'MaterialDescription',
+                            visible: false,
+                            orderable: false,
+                            searchable: true,
+                        },
                         // {
                         //     targets: 14,
                         //     title: 'ccc',
@@ -2581,7 +2703,7 @@
                     }
                 }
 
-                if (GROUP == 'ASSY' || GROUP == 'PACKING') {
+                if (GROUP == 'ASSYA' || GROUP == 'ASSYM' || GROUP == 'PACKING') {
                     orderOpreationTable.column(8).visible(false);
                     orderOpreationTable.column(9).visible(false);
                     orderOpreationTable.column(10).visible(false);
@@ -2594,6 +2716,39 @@
                 // orderOpreationTable.row(':eq(5)', {page: 'current'}).select();
 
                 orderOpreationTable.page.len(10).draw();
+
+                orderOpreationTable.on('draw', function () {
+                    // cc('css');
+                    // cc($('.dataTables_scrollBody').css('height'));
+                    // cc(orderOpreationTable.rows({page: 'current'}).nodes().length);
+                    if (orderOpreationTable.rows({page: 'current'}).nodes().length == tbRows) {
+                        return;
+                    } else {
+                        tbRows = orderOpreationTable.rows({page: 'current'}).nodes().length;
+                        if (tbRows < 5) {
+                            // if ($('.dataTables_scrollBody').css('height') != '400px') {
+                            $('.dataTables_scrollBody').css('height', '400px');
+                            orderOpreationTable.draw(false);
+                            // }
+                            // } else {
+                            //     if ($('.dataTables_scrollBody').css('height') != 'auto') {
+                            //         $('.dataTables_scrollBody').css('height', 'auto');
+                            //         orderOpreationTable.draw();
+                            //     }
+
+                        } else {
+                            $('.dataTables_scrollBody').css('height', 'auto');
+                            orderOpreationTable.draw(false);
+                        }
+                    }
+
+                    // $('.dataTables_scrollBody').css('height', '400px');
+                    // orderOpreationTable.draw();
+                    // console.log('Redraw occurred at: ' + new Date().getTime());
+                });
+
+                // $('.dataTables_scrollBody').css('height', '400px');
+                // orderOpreationTable.draw();
 
                 $('#m_table_1 tbody').on('change', 'input[type="checkbox"]', function () {
                     // cc('m_table_1 on change');
@@ -2983,7 +3138,7 @@
                                     m-dropdown-toggle="click" style="display: none">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
 												<span class="m-topbar__userpic">
-													<img src="assets/app/media/img/users/user4.jpg"
+													<img src="assets/app/media/img/users/user4.png"
                                                          class="m--img-rounded m--marginless m--img-centered" alt=""/>
 												</span>
                                         <span class="m-topbar__username m--hide">
@@ -2997,7 +3152,7 @@
                                                  style="background: url(assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
-                                                        <img src="assets/app/media/img/users/user4.jpg"
+                                                        <img src="assets/app/media/img/users/user4.png"
                                                              class="m--img-rounded m--marginless" alt=""/>
                                                     </div>
                                                     <div class="m-card-user__details">
@@ -3399,7 +3554,8 @@
                         </li>
                         <li class="m-nav__item">
                             <a href="#" class="m-nav__link">
-										<span class="m-nav__link-text">
+										<span class="m-nav__link-text" data-toggle="m-tooltip" title="T&C"
+                                              data-placement="left">
 											T&C
 										</span>
                             </a>
